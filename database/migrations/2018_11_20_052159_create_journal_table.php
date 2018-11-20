@@ -19,8 +19,6 @@ class CreateJournalTable extends Migration
             $table->boolean('active');
             $table->dateTime('active_date');
             $table->string('code');
-            $table->unsignedInteger('publishing_id');
-            $table->unsignedInteger('category_id');
             $table->string('ISSN');
             $table->json('in_HAC_list');
             $table->string('image');
