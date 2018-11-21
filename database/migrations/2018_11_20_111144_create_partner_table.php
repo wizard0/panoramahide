@@ -16,7 +16,7 @@ class CreatePartnerTable extends Migration
         Schema::create('partner', function (Blueprint $table) {
             $table->increments('id');
             $table->string('secret_key');
-            $table->boolean('active');
+            $table->boolean('active')->default(1);
             $table->timestamps();
         });
     }

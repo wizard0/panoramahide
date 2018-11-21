@@ -17,7 +17,7 @@ class CreateSubscriptionTable extends Migration
             $table->increments('id');
             $table->string('language');
             $table->unsignedInteger('journal_id');
-            $table->boolean('active');
+            $table->boolean('active')->default(1);
             $table->enum('type', ['printed', 'electronic']);
             $table->year('year');
             $table->enum('half_year', ['first', 'second']);
@@ -29,8 +29,8 @@ class CreateSubscriptionTable extends Migration
                 'once_at_half_year'
             ]);
             $table->string('price_for_release');
-            $table->string('price_for_half_year');
-            $table->string('price_for_year');
+            $table->string('price_for_half_year')->nullable();
+            $table->string('price_for_year')->nullable();
             $table->timestamps();
 
             $table->foreign('journal_id')->references('id')->on('journal');

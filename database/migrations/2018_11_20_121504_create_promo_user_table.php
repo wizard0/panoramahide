@@ -17,7 +17,7 @@ class CreatePromoUserTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('user_id');
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

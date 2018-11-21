@@ -41,7 +41,7 @@ class AddForeignKeysToTables extends Migration
             $table->foreign('language')->references('code')->on('language');
         });
 
-        Schema::table('journal_contact_translate', function (Blueprint $table) {
+        Schema::table('journal_contact', function (Blueprint $table) {
             $table->foreign('language')->references('code')->on('language');
         });
 

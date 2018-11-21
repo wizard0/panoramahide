@@ -15,28 +15,11 @@ class CreateJournalTable extends Migration
     {
         Schema::create('journal', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->boolean('active');
-            $table->dateTime('active_date');
-            $table->string('code');
-            $table->string('ISSN');
-            $table->json('in_HAC_list');
-            $table->string('image');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
-            $table->unsignedInteger('journal_contact_id');
-            $table->string('format');
-            $table->string('volume');
-            $table->string('periodicity');
-            $table->text('editorial_board');
-            $table->text('article_index');
-            $table->text('rubrics');
-            $table->text('review_procedure');
-            $table->text('article_submission_rules');
+            $table->boolean('active')->default(1);
+            $table->dateTime('active_date')->nullable();
+            $table->string('ISSN')->nullable();
+            $table->unsignedInteger('journal_contact_id')->nullable();
             $table->timestamps();
-
-            $table->unique('code');
         });
 
         Schema::create('journal_translate', function (Blueprint $table) {
@@ -45,22 +28,22 @@ class CreateJournalTable extends Migration
             $table->string('language');
             $table->string('name');
             $table->string('code');
-            $table->json('in_HAC_list');
-            $table->string('image');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
-            $table->string('format');
-            $table->string('volume');
-            $table->string('periodicity');
-            $table->text('editorial_board');
-            $table->text('article_index');
-            $table->text('rubrics');
-            $table->text('review_procedure');
-            $table->text('article_submission_rules');
+            $table->json('in_HAC_list')->nullable();
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
+            $table->string('preview_image')->nullable();
+            $table->text('preview_description')->nullable();
+            $table->string('format')->nullable();
+            $table->string('volume')->nullable();
+            $table->string('periodicity')->nullable();
+            $table->text('editorial_board')->nullable();
+            $table->text('article_index')->nullable();
+            $table->text('rubrics')->nullable();
+            $table->text('review_procedure')->nullable();
+            $table->text('article_submission_rules')->nullable();
             $table->timestamps();
 
-            $table->unique('code');
+            $table->unique(['language', 'code']);
 
             $table->foreign('journal_id')->references('id')->on('journal');
         });

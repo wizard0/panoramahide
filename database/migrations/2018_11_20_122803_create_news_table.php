@@ -15,17 +15,9 @@ class CreateNewsTable extends Migration
     {
         Schema::create('news', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('code');
-            $table->boolean('active');
-            $table->dateTime('publishing_date');
-            $table->text('description');
-            $table->string('image');
-            $table->text('preview');
-            $table->string('preview_image');
+            $table->boolean('active')->default(1);
+            $table->dateTime('publishing_date')->nullable();
             $table->timestamps();
-
-            $table->unique('code');
         });
 
         Schema::create('news_publishings', function (Blueprint $table) {
@@ -44,13 +36,13 @@ class CreateNewsTable extends Migration
             $table->string('language');
             $table->string('name');
             $table->string('code');
-            $table->text('description');
-            $table->string('image');
-            $table->text('preview');
-            $table->string('preview_image');
+            $table->text('description')->nullable();
+            $table->string('image')->nullable();
+            $table->text('preview')->nullable();
+            $table->string('preview_image')->nullable();
             $table->timestamps();
 
-            $table->unique('code');
+            $table->unique(['language', 'code']);
 
             $table->foreign('news_id')->references('id')->on('news');
             $table->foreign('language')->references('code')->on('language');

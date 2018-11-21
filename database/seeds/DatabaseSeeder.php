@@ -11,6 +11,13 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        DB::table('language')->insert([
+            'name' => 'Русский',
+            'code' => 'RU'
+        ]);
+        DB::table('language')->insert([
+            'name' => 'English',
+            'code' => 'EN'
+        ]);
     }
 }
