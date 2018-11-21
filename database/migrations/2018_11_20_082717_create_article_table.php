@@ -15,25 +15,15 @@ class CreateArticleTable extends Migration
     {
         Schema::create('article', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('code');
-            $table->boolean('active');
-            $table->dateTime('active_date');
-            $table->integer('sort');
-            $table->unsignedInteger('release_id');
-            $table->boolean('pin');
-            $table->enum('content_restriction', ['no', 'register', 'pay/subscribe']);
-            $table->json('keywords')->comment('Just tags');
-            $table->string('image');
-            $table->string('UDC')->comment('Universal Decimal Classification');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
-            $table->text('bibliography');
-            $table->string('price');
+            $table->boolean('active')->default(1);
+            $table->dateTime('active_date')->nullable();
+            $table->integer('sort')->nullable();
+            $table->unsignedInteger('release_id')->nullable();
+            $table->boolean('pin')->default(0);
+            $table->enum('content_restriction', ['no', 'register', 'pay/subscribe'])->default('no');
+            $table->string('UDC')->nullable()->comment('Universal Decimal Classification');
+            $table->string('price')->nullable();
             $table->timestamps();
-
-            $table->unique('code');
 
             $table->foreign('release_id')->references('id')->on('release');
         });
@@ -44,16 +34,16 @@ class CreateArticleTable extends Migration
             $table->string('language');
             $table->string('name');
             $table->string('code');
-            $table->json('keywords')->comment('Just tags');
-            $table->string('image');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
-            $table->text('bibliography');
-            $table->string('price');
+            $table->json('keywords')->nullable()->comment('Just tags');
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
+            $table->string('preview_image')->nullable();
+            $table->text('preview_description')->nullable();
+            $table->text('bibliography')->nullable();
+            $table->string('price')->nullable();
             $table->timestamps();
 
-            $table->unique('code');
+            $table->unique(['language', 'code']);
 
             $table->foreign('article_id')->references('id')->on('release');
             $table->foreign('language')->references('code')->on('language');

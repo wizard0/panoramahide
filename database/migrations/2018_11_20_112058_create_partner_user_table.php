@@ -16,9 +16,9 @@ class CreatePartnerUserTable extends Migration
         Schema::create('partner_user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
-            $table->boolean('active');
+            $table->boolean('active')->default(1);
             $table->unsignedInteger('partner_id');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->timestamps();
 
             $table->unique('user_id');

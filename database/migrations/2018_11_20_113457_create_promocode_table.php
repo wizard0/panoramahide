@@ -16,7 +16,7 @@ class CreatePromocodeTable extends Migration
         Schema::create('promocode', function (Blueprint $table) {
             $table->increments('id');
             $table->string('promocode');
-            $table->boolean('active');
+            $table->boolean('active')->default(1);
             $table->enum('type', [
                 'common',
                 'on_journal',
@@ -24,13 +24,13 @@ class CreatePromocodeTable extends Migration
                 'journal+publishing',
                 'custom'
             ]);
-            $table->unsignedInteger('journal_id');
-            $table->unsignedInteger('limit');
-            $table->unsignedInteger('used');
-            $table->unsignedInteger('journal_for_releases_id');
-            $table->dateTime('release_begin');
-            $table->dateTime('release_end');
-            $table->unsignedInteger('release_limit');
+            $table->unsignedInteger('journal_id')->nullable();
+            $table->unsignedInteger('limit')->nullable();
+            $table->unsignedInteger('used')->nullable();
+            $table->unsignedInteger('journal_for_releases_id')->nullable();
+            $table->dateTime('release_begin')->nullable();
+            $table->dateTime('release_end')->nullable();
+            $table->unsignedInteger('release_limit')->nullable();
             $table->timestamps();
 
             $table->unique('promocode');

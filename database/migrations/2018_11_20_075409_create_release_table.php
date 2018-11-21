@@ -15,23 +15,15 @@ class CreateReleaseTable extends Migration
     {
         Schema::create('release', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('code');
-            $table->boolean('active');
-            $table->dateTime('active_date');
+            $table->boolean('active')->default(1);
+            $table->dateTime('active_date')->nullable();
             $table->unsignedInteger('journal_id');
-            $table->string('number');
-            $table->string('price_for_printed');
-            $table->string('price_for_electronic');
-            $table->string('image');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
-            $table->boolean('promo')->comment('Is release available for free');
-            $table->string('price_for_articles');
+            $table->string('number')->nullable();
+            $table->string('price_for_printed')->nullable();
+            $table->string('price_for_electronic')->nullable();
+            $table->boolean('promo')->nullable()->comment('Is release available for free');
+            $table->string('price_for_articles')->nullable();
             $table->timestamps();
-
-            $table->unique('code');
 
             $table->foreign('journal_id')->references('id')->on('journal');
         });
@@ -41,14 +33,14 @@ class CreateReleaseTable extends Migration
             $table->unsignedInteger('release_id');
             $table->string('language');
             $table->string('name');
-            $table->string('code')->nullable();
-            $table->string('image');
-            $table->text('description');
-            $table->string('preview_image');
-            $table->text('preview_description');
+            $table->string('code');
+            $table->string('image')->nullable();
+            $table->text('description')->nullable();
+            $table->string('preview_image')->nullable();
+            $table->text('preview_description')->nullable();
             $table->timestamps();
 
-            $table->unique('code');
+            $table->unique(['language', 'code']);
 
             $table->foreign('release_id')->references('id')->on('release');
             $table->foreign('language')->references('code')->on('language');
