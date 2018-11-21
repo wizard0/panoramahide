@@ -15,6 +15,12 @@ class CreateJournalContactTable extends Migration
     {
         Schema::create('journal_contact', function (Blueprint $table) {
             $table->increments('id');
+            $table->timestamps();
+        });
+
+        Schema::create('journal_contact', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('journal_contact-id');
             $table->string('language');
             $table->string('chief_editor')->nullable();
             $table->string('phone')->nullable();
