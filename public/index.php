@@ -8,6 +8,7 @@
  */
 
 define('LARAVEL_START', microtime(true));
+define('LANG_COOKIE_NAME', 'lang_code');
 
 /*
 |--------------------------------------------------------------------------
