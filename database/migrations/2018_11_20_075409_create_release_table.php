@@ -13,7 +13,7 @@ class CreateReleaseTable extends Migration
      */
     public function up()
     {
-        Schema::create('release', function (Blueprint $table) {
+        Schema::create('releases', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
             $table->dateTime('active_date')->nullable();
@@ -25,13 +25,13 @@ class CreateReleaseTable extends Migration
             $table->string('price_for_articles')->nullable();
             $table->timestamps();
 
-            $table->foreign('journal_id')->references('id')->on('journal');
+            $table->foreign('journal_id')->references('id')->on('journals');
         });
 
-        Schema::create('release_translate', function (Blueprint $table) {
+        Schema::create('release_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('release_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
             $table->string('image')->nullable();
@@ -40,10 +40,9 @@ class CreateReleaseTable extends Migration
             $table->text('preview_description')->nullable();
             $table->timestamps();
 
-            $table->unique(['language', 'code']);
+            $table->unique(['locale', 'code']);
 
-            $table->foreign('release_id')->references('id')->on('release');
-            $table->foreign('language')->references('code')->on('language');
+            $table->foreign('release_id')->references('id')->on('releases');
         });
     }
 
@@ -54,7 +53,6 @@ class CreateReleaseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('release');
-        Schema::dropIfExists('release_translate');
+
     }
 }

@@ -13,21 +13,20 @@ class CreateAuthorTable extends Migration
      */
     public function up()
     {
-        Schema::create('author', function (Blueprint $table) {
+        Schema::create('authors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('author_language');
             $table->timestamps();
         });
 
-        Schema::create('author_translate', function (Blueprint $table) {
+        Schema::create('author_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('author_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('author_id')->references('id')->on('author');
-            $table->foreign('language')->references('code')->on('language');
+            $table->foreign('author_id')->references('id')->on('authors');
         });
     }
 
@@ -38,7 +37,6 @@ class CreateAuthorTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('author');
-        Schema::dropIfExists('author_translate');
+
     }
 }

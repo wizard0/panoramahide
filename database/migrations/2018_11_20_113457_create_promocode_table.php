@@ -13,7 +13,7 @@ class CreatePromocodeTable extends Migration
      */
     public function up()
     {
-        Schema::create('promocode', function (Blueprint $table) {
+        Schema::create('promocodes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('promocode');
             $table->boolean('active')->default(1);
@@ -35,36 +35,36 @@ class CreatePromocodeTable extends Migration
 
             $table->unique('promocode');
 
-            $table->foreign('journal_id')->references('id')->on('journal');
-            $table->foreign('journal_for_releases_id')->references('id')->on('journal');
+            $table->foreign('journal_id')->references('id')->on('journals');
+            $table->foreign('journal_for_releases_id')->references('id')->on('journals');
         });
 
-        Schema::create('promocodes_publishings', function (Blueprint $table) {
+        Schema::create('promocode_publishing', function (Blueprint $table) {
             $table->unsignedInteger('promocode_id');
             $table->unsignedInteger('publishing_id');
 
-            $table->foreign('promocode_id')->references('id')->on('promocode');
-            $table->foreign('publishing_id')->references('id')->on('publishing');
+            $table->foreign('promocode_id')->references('id')->on('promocodes');
+            $table->foreign('publishing_id')->references('id')->on('publishings');
 
             $table->primary(['promocode_id', 'publishing_id']);
         });
 
-        Schema::create('promocodes_releases', function (Blueprint $table) {
+        Schema::create('promocode_release', function (Blueprint $table) {
             $table->unsignedInteger('promocode_id');
             $table->unsignedInteger('release_id');
 
-            $table->foreign('promocode_id')->references('id')->on('promocode');
-            $table->foreign('release_id')->references('id')->on('release');
+            $table->foreign('promocode_id')->references('id')->on('promocodes');
+            $table->foreign('release_id')->references('id')->on('releases');
 
             $table->primary(['promocode_id', 'release_id']);
         });
 
-        Schema::create('promocodes_journals', function (Blueprint $table) {
+        Schema::create('promocode_journal', function (Blueprint $table) {
             $table->unsignedInteger('promocode_id');
             $table->unsignedInteger('journal_id');
 
-            $table->foreign('promocode_id')->references('id')->on('promocode');
-            $table->foreign('journal_id')->references('id')->on('journal');
+            $table->foreign('promocode_id')->references('id')->on('promocodes');
+            $table->foreign('journal_id')->references('id')->on('journals');
 
             $table->primary(['promocode_id', 'journal_id']);
         });
@@ -77,6 +77,6 @@ class CreatePromocodeTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('promocode');
+
     }
 }

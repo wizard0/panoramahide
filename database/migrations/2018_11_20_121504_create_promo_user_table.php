@@ -13,7 +13,7 @@ class CreatePromoUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('promo_user', function (Blueprint $table) {
+        Schema::create('promo_users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->unsignedInteger('user_id');
@@ -23,32 +23,32 @@ class CreatePromoUserTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::create('promo_users_promocodes', function (Blueprint $table) {
+        Schema::create('promo_user_promocode', function (Blueprint $table) {
             $table->unsignedInteger('promo_user_id');
             $table->unsignedInteger('promocode_id');
 
-            $table->foreign('promo_user_id')->references('id')->on('promo_user');
-            $table->foreign('promocode_id')->references('id')->on('promocode');
+            $table->foreign('promo_user_id')->references('id')->on('promo_users');
+            $table->foreign('promocode_id')->references('id')->on('promocodes');
 
             $table->primary(['promo_user_id', 'promocode_id']);
         });
 
-        Schema::create('promo_users_publishings', function (Blueprint $table) {
+        Schema::create('promo_user_publishing', function (Blueprint $table) {
             $table->unsignedInteger('promo_user_id');
             $table->unsignedInteger('publishing_id');
 
-            $table->foreign('promo_user_id')->references('id')->on('promo_user');
-            $table->foreign('publishing_id')->references('id')->on('publishing');
+            $table->foreign('promo_user_id')->references('id')->on('promo_users');
+            $table->foreign('publishing_id')->references('id')->on('publishings');
 
             $table->primary(['promo_user_id', 'publishing_id']);
         });
 
-        Schema::create('promo_users_releases', function (Blueprint $table) {
+        Schema::create('promo_user_release', function (Blueprint $table) {
             $table->unsignedInteger('promo_user_id');
             $table->unsignedInteger('release_id');
 
-            $table->foreign('promo_user_id')->references('id')->on('promo_user');
-            $table->foreign('release_id')->references('id')->on('release');
+            $table->foreign('promo_user_id')->references('id')->on('promo_users');
+            $table->foreign('release_id')->references('id')->on('releases');
 
             $table->primary(['promo_user_id', 'release_id']);
         });
@@ -61,6 +61,6 @@ class CreatePromoUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('promo_user');
+
     }
 }

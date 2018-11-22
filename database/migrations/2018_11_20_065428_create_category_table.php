@@ -13,26 +13,25 @@ class CreateCategoryTable extends Migration
      */
     public function up()
     {
-        Schema::create('category', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
             $table->integer('sort')->nullable();
             $table->timestamps();
         });
 
-        Schema::create('category_translate', function (Blueprint $table) {
+        Schema::create('category_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('category_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
             $table->string('image')->nullable();
             $table->text('description')->nullable();
-            $table->timestamps();
 
-            $table->unique(['language', 'code']);
+            $table->unique(['locale', 'code']);
 
-            $table->foreign('category_id')->references('id')->on('category');
+            $table->foreign('category_id')->references('id')->on('categories');
         });
     }
 
@@ -43,6 +42,6 @@ class CreateCategoryTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('category');
+
     }
 }

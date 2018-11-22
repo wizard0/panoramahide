@@ -13,44 +13,28 @@ class AddForeignKeysToTables extends Migration
      */
     public function up()
     {
-        Schema::table('journal', function (Blueprint $table) {
-            $table->foreign('journal_contact_id')->references('id')->on('journal_contact');
+        Schema::table('journals', function (Blueprint $table) {
+            $table->foreign('journal_contact_id')->references('id')->on('journal_contacts');
         });
 
-        Schema::create('journals_publishings', function (Blueprint $table) {
+        Schema::create('journal_publishing', function (Blueprint $table) {
             $table->unsignedInteger('journal_id');
             $table->unsignedInteger('publishing_id');
 
-            $table->foreign('journal_id')->references('id')->on('journal');
-            $table->foreign('publishing_id')->references('id')->on('publishing');
+            $table->foreign('journal_id')->references('id')->on('journals');
+            $table->foreign('publishing_id')->references('id')->on('publishings');
 
             $table->primary(['journal_id', 'publishing_id']);
         });
 
-        Schema::create('journals_categories', function (Blueprint $table) {
+        Schema::create('journal_category', function (Blueprint $table) {
             $table->unsignedInteger('journal_id');
             $table->unsignedInteger('category_id');
 
-            $table->foreign('journal_id')->references('id')->on('journal');
-            $table->foreign('category_id')->references('id')->on('category');
+            $table->foreign('journal_id')->references('id')->on('journals');
+            $table->foreign('category_id')->references('id')->on('categories');
 
             $table->primary(['journal_id', 'category_id']);
-        });
-
-        Schema::table('journal_translate', function (Blueprint $table) {
-            $table->foreign('language')->references('code')->on('language');
-        });
-
-        Schema::table('journal_contact', function (Blueprint $table) {
-            $table->foreign('language')->references('code')->on('language');
-        });
-
-        Schema::table('category_translate', function (Blueprint $table) {
-            $table->foreign('language')->references('code')->on('language');
-        });
-
-        Schema::table('publishing_translate', function (Blueprint $table) {
-            $table->foreign('language')->references('code')->on('language');
         });
     }
 

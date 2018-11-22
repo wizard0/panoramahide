@@ -13,22 +13,23 @@ class CreateJournalContactTable extends Migration
      */
     public function up()
     {
-        Schema::create('journal_contact', function (Blueprint $table) {
+        Schema::create('journal_contacts', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
         });
 
-        Schema::create('journal_contact', function (Blueprint $table) {
+        Schema::create('journal_contact_translates', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('journal_contact-id');
-            $table->string('language');
+            $table->unsignedInteger('journal_contact_id');
+            $table->string('locale')->index();
             $table->string('chief_editor')->nullable();
             $table->string('phone')->nullable();
             $table->string('email')->nullable();
             $table->string('site')->nullable();
             $table->text('about_editor')->nullable();
             $table->text('contacts')->nullable();
-            $table->timestamps();
+
+            $table->foreign('journal_contact_id')->references('id')->on('journal_contacts');
         });
     }
 
@@ -39,6 +40,6 @@ class CreateJournalContactTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journal_contact');
+
     }
 }

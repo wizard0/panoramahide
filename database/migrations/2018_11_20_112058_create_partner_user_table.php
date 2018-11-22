@@ -13,7 +13,7 @@ class CreatePartnerUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('partner_user', function (Blueprint $table) {
+        Schema::create('partner_users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('user_id');
             $table->boolean('active')->default(1);
@@ -23,25 +23,25 @@ class CreatePartnerUserTable extends Migration
 
             $table->unique('user_id');
 
-            $table->foreign('partner_id')->references('id')->on('partner');
+            $table->foreign('partner_id')->references('id')->on('partners');
         });
 
-        Schema::create('p_users_used_quotas', function (Blueprint $table) {
+        Schema::create('partner_user_quota', function (Blueprint $table) {
             $table->unsignedInteger('p_user_id');
             $table->unsignedInteger('quota_id');
 
-            $table->foreign('p_user_id')->references('id')->on('partner_user');
-            $table->foreign('quota_id')->references('id')->on('quota');
+            $table->foreign('p_user_id')->references('id')->on('partner_users');
+            $table->foreign('quota_id')->references('id')->on('quotas');
 
             $table->primary(['p_user_id', 'quota_id']);
         });
 
-        Schema::create('p_users_avail_releases', function (Blueprint $table) {
+        Schema::create('partner_user_release', function (Blueprint $table) {
             $table->unsignedInteger('p_user_id');
             $table->unsignedInteger('release_id');
 
-            $table->foreign('p_user_id')->references('id')->on('partner_user');
-            $table->foreign('release_id')->references('id')->on('release');
+            $table->foreign('p_user_id')->references('id')->on('partner_users');
+            $table->foreign('release_id')->references('id')->on('releases');
 
             $table->primary(['p_user_id', 'release_id']);
         });
@@ -54,8 +54,6 @@ class CreatePartnerUserTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('partner_user');
-        Schema::dropIfExists('p_users_used_quotas');
-        Schema::dropIfExists('p_users_available_quotas');
+
     }
 }

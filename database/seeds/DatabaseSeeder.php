@@ -11,13 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('language')->insert([
-            'name' => 'Русский',
-            'code' => 'RU'
-        ]);
-        DB::table('language')->insert([
-            'name' => 'English',
-            'code' => 'EN'
-        ]);
+
     }
 }
