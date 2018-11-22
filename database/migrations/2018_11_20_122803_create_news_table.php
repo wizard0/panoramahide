@@ -20,20 +20,20 @@ class CreateNewsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('news_publishings', function (Blueprint $table) {
+        Schema::create('news_publishing', function (Blueprint $table) {
             $table->unsignedInteger('news_id');
             $table->unsignedInteger('publishing_id');
 
             $table->foreign('news_id')->references('id')->on('news');
-            $table->foreign('publishing_id')->references('id')->on('publishing');
+            $table->foreign('publishing_id')->references('id')->on('publishings');
 
             $table->primary(['news_id', 'publishing_id']);
         });
 
-        Schema::create('news_translate', function (Blueprint $table) {
+        Schema::create('news_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('news_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
             $table->text('description')->nullable();
@@ -42,10 +42,9 @@ class CreateNewsTable extends Migration
             $table->string('preview_image')->nullable();
             $table->timestamps();
 
-            $table->unique(['language', 'code']);
+            $table->unique(['locale', 'code']);
 
             $table->foreign('news_id')->references('id')->on('news');
-            $table->foreign('language')->references('code')->on('language');
         });
     }
 
@@ -56,6 +55,6 @@ class CreateNewsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('news');
+
     }
 }

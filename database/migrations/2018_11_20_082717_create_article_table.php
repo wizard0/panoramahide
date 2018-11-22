@@ -13,7 +13,7 @@ class CreateArticleTable extends Migration
      */
     public function up()
     {
-        Schema::create('article', function (Blueprint $table) {
+        Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
             $table->dateTime('active_date')->nullable();
@@ -25,13 +25,13 @@ class CreateArticleTable extends Migration
             $table->string('price')->nullable();
             $table->timestamps();
 
-            $table->foreign('release_id')->references('id')->on('release');
+            $table->foreign('release_id')->references('id')->on('releases');
         });
 
-        Schema::create('article_translate', function (Blueprint $table) {
+        Schema::create('article_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('article_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
             $table->json('keywords')->nullable()->comment('Just tags');
@@ -40,31 +40,29 @@ class CreateArticleTable extends Migration
             $table->string('preview_image')->nullable();
             $table->text('preview_description')->nullable();
             $table->text('bibliography')->nullable();
-            $table->string('price')->nullable();
             $table->timestamps();
 
-            $table->unique(['language', 'code']);
+            $table->unique(['locale', 'code']);
 
-            $table->foreign('article_id')->references('id')->on('release');
-            $table->foreign('language')->references('code')->on('language');
+            $table->foreign('article_id')->references('id')->on('articles');
         });
 
-        Schema::create('articles_authors', function (Blueprint $table) {
+        Schema::create('article_author', function (Blueprint $table) {
             $table->unsignedInteger('article_id');
             $table->unsignedInteger('author_id');
 
-            $table->foreign('article_id')->references('id')->on('article');
-            $table->foreign('author_id')->references('id')->on('author');
+            $table->foreign('article_id')->references('id')->on('articles');
+            $table->foreign('author_id')->references('id')->on('authors');
 
             $table->primary(['article_id', 'author_id']);
         });
 
-        Schema::create('articles_categories', function (Blueprint $table) {
+        Schema::create('article_category', function (Blueprint $table) {
             $table->unsignedInteger('article_id');
             $table->unsignedInteger('category_id');
 
-            $table->foreign('article_id')->references('id')->on('article');
-            $table->foreign('category_id')->references('id')->on('category');
+            $table->foreign('article_id')->references('id')->on('articles');
+            $table->foreign('category_id')->references('id')->on('categories');
 
             $table->primary(['article_id', 'category_id']);
         });
@@ -77,9 +75,6 @@ class CreateArticleTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('articles_authors');
-        Schema::dropIfExists('articles_categories');
-        Schema::dropIfExists('article');
-        Schema::dropIfExists('article_translate');
+
     }
 }

@@ -13,9 +13,9 @@ class CreateSubscriptionTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->unsignedInteger('journal_id');
             $table->boolean('active')->default(1);
             $table->enum('type', ['printed', 'electronic']);
@@ -33,8 +33,7 @@ class CreateSubscriptionTable extends Migration
             $table->string('price_for_year')->nullable();
             $table->timestamps();
 
-            $table->foreign('journal_id')->references('id')->on('journal');
-            $table->foreign('language')->references('code')->on('language');
+            $table->foreign('journal_id')->references('id')->on('journals');
         });
     }
 
@@ -45,6 +44,6 @@ class CreateSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('subscription');
+
     }
 }

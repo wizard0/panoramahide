@@ -19,16 +19,16 @@ class CreateJournalsByPromoTable extends Migration
             $table->unsignedInteger('promocode_id');
             $table->timestamps();
 
-            $table->foreign('promo_user_id')->references('id')->on('promo_user');
-            $table->foreign('promocode_id')->references('id')->on('promocode');
+            $table->foreign('promo_user_id')->references('id')->on('promo_users');
+            $table->foreign('promocode_id')->references('id')->on('promocodes');
         });
 
-        Schema::create('jby_promos_journals', function (Blueprint $table) {
+        Schema::create('jby_promo_journal', function (Blueprint $table) {
             $table->unsignedInteger('jby_promo_id');
             $table->unsignedInteger('journal_id');
 
             $table->foreign('jby_promo_id')->references('id')->on('jby_promo');
-            $table->foreign('journal_id')->references('id')->on('journal');
+            $table->foreign('journal_id')->references('id')->on('journals');
 
             $table->primary(['jby_promo_id', 'journal_id']);
         });
@@ -41,6 +41,6 @@ class CreateJournalsByPromoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journals_by_promo');
+
     }
 }

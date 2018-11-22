@@ -13,7 +13,7 @@ class CreateQuotaTable extends Migration
      */
     public function up()
     {
-        Schema::create('quota', function (Blueprint $table) {
+        Schema::create('quotas', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
             $table->unsignedInteger('partner_id');
@@ -25,9 +25,9 @@ class CreateQuotaTable extends Migration
             $table->unsignedInteger('used')->nullable();
             $table->timestamps();
 
-            $table->foreign('partner_id')->references('id')->on('partner');
-            $table->foreign('journal_id')->references('id')->on('journal');
-            $table->foreign('release_id')->references('id')->on('release');
+            $table->foreign('partner_id')->references('id')->on('partners');
+            $table->foreign('journal_id')->references('id')->on('journals');
+            $table->foreign('release_id')->references('id')->on('releases');
         });
     }
 
@@ -38,6 +38,6 @@ class CreateQuotaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('quota');
+
     }
 }

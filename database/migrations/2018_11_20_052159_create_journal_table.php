@@ -13,7 +13,7 @@ class CreateJournalTable extends Migration
      */
     public function up()
     {
-        Schema::create('journal', function (Blueprint $table) {
+        Schema::create('journals', function (Blueprint $table) {
             $table->increments('id');
             $table->boolean('active')->default(1);
             $table->dateTime('active_date')->nullable();
@@ -22,10 +22,10 @@ class CreateJournalTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('journal_translate', function (Blueprint $table) {
+        Schema::create('journal_translates', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('journal_id');
-            $table->string('language');
+            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
             $table->json('in_HAC_list')->nullable();
@@ -41,11 +41,10 @@ class CreateJournalTable extends Migration
             $table->text('rubrics')->nullable();
             $table->text('review_procedure')->nullable();
             $table->text('article_submission_rules')->nullable();
-            $table->timestamps();
 
-            $table->unique(['language', 'code']);
+            $table->unique(['locale', 'code']);
 
-            $table->foreign('journal_id')->references('id')->on('journal');
+            $table->foreign('journal_id')->references('id')->on('journals');
         });
     }
 
@@ -56,7 +55,6 @@ class CreateJournalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journal');
-        Schema::dropIfExists('journal_translate');
+
     }
 }
