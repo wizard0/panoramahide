@@ -16,3 +16,8 @@ Route::get('/', function () {
 });
 
 Route::get('/test/', 'TestController');
+
+
+Route::group(['prefix' => 'admin'], function () {
+    Voyager::routes();
+});
