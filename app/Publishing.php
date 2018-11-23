@@ -2,21 +2,13 @@
 
 namespace App;
 
-use App\Translate\PublishingTranslate;
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class Publishing extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name'];
-    protected $fillable = ['code'];
+    public $translatable = ['name'];
 
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = PublishingTranslate::class;
 }

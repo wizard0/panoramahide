@@ -2,20 +2,14 @@
 
 namespace App;
 
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class JournalContact extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name'];
-    protected $fillable = ['code'];
+    public $translatable = ['name'];
+//    protected $fillable = ['code'];
 
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = 'journal_contact_translate';
 }

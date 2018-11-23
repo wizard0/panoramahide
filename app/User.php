@@ -27,4 +27,8 @@ class User extends \TCG\Voyager\Models\User
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function isAdmin() {
+        return $this->hasRole('admin');
+    }
 }

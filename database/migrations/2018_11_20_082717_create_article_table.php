@@ -15,6 +15,8 @@ class CreateArticleTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('code');
             $table->boolean('active')->default(1);
             $table->dateTime('active_date')->nullable();
             $table->integer('sort')->nullable();
@@ -23,17 +25,6 @@ class CreateArticleTable extends Migration
             $table->enum('content_restriction', ['no', 'register', 'pay/subscribe'])->default('no');
             $table->string('UDC')->nullable()->comment('Universal Decimal Classification');
             $table->string('price')->nullable();
-            $table->timestamps();
-
-            $table->foreign('release_id')->references('id')->on('releases');
-        });
-
-        Schema::create('article_translates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('article_id');
-            $table->string('locale')->index();
-            $table->string('name');
-            $table->string('code');
             $table->json('keywords')->nullable()->comment('Just tags');
             $table->string('image')->nullable();
             $table->text('description')->nullable();
@@ -42,9 +33,7 @@ class CreateArticleTable extends Migration
             $table->text('bibliography')->nullable();
             $table->timestamps();
 
-            $table->unique(['locale', 'code']);
-
-            $table->foreign('article_id')->references('id')->on('articles');
+            $table->foreign('release_id')->references('id')->on('releases');
         });
 
         Schema::create('article_author', function (Blueprint $table) {

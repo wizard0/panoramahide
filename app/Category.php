@@ -2,21 +2,14 @@
 
 namespace App;
 
-use App\Translate\CategoryTranslate;
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class Category extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name', 'code', 'image', 'description'];
+    public $translatable = ['name', 'code', 'image', 'description'];
 //    protected $fillable = ['code'];
 
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = CategoryTranslate::class;
 }

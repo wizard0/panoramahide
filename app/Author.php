@@ -2,21 +2,14 @@
 
 namespace App;
 
-use App\Translate\AuthorTranslate;
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class Author extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name'];
+    public $translatable = ['name'];
 //    protected $fillable = ['code'];
 
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = AuthorTranslate::class;
 }
