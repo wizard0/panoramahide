@@ -2,27 +2,19 @@
 
 namespace App;
 
-use App\Translate\JournalTranslate;
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class Journal extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = [
+    public $translatable = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',
         'format', 'volume', 'periodicity', 'editorial_board', 'article_index', 'rubrics', 'review_procedure',
         'article_submission_rules'
     ];
 //    protected $fillable = ['code'];
-
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = JournalTranslate::class;
 
     /**
      * Categories of the journal belongs to

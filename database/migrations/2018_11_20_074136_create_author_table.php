@@ -16,17 +16,8 @@ class CreateAuthorTable extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->increments('id');
             $table->string('author_language');
-            $table->timestamps();
-        });
-
-        Schema::create('author_translates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('author_id');
-            $table->string('locale')->index();
             $table->string('name');
             $table->timestamps();
-
-            $table->foreign('author_id')->references('id')->on('authors');
         });
     }
 

@@ -15,24 +15,13 @@ class CreatePublishingTable extends Migration
     {
         Schema::create('publishings', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('active')->default(1);
-            $table->integer('sort')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('publishing_translates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('publishing_id');
-            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
+            $table->boolean('active')->default(1);
+            $table->integer('sort')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
-
-            $table->unique(['locale', 'code']);
-
-            $table->foreign('publishing_id')->references('id')->on('publishings');
         });
     }
 

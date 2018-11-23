@@ -15,6 +15,8 @@ class CreateReleaseTable extends Migration
     {
         Schema::create('releases', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
+            $table->string('code');
             $table->boolean('active')->default(1);
             $table->dateTime('active_date')->nullable();
             $table->unsignedInteger('journal_id');
@@ -23,26 +25,13 @@ class CreateReleaseTable extends Migration
             $table->string('price_for_electronic')->nullable();
             $table->boolean('promo')->nullable()->comment('Is release available for free');
             $table->string('price_for_articles')->nullable();
-            $table->timestamps();
-
-            $table->foreign('journal_id')->references('id')->on('journals');
-        });
-
-        Schema::create('release_translates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('release_id');
-            $table->string('locale')->index();
-            $table->string('name');
-            $table->string('code');
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->string('preview_image')->nullable();
             $table->text('preview_description')->nullable();
             $table->timestamps();
 
-            $table->unique(['locale', 'code']);
-
-            $table->foreign('release_id')->references('id')->on('releases');
+            $table->foreign('journal_id')->references('id')->on('journals');
         });
     }
 

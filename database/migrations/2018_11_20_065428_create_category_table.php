@@ -15,23 +15,13 @@ class CreateCategoryTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->increments('id');
-            $table->boolean('active')->default(1);
-            $table->integer('sort')->nullable();
-            $table->timestamps();
-        });
-
-        Schema::create('category_translates', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('category_id');
-            $table->string('locale')->index();
             $table->string('name');
             $table->string('code');
+            $table->boolean('active')->default(1);
+            $table->integer('sort')->nullable();
             $table->string('image')->nullable();
             $table->text('description')->nullable();
-
-            $table->unique(['locale', 'code']);
-
-            $table->foreign('category_id')->references('id')->on('categories');
+            $table->timestamps();
         });
     }
 
