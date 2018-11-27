@@ -2,23 +2,15 @@
 
 namespace App;
 
-use App\Translate\ReleaseTranslate;
-use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use TCG\Voyager\Traits\Translatable;
 
 class Release extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name', 'code', 'image', 'description', 'preview_image', 'preview_description'];
+    public $translatable = ['name', 'code', 'image', 'description', 'preview_image', 'preview_description'];
 //    protected $fillable = ['code'];
-
-    /**
-     * The model with translation of all entities
-     *
-     * @var string
-     */
-    protected $translationModel = ReleaseTranslate::class;
 
     /**
      * Journal the release belongs to
@@ -27,5 +19,9 @@ class Release extends Model
      */
     public function journal() {
         return $this->belongsTo(Journal::class);
+    }
+
+    public function articles() {
+        return $this->hasMany(Article::class);
     }
 }
