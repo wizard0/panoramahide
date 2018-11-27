@@ -12,4 +12,7 @@ class Author extends Model
     public $translatable = ['name'];
 //    protected $fillable = ['code'];
 
+    public function articles() {
+        $this->belongsToMany(Article::class);
+    }
 }

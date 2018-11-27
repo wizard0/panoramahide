@@ -21,7 +21,8 @@ class CreatePromocodeTable extends Migration
                 'common',
                 'on_journal',
                 'on_publishing',
-                'journal+publishing',
+                'on_release',
+                'publishing+release',
                 'custom'
             ]);
             $table->unsignedInteger('journal_id')->nullable();

@@ -43,10 +43,7 @@ class Journal extends Model
         return $this->belongsTo(JournalContact::class);
     }
 
-    /**
-     * Locales allowed to show journal
-     */
-    public function localeFor() {
-        //
+    public function releases() {
+        $this->hasMany(Release::class);
     }
 }
