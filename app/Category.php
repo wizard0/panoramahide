@@ -13,10 +13,10 @@ class Category extends Model
 //    protected $fillable = ['code'];
 
     public function journals() {
-        return $this->belongsToMany(Journal::class);
+        return $this->belongsToMany(Journal::class, 'journal_category');
     }
 
     public function articles() {
-        return $this->belongsToMany(Article::class);
+        return $this->belongsToMany(Article::class, 'article_category');
     }
 }

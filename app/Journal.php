@@ -40,7 +40,7 @@ class Journal extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function contact() {
-        return $this->belongsTo(JournalContact::class);
+        return $this->belongsTo(JournalContact::class, 'journal_contact_id');
     }
 
     public function releases() {
