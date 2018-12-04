@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use TCG\Voyager\Traits\Translatable;
 
@@ -46,4 +47,13 @@ class Journal extends Model
     public function releases() {
         $this->hasMany(Release::class);
     }
+
+    public function scopeAllNew(Builder $query) {
+        return $query->orderBy('created_at', 'asc');
+    }
+
+    public function scopeByAlphabet(Builder $query) {
+        return $query->orderBy('name', 'asc');
+    }
+
 }

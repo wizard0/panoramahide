@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use TCG\Voyager\Traits\Translatable;
 
@@ -23,5 +24,13 @@ class Release extends Model
 
     public function articles() {
         return $this->hasMany(Article::class);
+    }
+
+    public function scopeAllNew(Builder $query) {
+        return $query->orderBy('created_at', 'desc');
+    }
+
+    public function getUrl() {
+        return '/magazines/' . $this->journal->code . '/numbers/' . $this->id . '.html';
     }
 }

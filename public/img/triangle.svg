@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="21px" height="23px" viewBox="0 0 21 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Triangle 2 Copy</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="6.89355469 34.4628906 14.8935547 47.4628906 -1.10644531 47.4628906"></polygon>
+        <filter x="-53.8%" y="-31.2%" width="207.7%" height="187.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.313887002 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Issue" transform="translate(-648.000000, -954.000000)">
+            <g id="Контент" transform="translate(181.000000, 695.500000)">
+                <g id="Последние-журналы" transform="translate(20.500000, 55.500000)">
+                    <g id="item" transform="translate(0.390625, 0.769531)">
+                        <g id="ВАК" transform="translate(254.000000, 170.000000)">
+                            <g id="Сообщение" transform="translate(195.187500, 0.827148)">
+                                <g id="Triangle-2-Copy">
+                                    <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                                    <use fill="#FEFEFE" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use TCG\Voyager\Traits\Translatable;
 
@@ -19,5 +20,9 @@ class News extends Model
      */
     public function publishings() {
         return $this->belongsToMany(Publishing::class);
+    }
+
+    public function scopeAllNew(Builder $query) {
+        return $query->orderBy('created_at', 'desc');
     }
 }

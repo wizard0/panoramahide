@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="22px" viewBox="0 0 18 22" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Icons / Lock icon white</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Articles" transform="translate(-1089.000000, -701.000000)">
+            <g id="Контент" transform="translate(202.000000, 654.123047)">
+                <g id="Sidebar" transform="translate(874.000000, 3.000000)">
+                    <g id="ACTIONS" transform="translate(0.000000, 36.876953)">
+                        <g id="item-02-copy" transform="translate(1.500000, 0.597656)">
+                            <g id="Icons-/-Lock-icon-white" transform="translate(12.654297, 6.514648)">
+                                <path d="M1.08112081,9.68137229 L14.8711034,9.68137229 C15.3862079,10.7144943 15.675952,11.8796712 15.675952,13.1125215 C15.675952,17.3650264 12.2286157,20.8123628 7.97611078,20.8123628 C3.72360588,20.8123628 0.276269531,17.3650264 0.276269531,13.1125215 C0.276269531,11.8796715 0.566013575,10.7144948 1.08112081,9.68137229 Z" id="Combined-Shape" stroke="#FFFFFF" stroke-width="2"></path>
+                                <circle id="Oval-12" fill="#FFFFFF" fill-rule="evenodd" cx="7.97611078" cy="13.691152" r="1.94079438"></circle>
+                                <rect id="Rectangle-17" fill="#FFFFFF" fill-rule="evenodd" x="7.0470004" y="14.3274792" width="2.04978664" height="3.23541045"></rect>
+                                <path d="" id="Path-8" stroke="#979797" stroke-width="1"></path>
+                                <path d="M12.9332596,9.85793303 C12.6431852,6.57355626 12.5509282,1.46081424 7.8274585,1.46081424 C3.89496934,1.46081424 3.32277373,4.75242118 3.16226397,6.37313596" id="Path-9" stroke="#FFFFFF" stroke-width="2"></path>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
