@@ -25,7 +25,7 @@ class CreateArticleTable extends Migration
             $table->enum('content_restriction', ['no', 'register', 'pay/subscribe'])->default('no');
             $table->string('UDC')->nullable()->comment('Universal Decimal Classification');
             $table->string('price')->nullable();
-            $table->json('keywords')->nullable()->comment('Just tags');
+            $table->string('keywords')->nullable()->comment('Just tags');
             $table->string('image')->nullable();
             $table->text('description')->nullable();
             $table->string('preview_image')->nullable();

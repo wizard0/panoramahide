@@ -25,4 +25,8 @@ class Article extends Model
     public function categories() {
         return $this->belongsToMany(Category::class);
     }
+
+    public function getUrl() {
+        return '/articles/' . $this->code . '.html';
+    }
 }

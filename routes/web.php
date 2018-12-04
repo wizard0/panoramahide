@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'MainpageController@index');
 
 //Route::get('/test/', 'TestController');
 
@@ -25,3 +23,9 @@ Route::group(['prefix' => 'admin'], function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::post('/add-to-cart', 'ProductController@addToCart');
+
+Route::group(['prefix' => 'personal'], function () {
+    Route::get('cart', 'PersonalController@cart');
+});
