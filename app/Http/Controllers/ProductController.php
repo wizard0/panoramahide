@@ -18,12 +18,22 @@ class ProductController extends Controller
             $version = $request->get('version');
             $product = $this->getModel($type, $id);
 
-            $oldCart = Session::has('cart') ? Session::get('cart') : null;
-            $cart = new Cart($oldCart);
+            $cart = $this->getCart();
             $cart->add($product, $version);
-            $request->session()->put('cart', $cart);
+            return $this->updateCart($cart);
+        }
+        return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
+    }
 
-            return $this->getHeaderCart();
+    public function deleteFromCart(Request $request) {
+        if ($request->ajax()) {
+            $type = $request->get('type');
+            $id = $request->get('id');
+
+            $cart = $this->getCart();
+            $product = $this->getModel($type, $id);
+            $cart->delete($product, $type);
+            return $this->updateCart($cart);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
@@ -42,5 +52,15 @@ class ProductController extends Controller
             case Cart::PRODUCT_TYPE_SUBSCRIPTION:
                 return Subscription::find($id);
         }
+    }
+
+    private function getCart() {
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        return new Cart($oldCart);
+    }
+
+    private function updateCart($cart) {
+        Session::put('cart', $cart);
+        return $this->getHeaderCart();
     }
 }

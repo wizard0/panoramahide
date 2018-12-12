@@ -2,6 +2,8 @@
 
 namespace App;
 
+use Illuminate\Support\Facades\Session;
+
 class Cart
 {
     public $items = null;
@@ -39,7 +41,7 @@ class Cart
 //            case Subscription::class:
 //                break;
         }
-        $storedItems = [
+        $storedItems = (object) [
             'qty' => 0,
             'type' => $type,
             'version' => $version,
@@ -53,8 +55,8 @@ class Cart
             }
         }
 
-        $storedItems['qty']++;
-        $storedItems['price'] = $price * $storedItems['qty'];
+        $storedItems->qty++;
+        $storedItems->price = $price * $storedItems->qty;
         $this->items[$type . $product->id] = $storedItems;
         $this->totalQty = sizeof($this->items);
         $this->totalPrice += $price;
@@ -63,8 +65,8 @@ class Cart
     public function delete($product, $type) {
         $itemIndex = $type . $product->id;
         $item = $this->items[$itemIndex];
-        $itemPrice = $item['price'];
-        $itemQty = $item['qty'];
+        $itemPrice = $item->price;
+        $itemQty = $item->qty;
 
         unset($this->items[$itemIndex]);
         $this->totalQty = sizeof($this->items);
@@ -74,10 +76,10 @@ class Cart
     public function changeQty($product, $type, $q) {
         $itemIndex = $type . $product->id;
         $item = $this->items[$itemIndex];
-        $itemPrice = $item['price'];
-        $itemQty = $item['qty'];
+        $itemPrice = $item->price;
+        $itemQty = $item->qty;
 
-        $this->items[$itemIndex]['qty'] = $q;
+        $this->items[$itemIndex]->qty = $q;
         $this->totalPrice -= $itemPrice*$itemQty;
         $this->totalPrice += $itemPrice*$q;
         $this->totalQty = sizeof($this->items);

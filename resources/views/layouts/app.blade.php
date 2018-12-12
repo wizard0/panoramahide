@@ -10,11 +10,17 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    {{--<script src="{{ asset('js/app.js') }}"></script>--}}
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/popper.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.js') }}"></script>
     <script src="{{ asset('js/moment.js') }}"></script>
     <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
     <script src="{{ asset('js/default_scripts.js') }}"></script>
-    <script src="{{ asset('/js/CartManager.js') }}"></script>
+    <script src="{{ asset('js/CartManager.js') }}"></script>
+    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
+        <script src="{{ asset('js/order_scripts.js') }}"></script>
+    @endif
 
 
     <!-- Fonts -->
@@ -23,12 +29,16 @@
 
     <!-- Styles -->
 {{--    <link href="{{ asset('css/app.css') }}" rel="stylesheet">--}}
-    @if (preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
-    @endif
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    @if (preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
+        <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
+    @endif
+    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
+        <link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">
+    @endif
 
 </head>
 <body>

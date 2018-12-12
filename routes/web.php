@@ -25,7 +25,19 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('/add-to-cart', 'ProductController@addToCart');
+Route::post('/delete-from-cart', 'ProductController@deleteFromCart');
 
 Route::group(['prefix' => 'personal'], function () {
-    Route::get('cart', 'PersonalController@cart');
+    Route::get('cart', 'PersonalController@cart')
+        ->name('cart');
+    Route::get('order/make', 'PersonalController@orderMake')
+        ->name('order.make');
+    Route::post('order/make', 'PersonalController@processOrder');
+    Route::get('order/complete/{id}', 'PersonalController@completeOrder')
+        ->name('order.complete');
+});
+
+Route::get('/logout', function () {
+    Auth::logout();
+    \Illuminate\Support\Facades\Redirect::back();
 });

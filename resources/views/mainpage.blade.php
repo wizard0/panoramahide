@@ -76,7 +76,7 @@
                                 class="red-link _access_number addToCart"
                                 data-id="{{ $release->id }}"
                                 data-version="<?= Cart::VERSION_ELECTRONIC ?>"
-                                data-product-type="<?= Cart::PRODUCT_TYPE_ARTICLE ?>"
+                                data-product-type="<?= Cart::PRODUCT_TYPE_RELEASE ?>"
                             >
                                 В корзину
                             </a>
