@@ -32,7 +32,7 @@ return [
     */
 
     'controllers' => [
-        'namespace' => 'TCG\\Voyager\\Http\\Controllers',
+        'namespace' => 'App\\Http\\Controllers\\Voyager',
     ],
 
     /*
@@ -209,10 +209,11 @@ return [
     // Here you can specify additional assets you would like to be included in the master.blade
     'additional_css' => [
         'css/admin_custom.css',
+        'css/personal.css',
     ],
 
     'additional_js' => [
-        //'js/custom.js',
+//        'js/CustomBreadManager.js',
     ],
 
     'googlemaps' => [

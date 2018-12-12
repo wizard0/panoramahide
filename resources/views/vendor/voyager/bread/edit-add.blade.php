@@ -33,6 +33,8 @@
                         <!-- CSRF TOKEN -->
                         {{ csrf_field() }}
 
+                        <input type="hidden" id="locale2save" value="{{ config('voyager.multilingual.default') }}" name="locale2save">
+
                         <div class="panel-body">
 
                             @if (count($errors) > 0)
@@ -124,6 +126,10 @@
 @stop
 
 @section('javascript')
+    <script type="text/javascript" src="{{ asset('js/CustomBreadManager.js') }}" ></script>
+    <script>
+        var CustomBreadManager = new JSCustomBreadManager(<?= json_encode([]) ?>);
+    </script>
     <script>
         var params = {};
         var $image;

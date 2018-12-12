@@ -2,9 +2,9 @@
 
 namespace App;
 
+use App\Http\Traits\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
 
 class Release extends Model
 {

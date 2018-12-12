@@ -91,17 +91,7 @@
                 </div>
             </div>
             <div class="d-flex col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 order-sm-3 order-3 order-xl-5 order-lg-5 order-md-3 offset-sm-1 offset-xl-0 offset-lg-0 offset-md-2 justify-content-xl-center justify-content-lg-center justify-content-end">
-                <div class="cart-holder" id="cart-in-header">
-                    <ul>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" role="button" id="dropdownMenuLink3" href="/personal/cart/"><span>Корзина</span></a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
-                                <div class="d-flex flex-wrap w-100" id="basket_html"></div>
-                            </div>
-                        </li>
-                    </ul>
-                    <div id="count_in_basket" class="purchase-number"><span></span></div>
-                </div>
+                @include('personal.header_cart', ['cart' => Session::has('cart') ? Session::get('cart') : null])
             </div>
         </div>
     </div>
