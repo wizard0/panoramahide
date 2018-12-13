@@ -39,6 +39,11 @@
                         </div>
 
                         <div class="panel-body" style="padding-top:0;">
+                            @if($row->field == 'image' || $row->field == 'preview_image')
+                                <input type="hidden"
+                                       id="translate_{{ $row->field }}"
+                                       value="{{ get_field_translations($dataTypeContent, $row->field) }}">
+                            @endif
                             @if($row->type == "image")
                                 <img class="img-responsive"
                                      src="{{ filter_var($dataTypeContent->{$row->field}, FILTER_VALIDATE_URL) ? $dataTypeContent->{$row->field} : Voyager::image($dataTypeContent->{$row->field}) }}">
@@ -160,6 +165,10 @@
         </script>
         <script src="{{ voyager_asset('js/multilingual.js') }}"></script>
     @endif
+        <script type="text/javascript" src="{{ asset('js/CustomBreadManager.js') }}" ></script>
+    <script>
+        var CustomBreadManager = new JSCustomBreadManager(<?= json_encode([]) ?>);
+    </script>
     <script>
         var deleteFormAction;
         $('.delete').on('click', function (e) {

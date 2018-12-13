@@ -8,14 +8,21 @@
     window.JSCustomBreadManager = function (params) {
         this.image_i18n = $('[name="image_i18n"]').val();
         this.preview_image_i18n = $('[name="preview_image_i18n"]').val();
-        // var params = JSON.parse(params);
+        this.css4EditImages = {
+            'max-width' : '200px',
+            'height' : 'auto',
+            'clear' : 'both',
+            'display' : 'block',
+            'padding' : '2px',
+            'border' : '1px solid #ddd',
+            'margin-bottom' : '10px'
+        };
 
-        // $('.language-selector').on('click', $.proxy(this.swapMultilangImages, this));
-        $('input[name="name_i18n"]').on('change', $.proxy(this.swapMultilangImages, this));
-        //$($('input[type="file"][name="image"]')[0]).on('change', $.proxy(this.emptyImageI18nValue, this));
+        $('input[name="name_i18n"]').on('change', $.proxy(this.swapMultilangImagesEdit, this));
+        $('.language-selector label').on('click', $.proxy(this.swapMultilangImagesRead, this));
     };
 
-    window.JSCustomBreadManager.prototype.swapMultilangImages = function (event) {
+    window.JSCustomBreadManager.prototype.swapMultilangImagesEdit = function (event) {
         $('[name="image_i18n"]').val(this.image_i18n);
         $('[name="preview_image_i18n"]').val(this.preview_image_i18n);
 
@@ -25,8 +32,8 @@
         var imageContent = JSON.parse(imageValue.val()),
             previewImageContent = JSON.parse(previewImageValue.val());
 
-        this.applyImage(imageValue, imageContent, choosedLocale);
-        this.applyImage(previewImageValue, previewImageContent, choosedLocale);
+        this.applyImage(imageValue, imageContent, choosedLocale, {'css' : this.css4EditImages});
+        this.applyImage(previewImageValue, previewImageContent, choosedLocale, {'css' : this.css4EditImages});
 
         imageValue.siblings('img').attr('src', '/storage/' + imageContent[choosedLocale]);
         previewImageValue.siblings('img').attr('src', '/storage/' + previewImageContent[choosedLocale]);
@@ -34,20 +41,29 @@
         $('#locale2save').val(choosedLocale);
     };
 
-    window.JSCustomBreadManager.prototype.applyImage = function (imageValue, imageContent, choosedLocale) {
+    window.JSCustomBreadManager.prototype.swapMultilangImagesRead = function (event) {
+        var choosedLocale = $(event.target).find('input').attr('id'),
+            imageValue = $('#translate_image'),
+            previewImageValue = $('#translate_preview_image');
+        var imageContent = JSON.parse(imageValue.val()),
+            previewImageContent = JSON.parse(previewImageValue.val());
+
+        this.applyImage(imageValue, imageContent, choosedLocale, {'class' : 'img-responsive'});
+        this.applyImage(previewImageValue, previewImageContent, choosedLocale, {'class' : 'img-responsive'});
+
+        imageValue.siblings('img').attr('src', '/storage/' + imageContent[choosedLocale]);
+        previewImageValue.siblings('img').attr('src', '/storage/' + previewImageContent[choosedLocale]);
+    }
+
+    window.JSCustomBreadManager.prototype.applyImage = function (imageValue, imageContent, choosedLocale, params) {
         if (imageValue.siblings('img').length == 0 &&
             imageContent[choosedLocale] != null &&
             imageContent[choosedLocale].length > 0) {
             var newImgContainer = $('<img>');
-            newImgContainer.css({
-                'max-width' : '200px',
-                'height' : 'auto',
-                'clear' : 'both',
-                'display' : 'block',
-                'padding' : '2px',
-                'border' : '1px solid #ddd',
-                'margin-bottom' : '10px'
-            });
+            if (!!params['css'])
+                newImgContainer.css(params['css']);
+            if (!!params['class'])
+                newImgContainer.addClass(params['class']);
             imageValue.after(newImgContainer);
         }
 
