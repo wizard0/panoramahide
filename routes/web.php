@@ -35,6 +35,12 @@ Route::group(['prefix' => 'personal'], function () {
     Route::post('order/make', 'PersonalController@processOrder');
     Route::get('order/complete/{id}', 'PersonalController@completeOrder')
         ->name('order.complete');
+
+    Route::group(['prefix' => 'robokassa'], function (){
+        Route::get('result_receiver', 'PaymentController@robokassaResult');
+        Route::get('success', 'PaymentController@robokassaSuccess');
+        Route::get('fail', 'PaymentController@robokassaFail');
+    });
 });
 
 Route::get('/logout', function () {

@@ -14,7 +14,7 @@ class PaysystemSeeder extends Seeder
     {
         DB::table('paysystems')->insert([
             'name' => 'Электронный перевод (ROBOKASSA)',
-            'code' => 'robokassa'
+            'code' => 'robokassa',
         ]);
 
         DB::table('paysystems')->insert([

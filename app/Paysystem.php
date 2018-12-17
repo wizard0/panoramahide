@@ -16,25 +16,31 @@ class Paysystem extends Model
         return self::where(['code' => $code])->first();
     }
 
-    public function getData() {
-        $data = [];
-        switch ($this->code) {
-            case self::ROBOKASSA:
-                $data = (object) [
-                    'login' => 'demo',
-                    'pass' => 'password_1',
-                    'description' => 'Вы хотите оплатить через систему <b>www.roboxchange.net</b>',
-                ];
-                break;
-            case self::SBERBANK:
+    public function getDataValues() {
+        $dataObj = (object) [];
+        foreach ($this->data as $data)
+            $dataObj->{$data->code} = $data->value;
 
-                break;
+        return $dataObj;
+    }
 
-            case self::INVOICE:
+    public function getDataNames() {
+        $dataObj = (object) [];
+        foreach ($this->data as $data)
+            $dataObj->{$data->code} = $data->name;
 
-                break;
-        }
+        return $dataObj;
+    }
 
-        return $data;
+    public function getDataAttributes() {
+        $attributes = [];
+        foreach ($this->data as $data)
+            $attributes[] = $data->code;
+
+        return $attributes;
+    }
+
+    public function data() {
+        return $this->hasMany(PaysystemData::class);
     }
 }

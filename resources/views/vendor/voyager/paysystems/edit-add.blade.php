@@ -54,6 +54,7 @@
 
                             @foreach($dataTypeRows as $row)
                                 <!-- GET THE DISPLAY OPTIONS -->
+
                                 @php
                                     $display_options = isset($row->details->display) ? $row->details->display : NULL;
                                 @endphp
@@ -68,6 +69,7 @@
                                         <label for="name">{{ $row->display_name }}</label>
                                         @include('voyager::multilingual.input-hidden-bread-edit-add')
                                         @if($row->type == 'relationship')
+{{--                                            {{ dd($row->details->model) }}--}}
                                             @include('voyager::formfields.relationship', ['options' => $row->details])      
                                         @else
                                             {!! app('voyager')->formField($row, $dataType, $dataTypeContent) !!}
@@ -128,7 +130,15 @@
 @section('javascript')
     <script type="text/javascript" src="{{ asset('js/CustomBreadManager.js') }}" ></script>
     <script>
-        var CustomBreadManager = new JSCustomBreadManager('<?= json_encode([], JSON_HEX_TAG) ?>');
+        var CustomBreadManager = new JSCustomBreadManager('<?= json_encode([]) ?>');
+        $('#login_data_login').on('change', {
+            'fieldIDs2JSON' : ['login_data_login', 'login_data_password'],
+            'resultID2JSON' : 'result_login_data'
+        }, CustomBreadManager.fields2JSON);
+        $('#login_data_password').on('change', {
+            'fieldIDs2JSON' : ['login_data_login', 'login_data_password'],
+            'resultID2JSON' : 'result_login_data'
+        }, CustomBreadManager.fields2JSON);
     </script>
     <script>
         var params = {};
