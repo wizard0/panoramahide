@@ -81,22 +81,16 @@ class PersonalController extends Controller
 
         // cart clean up
         Session::forget('cart');
-        return redirect()->route('order.complete', ['id' => $order->id]);
+        return redirect()->route('order.complete', [
+            'id' => $order->id,
+            'paysystem' => $order->paysystem
+        ]);
     }
 
     public function completeOrder($id) {
-        $order = Order::find($id)->first();
+        $order = Order::where('id', $id)->first();
 
-        $payData = $order->paysystem->getData();
-
-        $signature = md5(
-            $payData->login .
-            ":" . $order->totalPrice .
-            ":" . $order->id .
-            ":" . $payData->pass .
-            ":Shp_item=1"
-        );
-        $payData->signature = $signature;
+        $payData = $order->collectPayData();
 
         return view('personal.order_complete', compact(
             'order',

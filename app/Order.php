@@ -23,4 +23,32 @@ class Order extends Model
     public function story() {
         return $this->hasMany(OrderStory::class);
     }
+
+    public function collectPayData() {
+            switch ($this->paysystem->code) {
+                case Paysystem::ROBOKASSA:
+                    $dataset = $this->paysystem->getDataValues();
+                    $signature = md5(
+                        $dataset->shop_login .
+                        ":" . $this->totalPrice .
+                        ":" . $this->id .
+                        ":" . $dataset->shop_pass .
+                        ":Shp_item=1"
+                    );
+
+                    return (object) [
+                        'type' => $this->paysystem->code,
+                        'logo' => $this->paysystem->logo,
+                        'description' => $this->paysystem->description,
+                        'login' => $dataset->shop_login,
+                        'signature' => $signature
+                    ];
+
+                    break;
+                case Paysystem::SBERBANK:
+                    break;
+                case Paysystem::INVOICE:
+                    break;
+            }
+    }
 }

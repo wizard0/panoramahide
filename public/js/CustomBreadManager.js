@@ -6,6 +6,11 @@
     if (!!window.JSCustomBreadManager) return;
 
     window.JSCustomBreadManager = function (params) {
+        params = JSON.parse(params);
+
+        // this.fieldIDs2JSON = params.fieldIDs2JSON;
+        // this.resultID2JSON = params.resultID2JSON;
+
         this.image_i18n = $('[name="image_i18n"]').val();
         this.preview_image_i18n = $('[name="preview_image_i18n"]').val();
         this.css4EditImages = {
@@ -18,7 +23,14 @@
             'margin-bottom' : '10px'
         };
 
-        $('input[name="name_i18n"]').on('change', $.proxy(this.swapMultilangImagesEdit, this));
+        // if (this.fieldIDs2JSON != undefined)
+        // this.fieldIDs2JSON.forEach(function (element) {
+        //     $('#' + element).on('change', $.proxy(this.fields2JSON, this));
+        // });
+
+        if ($('input[name="name_i18n"]').length > 0)
+            $('input[name="name_i18n"]').on('change', $.proxy(this.swapMultilangImagesEdit, this));
+        if ($('.language-selector label').length > 0)
         $('.language-selector label').on('click', $.proxy(this.swapMultilangImagesRead, this));
     };
 
@@ -57,8 +69,7 @@
 
     window.JSCustomBreadManager.prototype.applyImage = function (imageValue, imageContent, choosedLocale, params) {
         if (imageValue.siblings('img').length == 0 &&
-            imageContent[choosedLocale] != null &&
-            imageContent[choosedLocale].length > 0) {
+            imageContent[choosedLocale] != null && imageContent[choosedLocale].length > 0) {
             var newImgContainer = $('<img>');
             if (!!params['css'])
                 newImgContainer.css(params['css']);
@@ -73,18 +84,20 @@
         }
     };
 
-    window.JSCustomBreadManager.prototype.emptyImageI18nValue = function () {
-        var choosedLocale = $('.language-selector label.active').find('input').attr('id'),
-            imageValue = $('[name="image_i18n"]'),
-            previewImageValue = $('[name="preview_image_i18n"]');
-        var imageContent = JSON.parse(imageValue.val()),
-            previewImageContent = JSON.parse(previewImageValue.val());
+    window.JSCustomBreadManager.prototype.fields2JSON = function(event) {
+        var data2JSON = {},
+            resultJSON = "";
 
-        imageContent[choosedLocale] = null;
-        previewImageContent[choosedLocale] = null;
+        event.data.fieldIDs2JSON.forEach(function (element) {
+            var name = $('#' + element).attr('name'),
+                value = $('#' + element).val();
+            data2JSON[name] = value;
+        });
 
-        imageValue.val(JSON.stringify(imageContent));
-        previewImageValue.val(JSON.stringify(previewImageContent));
+        console.log(data2JSON);
+        resultJSON = JSON.stringify(data2JSON);
+        $("#" + event.data.resultID2JSON).val(resultJSON);
+        console.log(resultJSON);
     };
 
     MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
@@ -99,5 +112,7 @@
             attributes: true
         });
     };
-    trackChange( $('input[name="name_i18n"]')[0] );
+
+    if ($('input[name="name_i18n"]').length > 0)
+        trackChange( $('input[name="name_i18n"]')[0] );
 })(window, jQuery)
