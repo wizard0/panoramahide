@@ -24,6 +24,27 @@ class Order extends Model
         return $this->hasMany(OrderStory::class);
     }
 
+    public function user() {
+        if (isset($this->phys_user_id) && $this->phys_user_id) {
+            return $this->belongsTo(OrderPhysUser::class, 'phys_user_id');
+        } else {
+            return $this->belongsTo(OrderLegalUser::class, 'legal_user_id');
+        }
+    }
+
+    public function getFullUserName() {
+        return $this->user->getFullName();
+    }
+
+    public function getDeliveryAddress() {
+        return $this->user->getDeliveryAddress();
+    }
+
+    public function getDate()
+    {
+        return date_format(date_create($this->created_at), "d.m.Y");
+    }
+
     public function collectPayData() {
             switch ($this->paysystem->code) {
                 case Paysystem::ROBOKASSA:
@@ -35,18 +56,27 @@ class Order extends Model
                         ":" . $dataset->shop_pass .
                         ":Shp_item=1"
                     );
+                    $robo = new Robokassa();
+                    $robo->setId($this->id);
+                    $robo->setSum($this->totalPrice);
+                    $robo->setCulture(Payment::CULTURE_RU);
+                    $robo->setPaymentMethod('RUR');
+                    $robo->setDescription('test');
+                    dd();
 
                     return (object) [
-                        'type' => $this->paysystem->code,
-                        'logo' => $this->paysystem->logo,
+//                        'type' => $this->paysystem->code,
                         'description' => $this->paysystem->description,
                         'login' => $dataset->shop_login,
-                        'signature' => $signature
+                        'signature' => $signature,
+                        'paymentUrl' => $robo->getPaymentUrl()
                     ];
 
-                    break;
                 case Paysystem::SBERBANK:
-                    break;
+                    return (object) [
+//                        'type' => $this->paysystem->code,
+                        'description' => $this->paysystem->description,
+                    ];
                 case Paysystem::INVOICE:
                     break;
             }

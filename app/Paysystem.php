@@ -40,6 +40,18 @@ class Paysystem extends Model
         return $attributes;
     }
 
+    public function getData() {
+        $attributes = $this->getDataAttributes();
+        $values = $this->getDataValues();
+        $data = (object) [];
+
+        foreach ($attributes as $attribute) {
+            $data->{$attribute} = $values->{$attribute};
+        }
+
+        return $data;
+    }
+
     public function data() {
         return $this->hasMany(PaysystemData::class);
     }

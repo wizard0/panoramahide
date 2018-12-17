@@ -31,9 +31,14 @@
                         <br /><br />
 
                         <table class="sale_order_full_table">
-                            @if ($order->paysystem->code == Paysystem::ROBOKASSA)
-                                @include('includes.img.robokassa', compact('payData', 'order'))
-                            @endif
+                            <tr>
+                                <td class="ps_logo">
+                                    <div class="pay_name">Оплата заказа</div>
+                                    <img src="{{ $order->paysystem->logo }}" border=0 alt="" width="100" height="100" />
+                                    <div class="paysystem_name">{{ $order->paysystem->name }}</div><br>
+                                </td>
+                            </tr>
+                            @include('includes.img.' . $order->paysystem->code, compact('payData', 'order'))
                         </table>
 
                         <div class="form-buttons-holder">
