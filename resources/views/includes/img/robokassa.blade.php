@@ -1,10 +1,4 @@
 <tr>
-    <td class="ps_logo">
-        <div class="pay_name">Оплата заказа</div>
-        <img src="/img/robokassa_logo.jpg" border=0 alt="" width="100" height="100" />					<div class="paysystem_name">Электронный платеж</div><br>
-    </td>
-</tr>
-<tr>
     <td>
         <form action="https://auth.robokassa.ru/Merchant/Index.aspx" method="post" target="_blank">
             <p>{{ $payData->description }}</p>

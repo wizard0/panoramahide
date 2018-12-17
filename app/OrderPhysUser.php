@@ -11,4 +11,14 @@ class OrderPhysUser extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function getFullName() {
+        return $this->surname
+            . " " . $this->name
+            . " " . $this->patronymic;
+    }
+
+    public function getDeliveryAddress() {
+        return $this->delivery_address;
+    }
 }

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7a27df5cd47a9a87ed56b82deb5e8f6e",
-    "content-hash": "2a88c4247cd8fb951710aa529f591888",
+    "hash": "f8b7bb9d1d239407f6f05de911e87efa",
+    "content-hash": "fb1634200933edf78e0a56f62bc1fe50",
     "packages": [
         {
             "name": "arrilot/laravel-widgets",
@@ -68,6 +68,64 @@
                 "widgets"
             ],
             "time": "2018-04-15 19:59:08"
+        },
+        {
+            "name": "chelout/robokassa",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/chelout/laravel-robokassa.git",
+                "reference": "dfa696200be4fa842e81aa3ec268de5c6ff8bb7a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/chelout/laravel-robokassa/zipball/dfa696200be4fa842e81aa3ec268de5c6ff8bb7a",
+                "reference": "dfa696200be4fa842e81aa3ec268de5c6ff8bb7a",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "~5.5",
+                "lexty/robokassa": "dev-master",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^0.9.1",
+                "phpunit/phpunit": "~6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Chelout\\Robokassa\\RobokassaServiceProvider"
+                    ],
+                    "aliases": {
+                        "Robokassa": "Chelout\\Robokassa\\Facade"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Chelout\\Robokassa\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Viacheslav Ostrovskiy",
+                    "email": "chelout@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Laravel Robokassa",
+            "homepage": "https://github.com/chelout/robokassa",
+            "keywords": [
+                "laravel",
+                "robokassa"
+            ],
+            "time": "2018-04-20 05:54:26"
         },
         {
             "name": "composer/ca-bundle",
@@ -2048,6 +2106,53 @@
                 "storage"
             ],
             "time": "2018-10-15 13:53:10"
+        },
+        {
+            "name": "lexty/robokassa",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Lexty/robokassa.git",
+                "reference": "e7f908af8deaf6b8d15c8ceeacee59260f612511"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Lexty/robokassa/zipball/e7f908af8deaf6b8d15c8ceeacee59260f612511",
+                "reference": "e7f908af8deaf6b8d15c8ceeacee59260f612511",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Lexty\\Robokassa\\Tests\\": "tests/",
+                    "Lexty\\Robokassa\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Medvedev",
+                    "email": "alexandr.mdr@gmail.com"
+                }
+            ],
+            "description": "PHP library for Robokassa payment system",
+            "homepage": "https://github.com/lexty/robokassa",
+            "keywords": [
+                "lexty",
+                "payment",
+                "robokassa"
+            ],
+            "time": "2017-02-21 09:58:50"
         },
         {
             "name": "monolog/monolog",
@@ -5691,7 +5796,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "chelout/robokassa": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
