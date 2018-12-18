@@ -45,6 +45,11 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/payment', 'PaymentController@payment')->name('personal.order.payment');
 });
 
+Route::get('/magazines', 'MagazinesController')->name('magazines');
+Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
+
+Route::post('/recommend', 'AjaxActionsController@recommendJournal')->name('recommend');
+
 Route::get('/logout', function () {
     Auth::logout();
     \Illuminate\Support\Facades\Redirect::back();

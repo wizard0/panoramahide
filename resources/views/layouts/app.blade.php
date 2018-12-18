@@ -18,9 +18,12 @@
     <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
     <script src="{{ asset('js/default_scripts.js') }}"></script>
     <script src="{{ asset('js/CartManager.js') }}"></script>
+    <script src="{{ asset('js/actions.js') }}"></script>
+    <script src="{{ asset('js/clipboard.min.js') }}"></script>
     @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
+
 
 
     <!-- Fonts -->
@@ -47,5 +50,7 @@
     @yield('content')
 
     @include('includes.footer')
+
+    @yield('javascript');
 </body>
 </html>

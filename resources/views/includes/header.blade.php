@@ -33,49 +33,18 @@
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
                 <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
                     <ul class="topmenu">
-                        <li><a href="/magazines/?sort=name_asc">Журналы по алфавиту</a></li>
+                        <li><a href="{{ route('magazines', ['sort' => 'name_asc']) }}">Журналы по алфавиту</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" id="menu_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Журналы по темам</a>
                             <div class="dropdown-menu" aria-labelledby="menu_1">
-
                                 <div class="d-flex flex-wrap w-100">
+                                    @foreach(\App\Category::with('journals')->where('active', 1)->get() as $category)
                                     <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=69&amp;type=magazine&amp;extend=1">Медицина</a>
+                                        <a class="d-block grey-link" href="/search/?category={{ $category->id }}&amp;type=magazine&amp;extend=1">{{ $category->name }}</a>
                                     </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=70&amp;type=magazine&amp;extend=1">Охрана труда</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=71&amp;type=magazine&amp;extend=1">Сельское хозяйство</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=72&amp;type=magazine&amp;extend=1">Органы власти</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=73&amp;type=magazine&amp;extend=1">Сфера обслуживания</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=74&amp;type=magazine&amp;extend=1">Транспорт</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=75&amp;type=magazine&amp;extend=1">Промышленность</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=76&amp;type=magazine&amp;extend=1">Строительство</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=224&amp;type=magazine&amp;extend=1">Экономика</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=769&amp;type=magazine&amp;extend=1">Бухучет</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=223&amp;type=magazine&amp;extend=1">Наука и культура</a>
-                                    </div>
-                                    <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category=765&amp;type=magazine&amp;extend=1">Юридические консультации</a>
-                                    </div>
-                                </div>						</div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </li>
                         <li><a href="/publishers/">Издательства</a></li>
                         <li><a href="/favorites/">Избранное</a></li>

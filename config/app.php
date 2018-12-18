@@ -224,6 +224,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Cart' => App\Cart::class,
         'Paysystem' => App\Paysystem::class,
+        'Journal' => \App\Journal::class,
     ],
 
 ];
