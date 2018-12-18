@@ -28,7 +28,8 @@ class User extends \TCG\Voyager\Models\User
         'password', 'remember_token',
     ];
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         return $this->hasRole('admin');
     }
 }

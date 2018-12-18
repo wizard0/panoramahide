@@ -25,7 +25,7 @@ class MagazinesController extends Controller
 
         return view('magazines.index', compact(
             'journals',
-                'categories',
+            'categories',
             'authorAlphabet',
             'lastReleases'
         ));

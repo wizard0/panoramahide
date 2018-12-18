@@ -7,20 +7,24 @@ use Illuminate\Http\Request;
 
 class PaymentController extends Controller
 {
-    public function robokassaResult() {
+    public function robokassaResult()
+    {
         print_r($_REQUEST);
         die();
     }
 
-    public function robokassaSuccess() {
+    public function robokassaSuccess()
+    {
 
     }
 
-    public function robokassaFail() {
+    public function robokassaFail()
+    {
 
     }
 
-    public function payment(Request $request) {
+    public function payment(Request $request)
+    {
         $orderId = $request->get('ORDER_ID');
         $order = Order::where('id', $orderId)->first();
         //dd($order->paysystem->getData());

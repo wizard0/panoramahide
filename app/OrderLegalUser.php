@@ -19,7 +19,8 @@ class OrderLegalUser extends Model
             . " " . $this->l_patronymic;
     }
 
-    public function getDeliveryAddress() {
+    public function getDeliveryAddress()
+    {
         return $this->l_delivery_address;
     }
 }

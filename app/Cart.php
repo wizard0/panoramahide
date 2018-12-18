@@ -26,7 +26,8 @@ class Cart
         }
     }
 
-    public function add($product, $version) {
+    public function add($product, $version)
+    {
         switch (get_class($product)) {
             case Release::class:
                 $price = $version == self::VERSION_ELECTRONIC
@@ -41,7 +42,7 @@ class Cart
 //            case Subscription::class:
 //                break;
         }
-        $storedItems = (object) [
+        $storedItems = (object)[
             'qty' => 0,
             'type' => $type,
             'version' => $version,
@@ -62,7 +63,8 @@ class Cart
         $this->totalPrice += $price;
     }
 
-    public function delete($product, $type) {
+    public function delete($product, $type)
+    {
         $itemIndex = $type . $product->id;
         $item = $this->items[$itemIndex];
         $itemPrice = $item->price;
@@ -73,15 +75,16 @@ class Cart
         $this->totalPrice -= $itemPrice * $itemQty;
     }
 
-    public function changeQty($product, $type, $q) {
+    public function changeQty($product, $type, $q)
+    {
         $itemIndex = $type . $product->id;
         $item = $this->items[$itemIndex];
         $itemPrice = $item->price;
         $itemQty = $item->qty;
 
         $this->items[$itemIndex]->qty = $q;
-        $this->totalPrice -= $itemPrice*$itemQty;
-        $this->totalPrice += $itemPrice*$q;
+        $this->totalPrice -= $itemPrice * $itemQty;
+        $this->totalPrice += $itemPrice * $q;
         $this->totalQty = sizeof($this->items);
     }
 }

@@ -18,11 +18,13 @@ class News extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function publishings() {
+    public function publishings()
+    {
         return $this->belongsToMany(Publishing::class);
     }
 
-    public function scopeAllNew(Builder $query) {
+    public function scopeAllNew(Builder $query)
+    {
         return $query->orderBy('created_at', 'desc');
     }
 }

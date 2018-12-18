@@ -11,7 +11,8 @@ class PromoUser extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
@@ -20,7 +21,8 @@ class PromoUser extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function promocodes() {
+    public function promocodes()
+    {
         return $this->belongsToMany(Promocode::class);
     }
 
@@ -29,7 +31,8 @@ class PromoUser extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function publishings() {
+    public function publishings()
+    {
         return $this->belongsToMany(Publishing::class);
     }
 
@@ -38,7 +41,8 @@ class PromoUser extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function releases() {
+    public function releases()
+    {
         return $this->belongsToMany(Release::class);
     }
 }
