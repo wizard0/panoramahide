@@ -22,7 +22,8 @@ class Journal extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function categories() {
+    public function categories()
+    {
         return $this->belongsToMany(Category::class);
     }
 
@@ -31,7 +32,8 @@ class Journal extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function publishings() {
+    public function publishings()
+    {
         return $this->belongsToMany(Publishing::class);
     }
 
@@ -40,27 +42,33 @@ class Journal extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function contact() {
+    public function contact()
+    {
         return $this->belongsTo(JournalContact::class, 'journal_contact_id');
     }
 
-    public function releases() {
+    public function releases()
+    {
         return $this->hasMany(Release::class);
     }
 
-    public function scopeAllNew(Builder $query) {
+    public function scopeAllNew(Builder $query)
+    {
         return $query->orderBy('created_at', 'asc');
     }
 
-    public function scopeByAlphabet(Builder $query) {
+    public function scopeByAlphabet(Builder $query)
+    {
         return $query->orderBy('name', 'asc');
     }
 
-    public function scopeByCategories(Builder $query) {
+    public function scopeByCategories(Builder $query)
+    {
 
     }
 
-    public function getLink() {
+    public function getLink()
+    {
         return route('magazine', ['code' => $this->code]);
     }
 

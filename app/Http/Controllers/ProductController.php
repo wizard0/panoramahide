@@ -11,7 +11,8 @@ use Session;
 
 class ProductController extends Controller
 {
-    public function addToCart(Request $request) {
+    public function addToCart(Request $request)
+    {
         if ($request->ajax()) {
             $type = $request->get('type');
             $id = $request->get('id');
@@ -25,7 +26,8 @@ class ProductController extends Controller
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
 
-    public function deleteFromCart(Request $request) {
+    public function deleteFromCart(Request $request)
+    {
         if ($request->ajax()) {
             $type = $request->get('type');
             $id = $request->get('id');
@@ -38,12 +40,14 @@ class ProductController extends Controller
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
 
-    public function getHeaderCart() {
+    public function getHeaderCart()
+    {
         $cart = Session::get('cart');
         return view('personal.header_cart', compact('cart'));
     }
 
-    private function getModel($type, $id) {
+    private function getModel($type, $id)
+    {
         switch ($type) {
             case Cart::PRODUCT_TYPE_ARTICLE:
                 return Article::find($id);
@@ -54,12 +58,14 @@ class ProductController extends Controller
         }
     }
 
-    private function getCart() {
+    private function getCart()
+    {
         $oldCart = Session::has('cart') ? Session::get('cart') : null;
         return new Cart($oldCart);
     }
 
-    private function updateCart($cart) {
+    private function updateCart($cart)
+    {
         Session::put('cart', $cart);
         return $this->getHeaderCart();
     }

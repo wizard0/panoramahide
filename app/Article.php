@@ -12,21 +12,26 @@ class Article extends Model
     public $translatable = [
         'name', 'code', 'keywords', 'image', 'description', 'preview_image', 'preview_description', 'bibliography'
     ];
+
 //    protected $fillable = ['active'];
 
-    public function release() {
+    public function release()
+    {
         return $this->belongsTo(Release::class);
     }
 
-    public function authors() {
+    public function authors()
+    {
         return $this->belongsToMany(Author::class);
     }
 
-    public function categories() {
+    public function categories()
+    {
         return $this->belongsToMany(Category::class);
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         return '/articles/' . $this->code . '.html';
     }
 }

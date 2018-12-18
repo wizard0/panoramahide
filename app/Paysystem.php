@@ -12,27 +12,31 @@ class Paysystem extends Model
     const SBERBANK = 'sberbank';
     const INVOICE = 'invoice';
 
-    public static function getByCode($code) {
+    public static function getByCode($code)
+    {
         return self::where(['code' => $code])->first();
     }
 
-    public function getDataValues() {
-        $dataObj = (object) [];
+    public function getDataValues()
+    {
+        $dataObj = (object)[];
         foreach ($this->data as $data)
             $dataObj->{$data->code} = $data->value;
 
         return $dataObj;
     }
 
-    public function getDataNames() {
-        $dataObj = (object) [];
+    public function getDataNames()
+    {
+        $dataObj = (object)[];
         foreach ($this->data as $data)
             $dataObj->{$data->code} = $data->name;
 
         return $dataObj;
     }
 
-    public function getDataAttributes() {
+    public function getDataAttributes()
+    {
         $attributes = [];
         foreach ($this->data as $data)
             $attributes[] = $data->code;
@@ -40,10 +44,11 @@ class Paysystem extends Model
         return $attributes;
     }
 
-    public function getData() {
+    public function getData()
+    {
         $attributes = $this->getDataAttributes();
         $values = $this->getDataValues();
-        $data = (object) [];
+        $data = (object)[];
 
         foreach ($attributes as $attribute) {
             $data->{$attribute} = $values->{$attribute};
@@ -52,7 +57,8 @@ class Paysystem extends Model
         return $data;
     }
 
-    public function data() {
+    public function data()
+    {
         return $this->hasMany(PaysystemData::class);
     }
 }

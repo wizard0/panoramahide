@@ -28,14 +28,16 @@ class PersonalController extends Controller
         return view('personal.cart', compact('cart'));
     }
 
-    public function orderMake() {
+    public function orderMake()
+    {
         if (Session::has('cart') && Session::get('cart')->totalQty > 0) {
             return view('personal.order_make');
         }
         return Redirect::back();
     }
 
-    public function processOrder(Request $request) {
+    public function processOrder(Request $request)
+    {
         // saving order data
         $order = new Order();
         switch ($request->get('PERSON_TYPE')) {
@@ -89,7 +91,8 @@ class PersonalController extends Controller
         ]);
     }
 
-    public function completeOrder($id) {
+    public function completeOrder($id)
+    {
         $order = Order::where('id', $id)->first();
 
         $payData = $order->collectPayData();

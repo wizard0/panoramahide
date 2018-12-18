@@ -10,13 +10,16 @@ class Author extends Model
     use Translatable;
 
     public $translatable = ['name'];
+
 //    protected $fillable = ['code'];
 
-    public function articles() {
+    public function articles()
+    {
         $this->belongsToMany(Article::class);
     }
 
-    public static function getAlphabet() {
+    public static function getAlphabet()
+    {
         $alphabet = [];
         $authors = self::all();
         foreach ($authors as $author) {

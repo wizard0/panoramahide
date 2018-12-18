@@ -18,19 +18,23 @@ class Release extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function journal() {
+    public function journal()
+    {
         return $this->belongsTo(Journal::class);
     }
 
-    public function articles() {
+    public function articles()
+    {
         return $this->hasMany(Article::class);
     }
 
-    public function scopeAllNew(Builder $query) {
+    public function scopeAllNew(Builder $query)
+    {
         return $query->orderBy('created_at', 'desc');
     }
 
-    public function getUrl() {
+    public function getUrl()
+    {
         return '/magazines/' . $this->journal->code . '/numbers/' . $this->id . '.html';
     }
 }

@@ -10,13 +10,16 @@ class Category extends Model
     use Translatable;
 
     public $translatable = ['name', 'code', 'image', 'description'];
+
 //    protected $fillable = ['code'];
 
-    public function journals() {
+    public function journals()
+    {
         return $this->belongsToMany(Journal::class, 'journal_category');
     }
 
-    public function articles() {
+    public function articles()
+    {
         return $this->belongsToMany(Article::class, 'article_category');
     }
 }
