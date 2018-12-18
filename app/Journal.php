@@ -45,7 +45,7 @@ class Journal extends Model
     }
 
     public function releases() {
-        $this->hasMany(Release::class);
+        return $this->hasMany(Release::class);
     }
 
     public function scopeAllNew(Builder $query) {
@@ -54,6 +54,14 @@ class Journal extends Model
 
     public function scopeByAlphabet(Builder $query) {
         return $query->orderBy('name', 'asc');
+    }
+
+    public function scopeByCategories(Builder $query) {
+
+    }
+
+    public function getLink() {
+        return route('magazine', ['code' => $this->code]);
     }
 
 }
