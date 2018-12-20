@@ -20,6 +20,9 @@
     <script src="{{ asset('js/CartManager.js') }}"></script>
     <script src="{{ asset('js/actions.js') }}"></script>
     <script src="{{ asset('js/clipboard.min.js') }}"></script>
+    <script src="{{ asset('js/SideBarManager.js') }}"></script>
+    <script src="{{ asset('js/panor/panor.js') }}"></script>
+    <script src="{{ asset('js/panor/search.js') }}"></script>
     @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
@@ -36,6 +39,7 @@
     <link href="{{ asset('css/main.css') }}" rel="stylesheet">
     <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     @if (preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
         <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
     @endif
