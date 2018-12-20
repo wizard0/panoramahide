@@ -18,6 +18,7 @@ class SearchController extends Controller
 
     private function search($params)
     {
+
         if (isset($params['type']))
         switch ($params['type']) {
             case 'article':
