@@ -50,6 +50,10 @@ Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazi
 
 Route::post('/recommend', 'AjaxActionsController@recommendJournal')->name('recommend');
 
+Route::get('/search', 'SearchController')->name('search');
+
+Route::post('/search', 'SearchController');
+
 Route::get('/logout', function () {
     Auth::logout();
     \Illuminate\Support\Facades\Redirect::back();
