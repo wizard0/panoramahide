@@ -72,4 +72,9 @@ class Journal extends Model
         return route('magazine', ['code' => $this->code]);
     }
 
+    public static function getName($id)
+    {
+        return (self::where('id', $id)->first())->name;
+    }
+
 }

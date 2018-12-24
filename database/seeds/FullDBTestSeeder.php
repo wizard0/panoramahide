@@ -10,7 +10,8 @@ class FullDBTestSeeder extends Seeder
      * @return void
      */
     public function run()
-    {/*
+    {
+
         factory(App\Category::class, 5)->create()->each(function ($category) {
             $category->journals()->saveMany(factory(App\Journal::class, 10)->create()
                 ->each(function ($journal) {
@@ -18,9 +19,13 @@ class FullDBTestSeeder extends Seeder
                     factory(App\Release::class, 10)
                         ->create(['journal_id' => $journal->id])
                         ->each(function ($release) {
-                            $release->articles()->saveMany(factory(App\Article::class, 10)->make());
+                            $authors = factory(App\Author::class, 2)->make();
+                            $release->articles()->saveMany(factory(App\Article::class, 10)->create()
+                                ->each(function ($article) use ($authors) {
+                                    $article->authors()->saveMany($authors);
+                                }));
                         });
                 }));
         });
-    */}
+    }
 }

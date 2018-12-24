@@ -21,6 +21,7 @@
     <script src="{{ asset('js/actions.js') }}"></script>
     <script src="{{ asset('js/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/SideBarManager.js') }}"></script>
+    <script src="{{ asset('js/panor/scripts.js') }}"></script>
     <script src="{{ asset('js/panor/panor.js') }}"></script>
     <script src="{{ asset('js/panor/search.js') }}"></script>
     @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))

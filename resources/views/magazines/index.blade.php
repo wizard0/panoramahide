@@ -49,7 +49,7 @@
                      data-link="/magazines/##.html"
                      data-link-subscribe="/magazines/##.html#subscribe">
                     <div class="checkbox-col">
-                        <input id="magazine-index-{{ $journal->id }}" type="checkbox" name="article-choise" value="{{ $journal->id }}" />
+                        <input id="magazine-index-{{ $journal->id }}" type="checkbox" name="article-choise" data-type="journal" value="{{ $journal->id }}" />
                         <label for="magazine-index-{{ $journal->id }}"></label>
                     </div>
                     <div class="article-info-col">

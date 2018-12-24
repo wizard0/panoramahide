@@ -2,7 +2,7 @@
 <div class="container h-100">
 <div class="d-flex flex-column h-100 justify-content-center">
 <div class="search-form extended-search">
-<form method="POST" action="{{ route('search') }}">
+<form method="POST" action="{{ route('search') }}" id="searchBar">
     @csrf
     <div class="row">
         <div class="col-lg-12 text-center">
@@ -81,11 +81,11 @@
         <div class="d-flex col-xl-auto col-lg-auto col-md-auto col-sm-auto col-12 form-margin align-items-end mag-art-filter">
             <div class="row no-gutters">
                 <div class="col-xl-auto col-lg-auto col-auto">
-                    <input id="mag" type="radio" name="type" value="magazine"  >
+                    <input id="mag" type="radio" name="type" value="{{ UserSearch::TYPE_JOURNAL }}"  >
                     <label for="mag" class="rightsharp"><span>Журналы</span></label>
                 </div>
                 <div class="col-xl-auto col-lg-auto col-auto">
-                    <input id="art" type="radio" name="type" value="article"  >
+                    <input id="art" type="radio" name="type" value="{{ UserSearch::TYPE_ARTICLE }}" checked >
                     <label for="art" class="leftsharp"><span>Статьи</span></label>
                 </div>
             </div>
@@ -111,7 +111,11 @@
                 <a href="#" data-toggle="modal" data-target="#searchesModal">Удалить поиск</a>
             </div>
             <div class="save-search _save_search"  style="display: none;"  >
-                <a href="#" data-toggle="modal" data-target="#searchesModal">Сохранить поиск</a>
+                @php
+                    $dataTarget = "#searchesModal";
+                    if (!Auth::check()) $dataTarget = "#login-modal";
+                @endphp
+                <a id="saveSearch" href="#" data-toggle="modal" data-target="{{ $dataTarget }}">Сохранить поиск</a>
             </div>
             <div class="clear-search">
                 <a href="" class="_reset">Сбросить поиск</a>
@@ -138,7 +142,9 @@
                                     <button class="leftsharp _saved_search_delete" data-id="all" title="Удалить все"><span></span></button>
                                     <span>Сохраненные поиски</span>
                                 </div>
-                                <div class="_saved_search_container"></div>
+                                <div class="_saved_search_container">
+                                    @include('includes.searchbar_result')
+                                </div>
                             </div>
                         </div>
                     </div>

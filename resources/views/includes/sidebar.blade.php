@@ -10,7 +10,7 @@
                 </a>
             </div>
             <div class="col-xl-12 col-lg-12 col-sm-3 col-6">
-                <a class="to-favs action-item _add_to_favorite" href="#">
+                <a class="to-favs action-item _add_to_favorite" href="{{ route('to.favorite') }}">
                     <span>В избранное</span>
                 </a>
             </div>

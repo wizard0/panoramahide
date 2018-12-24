@@ -117,4 +117,24 @@ class PersonalController extends Controller
             $model->user()->associate($user)->save();
         }
     }
+
+    public function login(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            return redirect()->to('/personal');
+        }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        return redirect()->back();
+    }
+
+    public function index(Request $request)
+    {
+        echo "hello wizard its personal main page";
+    }
 }

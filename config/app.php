@@ -226,7 +226,8 @@ return [
         'Paysystem' => App\Paysystem::class,
         'Journal' => \App\Journal::class,
         'Author' => \App\Author::class,
-        'Category' => \App\Category::class
+        'Category' => \App\Category::class,
+        'UserSearch' => \App\UserSearch::class,
     ],
 
 ];

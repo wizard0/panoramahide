@@ -1,3 +1,7 @@
+@if (!Auth::check())
+    @include('includes.modals.register')
+@endif
+
 <footer>
     <div class="container">
         <div class="row">

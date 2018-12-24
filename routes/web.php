@@ -20,7 +20,7 @@ Route::group(['prefix' => 'admin'], function () {
     Voyager::routes();
 });
 
-Auth::routes();
+//Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
@@ -28,6 +28,8 @@ Route::post('/add-to-cart', 'ProductController@addToCart');
 Route::post('/delete-from-cart', 'ProductController@deleteFromCart');
 
 Route::group(['prefix' => 'personal'], function () {
+    Route::get('/', 'PersonalController@index')->name('personal');
+
     Route::get('cart', 'PersonalController@cart')
         ->name('cart');
     Route::get('order/make', 'PersonalController@orderMake')
@@ -49,12 +51,14 @@ Route::get('/magazines', 'MagazinesController')->name('magazines');
 Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
 
 Route::post('/recommend', 'AjaxActionsController@recommendJournal')->name('recommend');
+Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
 
 Route::get('/search', 'SearchController')->name('search');
-
 Route::post('/search', 'SearchController');
+Route::post('/save-search', 'SearchController@saveSearch')->middleware('auth')->name('save.search');
+Route::get('/get-saved-search', 'SearchController@getSaved')->middleware('auth')->name('get.search');
+Route::post('/delete-search', 'SearchController@deleteSearch')->middleware('auth')->name('delete.search');
 
-Route::get('/logout', function () {
-    Auth::logout();
-    \Illuminate\Support\Facades\Redirect::back();
-});
+Route::get('/logout', 'PersonalController@logout');
+
+Route::post('/login', 'PersonalController@login')->name('login');

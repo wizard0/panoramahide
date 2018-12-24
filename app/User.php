@@ -32,4 +32,9 @@ class User extends \TCG\Voyager\Models\User
     {
         return $this->hasRole('admin');
     }
+
+    public function searches()
+    {
+        return $this->hasMany(UserSearch::class);
+    }
 }

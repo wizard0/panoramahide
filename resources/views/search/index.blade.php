@@ -15,7 +15,9 @@
     </div>
 
 
-    <div class="show-results"></div>
+    <div class="show-results">
+        @include('search.search_results', compact('search'))
+    </div>
 
 @endsection
 
@@ -121,20 +123,23 @@
             });
 
             // сохранить поиск
-            P.search.settings.form.on('click', P.search.settings.saveSearch, function(){
-                P.search.saveSearch();
-                return false;
+            P.search.settings.form.on('click', P.search.settings.saveSearch, function(event){
+                if ($(event.target).data('target') == '#searchesModal')
+                    P.search.saveSearch();
+//                return false;
             });
 
             // применить сохраенный поиск
-            P.search.settings.form.on('click', P.search.settings.savedSearchApply, function(){
+            P.search.settings.form.on('click', P.search.settings.savedSearchApply, function(event){
+                event.preventDefault();
+                console.log('clickesadasdsadsadd');
                 P.search.applySavedSearch($(this).data('id'));
                 return false;
             });
 
             // удалить сохраненный поиск
             P.search.settings.form.on('click', P.search.settings.savedSearchDelete, function(){
-                if (confirm(MESS.CONFIRM_ASK)) {
+                if (confirm('Вы уверены что хотите удалить этот сохраненный поиск?')) {
                     P.search.deleteSavedSearch($(this).data('id'));
                 }
                 return false;
@@ -149,7 +154,8 @@
                 $('.searchesinn').addClass('modal-dialog modal-dialog-centered');
                 $('.mysearches').attr('id','searchesModal');
                 $('.mysearches').on('show.bs.modal', function() {
-                    P.search.loadSavedSearch();
+                    $('.mysearches').toggle();
+//                    P.search.loadSavedSearch();
                 });
             } else {
                 /*--На больших экранах выводим в виде выпадающего меню--*/
@@ -160,7 +166,7 @@
                 /*--Появление выпадающего блока по клику на ссылке--*/
                 $('.my-searches a').on('click', function(e) {
                     e.stopPropagation();
-                    P.search.loadSavedSearch();
+//                    P.search.loadSavedSearch();
                     $('.mysearches').toggle();
                     e.preventDefault();
                 });

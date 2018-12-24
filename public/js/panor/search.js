@@ -1,5 +1,5 @@
 ;(function(panor) {
-
+	var time_animation = 500;
 	class Search
 	{
 		constructor()
@@ -56,8 +56,8 @@
 			var _this = this;
 			if (!this.savedSearchLoaded) {
 		        load(
-		        	'/ajax/saved_search.php', 
-		        	this.settings.savedSearchContainer, 
+		        	'/save-search',
+		        	this.settings.savedSearchContainer,
 		        	function() {
 		            	_this.savedSearchLoaded = true;
 		        	}
@@ -114,7 +114,7 @@
 		        id: id,
 		    };
 		    var _this= this;
-		    ajax('search', data, function(res){
+		    ajax('/delete-search', data, function(res){
 		        if (res.ids) {
 		            res.ids.forEach(function(id){
 		                var savedSearch = $(_this.settings.savedSearch+'[data-id='+id+']');
@@ -130,7 +130,8 @@
 		        _this.hideSearchDelete();
 		    }, 
 		    function(msg){
-		        notice(msg, 'error', btn, {position: 'right middle'});
+		    	alert('smth like error happens');
+		        // notice(msg, 'error', btn, {position: 'right middle'});
 		    });
 		}
 		// применить сохраненный поиск
@@ -140,6 +141,7 @@
 
 		    var savedSearch = $(this.settings.savedSearch+'[data-id='+id+']');
 		    var data = savedSearch.data();
+		    console.log(data);
 		    for(var key in data) {
 		        if (key == 'extend') {
 		            if (!this.isExtend()) this.toggleExtend();
@@ -174,10 +176,11 @@
 		    }
 		    var _this = this;
 		    ajax(
-		    	'search', 
+		    	'save-search',
 		    	data, 
 		    	function(res) 
 		    	{
+		    		alert('Поиск упешно сохранен');
 			        _this.savedSearchLoaded = false;
 
 			        _this.hideSearchSave();
@@ -194,7 +197,7 @@
 			    },
 		    	function(msg) 
 		    	{
-		        	notice(msg, 'error', $(_this.settings.saveSearch), {position: 'bottom center'});  
+		        	// notice(msg, 'error', $(_this.settings.saveSearch), {position: 'bottom center'});
 		    	}
 		    );
 		}

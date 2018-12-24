@@ -23,9 +23,15 @@
 
             <div class="d-flex flex-column align-items-center col-xl-2 col-lg-2 col-md-4 col-sm-4 col-8 order-2 order-xl-3 order-lg-3 order-md-5 order-sm-5">
                 <div class="login">
-                    <a href="#" class="grey-link" data-toggle="modal" data-target="#login-modal">Войти</a>
-                    /
-                    <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">Регистрация</a>
+                    @if (Auth::check())
+                        <a class="grey-link" href="/personal/">Личный кабинет</a>
+                        /
+                        <a class="grey-link" href="/logout">Выйти</a>
+                    @else
+                        <a href="#" class="grey-link" data-toggle="modal" data-target="#login-modal">Войти</a>
+                        /
+                        <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">Регистрация</a>
+                    @endif
                 </div>
                 <div class="request"><a href="#" data-toggle="modal" data-target="#request-modal">Заявка на подписку</a></div>
             </div>
