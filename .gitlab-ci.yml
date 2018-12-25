@@ -1,0 +1,40 @@
+stages:
+    # - phpunit_tests
+    # - qunit_tests
+    - deploy
+    # - production
+
+# phpunit_tests:
+#     stage: phpunit_tests
+#     script:
+#         - /usr/bin/phpunit tests
+#     only:
+#         - master
+
+# qunit_tests:
+#     stage: qunit_tests
+#     script:
+#         - /usr/bin/qunit testjs
+#     only:
+#         - master
+
+deploy:
+    stage: deploy
+    variables:
+        CI_DEBUG_TRACE: "false"
+    script:
+        - /usr/local/bin/deploy-dev.panor.ru $USER $PASS dev.panor.ru
+    only:
+        - master
+
+# Задача на развертывание PRODUCTION релиза
+# Обычно проускается
+# Выполгяется в ручном режиме по мере необходимости
+# production:
+#     stage: production
+#     script:
+#         - echo "Deploy to PRODUCTION..."
+#         - /usr/local/bin/prod-dev.panor.ru $USER $PASS dev.panor.ru
+#     only:
+#         - master
+#     when: manual
