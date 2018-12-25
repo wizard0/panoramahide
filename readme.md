@@ -17,7 +17,7 @@
 
 ### Сущности:
 
-#### Промокод.
+## Промокод.
 
 ### Свойства:
 
@@ -108,23 +108,25 @@
 На странице промо-участника в админке рядом с каждым значением свойства "**Активированные промокоды**" выводятся доступные по коду выпуски,
 и для каждого выпуска выводится "стадия доступа" промо-участника к выпуску: открывал ли пользователь этот выпуск (он есть в списке значений свойства "**Открытые выпуски**")
 
+---
+
 # Читалка
 
 ## ФАЙЛЫ:
 
 | Файл   | Описание |
 |--------|----------|
-|`\html/personal/reader/index.php` | проверка и подтверждение доступа
-|`\html/personal/reader/event.php` | общение из читалки с сервером
-|`\html/personal/reader/articles/` | html-файлы для читалки
-|`\html/personal/reader/templates/` | шаблоны для вывода сообщений (об ошибках и т.п.)
-|`\html/personal/reader/print/(index.php, js/print.js)` | формирование постраничной структуры и оглавления для вывода выпуска на печать
-|`\html/bitrix/components/journal/reader/component.php` | получение и формирование данных для читалки
-|`\html/bitrix/templates/panor2016/components/journal/reader/online/template.php` | шаблон
-|`\html/bitrix/templates/panor2016/components/journal/reader/online/js/script.js` | js для работы читалки (подгрузка частей, общение с сервером, и т.д.)
-|`\html/api/classes/bookmark.php` | класс для работы с закладками
-|`\html/api/classes/readerCode.php` | класс для работы с кодами подтверждения (устройствами)
-|`\html/api/classes/readable.php` | класс для работы с html-файлами (частями) для читалки
+|`/html/personal/reader/index.php` | проверка и подтверждение доступа
+|`/html/personal/reader/event.php` | общение из читалки с сервером
+|`/html/personal/reader/articles/` | html-файлы для читалки
+|`/html/personal/reader/templates/` | шаблоны для вывода сообщений (об ошибках и т.п.)
+|`/html/personal/reader/print/(index.php, js/print.js)` | формирование постраничной структуры и оглавления для вывода выпуска на печать
+|`/html/bitrix/components/journal/reader/component.php` | получение и формирование данных для читалки
+|`/html/bitrix/templates/panor2016/components/journal/reader/online/template.php` | шаблон
+|`/html/bitrix/templates/panor2016/components/journal/reader/online/js/script.js` | js для работы читалки (подгрузка частей, общение с сервером, и т.д.)
+|`/html/api/classes/bookmark.php` | класс для работы с закладками
+|`/html/api/classes/readerCode.php` | класс для работы с кодами подтверждения (устройствами)
+|`/html/api/classes/readable.php` | класс для работы с html-файлами (частями) для читалки
 
 ## ОПИСАНИЕ:
 
@@ -149,17 +151,17 @@
 
 | Файл   | Описание |
 |--------|----------|
-|`\html/personal/reader/api/index.php` | проверка параметров доступа (партнер, пользователь, квота) для открытия читалки
-|`\html/personal/reader/api/magazines.php` | выбор выпуска для чтения из списка доступных по квоте
-|`\html/personal/reader/api/event.php` | общение читалки с сервером
-|`\html/personal/reader/api/templates/` | шаблоны для вывода сообщений (об ошибках и т.п.)
-|`\html/api/classes/partner.php` | класс для работы с сущностью "Партнер"
-|`\html/api/classes/partnerQuota.php` | класс для работы с сущностью "Квота"
-|`\html/api/classes/partnerUser.php` | класс для работы с сущностью "Пользователь" партнера
-|`\html/api/classes/partnerDevice.php` | класс для работы устройствами пользователей партнеров, работает совместно с классом ReaderCode
-|`\html/bitrix/components/journal/reader/component.php` | получение и формирование данных для читалки
-|`\html/bitrix/templates/panor2016/components/journal/reader/api_online/template.php` | шаблон
-|`\html/bitrix/templates/panor2016/components/journal/reader/api_online/js/script.js` | js для работы читалки (подгрузка частей, общение с сервером, и т.д.)
+|`/html/personal/reader/api/index.php` | проверка параметров доступа (партнер, пользователь, квота) для открытия читалки
+|`/html/personal/reader/api/magazines.php` | выбор выпуска для чтения из списка доступных по квоте
+|`/html/personal/reader/api/event.php` | общение читалки с сервером
+|`/html/personal/reader/api/templates/` | шаблоны для вывода сообщений (об ошибках и т.п.)
+|`/html/api/classes/partner.php` | класс для работы с сущностью "Партнер"
+|`/html/api/classes/partnerQuota.php` | класс для работы с сущностью "Квота"
+|`/html/api/classes/partnerUser.php` | класс для работы с сущностью "Пользователь" партнера
+|`/html/api/classes/partnerDevice.php` | класс для работы устройствами пользователей партнеров, работает совместно с классом ReaderCode
+|`/html/bitrix/components/journal/reader/component.php` | получение и формирование данных для читалки
+|`/html/bitrix/templates/panor2016/components/journal/reader/api_online/template.php` | шаблон
+|`/html/bitrix/templates/panor2016/components/journal/reader/api_online/js/script.js` | js для работы читалки (подгрузка частей, общение с сервером, и т.д.)
 
 ## ОПИСАНИЕ:
 
@@ -174,7 +176,7 @@
 
 Блоксхема условия предоставления журнала: [https://yadi.sk/i/mXOhYKd83KBjQu](https://yadi.sk/i/mXOhYKd83KBjQu)
 
-## Сущности:
+### Сущности:
 
 ## Партнер.
 
