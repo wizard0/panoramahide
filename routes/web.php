@@ -62,3 +62,4 @@ Route::post('/delete-search', 'SearchController@deleteSearch')->middleware('auth
 Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
+Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');

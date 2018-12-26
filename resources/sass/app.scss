@@ -1,14 +1,53 @@
-
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
-
 // Variables
-@import 'variables';
+/* ---------------------------------------------- */
+@import '_variables';
+$brand-primary: $blue;
+$brand-success: $green;
+$brand-danger: $red;
+$brand-warning: $yellow;
+$brand-info: $blue;
+/* ---------------------------------------------- */
+// Toast
+@import '~toastr/build/toastr.min.css';
+.toast {
+  font-size: 14px;
+  box-shadow: none;
+  &:hover {
+    box-shadow: none;
+  }
+  user-select: none;
+}
+.toast-top-right {
+  right: 25px;
+}
+#toast-container > div {
+  &:hover {
+    box-shadow: none;
+  }
+}
+/* ---------------------------------------------- */
+.btn {
+  outline: none;
+}
+@import './loader';
+@import './spacing-helpers';
 
-// Bootstrap
-@import '~bootstrap/scss/bootstrap';
-
-.navbar-laravel {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+.modal-body input.is-danger {
+  border: solid 1px #dc3545 !important;
+}
+.modal {
+  .form-group {
+    position: relative;
+    .help {
+      font-size: 12px;
+      position: absolute;
+    }
+    input {
+      margin-bottom: 0px;
+    }
+  }
+}
+.form-control:focus {
+  box-shadow: none !important;
+  border-color: #80bdff !important;
 }
