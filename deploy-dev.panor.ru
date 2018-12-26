@@ -10,13 +10,13 @@ if [ -d "$PROD_PATH/$PROJECT" ]; then
     git fetch https://$1:$2@gl.panor.ru/web/laravel-panor.git
     git reset --hard origin/master
     git pull https://$1:$2@gl.panor.ru/web/laravel-panor.git
-    composer update
+    php72 /usr/bin/composer update
     cd $CURR_DIR
 else
     echo "Cloning project [$PROJECT] from git..."
     git clone https://$1:$2@gl.panor.ru/web/laravel-panor.git $PROD_PATH/$PROJECT
     cd $PROD_PATH/$PROJECT
-    composer install
+    php72 /usr/bin/composer install
     cd $CURR_DIR
 fi
 
