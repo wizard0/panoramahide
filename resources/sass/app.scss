@@ -46,16 +46,11 @@ $brand-info: $blue;
       margin-bottom: 0px;
     }
   }
-  //.modal-dialog {
-  //  overflow: hidden;
-  //}
-  //.grecaptcha-badge {
-  //  position: relative !important;
-  //  right: 0 !important;
-  //  bottom: 0 !important;
-  //}
 }
 .form-control:focus {
   box-shadow: none !important;
   border-color: #80bdff !important;
+}
+input[type="checkbox"].is-danger + label::before {
+  border: solid 1px $red !important;
 }

@@ -96,7 +96,7 @@
             </div>
             <div class="form-group m-0 text-right">
                 <button type="submit" class="btn inner-form-submit">
-                    <span>Войти</span>
+                    <span>Зарегистрироваться</span>
                 </button>
             </div>
         </form>
