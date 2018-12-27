@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
+use TimeHunter\LaravelGoogleCaptchaV3\Validations\GoogleReCaptchaValidationRule;
 
 class RegisterController extends Controller
 {
@@ -52,6 +53,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         $validateResister = Validator::make($data, [
+            'g-recaptcha-response' => ['required', /*new GoogleReCaptchaValidationRule('auth/register')*/],
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', Rule::unique('users', 'email')],

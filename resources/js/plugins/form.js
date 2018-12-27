@@ -350,18 +350,6 @@ let ajaxForm = {
     },
 
     validateServer: function (result) {
-        /**
-         * Для валидации.
-         */
-        /*
-        let self = this;
-        _.each(result.responseJSON, function(field, index) {
-            let input = self.form.find('.input[name="' + index + '"]');
-            let message = field.responseJSON[index][0];
-            input.addClass('is-danger');
-            input.parent().append('<span class="help is-danger">' + message + '</span>');
-        });
-        */
         const self = this;
 
         let resultJson = result.responseJSON;
@@ -370,9 +358,6 @@ let ajaxForm = {
         }
         for (let key in resultJson) {
             let $input = self.form.find('input[name="' + key + '"]');
-            if (!$input.length) {
-                $input = self.form.find('input[name="REGISTER[' + key + ']"]');
-            }
             $input.addClass(self.options.validation.errorClass);
             /*
             setTimeout(function() {
@@ -389,6 +374,9 @@ let ajaxForm = {
             //this.form.find('.text-error[data-name="' + key + '"]').text(result.responseJSON[key][0]);
             if (key === 'error') {
                 self.showError(message);
+            }
+            if (key === 'g-recaptcha-response') {
+                self.form.find('textarea[name="' + key + '"]').closest('.form-group').append(self.validationTemplate(message, false));
             }
         }
     },

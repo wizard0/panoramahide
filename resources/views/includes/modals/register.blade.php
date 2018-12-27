@@ -3,9 +3,9 @@
         <form name="system_auth_form6zOYVN" method="post" target="_top" action="{{ route('login') }}">
             @csrf
             <label class="col-12">Логин</label>
-            <input type="text" name="email" placeholder="grishchenkonikolay@gmail.com">
+            <input type="text" name="email" placeholder="grishchenkonikolay@gmail.com" autocomplete="username">
             <label class="col-12">Пароль</label>
-            <input type="password" name="password" placeholder="">
+            <input type="password" name="password" placeholder="" autocomplete="current-password">
             <div class="d-flex justify-content-between" style="margin-bottom: 24px;">
                 <div class="simple-checkbox">
                     <input id="remember_auth" name="remember" value="Y" type="checkbox" checked/>
@@ -45,7 +45,7 @@
             </div>
             <div class="form-group">
                 <label>Ваш email</label>
-                <input type="email" name="email" value="" required>
+                <input type="email" name="email" value="" autocomplete="username" required>
             </div>
             <div class="form-group">
                 <label>Ваш телефон</label>
@@ -53,11 +53,14 @@
             </div>
             <div class="form-group">
                 <label>Придумайте пароль</label>
-                <input type="password" name="password" value="">
+                <input type="password" name="password" value="" autocomplete="new_password">
+            </div>
+            <div class="form-group m-b-25">
+                <label>Пароль еще раз</label>
+                <input type="password" name="password_confirmation" value="" autocomplete="new_password">
             </div>
             <div class="form-group">
-                <label>Пароль еще раз</label>
-                <input type="password" name="password_confirmation" value="">
+                <div id="auth_register_id"></div>
             </div>
             {{--<div class="form-group p-t-5">--}}
                 {{--<div class="d-flex justify-content-end">--}}
