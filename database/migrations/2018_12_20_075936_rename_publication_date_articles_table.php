@@ -25,6 +25,8 @@ class RenamePublicationDateArticlesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::table('articles', function (Blueprint $table) {
+            $table->renameColumn('active_end_date', 'publication_date');
+        });
     }
 }
