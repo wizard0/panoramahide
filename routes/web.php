@@ -63,3 +63,7 @@ Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+
+Route::get('/promo', function() {
+    return view('promo');
+});

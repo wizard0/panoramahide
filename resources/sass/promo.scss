@@ -1,5 +1,21 @@
 /* Promo.blade.php */
 
 .promo-head {
-	background: linear-gradient(to right, $indigo 0%, $cyan 100%);
+	color: white;
+	background: linear-gradient(to right, $cleanblue 0%, $cyan 100%);
+}
+
+.promo-head .container {
+	background: url(../../public/img/reader.png) 300px bottom no-repeat;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+
+.form-container {
+    width: 100%;
+    padding: 16px;
+    background: #fff;
+    -webkit-box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
+    -moz-box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
+    box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
 }
