@@ -9,11 +9,13 @@ class Article extends Model
 {
     use Translatable;
 
+    const RESTRICTION_NO = 'no';
+    const RESTRICTION_REGISTER = 'register';
+    const RESTRICTION_PAY = 'pay/subscribe';
+
     public $translatable = [
         'name', 'code', 'keywords', 'image', 'description', 'preview_image', 'preview_description', 'bibliography'
     ];
-
-//    protected $fillable = ['active'];
 
     public function release()
     {
@@ -30,8 +32,8 @@ class Article extends Model
         return $this->belongsToMany(Category::class);
     }
 
-    public function getUrl()
+    public function getLink()
     {
-        return '/articles/' . $this->code . '.html';
+        return route('article', ['code' => $this->code]);
     }
 }

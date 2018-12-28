@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
 use App\Journal;
 use App\Mail\Recommend;
 use App\UserFavorite;
@@ -11,15 +12,18 @@ use Illuminate\Support\Facades\Mail;
 
 class AjaxActionsController extends Controller
 {
-    public function recommendJournal(Request $request)
+    public function recommend(Request $request)
     {
         $emailFrom = $request->get('email_from');
         $emailTo = $request->get('email_to');
-        $journalIds = explode(',', $request->get('ids'));
+        $r = json_decode($request->get('ids'));
         $links = [];
-        foreach ($journalIds as $id) {
-            if (is_numeric($id))
-                $links[] = Journal::where('id', $id)->first()->getLink();
+        foreach ($r as $data) {
+            if (is_numeric($data->id))
+                if ($data->type == 'journal')
+                    $links[] = Journal::where('id', $data->id)->first()->getLink();
+                if ($data->type == 'article')
+                    $links[] = Article::where('id', $data->id)->first()->getLink();
         }
 
         Mail::to($emailTo)->send(new Recommend($emailFrom, $links));
