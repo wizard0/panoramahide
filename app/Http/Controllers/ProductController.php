@@ -17,6 +17,7 @@ class ProductController extends Controller
             $type = $request->get('type');
             $id = $request->get('id');
             $version = $request->get('version');
+
             $product = $this->getModel($type, $id);
 
             $cart = $this->getCart();
