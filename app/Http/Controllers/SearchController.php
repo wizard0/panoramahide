@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Article;
 use App\UserSearch;
-use function foo\func;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
@@ -14,68 +15,138 @@ class SearchController extends Controller
     {
         $extend = $request->get('extend');
 
-        $searchResult = $this->search($request->all());
+        $params = $request->all();
+        if ($params && (isset($params['search']) || isset($params['q']))) {
+            Cookie::queue('search_params', json_encode($params));
+        } else {
+            $params = json_decode(Cookie::get('search_params'), true);
+        }
+        if (!isset($params['sort_by']) && $request->has('sort_by')) {
+            $params['sort_by'] = $request->get('sort_by');
+            $params['sort_order'] = $request->get('sort_order');
+//            array_push($params, $request->only(['sort_by', 'sort_order']));
+        }
+
+        $searchResult = $this->search($params);
         if ($searchResult) {
+//            $rowCount = $searchResult->count();
             $search = $searchResult->paginate(10);
-            $rowCount = $searchResult->count();
+            $rowCount = $search->total();
             foreach ($search as $s) {
-                $found = $this->getFoundString($request->get('q'), $s->found);
-                if ($found) {
-                    $s->found = $found[0];
-                    $s->length = sizeof($found);
+                if (property_exists($s, 'found')) {
+                    $found = $this->getFoundString($request->get('q'), $s->found);
+                    if ($found) {
+                        $s->found = $found[0];
+                        $s->length = sizeof($found);
+                    }
                 }
             }
         } else {
             $search = [];
         }
 
-        return view('search.index', compact('search', 'extend', 'rowCount'));
+        return view('search.index', compact('search', 'extend', 'rowCount', 'params'));
     }
 
     private function search($params)
     {
-        if (isset($params['q']))
+        $groupBy = 'articles.code';
+        if (!isset($params['type'])) $params['type'] = 'any';
             switch ($params['type']) {
                 case 'journal':
+                    $groupBy = 'journals.code';
                     $q = DB::table('journals')
-                        ->select()
-                        ->leftJoin('releases', 'releases.journal.id', '=', 'journals.id')
-                        ->leftJoin('articles', 'releases.id', '=', 'articles.journal_id');
+                        ->selectRaw("
+                            ANY_VALUE(journals.id) as journalID,
+                            ANY_VALUE(journals.image) as journalImage,
+                            ANY_VALUE(journals.active_date) as journalActiveDate,
+                            ANY_VALUE(articles.name) as articleName,
+                            ANY_VALUE(articles.id) as articleID,
+                            ANY_VALUE(articles.code) as articleCode,
+                            ANY_VALUE(articles.description) as articleDescr,
+                            ANY_VALUE(journals.issn) as journalISSN,
+                            ANY_VALUE(releases.id) as releaseID,
+                            ANY_VALUE(releases.name) as releaseName,
+                            ANY_VALUE(authors.name) as authorName,
+                            ANY_VALUE(authors.id) as authorID,
+                            ANY_VALUE(journals.name) as journalName,
+                            ANY_VALUE(journals.code) as journalCode,
+                            ANY_VALUE(releases.name) as releaseName,
+                            ANY_VALUE(releases.code) as releaseCode"
+                        )
+                        ->leftJoin('releases', 'releases.journal_id', '=', 'journals.id')
+                        ->leftJoin('articles', 'releases.id', '=', 'articles.release_id');
                     break;
                 default:
-                    $q = Db::table('articles')
-                        ->selectRaw("
-                            articles.name as articleName,
-                            articles.id as articleID,
-                            articles.code as articleCode,
-                            articles.description as articleDescr,
-                            releases.name as releaseName,
-                            authors.name as authorName,
-                            authors.id as authorID,
-                            journals.name as journalName,
-                            journals.code as journalCode,
-                            releases.name as releaseName,
-                            releases.code as releaseCode,
-                            CASE
-                                WHEN articles.description like '%{$params['q']}%'
-                                  THEN articles.description
-                                  ELSE null
-                            END as found
-                        ")
-                        ->leftJoin('releases', 'articles.release_id', '=', 'releases.id')
+                    if (isset($params['q']) && $params['q']) {
+                        $q = Db::table('articles')
+                            ->selectRaw("
+                                ANY_VALUE(articles.name) as articleName,
+                                ANY_VALUE(articles.id) as articleID,
+                                ANY_VALUE(articles.code) as articleCode,
+                                ANY_VALUE(articles.description) as articleDescr,
+                                ANY_VALUE(releases.name) as releaseName,
+                                ANY_VALUE(authors.name) as authorName,
+                                ANY_VALUE(authors.id) as authorID,
+                                ANY_VALUE(journals.name) as journalName,
+                                ANY_VALUE(journals.code) as journalCode,
+                                ANY_VALUE(releases.name) as releaseName,
+                                ANY_VALUE(releases.code) as releaseCode,
+                                ANY_VALUE(articles.active_date) as articleActiveDate,
+                                CASE
+                                    WHEN ANY_VALUE(articles.description) like '%{$params['q']}%'
+                                      THEN ANY_VALUE(articles.description)
+                                      ELSE null
+                                END as found
+                            ");
+                    } else {
+                        $q = Db::table('articles')
+                            ->selectRaw("
+                                ANY_VALUE(articles.name) as articleName,
+                                ANY_VALUE(articles.id) as articleID,
+                                ANY_VALUE(articles.code) as articleCode,
+                                ANY_VALUE(articles.description) as articleDescr,
+                                ANY_VALUE(releases.name) as releaseName,
+                                ANY_VALUE(authors.name) as authorName,
+                                ANY_VALUE(authors.id) as authorID,
+                                ANY_VALUE(journals.name) as journalName,
+                                ANY_VALUE(journals.code) as journalCode,
+                                ANY_VALUE(releases.name) as releaseName,
+                                ANY_VALUE(releases.code) as releaseCode,
+                                ANY_VALUE(articles.active_date) as articleActiveDate
+                            ");
+                    }
+                        $q = $q->leftJoin('releases', 'articles.release_id', '=', 'releases.id')
                         ->leftJoin('journals', 'releases.journal_id', '=', 'journals.id');
+                    if (isset($params) && isset($params['favorite'])) {
+                        if (Auth::check()) {
+                            $q = $q->rightJoin('user_favorites', 'user_favorites.element_id', '=', 'articles.id')
+                                ->where('user_favorites.type', '=', 'article')
+                                ->where('user_favorites.user_id', '=', Auth::id());
+                        }
+                    }
+                    if (isset($params) && isset($params['access'])) {
+                        if (Auth::check()) {
+                            $q = $q->where('articles.content_restriction', '<>', Article::RESTRICTION_PAY);
+                        } else {
+                            $q = $q->where('articles.content_restriction', '=', Article::RESTRICTION_NO);
+                        }
+                    }
                     break;
             }
         if (isset($q) && isset($params)) {
             $q = $q->leftJoin('article_author', 'article_author.article_id', '=', 'articles.id')
                 ->leftJoin('authors', 'article_author.author_id', '=', 'authors.id')
-                ->leftJoin('article_category', 'article_category.article_id', '=', 'articles.id')
-                ->leftJoin('categories', 'categories.id', '=', 'article_category.category_id')
-                ->where(function ($query) use ($params) {
+                ->leftJoin('journal_category', 'journal_category.journal_id', '=', 'journals.id')
+                ->leftJoin('categories', 'categories.id', '=', 'journal_category.category_id');
+
+            if (isset($params['q']) && $params['q']) {
+                $q = $q->where(function ($query) use ($params) {
                     $query->where('articles.name', 'like', '%' . $params['q'] . '%')
                         ->orWhere('releases.name', 'like', '%' . $params['q'] . '%')
                         ->orWhere('articles.description', 'like', '%' . $params['q'] . '%');
                 });
+            }
             if (isset($params['category']) && $params['category'])
                 $q = $q->where('categories.id', '=', $params['category']);
             if (isset($params['journal']) && $params['journal'])
@@ -89,10 +160,37 @@ class SearchController extends Controller
             if (isset($params['udk']) && $params['udk'])
                 $q = $q->where('articles.UDC', 'like', '%'.$params['udk'].'%');
 
-            return $q;
+            if (isset($params['sort_by'])) {
+                switch ($params['sort_by']) {
+                    case 'name':
+                        if ($params['type'] == 'journal') $orderBy = 'journalName';
+                        else $orderBy = 'articleName';
+                        $q = $q->orderBy(
+                            $orderBy,
+                            isset($params['sort_order']) ? $params['sort_order'] : 'asc'
+                        );
+                        break;
+                    case 'date':
+                        if ($params['type'] == 'journal') $orderBy = 'journalActiveDate';
+                        else $orderBy = 'articleActiveDate';
+                        $q = $q->orderBy(
+                            $orderBy,
+                            isset($params['sort_order']) ? $params['sort_order'] : 'asc'
+                        );
+                        break;
+                }
+            }
+
+            return $q->groupBy($groupBy);
         }
     }
 
+    /**
+     * @param $seek
+     * @param $found
+     *
+     * @return string|null sentences from article where query word (q) was found
+     */
     private function getFoundString($seek, $found)
     {
         $seek = strtolower($seek);
@@ -114,11 +212,12 @@ class SearchController extends Controller
     {
         $id = $request->get('id');
         $ids = [];
-        if ($id = 'all') {
+        if ($id == 'all') {
             Auth::user()->searches()->each(function ($item, $key) {
                 $item->delete();
                 $ids[] = $item->id;
             });
+            Cookie::forget('search_params');
         } else {
             UserSearch::where('id', $id)->delete();
             $ids[] = $id;

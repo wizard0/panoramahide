@@ -58,8 +58,10 @@
     @yield('javascript');
 
     <script src="{{ asset('js/app.js') }}"></script>
-    {!!  GoogleReCaptchaV3::render([
-       'auth_register_id' => 'auth/register'
-    ]) !!}
+    @if(Auth::guest())
+        {!!  GoogleReCaptchaV3::render([
+           'auth_register_id' => 'auth/register'
+        ]) !!}
+    @endif
 </body>
 </html>

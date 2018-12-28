@@ -77,4 +77,22 @@ class Journal extends Model
         return (self::where('id', $id)->first())->name;
     }
 
+    public static function getSome($filters)
+    {
+        if (
+            array_key_exists('sort_by', $filters) &&
+            Schema::hasColumn('journals', $filters['sort_by'])
+        ) {
+            $order = array_key_exists('sort_order', $filters)
+                ? $filters['sort_order']
+                : 'asc';
+
+            return self::where('active', 1)
+                ->orderBy($filters['sort_by'], $order)
+                ->paginate(10);
+        } else {
+            return Journal::where('active', 1)->orderBy('name', 'asc')->paginate(10);
+        }
+    }
+
 }

@@ -3,6 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Session;
+
 
 class Order extends Model
 {
@@ -85,6 +87,47 @@ class Order extends Model
                 ];
             case Paysystem::INVOICE:
                 break;
+        }
+    }
+
+    public function saveOrder($data) {
+        switch ($data['PERSON_TYPE']) {
+            case Order::PHYSICAL_USER:
+                $physUser = OrderPhysUser::create($data);
+
+                $this->assocWithUser($physUser, $data['name'], $data['email']);
+
+                $this->phys_user_id = $physUser->id;
+                $this->paysystem()->associate(Paysystem::getByCode($data['paysystem_physic']));
+                break;
+
+            case Order::LEGAL_USER:
+                $legalUser = OrderLegalUser::create(data);
+
+                $this->assocWithUser($legalUser, $data['l_name'], $data['l_email']);
+
+                $this->legal_user_id = $legalUser->id;
+                $this->paysystem()->associate(Paysystem::getByCode($data['paysystem_legal']));
+                break;
+        }
+
+        $this->orderList = json_encode(Session::get('cart')->items);
+        $this->totalPrice = Session::get('cart')->totalPrice;
+        $this->save();
+    }
+
+    private function assocWithUser($model, $name, $email)
+    {
+        if (!$user = User::where(['email' => $email])->first()) {
+            $model->user()->associate(User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make(str_random())
+            ]))->save();
+
+            Auth::login($model->user, true);
+        } else {
+            $model->user()->associate($user)->save();
         }
     }
 }
