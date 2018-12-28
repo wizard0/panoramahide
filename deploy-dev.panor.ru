@@ -22,10 +22,10 @@ fi
 
 sudo /usr/local/bin/rightchk $PROD_PATH/$PROJECT nginx:nginx 775 664
 
-# if [ -d "$PROD_PATH/$PROJECT/node_modules" ]; then
-#     rm -r $PROD_PATH/$PROJECT/node_modules
-#     cd $PROD_PATH/$PROJECT
-#     npm install
-#     npm run prod
-#     cd $CURR_DIR
-# fi
+if [ -d "$PROD_PATH/$PROJECT/node_modules" ]; then
+    rm -r $PROD_PATH/$PROJECT/node_modules
+    cd $PROD_PATH/$PROJECT
+    npm install
+    npm run prod
+    cd $CURR_DIR
+fi
