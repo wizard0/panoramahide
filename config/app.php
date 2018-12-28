@@ -226,6 +226,7 @@ return [
         'Cart' => App\Cart::class,
         'Paysystem' => App\Paysystem::class,
         'Journal' => \App\Journal::class,
+        'Release' => \App\Release::class,
         'Author' => \App\Author::class,
         'Category' => \App\Category::class,
         'UserSearch' => \App\UserSearch::class,

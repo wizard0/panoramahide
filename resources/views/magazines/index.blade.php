@@ -15,6 +15,7 @@
                     </div>
 
                     <div class="row justify-content-between">
+                        @include('includes.sortbar', ['sort_by' => !isset($_GET['sort_by']) ?: $_GET['sort_by']])
                         <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 col-12">
                             <select name="sort">
                                 <option value="DATE_CREATE-DESC"
@@ -44,48 +45,7 @@
 
             <div class="row col-xl-9 col-lg-9 col-12 order-3 order-xl-2 order-lg-2">
                 @foreach ($journals as $journal)
-                <div class="magazine-item entity-item d-flex col-12 _magazine"
-                     data-id="{{ $journal->id }}"
-                     data-link="/magazines/##.html"
-                     data-link-subscribe="/magazines/##.html#subscribe">
-                    <div class="checkbox-col">
-                        <input id="magazine-index-{{ $journal->id }}" type="checkbox" name="article-choise" data-type="journal" value="{{ $journal->id }}" />
-                        <label for="magazine-index-{{ $journal->id }}"></label>
-                    </div>
-                    <div class="article-info-col">
-                        <div class="row">
-                            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-2 col-12">
-                                <div class="issue-image">
-                                    <a href="/magazines/##.html">
-                                        <img src="{{ $journal->image }}">
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="col-xl-9 col-lg-9 col-md-9 col-sm-10 col-12">
-                                <h3><a href="/magazines/##.html" class="black-link journalName">{{ $journal->name }}</a></h3>
-                                <div class="announce">
-                                    <p></p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="magazine-footer row justify-content-between align-items-center no-gutters">
-                            <div class="col-xl-2 col-lg-2 col-md-4 col-sm-3 col-12 out-issn">
-                                <span>ISSN:</span>{{ $journal->issn }}							</div>
-                            <div class="d-flex col-xl-8 col-lg-8 col-md-4 col-sm-6 col-12 goto-issue justify-content-xl-center justify-content-lg-center justify-content-md-center justify-content-sm-center justify-content-start">
-                                <span>к номеру:</span>
-                                <select name="number">
-                                    @foreach ($journal->releases as $release)
-                                        <option value="/magazines/{{  $journal->code }}/numbers/##.html">№ {{ $release->number }}, {{ $release->year }}</option>
-                                    @endforeach
-                                </select>
-                                <a href="" class="_go_to_number_3697">перейти</a>
-                            </div>
-                            <div class="d-flex col-xl-2 col-lg-2 col-md-4 col-sm-3 col-12 get-access-red justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-sm-end justify-content-start">
-                                <a href="/magazines/avtotransport-ekspluatatsiya-obsluzhivanie-remont.html#subscribe" class="red-link">получить доступ</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                    @include('includes.journal_item', compact('journal'))
                 @endforeach
 
                 <div class="w-100 pagination d-flex justify-content-center">
@@ -147,10 +107,4 @@
         </div>
     </div></div>
 </div>
-@endsection
-
-@section('javascript')
-<script>
-    var SideBarManager = new JSSideBarManager();
-</script>
 @endsection

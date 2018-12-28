@@ -7,11 +7,11 @@
     window.JSSideBarManager = function (params) {
         this.subscribeBtn = $('.get-access._access');
         this.items = $('input[name="article-choise"]');
-        this.favoriteBtn = $('a._add_to_favorite');
+        this.favoriteBtn = $('a.action-item._add_to_favorite');
         // this.quoteBtn = $('.actions-menu .action-item._quote');
         // this.copyQuoteBtn = $()
 
-        $('input[name="article-choise"]').on('change', $.proxy(this.processJournalChoice, this));
+        $('input[name="article-choise"]').on('change', $.proxy(this.processChoice, this));
         this.subscribeBtn.on('click', $.proxy(this.subscribeTo, this));
         $('#recommend form').on('submit', $.proxy(this.recommendSubmit, this));
         this.favoriteBtn.on('click', $.proxy(this.addToFavorites, this));
@@ -34,7 +34,7 @@
         return false;
     }
 
-    window.JSSideBarManager.prototype.processJournalChoice = function () {
+    window.JSSideBarManager.prototype.processChoice = function () {
         this.disableBtn();
         this.countAndTypes();
         this.processQuote();
@@ -43,8 +43,8 @@
     window.JSSideBarManager.prototype.processQuote = function () {
         var text = "";
         $.each(this.items.filter(':checked'), function (index, item) {
-            var element = $('.magazine-item._magazine[data-id="' + $(item).val() + '"]');
-            text += '<a href="' + $(element).data('link') + '">' + $(element).find('.journalName').text() + "</a><br>";
+            var element = $('.entity-item[data-id="' + $(item).val() + '"]');
+            text += '<a href="' + $(element).data('link') + '">' + $(element).find('.itemName').text() + "</a><br>";
         });
         $('#quote ._text').html(text);
     }
@@ -77,7 +77,7 @@
 
     window.JSSideBarManager.prototype.addToFavorites = function (event) {
         event.preventDefault();
-        // taking ids from recommendation modal form, cause tis not so bad
+        // taking ids from recommendation modal form, cause this
         // this would be a string like ',1,2,3'
         var data = $('#recommend input[name="ids"]').val();
 

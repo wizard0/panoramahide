@@ -38,7 +38,7 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/complete/{id}', 'PersonalController@completeOrder')
         ->name('order.complete');
 
-    Route::group(['prefix' => 'robokassa'], function (){
+    Route::group(['prefix' => 'robokassa'], function () {
         Route::get('result_receiver', 'PaymentController@robokassaResult');
         Route::get('success', 'PaymentController@robokassaSuccess');
         Route::get('fail', 'PaymentController@robokassaFail');
@@ -49,20 +49,29 @@ Route::group(['prefix' => 'personal'], function () {
 
 Route::get('/magazines', 'MagazinesController')->name('magazines');
 Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
+Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');
+Route::get('/magazines/{journalCode}/numbers/{releaseCode}.html', 'ReleasesController@detail')->name('release');
 
-Route::post('/recommend', 'AjaxActionsController@recommendJournal')->name('recommend');
+Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
 
-Route::get('/search', 'SearchController')->name('search');
-Route::post('/search', 'SearchController');
-Route::post('/save-search', 'SearchController@saveSearch')->middleware('auth')->name('save.search');
-Route::get('/get-saved-search', 'SearchController@getSaved')->middleware('auth')->name('get.search');
-Route::post('/delete-search', 'SearchController@deleteSearch')->middleware('auth')->name('delete.search');
+Route::group(['prefix' => 'search'], function () {
+    Route::get('/', 'SearchController')->name('search');
+    Route::post('/', 'SearchController');
+    Route::post('/save', 'SearchController@saveSearch')->middleware('auth')->name('save.search');
+    Route::get('/get', 'SearchController@getSaved')->middleware('auth')->name('get.search');
+    Route::post('/delete', 'SearchController@deleteSearch')->middleware('auth')->name('delete.search');
+});
+
 
 Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+
+Route::get('/promo', function() {
+    return view('promo');
+});
 
 
 /**
