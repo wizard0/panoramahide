@@ -15,5 +15,6 @@ yarn-error.log
 .phpunit.result.cache
 composer.lock
 package-lock.json
+mix-manifest.json
 public/js/app.js
-storage/debugbar
+.DS_Store

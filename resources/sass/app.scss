@@ -54,3 +54,6 @@ $brand-info: $blue;
 input[type="checkbox"].is-danger + label::before {
   border: solid 1px $red !important;
 }
+
+// Promo
+@import 'promo';
