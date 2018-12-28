@@ -659,6 +659,7 @@ input[type=checkbox].is-danger + label::before {
   background: linear-gradient(to right, #06549d 0%, #6cb2eb 100%);
   height: 530px;
   margin-bottom: 30px;
+  margin-top: 10px;
 }
 
 .promo.body > .container > .row {
