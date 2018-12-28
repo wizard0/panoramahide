@@ -63,3 +63,19 @@ Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+
+
+/**
+ * Промо-учасники
+ */
+Route::resource('promo_users', 'PromoUsersController');
+Route::group(['prefix' => 'promo_users'], function () {
+    Route::any('/{id}/promocodes', ['uses' => 'PromoUsersController@promocodes', 'as' => 'promo_users.promocodes']);
+    Route::any('/{id}/publishings', ['uses' => 'PromoUsersController@publishings', 'as' => 'promo_users.publishings']);
+    Route::any('/{id}/releases', ['uses' => 'PromoUsersController@releases', 'as' => 'promo_users.releases']);
+
+    Route::any('/{id}/promocode/{item_id}/activate', ['uses' => 'PromoUsersController@activatePromocode', 'as' => 'promo_users.promocode.activate']);
+    Route::any('/{id}/publishing/{item_id}/activate', ['uses' => 'PromoUsersController@activatePublishing', 'as' => 'promo_users.publishing.activate']);
+    Route::any('/{id}/release/{item_id}/activate', ['uses' => 'PromoUsersController@activateRelease', 'as' => 'promo_users.release.activate']);
+});
+
