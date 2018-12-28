@@ -1,21 +1,137 @@
 /* Promo.blade.php */
+$promo_height: 530px;
 
-.promo-head {
-	color: white;
+.col-lg-offset-2 {
+	margin-left: 16.66667%
+}
+
+.promo.body {
 	background: linear-gradient(to right, $cleanblue 0%, $cyan 100%);
+	height: $promo_height;
+	margin-bottom: 30px;
 }
 
-.promo-head .container {
+.promo.body > .container > .row {
+	margin: 10px -15px 10px -15px;
+}
+
+.promo .container {
+	height: $promo_height;
 	background: url(../../public/img/reader.png) 300px bottom no-repeat;
-    padding-right: 15px;
-    padding-left: 15px;
+    padding: 10px 15px 10px 15px;
 }
 
-.form-container {
+.promo h1 {
+	font-family: 'OpenSans-Semibold';
+	padding-right: 20px;
+	margin-top: 20px;
+    margin-bottom: 24px;
+    font-size: 46px;
+    line-height: 0.95em;
+	color: white;
+}
+
+.promo .info {
+	width: 72%;
+    font-size: 14px;
+    line-height: 1.4;
+	color: white;
+}
+
+.promo .form-container {
+	height: 100%;
     width: 100%;
     padding: 16px;
     background: #fff;
     -webkit-box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
     -moz-box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
     box-shadow: 0px 2px 12px 1px rgba(0,0,0,0.38);
+	font-size: 14px;
+}
+
+.promo .form-wrapper {
+    display: table;
+    width: 90%;
+    margin: 0 5%;
+    margin-bottom: 40px;
+}
+
+.promo .form-row {
+    display: table-row;
+	width: 100% !important;
+}
+
+.promo .form-label {
+	display: table-cell;
+    padding-right: 8px;
+	text-align: right;
+    width: 20%;
+}
+
+.promo .form-field {
+	display: table-cell;
+    height: 36px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #bcbcbc;
+    border-radius: 0px;
+    margin-bottom: 14px;
+    outline: none;
+}
+
+.promo .form-field.promocode {
+    width: 50%;
+    border-bottom: 2px solid #1771b3;
+}
+
+.promo input[type="checkbox"] {
+	display: inline;
+}
+
+.promo .button-holder {
+    /* width: 220px; */
+    margin: 0 auto;
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 25px;
+}
+
+.promo .btn {
+	width: 40%;
+    letter-spacing: 2px;
+    padding: 14px 24px;
+    font-family: 'OpenSans-Semibold';
+    border: none;
+    background: #3d97cc;
+    background: -moz-linear-gradient(top, #3d97cc 0%, #1262a7 100%);
+    background: -webkit-linear-gradient(top, #3d97cc 0%,#1262a7 100%);
+    background: linear-gradient(to bottom, #3d97cc 0%,#1262a7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3d97cc', endColorstr='#1262a7',GradientType=0 );
+}
+
+.promo.container {
+	font-size: 14px;
+}
+
+.promo.container .h4 {
+	font-size: 18px;
+}
+
+.promo.container .row.center {
+	display: block;
+    /*border: 1px solid red;*/
+    width: 70%;
+    text-align: -webkit-center;
+    align-self: center;
+    margin-left: 15%;
+    padding: 0px;
+}
+
+.promo.container .row.center .phone-container {
+	margin-top: 30px;
+}
+
+.promo.container .row.center .phone {
+    font-family: 'OpenSans-Light';
+    font-size: 32px;
 }
