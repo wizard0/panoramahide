@@ -28,7 +28,7 @@
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
 
-
+    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
