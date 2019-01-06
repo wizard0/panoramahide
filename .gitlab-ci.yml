@@ -1,37 +1,23 @@
 stages:
-    - phpunit_tests
-    # - qunit_tests
     - build
     - deploy
     # - production
 
-phpunit_tests:
-    stage: phpunit_tests
-    script:
-        - /usr/bin/phpunit --testdox tests
-    only:
-        - master
-
-# qunit_tests:
-#     stage: qunit_tests
-#     script:
-#         - /usr/bin/qunit testjs
-#     only:
-#         - master
-
 build:
     stage: build
     script:
-        - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
+        - php72 /usr/bin/composer install
+        - npm install
+        - npm run prod
+        - cp /usr/local/bin/.env.dev.panor.ru ./.env
+        - /usr/bin/phpunit --testdox tests
     only:
         - master
 
 deploy:
     stage: deploy
-    variables:
-        CI_DEBUG_TRACE: "false"
     script:
-        # - /usr/local/bin/deploy-dev.panor.ru $USER $PASS dev.panor.ru
+        - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
         - /usr/local/bin/deploy-dev.panor.ru dev.panor.ru
     only:
         - master
