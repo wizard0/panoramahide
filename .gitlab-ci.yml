@@ -1,15 +1,16 @@
 stages:
-    # - phpunit_tests
+    - phpunit_tests
     # - qunit_tests
+    - build
     - deploy
     # - production
 
-# phpunit_tests:
-#     stage: phpunit_tests
-#     script:
-#         - /usr/bin/phpunit tests
-#     only:
-#         - master
+phpunit_tests:
+    stage: phpunit_tests
+    script:
+        - /usr/bin/phpunit --testdox tests
+    only:
+        - master
 
 # qunit_tests:
 #     stage: qunit_tests
@@ -18,12 +19,20 @@ stages:
 #     only:
 #         - master
 
+build:
+    stage: build
+    script:
+        - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
+    only:
+        - master
+
 deploy:
     stage: deploy
     variables:
         CI_DEBUG_TRACE: "false"
     script:
-        - /usr/local/bin/deploy-dev.panor.ru $USER $PASS dev.panor.ru
+        # - /usr/local/bin/deploy-dev.panor.ru $USER $PASS dev.panor.ru
+        - /usr/local/bin/deploy-dev.panor.ru dev.panor.ru
     only:
         - master
 
