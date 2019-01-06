@@ -4,17 +4,29 @@ namespace Tests\Feature;
 
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 class ExampleTest extends TestCase
 {
+    public function testMainPage()
+    {
+        $_SERVER['REQUEST_URI'] = '/';
+
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+
     /**
-     * A basic test example.
+     * Test /promo page
      *
      * @return void
      */
-    public function testBasicTest()
+    public function testPromoPage()
     {
-        $response = $this->get('/');
+        $_SERVER['REQUEST_URI'] = '/promo';
+
+        $response = $this->get('/promo');
 
         $response->assertStatus(200);
     }
