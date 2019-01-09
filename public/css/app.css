@@ -648,6 +648,10 @@ input[type=checkbox].is-danger + label::before {
   border: solid 1px #e3342f !important;
 }
 
+.form-field.__error.is-danger {
+  border-color: #e3342f !important;
+}
+
 /* Promo.blade.php */
 
 .col-lg-offset-2 {

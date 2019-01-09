@@ -54,6 +54,9 @@ $brand-info: $blue;
 input[type="checkbox"].is-danger + label::before {
   border: solid 1px $red !important;
 }
+.form-field.__error.is-danger {
+  border-color: $red !important;
+}
 
 // Promo
 @import 'promo';

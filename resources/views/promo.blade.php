@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-6 col-lg-offset-2">
                 <div class="form-container">
-                    <form id="user_form">
+                    <form id="user_form" class="ajax-form" action="/promo/access">
                         <div class="form-wrapper">
 
                             <div class="form-row">
@@ -39,7 +39,9 @@
 
                             <div class="form-row">
                                 <div class="form-label">Моб. телефон:</div>
-                                <div class="form-holder"><input type="phone" class="form-field" name="phone" placeholder="+7(xxx)-xxx-xx-xx" required="" value=""></div>
+                                <div class="form-holder">
+                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" required="" value="" data-role="js-mask-phone">
+                                </div>
                             </div>
 
                             <div class="form-row" id="publisher" style="display: none;">
@@ -97,7 +99,7 @@
                         </div>
 
                         <div class="button-holder">
-                            <button class="btn btn-primary text-uppercase" id="btn_access" value="Получить доступ">Получить доступ</button>
+                            <button type="submit" class="btn btn-primary text-uppercase inner-form-submit" id="btn_access" value="Получить доступ">Получить доступ</button>
                         </div>
 
                         <div class="text-center">

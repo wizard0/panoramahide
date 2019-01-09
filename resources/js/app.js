@@ -24,3 +24,4 @@ require('lodash/lodash.min.js');
 window.toastr = require('toastr/build/toastr.min.js');
 
 require('./plugins/form.js');
+require('./plugins/cleave-masks.js');
