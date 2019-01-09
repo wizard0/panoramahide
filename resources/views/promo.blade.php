@@ -14,33 +14,35 @@
             </div>
             <div class="col-lg-6 col-lg-offset-2">
                 <div class="form-container">
-                    <form id="user_form" class="ajax-form" action="/promo/access">
+                    <form id="user_form" class="ajax-form" action="{{ route('promo.access') }}"
+                        data-callback="callbackPromoAccess"
+                    >
                         <div class="form-wrapper">
 
                             <div class="form-row">
                                 <div class="form-label">Фамилия:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" value=""></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Имя:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" value=""></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Отчество:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="patronymic" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="patronymic" placeholder="" value=""></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Email:</div>
-                                <div class="form-holder"><input type="email" class="form-field" name="email" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="email" class="form-field" name="email" placeholder="" value=""></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Моб. телефон:</div>
                                 <div class="form-holder">
-                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" required="" value="" data-role="js-mask-phone">
+                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" value="" data-role="js-mask-phone">
                                 </div>
                             </div>
 
@@ -82,13 +84,13 @@
 
                             <div class="form-row">
                                 <div class="form-label">Промокод:</div>
-                                <div class="form-holder"><input type="text" class="form-field promocode" name="promocode" required=""></div>
+                                <div class="form-holder"><input type="text" class="form-field promocode" name="promocode" ></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label"></div>
                                 <div class="form-holder">
-                                    <input type="checkbox" value="1" name="UF_PROC_PER_DATA" checked="checked" required="">
+                                    <input type="checkbox" value="1" name="UF_PROC_PER_DATA" checked="checked" >
                                     &nbsp;Я согласен на обработку&nbsp;
                                     <a href="http://panor.ru/coglasie-na-obrabotku-personalnykh-dannykh/" target="_blank">
                                         своих персональных данных

@@ -265,7 +265,7 @@ let ajaxForm = {
     before() {
         const self = this;
         if (self.form.data('loading-container')) {
-            for (let key in this.loading.container) {
+            for (let key in self.loading.container) {
                 $(self.form.data('loading-container')).addClass(self.loading.container[key])
             }
         }
