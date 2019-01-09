@@ -34,22 +34,17 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsReleaseEnd()
     {
         $oPromoUser = PromoUser::first();
-        if (is_null($oPromoUser)) {
-            $this->assertTrue(false, 'Table promo_users is empty');
-            return;
-        }
-        $now = now();
-        $oPromoCode = Promocode::where('release_end', '<', $now)->first();
-        if (!is_null($oPromoCode)) {
-            DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-                $service = (new PromoUserService($oPromoUser));
-                $result = $service->activatePromocode($oPromoCode);
-                $this->assertFalse($result, 'Activate by release_end, must be false');
-                DB::rollBack();
-            });
-        } else {
-            $this->assertTrue(true);
-        }
+        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+
+        $oPromoCode = Promocode::where('release_end', '<', '2019-02-01 00:00:00')->first();
+        $this->assertNotNull($oPromoCode);
+
+        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
+            $service = (new PromoUserService($oPromoUser));
+            $result = $service->activatePromocode($oPromoCode);
+            $this->assertFalse($result, 'Activate by release_end, must be false');
+            DB::rollBack();
+        });
     }
 
     /**
