@@ -3,12 +3,9 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
 
 class Article extends Model
 {
-    use Translatable;
-
     const RESTRICTION_NO = 'no';
     const RESTRICTION_REGISTER = 'register';
     const RESTRICTION_PAY = 'pay/subscribe';
