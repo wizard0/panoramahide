@@ -1,5 +1,4 @@
 stages:
-    # - build
     - deploy
     # - production
 
@@ -15,14 +14,6 @@ deploy:
         - ./deploy
     only:
         - master
-
-# deploy:
-#     stage: deploy
-#     script:
-#         - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
-#         - /usr/local/bin/deploy-dev.panor.ru dev.panor.ru
-#     only:
-#         - master
 
 # Задача на развертывание PRODUCTION релиза
 # Обычно проускается
