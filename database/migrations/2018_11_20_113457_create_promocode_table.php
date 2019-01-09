@@ -35,39 +35,6 @@ class CreatePromocodeTable extends Migration
             $table->timestamps();
 
             $table->unique('promocode');
-
-            $table->foreign('journal_id')->references('id')->on('journals');
-            $table->foreign('journal_for_releases_id')->references('id')->on('journals');
-        });
-
-        Schema::create('promocode_publishing', function (Blueprint $table) {
-            $table->unsignedInteger('promocode_id');
-            $table->unsignedInteger('publishing_id');
-
-            $table->foreign('promocode_id')->references('id')->on('promocodes');
-            $table->foreign('publishing_id')->references('id')->on('publishings');
-
-            $table->primary(['promocode_id', 'publishing_id']);
-        });
-
-        Schema::create('promocode_release', function (Blueprint $table) {
-            $table->unsignedInteger('promocode_id');
-            $table->unsignedInteger('release_id');
-
-            $table->foreign('promocode_id')->references('id')->on('promocodes');
-            $table->foreign('release_id')->references('id')->on('releases');
-
-            $table->primary(['promocode_id', 'release_id']);
-        });
-
-        Schema::create('promocode_journal', function (Blueprint $table) {
-            $table->unsignedInteger('promocode_id');
-            $table->unsignedInteger('journal_id');
-
-            $table->foreign('promocode_id')->references('id')->on('promocodes');
-            $table->foreign('journal_id')->references('id')->on('journals');
-
-            $table->primary(['promocode_id', 'journal_id']);
         });
     }
 
@@ -78,6 +45,6 @@ class CreatePromocodeTable extends Migration
      */
     public function down()
     {
-
+        Schema::dropIfExists('promocodes');
     }
 }

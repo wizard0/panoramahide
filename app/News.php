@@ -2,15 +2,16 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
 
 class News extends Model
 {
     use Translatable;
 
-    public $translatable = ['name', 'code', 'description', 'image', 'preview', 'preview_image'];
+    public $translatedAttributes = ['name', 'code', 'description', 'image', 'preview', 'preview_image'];
+
 //    protected $fillable = ['code'];
 
     /**

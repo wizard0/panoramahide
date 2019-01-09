@@ -24,10 +24,6 @@ class CreateQuotaTable extends Migration
             $table->unsignedInteger('quota_size')->nullable();
             $table->unsignedInteger('used')->nullable();
             $table->timestamps();
-
-            $table->foreign('partner_id')->references('id')->on('partners');
-            $table->foreign('journal_id')->references('id')->on('journals');
-            $table->foreign('release_id')->references('id')->on('releases');
         });
     }
 
@@ -38,6 +34,6 @@ class CreateQuotaTable extends Migration
      */
     public function down()
     {
-
+        Schema::dropIfExists('quotas');
     }
 }
