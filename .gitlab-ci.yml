@@ -9,6 +9,8 @@ deploy:
         - npm install
         - npm run prod
         - cp /usr/local/bin/.env.dev.panor.ru ./.env
+        - php72 ./artisan migrate
+        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS dev_panor < ./database/dumps/panorama_dummydata.sql
         - /usr/bin/phpunit --testdox tests
         - chmod 774 ./deploy
         - ./deploy
