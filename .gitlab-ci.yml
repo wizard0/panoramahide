@@ -1,26 +1,28 @@
 stages:
-    - build
+    # - build
     - deploy
     # - production
 
-build:
-    stage: build
+deploy:
+    stage: deploy
     script:
         - php72 /usr/bin/composer install
         - npm install
         - npm run prod
         - cp /usr/local/bin/.env.dev.panor.ru ./.env
         - /usr/bin/phpunit --testdox tests
+        - chmod 774 ./deploy
+        - ./deploy
     only:
         - master
 
-deploy:
-    stage: deploy
-    script:
-        - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
-        - /usr/local/bin/deploy-dev.panor.ru dev.panor.ru
-    only:
-        - master
+# deploy:
+#     stage: deploy
+#     script:
+#         - /usr/local/bin/build-dev.panor.ru $USER $PASS dev.panor.ru.build
+#         - /usr/local/bin/deploy-dev.panor.ru dev.panor.ru
+#     only:
+#         - master
 
 # Задача на развертывание PRODUCTION релиза
 # Обычно проускается

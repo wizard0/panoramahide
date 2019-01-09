@@ -1,0 +1,17 @@
+#!/bin/bash
+
+WEB=/var/www/html
+PROJECT=$WEB/dev.panor.ru
+
+mkdir $PROJECT.new
+cp -R ./* $PROJECT.new/*
+
+if [ -d "$PROJECT.prev" ]; then
+	rm -r $PROJECT.prev
+fi
+
+if [ -d "$PROJECT" ]; then
+	mv $PROJECT $PROJECT.prev
+	mv $PROJECT.new $PROJECT
+	chown -R nginx:nginx $PROJECT
+fi
