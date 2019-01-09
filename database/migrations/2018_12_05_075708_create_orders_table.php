@@ -22,7 +22,7 @@ class CreateOrdersTable extends Migration
                 'wait', 'payed', 'cancelled', 'completed'
             ])->default('wait');
             $table->json('orderList');
-            $table->string('totalPrice');
+            $table->integer('totalPrice');
             $table->string('payed');
             $table->string('left_to_pay');
             $table->timestamps();

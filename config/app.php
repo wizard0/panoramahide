@@ -163,8 +163,7 @@ return [
         /*
          * Package Service Providers...
          */
-        TCG\Voyager\VoyagerServiceProvider::class,
-
+        Dimsav\Translatable\TranslatableServiceProvider::class,
         /*
          * Application Service Providers...
          */

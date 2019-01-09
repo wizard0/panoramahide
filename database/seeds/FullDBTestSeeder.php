@@ -15,7 +15,6 @@ class FullDBTestSeeder extends Seeder
         factory(App\Category::class, 5)->create()->each(function ($category) {
             $category->journals()->saveMany(factory(App\Journal::class, 10)->create()
                 ->each(function ($journal) {
-                    $journal->contact()->associate(factory(App\JournalContact::class)->create())->save();
                     factory(App\Release::class, 10)
                         ->create(['journal_id' => $journal->id])
                         ->each(function ($release) {
