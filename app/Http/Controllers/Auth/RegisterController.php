@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
-use TimeHunter\LaravelGoogleCaptchaV3\Facades\GoogleReCaptchaV3;
+use TimeHunter\LaravelGoogleReCaptchaV3\Facades\GoogleReCaptchaV3;
 
 class RegisterController extends Controller
 {
@@ -105,14 +105,17 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
-            $request->get('g-recaptcha-response'),
-            $request->ip()
-        );
-        if (!$captcha->isSuccess()) {
-            return response()->json([
-                'g-recaptcha-response' => ['Ошибка проверки Google reCAPTCHA. Перезагрузите страницу.']
-            ], 422);
+        $code = $request->get('g-recaptcha-response');
+        if ($code !== config('googlerecaptchav3.except_value')) {
+            $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
+                $request->get('g-recaptcha-response'),
+                $request->ip()
+            );
+            if (!$captcha->isSuccess()) {
+                return response()->json([
+                    'g-recaptcha-response' => ['Ошибка проверки Google reCAPTCHA. Перезагрузите страницу.']
+                ], 422);
+            }
         }
 
         event(new Registered($user = $this->create($request->all())));

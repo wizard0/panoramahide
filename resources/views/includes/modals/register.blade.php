@@ -49,7 +49,7 @@
             </div>
             <div class="form-group">
                 <label>Ваш телефон</label>
-                <input type="text" name="phone" class="_phone" value="" required>
+                <input type="text" name="phone" class="_phone" value="" data-role="js-mask-phone" required>
             </div>
             <div class="form-group">
                 <label>Придумайте пароль</label>

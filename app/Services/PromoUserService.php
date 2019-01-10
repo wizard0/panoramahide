@@ -41,10 +41,11 @@ class PromoUserService
      * PromoUserService constructor.
      * @param PromoUser $promoUser
      */
-    public function __construct(PromoUser $promoUser)
+    public function __construct(PromoUser $promoUser = null)
     {
-        $this->promoUser = $promoUser;
-        $this->promoUserPromocodes = $promoUser->promocodes;
+        if (!is_null($promoUser)) {
+            $this->setPromoUser($promoUser);
+        }
         $this->now = Carbon::now();
     }
 
@@ -118,5 +119,47 @@ class PromoUserService
     public function getMessage() : string
     {
         return $this->message;
+    }
+
+    /**
+     * Создать промо-юзера
+     *
+     * @param array $data
+     * @return PromoUser
+     */
+    public function create(array $data) : PromoUser
+    {
+        $oPromoUser = PromoUser::create([
+            'name' => $data['name'],
+            'user_id' => $data['user_id'],
+            'phone' => $data['phone'],
+        ]);
+        return $oPromoUser;
+    }
+
+    /**
+     * Обновить промо-юзера
+     *
+     * @param $id
+     * @param array $data
+     * @return PromoUser
+     */
+    public function update($id, array $data) : PromoUser
+    {
+        $oPromoUser = PromoUser::find($id);
+        $oPromoUser->update([
+            'name' => $data['name'],
+            'phone' => $data['phone'],
+        ]);
+        return $oPromoUser;
+    }
+
+    /**
+     * @param PromoUser $promoUser
+     */
+    public function setPromoUser(PromoUser $promoUser)
+    {
+        $this->promoUser = $promoUser;
+        $this->promoUserPromocodes = $promoUser->promocodes;
     }
 }

@@ -36,7 +36,7 @@ class PromoUsersController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
     {
@@ -56,7 +56,7 @@ class PromoUsersController extends Controller
                 'phone' => $data['phone'],
             ]);
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
     /**
@@ -86,7 +86,7 @@ class PromoUsersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
     {
@@ -105,7 +105,7 @@ class PromoUsersController extends Controller
                 'phone' => $data['phone'],
             ]);
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
     /**
@@ -113,7 +113,7 @@ class PromoUsersController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
     {
@@ -121,7 +121,7 @@ class PromoUsersController extends Controller
             $oPromoUser = PromoUser::find($id);
             $oPromoUser->delete();
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
     /**
@@ -163,7 +163,7 @@ class PromoUsersController extends Controller
                 return $this->jsonResponseValidationErrors([$service->getMessage()]);
             }
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
     /**
@@ -196,7 +196,7 @@ class PromoUsersController extends Controller
         if ($request->ajax()) {
             $oPromoUser = PromoUser::find($id);
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
     /**
@@ -229,7 +229,7 @@ class PromoUsersController extends Controller
         if ($request->ajax()) {
             $oPromoUser = PromoUser::find($id);
         };
-        return $this->jsonResponseMustBeAjax();
+        return responseCommon()->mustBeAjax();
     }
 
 

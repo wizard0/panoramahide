@@ -138,6 +138,7 @@ let ajaxForm = {
                 window.toastr.info(notification.text, notification.title, notification.options);
                 break;
             default:
+                window.toastr.info(notification.text, notification.title, notification.options);
                 break;
         }
     },
