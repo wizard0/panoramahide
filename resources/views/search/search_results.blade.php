@@ -8,6 +8,6 @@
     @endforeach
 
     <div class="w-100 pagination d-flex justify-content-center">
-        {{ $search->links() }}
+        {{ $search->appends(app('request')->all())->links() }}
     </div>
 </div>

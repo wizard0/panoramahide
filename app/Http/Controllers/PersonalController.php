@@ -68,6 +68,8 @@ class PersonalController extends Controller
 
         if (Auth::attempt($credentials)) {
             return redirect()->to('/personal');
+        } else {
+            return redirect()->back();
         }
     }
 
