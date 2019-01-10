@@ -2,8 +2,8 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
 
 class Article extends Model
 {
@@ -13,7 +13,7 @@ class Article extends Model
     const RESTRICTION_REGISTER = 'register';
     const RESTRICTION_PAY = 'pay/subscribe';
 
-    public $translatable = [
+    public $translatedAttributes = [
         'name', 'code', 'keywords', 'image', 'description', 'preview_image', 'preview_description', 'bibliography'
     ];
 

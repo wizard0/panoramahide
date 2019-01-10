@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\Http\Traits\Translatable;
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -10,7 +10,8 @@ class Release extends Model
 {
     use Translatable;
 
-    public $translatable = ['name', 'code', 'image', 'description', 'preview_image', 'preview_description'];
+    public $translatedAttributes = ['name', 'code', 'number', 'image', 'description', 'preview_image', 'preview_description'];
+
 //    protected $fillable = ['code'];
 
     /**

@@ -15,7 +15,7 @@ class CreatePaysystemDataTable extends Migration
     {
         Schema::create('paysystem_data', function (Blueprint $table) {
             $table->increments('id');
-            $table->string("name");
+            $table->string('name');
             $table->string('code');
             $table->text('value')->nullable();
             $table->enum('type', ['string', 'file'])->default('string');

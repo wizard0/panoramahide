@@ -17,6 +17,8 @@ class CreatePaysystemsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('code');
+            $table->string('logo')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
