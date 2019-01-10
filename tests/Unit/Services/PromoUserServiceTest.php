@@ -53,26 +53,20 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsActivateExists()
     {
         $oPromoUser = PromoUser::first();
-        if (is_null($oPromoUser)) {
-            $this->assertTrue(false, 'Table promo_users is empty');
-            return;
-        }
+        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+
         $oPromocodes = $oPromoUser->promocodes;
-        if (!empty($oPromocodes)) {
-            $oPromoCode = Promocode::whereIn('id', $oPromocodes->pluck('id'))->first();
-            if (!is_null($oPromoCode)) {
-                DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-                    $service = (new PromoUserService($oPromoUser));
-                    $result = $service->activatePromocode($oPromoCode);
-                    $this->assertFalse($result, 'Activate by isset promocode, must be false');
-                    DB::rollBack();
-                });
-            } else {
-                $this->assertTrue(true);
-            }
-        } else {
-            $this->assertTrue(true);
-        }
+        $this->assertNotEmpty($oPromocodes);
+
+        $oPromoCode = Promocode::whereIn('id', $oPromocodes->pluck('id'))->first();
+        $this->assertNotNull($oPromoCode);
+
+        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
+            $service = (new PromoUserService($oPromoUser));
+            $result = $service->activatePromocode($oPromoCode);
+            $this->assertFalse($result, 'Activate by isset promocode, must be false');
+            DB::rollBack();
+        });
     }
 
     /**
@@ -81,25 +75,19 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsDeactivateNotExists()
     {
         $oPromoUser = PromoUser::first();
-        if (is_null($oPromoUser)) {
-            $this->assertTrue(false, 'Table promo_users is empty');
-            return;
-        }
+        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+
         $oPromocodes = $oPromoUser->promocodes;
-        if (!empty($oPromocodes)) {
-            $oPromoCode = Promocode::whereNotIn('id', $oPromocodes->pluck('id'))->first();
-            if (!is_null($oPromoCode)) {
-                DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-                    $service = (new PromoUserService($oPromoUser));
-                    $result = $service->deactivatePromocode($oPromoCode);
-                    $this->assertFalse($result, 'Deactivate by isset promocode, must be false');
-                    DB::rollBack();
-                });
-            } else {
-                $this->assertTrue(true);
-            }
-        } else {
-            $this->assertTrue(true);
-        }
+        $this->assertNotEmpty($oPromocodes);
+
+        $oPromoCode = Promocode::whereNotIn('id', $oPromocodes->pluck('id'))->first();
+        $this->assertNotNull($oPromoCode);
+
+        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
+            $service = (new PromoUserService($oPromoUser));
+            $result = $service->deactivatePromocode($oPromoCode);
+            $this->assertFalse($result, 'Deactivate by isset promocode, must be false');
+            DB::rollBack();
+        });
     }
 }
