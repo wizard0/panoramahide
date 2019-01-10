@@ -1,11 +1,31 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Promocode;
+use App\Publishing;
+use App\Release;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class PromoUser extends Model
 {
+    protected $table = 'promo_users';
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name', 'user_id', 'phone',
+    ];
+
+    public function setPhoneAttribute($value)
+    {
+        $this->attributes['phone'] = preg_replace('/[^0-9]/','', $value);
+    }
+
     /**
      * User account the Promo-user belongs to
      *
