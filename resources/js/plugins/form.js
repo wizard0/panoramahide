@@ -411,6 +411,15 @@ let ajaxForm = {
             delete data['bs.tooltip'];
         }
         if (self.form.data('form-data')) {
+            let supportData = [];
+            _.each(data, function (value, key) {
+                if (value.name === undefined) {
+                    let val = value;
+                    value.name = key;
+                    value.value = val;
+                }
+                supportData = self.getFormDataPushKeyValue(supportData, value.name, value.value);
+            });
             let sData = self.form.data('form-data');
             if (sData) {
                 sData = _.split(sData, ',');
@@ -418,23 +427,32 @@ let ajaxForm = {
                     let $element = $(_.trim(val));
                     if ($element.get(0).tagName === 'INPUT') {
                         if ($element.is(':checkbox')) {
-                            data[$element.attr('name')] = $element.is(':checked') ? 1 : 0;
+                            supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.is(':checked') ? 1 : 0);
                         } else {
-                            data[$element.attr('name')] = $element.val();
+                            supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.val());
                         }
                     }
                     if ($element.get(0).tagName === 'SELECT') {
-                        data[$element.attr('name')] = $element.val();
+                        supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.val());
                     }
                     if ($element.get(0).tagName === 'FORM') {
                         _.each($element.serializeArray(), function (val) {
-                            data[val.name] = val.value;
+                            supportData = self.getFormDataPushKeyValue(supportData, val.name, val.value);
                         });
                     }
                 });
             }
+            data = supportData;
         }
         console.log(data);
+        return data;
+    },
+
+    getFormDataPushKeyValue(data, key, value) {
+        data.push({
+            name: key,
+            value: value,
+        });
         return data;
     },
 

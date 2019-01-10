@@ -14,7 +14,7 @@
             </div>
             <div class="col-lg-6 col-lg-offset-2">
                 <div class="form-container">
-                    <form id="user_form" class="ajax-form" action="{{ route('promo.access') }}"
+                    <form id="user_form" class="ajax-form --form-promo-access" action="{{ route('promo.access') }}"
                         data-callback="callbackPromoAccess"
                     >
                         <div class="form-wrapper">
