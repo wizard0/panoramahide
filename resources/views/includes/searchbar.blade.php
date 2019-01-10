@@ -2,9 +2,9 @@
 <div class="container h-100">
 <div class="d-flex flex-column h-100 justify-content-center">
 <div class="search-form extended-search">
-<form method="POST" action="{{ route('search') }}" id="searchBar">
-    @csrf
-    <input type="hidden" name="search" value="Y">
+<form method="GET" action="{{ route('search') }}" id="searchBar">
+    {{--@csrf--}}
+    {{--<input type="hidden" name="search" value="Y">--}}
     <div class="row">
         <div class="col-lg-12 text-center">
             <div class="search-intro">
@@ -241,51 +241,6 @@
             $('.all-form-row').toggleClass("no-gutters");
             $('.searcharea').toggleClass("bothsharp");
             $('.cover button').toggleClass("leftsharp");
-            if (!P.search.isExtend()) {
-//                $('.collapse-search a').text(MESS.ADVANCED_SEARCH);
-            } else {
-//                $('.collapse-search a').text(MESS.HIDE_SEARCH);
-            }
-        }
-
-        function showResult()
-        {
-            $('html, body').animate({scrollTop: $('.show-results').offset().top}, time_animation);
-        }
-
-        function loadResultFrom(url)
-        {
-            var btn = P.search.settings.form.find('[type=submit]');
-            if (searchResultLoading) {
-                notice(MESS.SEARCH_EXECUTED, 'error', btn, {position: 'top center'});
-                return false;
-            }
-            notice(MESS.SEARCH_EXEC, 'success', btn, {position: 'top center'});
-
-            searchResultLoading = true;
-            load(url, '.show-results', function(res) {
-                searchResultLoading = false;
-                showResult();
-                // подсветить ключевой запрос
-                if (window.q) {
-                    $('.show-results').html($('.show-results').html().replace(new RegExp('('+q+')', 'gi'), '<mark>$1</mark>'));
-                }
-                // выполнить js
-                $(res).find('script').each(function(i, item){
-                    eval($(item).text());
-                });
-            });
-        }
-
-        function loadResult(data)
-        {
-            loadResultFrom('ajax.php?'+$.param(data));
-        }
-
-        function AddToHistory(data)
-        {
-            var url = $.param(data);
-            history.pushState(data, 'search', '?'+url);
         }
 
         $(function() {
@@ -297,19 +252,14 @@
                 P.search.showSearchSave();
             });
 
-            window.onpopstate = function(event) {
-                loadResult(event.state);
-            }
-
-            // поиск
-            P.search.settings.form.on('submit', function(){
-                var data = P.search.getFormData();
-                if (!searchResultLoading) {
-                    AddToHistory(data);
-                }
-                loadResult(data);
-                return false;
+            // Change 'form' to class or ID of your specific form
+            P.search.settings.form.submit(function() {
+                $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
+                return true; // ensure form still submits
             });
+
+            // Un-disable form fields when page loads, in case they click back after submission
+            P.search.settings.form.find( ":input" ).prop( "disabled", false );
 
             // переключить режим поиска
             $('.collapse-search a').on('click', function(e) {
@@ -333,7 +283,6 @@
             // применить сохраенный поиск
             P.search.settings.form.on('click', P.search.settings.savedSearchApply, function(event){
                 event.preventDefault();
-                console.log('clickesadasdsadsadd');
                 P.search.applySavedSearch($(this).data('id'));
                 return false;
             });
@@ -377,18 +326,6 @@
                     $(this).hide();
                 });
             }
-            /*--Мои поиски--*/
-
-//            $(document).on('change', '[name=sort]', function(){
-//                showResult();
-//                loadResultFrom('ajax.php?'+$.param(P.search.getFormData())+'&'+getSortURL($(this).val()));
-//            });
-
-            $(document).on('click', '.pagination a', function(){
-                showResult();
-                loadResultFrom($(this).attr('href'));
-                return false;
-            });
         });
         $(function(){
             P.search.toggleExtend();
