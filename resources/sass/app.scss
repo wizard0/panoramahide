@@ -11,11 +11,18 @@ $brand-info: $blue;
 @import '~toastr/build/toastr.min.css';
 .toast {
   font-size: 14px;
-  box-shadow: none;
+  box-shadow: 0 0 6px #999 !important;
+  opacity: .9 !important;
+  padding: 10px 10px 10px 50px !important;
   &:hover {
     box-shadow: none;
+    opacity: 1 !important;
   }
   user-select: none;
+}
+.modal-open #toast-container {
+  position: absolute;
+  padding-right: 17px;
 }
 .toast-top-right {
   right: 25px;

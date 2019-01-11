@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Models\PromoUser;
 use App\Promocode;
 use App\Services\PromoUserService;
+use App\Services\Toastr\Toastr;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -154,6 +155,9 @@ class PromoController extends Controller
 
         // У промокода увеличивается на 1 свойство "использован", промо-участнику в "активированные промокоды" добавляется введенный промокод и при необходимости добавляется выбранное издательство.
         // После активации происходит переход на страницу "Мои журналы", а для промокода вида "Выборочный" переход на страницу выбора журналов.
+
+        (new Toastr('Промокод успешно активирован'))->success(false);
+
         return responseCommon()->success([
             'redirect' => '/promo'
         ], 'Промокод успешно активирован');

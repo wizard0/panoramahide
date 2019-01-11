@@ -2,6 +2,8 @@
 
 namespace App\Services\Toastr;
 
+use Bulk\Toastr\Facades\Toastr as ToastrFacade;
+
 class Toastr
 {
     private $toastrMessages = [
@@ -42,6 +44,16 @@ class Toastr
     private function get($type, $json = true)
     {
         $this->toastrMessages[$type]['text'] = $this->message;
+        if (!$json) {
+            $data['options'] = [
+                'timeOut' => 5000
+            ];
+            $data = array_merge($data, $this->toastrMessages[$type]);
+            if ($type === 'primary') {
+                $type = 'info';
+            }
+            return ToastrFacade::{$type}($data['text'], $data['title'], $data['options']);
+        }
         return $this->toastrMessages[$type];
     }
 
