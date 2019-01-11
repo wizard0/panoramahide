@@ -47,10 +47,13 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/payment', 'PaymentController@payment')->name('personal.order.payment');
 });
 
-Route::get('/magazines', 'MagazinesController')->name('magazines');
-Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
+Route::group(['prefix' => 'magazines'], function () {
+    Route::get('/', 'MagazinesController')->name('magazines');
+    Route::get('/{code}.html', 'MagazinesController@detail')->name('magazine');
+    Route::get('/{journalCode}/numbers/{releaseID}.html', 'ReleasesController@detail')->name('release');
+});
+
 Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');
-Route::get('/magazines/{journalCode}/numbers/{releaseCode}.html', 'ReleasesController@detail')->name('release');
 
 Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');

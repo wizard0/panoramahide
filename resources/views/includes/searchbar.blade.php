@@ -1,3 +1,8 @@
+@php
+$categories = Category::with('journals')->withTranslation()->get();
+$journals = Journal::withTranslation()->get();
+@endphp
+
 <div class="cover form-collapsed" style="background-image: url(/img/cover-bg.jpg);">
 <div class="container h-100">
 <div class="d-flex flex-column h-100 justify-content-center">
@@ -18,7 +23,7 @@
             <label class="col-12">Тематика</label>
             <select name="category">
                 <option value="">Любая тематика</option>
-                @foreach (Category::with('journals')->get() as $category)
+                @foreach ($categories as $category)
                     <option value="{{ $category->id }}" @php
                     if (isset($params)) {
                         if (isset($params['$category']) && $params['$category'] == $category->id)
@@ -67,7 +72,7 @@
                     <label class="col-12">Выбрать журнал</label>
                     <select name="journal">
                         <option value="">Любой журнал</option>
-                        @foreach (Journal::all() as $journal)
+                        @foreach ($journals as $journal)
                             <option value="{{ $journal->id }}" {{
                             (isset($params) && isset($params['journal']) && $params['journal'] == $journal->id)
                                 ? 'selected'

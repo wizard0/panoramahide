@@ -44,9 +44,11 @@ class Journal extends Model
         return $this->hasMany(Release::class);
     }
 
-    public function scopeAllNew(Builder $query)
+    public function scopeNewest(Builder $query, $limit = null)
     {
-        return $query->orderBy('created_at', 'asc');
+        return (is_numeric($limit))
+            ? $query->orderBy('active_date', 'desc')->limit($limit)
+            : $query->orderBy('active_date', 'desc');
     }
 
     public function scopeByAlphabet(Builder $query)
@@ -74,7 +76,7 @@ class Journal extends Model
         $sort = $filters['sort_by'];
         $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
 
-        $q = self::where('active', 1);
+        $q = self::where('active', 1)->withTranslation();
 
         switch ($sort) {
             case 'name':

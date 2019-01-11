@@ -29,9 +29,18 @@ class Release extends Model
         return $this->hasMany(Article::class);
     }
 
-    public function scopeAllNew(Builder $query)
+    public function scopeNewest(Builder $query, $limit = null)
     {
-        return $query->orderBy('created_at', 'desc');
+        return (is_numeric($limit))
+            ? $this->orderBy('active_date', 'desc')->limit($limit)
+            : $this->orderBy('active_date', 'desc');
+    }
+
+    public function scopeNewestTranslated(Builder $query, $limit = null)
+    {
+        return (is_numeric($limit))
+            ? $this->orderBy('active_date', 'desc')->limit($limit)->withTranslation()
+            : $this->orderBy('active_date', 'desc')->withTranslation();
     }
 
     public function getUrl()
