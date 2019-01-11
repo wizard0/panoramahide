@@ -376,6 +376,11 @@ let ajaxForm = {
             if (key === 'error') {
                 self.showError(message);
             }
+            $input.closest('.form-holder').append(self.validationTemplate(message, false));
+            //this.form.find('.text-error[data-name="' + key + '"]').text(result.responseJSON[key][0]);
+            if (key === 'error') {
+                self.showError(message);
+            }
             if (key === 'g-recaptcha-response') {
                 self.form.find('textarea[name="' + key + '"]').closest('.form-group').append(self.validationTemplate(message, false));
             }

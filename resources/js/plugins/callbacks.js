@@ -10,7 +10,7 @@ window['after-callbackPromoAccess'] = function (result, $form) {
         $('#code-modal').modal('show');
     }
     if (result.result === 2) {
-        $('#login-modal').modal('show');
-        $('#login-modal').find('input[name="email"]').val($form.find('input[name="email"]').val());
+        $('#promo-access-password-modal').modal('show');
+        $('#promo-access-password-modal').find('input[name="email"]').val($form.find('input[name="email"]').val());
     }
 };

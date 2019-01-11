@@ -87,7 +87,7 @@ class PromoUserService
      * @param Promocode $promocode
      * @return bool
      */
-    private function checkPromocodeBeforeActivate(Promocode $promocode) : bool
+    public function checkPromocodeBeforeActivate(Promocode $promocode) : bool
     {
         if ($this->now > $promocode->release_end) {
             $this->setMessage('Промокод не действителен.');
@@ -97,10 +97,12 @@ class PromoUserService
             $this->setMessage('Промокод невозможно выбрать. Количество ограничено.');
             return false;
         }
-        $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
-        if (!is_null($exists)) {
-            $this->setMessage('Промокод уже применен.');
-            return false;
+        if (!is_null($this->promoUserPromocodes)) {
+            $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
+            if (!is_null($exists)) {
+                $this->setMessage('Промокод уже применен.');
+                return false;
+            }
         }
         return true;
     }

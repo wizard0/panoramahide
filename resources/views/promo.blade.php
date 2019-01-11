@@ -21,12 +21,12 @@
 
                             <div class="form-row">
                                 <div class="form-label">Фамилия:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" value="{{ Auth::user()->last_name ?? '' }}"></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Имя:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" value="{{ Auth::user()->name ?? '' }}"></div>
                             </div>
 
                             <div class="form-row">
@@ -36,13 +36,15 @@
 
                             <div class="form-row">
                                 <div class="form-label">Email:</div>
-                                <div class="form-holder"><input type="email" class="form-field" name="email" placeholder="" value=""></div>
+                                <div class="form-holder">
+                                    <input type="email" class="form-field" name="email" placeholder="" value="{{ Auth::user()->email ?? '' }}">
+                                </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Моб. телефон:</div>
                                 <div class="form-holder">
-                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" value="" data-role="js-mask-phone">
+                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" value="{{ Auth::user()->phone ?? '' }}" data-role="js-mask-phone">
                                 </div>
                             </div>
 

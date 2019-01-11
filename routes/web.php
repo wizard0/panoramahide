@@ -74,6 +74,7 @@ Route::group(['prefix' => 'promo'], function () {
     Route::get('/', 'PromoController@index')->name('promo.index');
     Route::post('/access', 'PromoController@access')->name('promo.access');
     Route::post('/code', 'PromoController@code')->name('promo.code');
+    Route::post('/password', 'PromoController@password')->name('promo.password');
 });
 
 

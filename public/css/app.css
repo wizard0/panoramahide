@@ -652,6 +652,24 @@ input[type=checkbox].is-danger + label::before {
   border-color: #e3342f !important;
 }
 
+.form-field.is-danger {
+  border-color: #e3342f !important;
+}
+
+.form-wrapper .form-holder {
+  position: relative;
+}
+
+.form-wrapper .form-holder .help {
+  font-size: 12px;
+  position: absolute;
+}
+
+.form-wrapper .form-holder input {
+  margin-bottom: 0px;
+  color: #212529;
+}
+
 /* Promo.blade.php */
 
 .col-lg-offset-2 {

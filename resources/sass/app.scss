@@ -57,6 +57,23 @@ input[type="checkbox"].is-danger + label::before {
 .form-field.__error.is-danger {
   border-color: $red !important;
 }
+.form-field.is-danger {
+  border-color: $red !important;
+}
+.form-wrapper {
+  .form-holder {
+    position: relative;
+    .help {
+      font-size: 12px;
+      position: absolute;
+    }
+    input {
+      margin-bottom: 0px;
+      color: #212529;
+    }
+  }
+}
+
 
 // Promo
 @import 'promo';
