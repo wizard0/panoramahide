@@ -84,8 +84,10 @@ let ajaxForm = {
                 if (result.toastr) {
                     self.notification(result.toastr);
                 }
+                self.after(result);
+
                 if (result.success) {
-                    self.after(result);
+                    //self.after(result);
                 } else if (result.error) {
                     self.showError(result.message);
                 }
@@ -284,6 +286,12 @@ let ajaxForm = {
                     }
                 });
             }
+        }
+        let messageLoading = self.form.find('.message-loading');
+        if (messageLoading) {
+            messageLoading.empty();
+            messageLoading.addClass('is-loading');
+            messageLoading.removeClass('__is-danger');
         }
         return goToAjax;
     },

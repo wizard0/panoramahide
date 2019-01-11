@@ -46,7 +46,7 @@ class ResponseCommon
         $this->method = __FUNCTION__;
 
         $this->aData = array_merge([
-            'success' => true
+            'success' => false
         ], $aData);
 
         return $this;
@@ -85,5 +85,11 @@ class ResponseCommon
         return $this->aData;
     }
 
-
+    /**
+     * @param $method
+     */
+    public function setMethod($method)
+    {
+        $this->method = in_array($method, ['success', 'error', 'warning', 'info']) ? $method : $this->method;
+    }
 }

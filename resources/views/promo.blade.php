@@ -86,7 +86,9 @@
 
                             <div class="form-row">
                                 <div class="form-label">Промокод:</div>
-                                <div class="form-holder"><input type="text" class="form-field promocode" name="promocode" ></div>
+                                <div class="form-holder">
+                                    <input type="text" class="form-field promocode" name="promocode" required>
+                                </div>
                             </div>
 
                             <div class="form-row">

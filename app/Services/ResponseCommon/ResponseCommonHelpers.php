@@ -43,6 +43,10 @@ class ResponseCommonHelpers
     {
         $success = (new ResponseCommon())->error($aData);
 
+        if (isset($aData['type'])) {
+            $success->setMethod($aData['type']);
+        }
+
         if (!is_null($message)) {
             $success = $success->withMessage($message);
         }

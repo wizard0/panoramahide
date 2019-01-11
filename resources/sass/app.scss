@@ -35,6 +35,15 @@ $brand-info: $blue;
 .modal-body input.is-danger {
   border: solid 1px #dc3545 !important;
 }
+.message-loading {
+  min-height: 50px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  &.__is-danger {
+    color: #dc3545;
+  }
+}
 .modal {
   .form-group {
     position: relative;
@@ -74,6 +83,8 @@ input[type="checkbox"].is-danger + label::before {
   }
 }
 
-
 // Promo
 @import 'promo';
+
+//
+@import 'modal';
