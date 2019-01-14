@@ -106,17 +106,30 @@ class ResponseCommonHelpers
     /**
      * Вытащить все сообщения об ошибках
      *
-     * @param $validation
-     * @return array
+     * @param null $validation
+     * @param array $errors
+     * @param array $data
+     * @return JsonResponse
      */
-    public function validationMessages($validation)
+    public function validationMessages($validation = null, $errors = [], $data = [])
     {
-        $aMessages = $validation->getMessageBag()->toArray();
         $messages = [];
-        foreach ($aMessages as $key => $aMessage) {
-            $messages[$key] = $aMessage[0];
+        if (!is_null($validation)) {
+            $aMessages = $validation->getMessageBag()->toArray();
+
+            foreach ($aMessages as $key => $aMessage) {
+                $messages[$key] = $aMessage[0];
+            }
         }
-        return $messages;
+        $messages = array_merge($messages, $errors);
+        $returnData = [
+            'success' => false,
+            'errors' => $messages,
+        ];
+        if (!empty($data)) {
+            $returnData = array_merge($returnData, $data);
+        }
+        return $this->jsonError($returnData);
     }
 
     /**

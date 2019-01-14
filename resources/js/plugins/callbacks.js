@@ -7,7 +7,11 @@
 window['after-callbackPromoAccess'] = function (result, $form) {
     console.log(result, $form);
     if (result.result === 1) {
-        $('#promo-code-modal').modal('show');
+        let $modal = $('#promo-code-modal');
+        $modal.find('.help').remove();
+        $modal.find('input.is-danger').removeClass('is-danger');
+        $modal.find('input').val('');
+        $modal.modal('show');
     }
     if (result.result === 2) {
         $('#promo-access-password-modal').modal('show');

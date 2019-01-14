@@ -48,7 +48,7 @@ class PromoUsersController extends Controller
                 'phone' => ['required', 'string', Rule::unique('promo_users', 'phone')],
             ]);
             if ($validator->fails()) {
-                return $this->jsonResponseValidationErrors($validator->getMessageBag()->toArray());
+                return responseCommon()->validationMessages($validator);
             }
             PromoUser::create([
                 'name' => $data['name'],
@@ -97,7 +97,7 @@ class PromoUsersController extends Controller
                 'phone' => ['required', 'string', Rule::unique('promo_users', 'phone')],
             ]);
             if ($validator->fails()) {
-                return $this->jsonResponseValidationErrors($validator->getMessageBag()->toArray());
+                return responseCommon()->validationMessages($validator);
             }
             $oPromoUser = PromoUser::find($id);
             $oPromoUser->update([
@@ -160,7 +160,7 @@ class PromoUsersController extends Controller
             $oPromoCode = Promocode::find($item_id);
             $service = (new PromoUserService($oPromoUser));
             if (!$service->activatePromocode($oPromoCode)) {
-                return $this->jsonResponseValidationErrors([$service->getMessage()]);
+                return responseCommon()->validationMessages(null, [$service->getMessage()]);
             }
         };
         return responseCommon()->mustBeAjax();

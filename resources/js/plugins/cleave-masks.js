@@ -11,9 +11,9 @@ let cleaveMasks = {
         price: '[data-role="js-mask-price"]'
     },
 
-    integer: function (target) {
-        this.cleave = new Cleave(target, {
-            blocks: [11],
+    integer: function ($target) {
+        this.cleave = new Cleave($target, {
+            blocks: [$target.data('length') ? $target.data('length') : 2],
             numericOnly: true
         });
     },
@@ -37,3 +37,8 @@ $('body').on('focus', cleaveMasks.type.phone, function () {
         $(this).val('');
     }
 });
+if ($(cleaveMasks.type.int).length) {
+    $(cleaveMasks.type.int).each(function() {
+        cleaveMasks.integer($(this));
+    });
+}

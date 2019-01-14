@@ -18,9 +18,14 @@
   opacity: 1 !important;
 }
 
-.modal-open #toast-container {
+.toast .toast-close-button {
+  width: 20px;
   position: absolute;
-  padding-right: 17px;
+  top: 5px;
+  padding-right: 5px;
+  padding-left: 5px;
+  right: 5px;
+  outline: none;
 }
 
 .toast-top-right {

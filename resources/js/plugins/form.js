@@ -124,7 +124,7 @@ let ajaxForm = {
     },
 
     notification(notification) {
-        window.toastr.options.closeButton = false;
+        window.toastr.options.closeButton = true;
         window.toastr.options.closeDuration = 10;
         switch (notification.type) {
             case 'warning':
