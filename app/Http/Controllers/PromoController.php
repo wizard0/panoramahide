@@ -18,11 +18,27 @@ use Illuminate\Validation\Rule;
 
 class PromoController extends Controller
 {
+    /**
+     * Страница /promo
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function index()
     {
         return view('promo');
     }
 
+    /**
+     * Основная форма
+     * - проверка промокода
+     * - проверка промокода на активацию
+     * - поиск пользователя по email, если сущетсвует, то окно с Авторизацией
+     * - проверка телефона на существование
+     * - генерация кода подтверждения для новых пользователей
+     *
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function access(Request $request)
     {
         $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
@@ -59,21 +75,7 @@ class PromoController extends Controller
                 ]);
             }
         }
-        $existsCodes = Activations::where('phone', $phone)
-            ->where('completed', 0)
-            ->get();
-        if (count($existsCodes) !== 0) {
-            foreach ($existsCodes as $oActivation) {
-                $oActivation->delete();
-            }
-        }
-        $oCodeService = new Code();
-        $code = $oCodeService->getConfirmationPromoCode();
-        Activations::create([
-            'phone' => $phone,
-            'code' => $code,
-        ]);
-        $oCodeService->sendConfirmationPromoCode($code);
+        $code = $oPromoUserService->codeGenerateByPhone($phone);
 
         return responseCommon()->success([
             'result' => 1,
@@ -81,28 +83,32 @@ class PromoController extends Controller
         ], 'На указанный номер телефона был отправлен код подтверждения '.$code);
     }
 
+    /**
+     * Модальное окно с кодом подтверждения
+     * - проверка промокода
+     * - проверка кода подтверждения, закрытие его
+     * - регистрация пользователя
+     * - авторизация пользователя
+     *
+     * @param Request $request
+     * @return array|\Illuminate\Http\JsonResponse
+     */
     public function code(Request $request)
     {
         $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
         if (is_null($oPromocode)) {
             return responseCommon()->error([], 'Промокод не найден');
         }
+        $oPromoUserService = new PromoUserService();
 
         $phone = preg_replace('/[^0-9]/','', $request->get('phone'));
-        $oActivation = Activations::where('code', $request->get('code'))
-            ->where('phone', $phone)
-            ->where('completed', 0)
-            ->first();
-        if (is_null($oActivation)) {
+
+        $checkCode = $oPromoUserService->codeCheckByPhone($phone, $request->get('code'));
+        if (!$checkCode) {
             return responseCommon()->validationMessages(null, [
                 'code' => 'Неверный код подтверждения'
             ]);
         }
-        $oActivation->update([
-            'completed' => 1
-        ]);
-
-        $oPromoUserService = new PromoUserService();
 
         // Если пользователь уже авторизован, то данные из формы записываются в его профиль.
         if (!Auth::guest()) {
@@ -137,6 +143,15 @@ class PromoController extends Controller
     }
 
 
+    /**
+     * Модальное окно с паролем
+     * - проверка промокода
+     * - проверка логин|пароль
+     * - авторизация
+     *
+     * @param Request $request
+     * @return array
+     */
     public function password(Request $request)
     {
         $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
@@ -157,7 +172,16 @@ class PromoController extends Controller
         }
     }
 
-
+    /**
+     * Модальное окно с активацией промокода
+     * - проверка промокода
+     * - поиск промо-участника/создание промо-участника
+     * - активация промокода
+     * - редирект на нужную страницу
+     *
+     * @param Request $request
+     * @return array
+     */
     public function activation(Request $request)
     {
         $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();

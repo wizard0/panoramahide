@@ -3,6 +3,7 @@
 namespace App\Services;
 
 
+use App\Models\Activations;
 use App\Models\PromoUser;
 use App\Promocode;
 use Carbon\Carbon;
@@ -163,5 +164,53 @@ class PromoUserService
     {
         $this->promoUser = $promoUser;
         $this->promoUserPromocodes = $promoUser->promocodes;
+    }
+
+    /**
+     * Генерация и отправка кода подтверждения на телефон
+     *
+     * @param int $phone
+     * @return int
+     */
+    public function codeGenerateByPhone(int $phone) : int
+    {
+        $existsCodes = Activations::where('phone', $phone)
+            ->where('completed', 0)
+            ->get();
+        if (count($existsCodes) !== 0) {
+            foreach ($existsCodes as $oActivation) {
+                $oActivation->delete();
+            }
+        }
+        $oCodeService = new Code();
+        $code = $oCodeService->getConfirmationPromoCode();
+        Activations::create([
+            'phone' => $phone,
+            'code' => $code,
+        ]);
+        $oCodeService->sendConfirmationPromoCode($code);
+        return $code;
+    }
+
+    /**
+     * Проверка кода подтверждения по телефону
+     *
+     * @param $phone
+     * @param $code
+     * @return bool
+     */
+    public function codeCheckByPhone(int $phone, int $code) : bool
+    {
+        $oActivation = Activations::where('code', $code)
+            ->where('phone', $phone)
+            ->where('completed', 0)
+            ->first();
+        if (is_null($oActivation)) {
+            return false;
+        }
+        $oActivation->update([
+            'completed' => 1
+        ]);
+        return true;
     }
 }
