@@ -18,3 +18,4 @@ package-lock.json
 mix-manifest.json
 public/js/app.js
 .DS_Store
+docker.panor.ru.sublime-workspace
