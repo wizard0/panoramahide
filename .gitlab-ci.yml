@@ -11,6 +11,8 @@ deploy:
         - cp /usr/local/bin/.env.dev.panor.ru ./.env
         - php72 ./artisan migrate
         - mysql --user=$MYSQL_USER --password=$MYSQL_PASS dev_panor < ./database/dumps/panorama_dummydata.sql
+        - php72 ./artisan cache:clear
+        - php72 ./artisan config:cache
         - /usr/bin/phpunit --testdox tests
         - chmod 774 ./deploy
         - ./deploy

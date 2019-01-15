@@ -1,7 +1,7 @@
 #
 # SQL Export
 # Created by Querious (201054)
-# Created: 9 January 2019 at 17:32:07 GMT+5
+# Created: 10 January 2019 at 16:41:33 GMT+5
 # Encoding: Unicode (UTF-8)
 #
 
@@ -22417,7 +22417,8 @@ LOCK TABLES `promocodes` WRITE;
 TRUNCATE `promocodes`;
 ALTER TABLE `promocodes` DISABLE KEYS;
 REPLACE INTO `promocodes` (`id`, `promocode`, `active`, `type`, `journal_id`, `limit`, `used`, `journal_for_releases_id`, `release_begin`, `release_end`, `release_limit`, `created_at`, `updated_at`) VALUES 
-	(1,'1111111111',1,'common',NULL,NULL,NULL,NULL,'2019-01-01 00:00:00','2019-12-31 00:00:00',NULL,NULL,NULL);
+	(1,'1111111111',1,'common',NULL,NULL,NULL,NULL,'2019-01-01 00:00:00','2019-01-31 00:00:00',NULL,NULL,NULL),
+	(2,'2222222222',1,'on_journal',NULL,NULL,NULL,NULL,'2019-01-01 00:00:00','2019-01-10 00:00:00',NULL,NULL,NULL);
 ALTER TABLE `promocodes` ENABLE KEYS;
 UNLOCK TABLES;
 

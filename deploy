@@ -16,4 +16,7 @@ fi
 if [ -d "$PROJECT" ]; then
     mv $PROJECT $PROJECT.prev
     mv $PROJECT.new $PROJECT
+    cd $PROJECT
+    php72 ./artisan cache:clear
+    php72 ./artisan config:cache
 fi

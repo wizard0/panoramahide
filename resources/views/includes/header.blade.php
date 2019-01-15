@@ -39,7 +39,7 @@
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
                 <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
                     <ul class="topmenu">
-                        <li><a href="{{ route('magazines', ['sort' => 'name_asc']) }}">Журналы по алфавиту</a></li>
+                        <li><a href="{{ route('magazines', ['sort_by' => 'name']) }}">Журналы по алфавиту</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" id="menu_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Журналы по темам</a>
                             <div class="dropdown-menu" aria-labelledby="menu_1">

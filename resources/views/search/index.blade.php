@@ -50,7 +50,9 @@
             </div>
 
             <script>
-                window.q = '<mark>{{ $params['q'] }}</mark>';
+                @if (isset($params['q']))
+                    window.q = '<mark>{{ $params['q'] }}</mark>';
+                @endif
             </script></div>
 
     </div>

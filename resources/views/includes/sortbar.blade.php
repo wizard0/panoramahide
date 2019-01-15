@@ -18,18 +18,42 @@
 <script>
     $(document).ready(function() {
         $('select[name="sort"]').on('change', function (event) {
-            console.log($(this).val());
+            var search = document.location.search;
             switch ($(this).val()) {
                 case 'ACTIVE_FROM-DESC':
-                    window.location = window.location.pathname + '?sort_by=date&sort_order=desc';
-                    break;
-                case 'DATE_CREATE-DESC':
-                    window.location = window.location.pathname + '?sort_by=created_at&sort_order=desc';
+                    search = insertParam(search, 'sort_by', 'date');
+                    search = insertParam(search, 'sort_order', 'desc');
+
+                    window.location.search = search;
                     break;
                 case 'NAME-ASC':
-                    window.location = window.location.pathname + '?sort_by=name&sort_order=asc';
+                    search = insertParam(search, 'sort_by', 'name');
+
+                    window.location.search = search;
                     break;
             }
         })
+
+        function insertParam(search, key, value)
+        {
+            key = encodeURI(key); value = encodeURI(value);
+            var kvp = search.split('&');
+            var i=kvp.length; var x;
+            while(i--)
+            {
+                x = kvp[i].split('=');
+
+                if (x[0]==key)
+                {
+                    x[1] = value;
+                    kvp[i] = x.join('=');
+                    break;
+                }
+            }
+            if(i<0) {
+                kvp[kvp.length] = [key,value].join('=');
+            }
+            return kvp.join('&');
+        }
     });
 </script>
