@@ -53,14 +53,14 @@ class PromoController extends Controller
             return responseCommon()->error([], $oPromoUserService->getMessage());
         }
 
-        $phone = preg_replace('/[^0-9]/','', $request->get('phone'));
+        $phone = preg_replace('/[^0-9]/', '', $request->get('phone'));
 
         if (Auth::guest()) {
             $oUser = User::where('email', $request->get('email'))->first();
             if (!is_null($oUser)) {
                 return responseCommon()->error([
                     'result' => 2,
-                    'type' => 'info'
+                    'type' => 'info',
                 ], 'Найден пользователь с таким же email. Авторизуйтесь.');
             }
             $data['phone'] = $phone;
@@ -71,7 +71,7 @@ class PromoController extends Controller
             ]);
             if ($validate->fails()) {
                 return responseCommon()->jsonError([
-                    'errors' => $validate->getMessageBag()->toArray()
+                    'errors' => $validate->getMessageBag()->toArray(),
                 ]);
             }
         }
@@ -79,8 +79,8 @@ class PromoController extends Controller
 
         return responseCommon()->success([
             'result' => 1,
-            'code' => $code
-        ], 'На указанный номер телефона был отправлен код подтверждения '.$code);
+            'code' => $code,
+        ], 'На указанный номер телефона был отправлен код подтверждения ' . $code);
     }
 
     /**
@@ -101,12 +101,12 @@ class PromoController extends Controller
         }
         $oPromoUserService = new PromoUserService();
 
-        $phone = preg_replace('/[^0-9]/','', $request->get('phone'));
+        $phone = preg_replace('/[^0-9]/', '', $request->get('phone'));
 
         $checkCode = $oPromoUserService->codeCheckByPhone($phone, $request->get('code'));
         if (!$checkCode) {
             return responseCommon()->validationMessages(null, [
-                'code' => 'Неверный код подтверждения'
+                'code' => 'Неверный код подтверждения',
             ]);
         }
 
@@ -125,7 +125,7 @@ class PromoController extends Controller
                     'phone' => $phone,
                     'password' => '1234567890',
                     'password_confirmation' => '1234567890',
-                    'g-recaptcha-response' => config('googlerecaptchav3.except_value')
+                    'g-recaptcha-response' => config('googlerecaptchav3.except_value'),
                 ]);
                 (new RegisterController())->register($request);
             } else {
@@ -207,7 +207,7 @@ class PromoController extends Controller
 
         if (!$oPromoUserService->activatePromocode($oPromocode)) {
             return responseCommon()->error([
-                'message' => 'Ошибка активации промокода. '.$oPromoUserService->getMessage()
+                'message' => 'Ошибка активации промокода. ' . $oPromoUserService->getMessage(),
             ], $oPromoUserService->getMessage());
         }
 
@@ -217,7 +217,7 @@ class PromoController extends Controller
         (new Toastr('Промокод успешно активирован'))->success(false);
 
         return responseCommon()->success([
-            'redirect' => '/promo'
+            'redirect' => '/promo',
         ], 'Промокод успешно активирован');
     }
 
