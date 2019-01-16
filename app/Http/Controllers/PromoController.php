@@ -35,7 +35,7 @@ class PromoController extends Controller
      */
     public function deskbooks()
     {
-        return view('content.promocodes.deskbooks');
+        return view('deskbooks');
     }
 
     /**

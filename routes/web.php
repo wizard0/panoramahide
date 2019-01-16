@@ -78,8 +78,8 @@ Route::group(['prefix' => 'promo'], function () {
     Route::post('/activation', 'PromoController@activation')->name('promo.activation');
 });
 
-Route::group(['prefix' => 'promocodes'], function () {
-    Route::get('/deskbooks', 'PromoController@deskbooks')->name('promo.index');
+Route::group(['prefix' => 'deskbooks'], function () {
+    Route::get('/', 'PromoController@deskbooks')->name('deskbooks.index');
 });
 
 
