@@ -29,6 +29,16 @@ class PromoController extends Controller
     }
 
     /**
+     * Страница /promo
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deskbooks()
+    {
+        return view('content.promocodes.deskbooks');
+    }
+
+    /**
      * Основная форма
      * - проверка промокода
      * - проверка промокода на активацию

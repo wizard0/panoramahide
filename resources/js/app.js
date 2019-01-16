@@ -1,7 +1,6 @@
 
 //window.jQuery = window.$ = require('jquery');
 
-
 /**
  * -------------------------------------------
  * Append laravel token
