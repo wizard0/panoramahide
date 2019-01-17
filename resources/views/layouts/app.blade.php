@@ -21,6 +21,7 @@
     <script src="{{ asset('js/actions.js') }}"></script>
     <script src="{{ asset('js/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/SideBarManager.js') }}"></script>
+    <script src="{{ asset('js/MagazinesDetailManager.js') }}"></script>
     <script src="{{ asset('js/panor/scripts.js') }}"></script>
     <script src="{{ asset('js/panor/panor.js') }}"></script>
     <script src="{{ asset('js/panor/search.js') }}"></script>

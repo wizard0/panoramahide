@@ -42,7 +42,9 @@
 
             </div>
 
-            @include('includes.sidebar')
+            <div class="col-xl-2 col-lg-3 col-12 order-2 order-xl-3 order-lg-3 offset-xl-1">
+                @include('includes.sidebar', compact('journal'))
+            </div>
 
         </div>
     </div>

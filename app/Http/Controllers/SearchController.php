@@ -86,6 +86,7 @@ class SearchController extends Controller
                             ANY_VALUE(journal_translations.code) as journalCode,
                             ANY_VALUE(release_translations.name) as releaseName,
                             ANY_VALUE(release_translations.code) as releaseCode,
+                            ANY_VALUE(release_translations.number) as releaseNumber,
                             ANY_VALUE(articles.active_date) as articleActiveDate,
                             CASE
                                 WHEN ANY_VALUE(article_translations.description) like '%{$params['q']}%'

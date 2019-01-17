@@ -2,6 +2,8 @@
     @include('includes.modals.register')
 @endif
 
+@include('includes.modals.number_type')
+
 <footer>
     <div class="container">
         <div class="row">

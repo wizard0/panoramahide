@@ -45,6 +45,6 @@ class Release extends Model
 
     public function getUrl()
     {
-        return '/magazines/' . $this->journal->code . '/numbers/' . $this->id . '.html';
+        return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
     }
 }

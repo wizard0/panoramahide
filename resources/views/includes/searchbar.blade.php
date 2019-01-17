@@ -1,39 +1,64 @@
 @php
-$categories = Category::with('journals')->withTranslation()->get();
-$journals = Journal::withTranslation()->get();
+    $isJournalPage = isset($journal);
+    if (!$isJournalPage) {
+        $categories = Category::with('journals')->withTranslation()->get();
+        $journals = Journal::withTranslation()->get();
+        $barBackground = 'url(/img/cover-bg.jpg)';
+    } else {
+        $barBackground = 'url(/img/cover03.png)';
+    }
+
 @endphp
 
-<div class="cover form-collapsed" style="background-image: url(/img/cover-bg.jpg);">
+<div class="cover" style="background-image: {{ $barBackground }};">
+    @if ($isJournalPage)
+        <div class="cover-back">
+    @endif
 <div class="container h-100">
 <div class="d-flex flex-column h-100 justify-content-center">
 <div class="search-form extended-search">
 <form method="GET" action="{{ route('search') }}" id="searchBar">
-    {{--@csrf--}}
-    {{--<input type="hidden" name="search" value="Y">--}}
-    <div class="row">
-        <div class="col-lg-12 text-center">
-            <div class="search-intro">
-                <span>Поиск среди статей и изданий в информационной системе «панорама»</span>
+    @if ($isJournalPage)
+        <input type="hidden" name="journal" value="3802">
+        <input type="hidden" name="type" value="article">
+
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="search-intro">
+                    <span>{{ $journal->name }} /
+                        {{ $journal->translate('en', true)->name }}</span>
+                    <p>Поиск среди статей журнала</p>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="row justify-content-between align-items-end all-form-row no-gutters">
-        <div class="col-xl-3 col-lg-3 col-12 section-choice form-margin">
-            <label class="col-12">Тематика</label>
-            <select name="category">
-                <option value="">Любая тематика</option>
-                @foreach ($categories as $category)
-                    <option value="{{ $category->id }}" @php
-                    if (isset($params)) {
-                        if (isset($params['$category']) && $params['$category'] == $category->id)
-                            echo 'selected';
-                    }
-                    @endphp >{{ $category->name }}</option>
-                @endforeach
-            </select>
+    @else
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="search-intro">
+                    <span>Поиск среди статей и изданий в информационной системе «панорама»</span>
+                </div>
+            </div>
         </div>
-        <div class="col-xl-9 col-lg-9 col-md col-12 phrase-search form-margin col-xl-10">
+    @endif
+
+    <div class="row justify-content-between align-items-end all-form-row">
+        @if (!$isJournalPage)
+            <div class="col-xl-3 col-lg-3 col-12 section-choice form-margin">
+                <label class="col-12">Тематика</label>
+                <select name="category">
+                    <option value="">Любая тематика</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" @php
+                        if (isset($params)) {
+                            if (isset($params['$category']) && $params['$category'] == $category->id)
+                                echo 'selected';
+                        }
+                        @endphp >{{ $category->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+        @endif
+        <div class="col-xl-9 col-lg-9 col-md col-12 phrase-search form-margin">
             <label class="col-12">Поиск по фразе</label>
             <div class="row no-gutters">
                 <div class="col-xl-9 col-9">
@@ -68,24 +93,27 @@ $journals = Journal::withTranslation()->get();
         </div>
         <div class="col-12 form-line-to-collapse">
             <div class="row">
-                <div class="col-xl-3 col-lg-3 col-12 form-margin">
-                    <label class="col-12">Выбрать журнал</label>
-                    <select name="journal">
-                        <option value="">Любой журнал</option>
-                        @foreach ($journals as $journal)
-                            <option value="{{ $journal->id }}" {{
-                            (isset($params) && isset($params['journal']) && $params['journal'] == $journal->id)
-                                ? 'selected'
-                                : ""
-                             }}>{{ $journal->name }}</option>
-                        @endforeach
-                    </select>
-                </div>
+                @if (!$isJournalPage)
+                    <div class="col-xl-3 col-lg-3 col-12 form-margin">
+                        <label class="col-12">Выбрать журнал</label>
+                        <select name="journal">
+                            <option value="">Любой журнал</option>
+                            @foreach ($journals as $journal)
+                                <option value="{{ $journal->id }}" {{
+                                (isset($params) && isset($params['journal']) && $params['journal'] == $journal->id)
+                                    ? 'selected'
+                                    : ""
+                                 }}>{{ $journal->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @endif
+
                 <div class="col-xl-3 col-lg-3 col-12 form-margin">
                     <label class="col-12">Выбрать автора</label>
                     <div class="row no-gutters">
                         <div class="col-3">
-                            <select class="searcharea rightsharp bothsharp" name="author_char">
+                            <select class="searcharea rightsharp" name="author_char">
                                 <option value="">-</option>
                                 @foreach(Author::getAlphabet() as $char)
                                     <option value="{{ $char }}" {{
@@ -127,29 +155,30 @@ $journals = Journal::withTranslation()->get();
             </div>
         </div>
 
-        <div class="d-flex col-xl-auto col-lg-auto col-md-auto col-sm-auto col-12 form-margin align-items-end mag-art-filter">
-            <div class="row no-gutters">
-                <div class="col-xl-auto col-lg-auto col-auto">
-                    <input id="mag" type="radio" name="type" value="{{ UserSearch::TYPE_JOURNAL }}" {{
-                    (isset($params) && isset($params['type']) && $params['type'] == UserSearch::TYPE_JOURNAL)
-                        ? 'checked'
-                        : ''
-                     }}  >
-                    <label for="mag" class="rightsharp"><span>Журналы</span></label>
-                </div>
-                <div class="col-xl-auto col-lg-auto col-auto">
-                    <input id="art" type="radio" name="type" value="{{ UserSearch::TYPE_ARTICLE }}" {{
-                    (isset($params) && isset($params['type']) && $params['type'] == UserSearch::TYPE_ARTICLE)
-                        ? 'checked'
-                        : (!isset($params) || !isset($params['type']))
+        @if (!$isJournalPage)
+            <div class="d-flex col-xl-auto col-lg-auto col-md-auto col-sm-auto col-12 form-margin align-items-end mag-art-filter">
+                <div class="row no-gutters">
+                    <div class="col-xl-auto col-lg-auto col-auto">
+                        <input id="mag" type="radio" name="type" value="{{ UserSearch::TYPE_JOURNAL }}" {{
+                        (isset($params) && isset($params['type']) && $params['type'] == UserSearch::TYPE_JOURNAL)
                             ? 'checked'
                             : ''
-                     }} >
-                    <label for="art" class="leftsharp"><span>Статьи</span></label>
+                         }}  >
+                        <label for="mag" class="rightsharp"><span>Журналы</span></label>
+                    </div>
+                    <div class="col-xl-auto col-lg-auto col-auto">
+                        <input id="art" type="radio" name="type" value="{{ UserSearch::TYPE_ARTICLE }}" {{
+                        (isset($params) && isset($params['type']) && $params['type'] == UserSearch::TYPE_ARTICLE)
+                            ? 'checked'
+                            : (!isset($params) || !isset($params['type']))
+                                ? 'checked'
+                                : ''
+                         }} >
+                        <label for="art" class="leftsharp"><span>Статьи</span></label>
+                    </div>
                 </div>
             </div>
-        </div>
-
+        @endif
         <div class="d-flex flex-wrap col-xl col-lg col-md col-sm col-12 form-margin align-items-end mag-art-filter">
             <input id="opened" type="checkbox" name="access" value="1" {{
             (isset($params) && isset($params['access']) && $params['access'] == "1")
@@ -158,12 +187,14 @@ $journals = Journal::withTranslation()->get();
              }} >
             <label for="opened" class="mr-2"><span>Только доступные для чтения</span></label>
 
-            <input id="favs" type="checkbox" name="favorite" value="1" {{
-            (isset($params) && isset($params['favorite']) && $params['favorite'] == "1")
-                ? 'checked'
-                : ''
-             }} >
-            <label for="favs"><span>Только в избранном</span></label>
+            @if (Auth::check())
+                <input id="favs" type="checkbox" name="favorite" value="1" {{
+                (isset($params) && isset($params['favorite']) && $params['favorite'] == "1")
+                    ? 'checked'
+                    : ''
+                 }} >
+                <label for="favs"><span>Только в избранном</span></label>
+            @endif
         </div>
 
         <div class="d-flex col-xl-2 col-lg-3 col-md-3 col-6 offset-xl-0 offset-lg-0 offset-md-0 offset-3 form-margin align-items-end justify-content-xl-end justify-content-lg-end justify-content-center">
@@ -192,7 +223,7 @@ $journals = Journal::withTranslation()->get();
         <div class="order-3 order-md-2 order-xl-2">
             <div class="row justify-content-center">
                 <div class="col-auto collapse-search">
-                    <a class="text-uppercase collapsed-search" href="#">расширенный поиск</a>
+                    <a class="text-uppercase" href="#">расширенный поиск</a>
                 </div>
             </div>
         </div>
@@ -206,7 +237,7 @@ $journals = Journal::withTranslation()->get();
                         <div class="searchesinn">
                             <div class="modal-content">
                                 <div class="d-flex searches-title">
-                                    <button class="leftsharp _saved_search_delete" data-id="all" title="Удалить все"><span></span></button>
+                                    <button class="_saved_search_delete" data-id="all" title="Удалить все"><span></span></button>
                                     <span>Сохраненные поиски</span>
                                 </div>
                                 <div class="_saved_search_container">
@@ -224,6 +255,9 @@ $journals = Journal::withTranslation()->get();
 </div>
 </div>
 </div>
+@if ($isJournalPage)
+    </div>
+@endif
 
 
 @section('javascript')

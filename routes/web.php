@@ -48,8 +48,9 @@ Route::group(['prefix' => 'personal'], function () {
 });
 
 Route::group(['prefix' => 'magazines'], function () {
-    Route::get('/', 'MagazinesController')->name('magazines');
-    Route::get('/{code}.html', 'MagazinesController@detail')->name('magazine');
+    Route::get('/', 'MagazinesController')->name('journals');
+    Route::get('/{code}.html', 'MagazinesController@detail')->name('journal');
+    Route::get('/ajax-get-page', 'MagazinesController@ajaxGetPage');
     Route::get('/{journalCode}/numbers/{releaseID}.html', 'ReleasesController@detail')->name('release');
 });
 

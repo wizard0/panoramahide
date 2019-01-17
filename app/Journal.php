@@ -6,6 +6,7 @@ use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class Journal extends Model
 {
@@ -44,6 +45,16 @@ class Journal extends Model
         return $this->hasMany(Release::class);
     }
 
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function getLastRelease()
+    {
+        return $this->releases()->where('active', '1')->orderBy('active_date', 'desc')->first();
+    }
+
     public function scopeNewest(Builder $query, $limit = null)
     {
         return (is_numeric($limit))
@@ -63,7 +74,7 @@ class Journal extends Model
 
     public function getLink()
     {
-        return route('magazine', ['code' => $this->code]);
+        return route('journal', ['code' => $this->code]);
     }
 
     public static function getName($id)
@@ -90,4 +101,43 @@ class Journal extends Model
         return $q->paginate(10);
     }
 
+
+    public function getReleasesByYears()
+    {
+        $groupedData = [];
+        $releases = Release::where('journal_id', $this->id)->orderBy('year', 'desc')->get();
+        foreach ($releases as $release) {
+            $groupedData[$release->year][] = $release;
+        }
+
+        return $groupedData;
+    }
+
+    public function getArticlesFresh($pagination)
+    {
+        $release = $this->getLastRelease();
+        return $release->articles()->paginate($pagination);
+    }
+
+    public function getArticlesAll($pagination)
+    {
+        $releasesIds = [];
+        $releases = DB::table('releases')->select('id')->where('journal_id', $this->id)->get();
+        foreach ($releases as $r) {
+            $releasesIds[] = $r->id;
+        }
+
+        return Article::whereIn('release_id', $releasesIds)->paginate($pagination);
+    }
+
+    public function getSubscriptionsByTypes()
+    {
+        $subscriptions = $this->subscriptions;
+        $byType = [];
+        foreach ($subscriptions as $s) {
+            $byType[$s->type] = $s;
+        }
+
+        return $byType;
+    }
 }

@@ -17,7 +17,7 @@ class ProductController extends Controller
             $type = $request->get('type');
             $id = $request->get('id');
             $version = $request->get('version');
-
+//            print_r($request->all());die;
             $product = $this->getModel($type, $id);
 
             $cart = $this->getCart();
@@ -51,11 +51,11 @@ class ProductController extends Controller
     {
         switch ($type) {
             case Cart::PRODUCT_TYPE_ARTICLE:
-                return Article::find($id);
+                return Article::where('id', $id)->first();
             case Cart::PRODUCT_TYPE_RELEASE:
-                return Release::find($id);
+                return Release::where('id', $id)->first();
             case Cart::PRODUCT_TYPE_SUBSCRIPTION:
-                return Subscription::find($id);
+                return Subscription::where('id', $id)->first();
         }
     }
 
