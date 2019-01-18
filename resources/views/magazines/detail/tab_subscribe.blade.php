@@ -16,22 +16,16 @@
                         <div class="row no-gutters form-margin align-items-end mag-art-filter">
                             <div class="d-flex justify-content-start">
                                 <div>
-                                    <input id="print" type="radio" name="version" value="{{ Subscription::TYPE_PRINTED }}" checked>
+                                    <input id="print" type="radio" name="version" value="{{ Subscription::TYPE_PRINTED }}">
                                     <label for="print" class="rightsharp">
                                         <span>Печатная</span>
                                     </label>
-                                    <input type="hidden"
-                                           name="{{ Subscription::TYPE_PRINTED }}_data"
-                                           value="<?= json_encode($subscriptions[Subscription::TYPE_PRINTED]) ?>">
                                 </div>
                                 <div style="margin-left: -1px;">
                                     <input id="electro" type="radio" name="version" value="{{ Subscription::TYPE_ELECTRONIC }}">
                                     <label for="electro" class="leftsharp">
                                         <span>Электронная</span>
                                     </label>
-                                    <input type="hidden"
-                                           name="{{ Subscription::TYPE_ELECTRONIC }}_data"
-                                           value="<?= json_encode($subscriptions[Subscription::TYPE_ELECTRONIC]) ?>">
                                 </div>
                             </div>
                         </div>
@@ -42,15 +36,7 @@
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6 d-flex flex-column justify-content-end">
                                 <label>Срок подписки</label>
-                                <select id="count_monts">
-                                    <option value="1">1 месяц</option>
-                                    <option value="2">2 месяца</option>
-                                    <option value="3">3 месяца</option>
-                                    <option value="4">4 месяца</option>
-                                    <option value="5">5 месяцев</option>
-                                    <option value="6">6 месяцев</option>
-                                    <option value="12">12 месяцев</option>
-                                </select>
+                                <select id="count_monts"></select>
                             </div>
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-6 d-flex flex-column justify-content-end">
                                 <div class="quantity">
