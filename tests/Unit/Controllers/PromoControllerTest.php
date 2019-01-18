@@ -40,6 +40,8 @@ class PromoControllerTest extends TestCase
 
         $oPromoCode = $this->activePromocode();
 
+        $this->assertNotNull($oPromoCode, 'Active promocode not found');
+
         $user = $this->user();
         if (Auth::guest()) {
             // вывод модального окна с просьбой авторизоваться
@@ -192,9 +194,9 @@ class PromoControllerTest extends TestCase
      *
      * @return mixed
      */
-    private function user()
+    private function user() : User
     {
-        return User::first();
+        return testData()->user();
     }
 
     /**
@@ -202,9 +204,9 @@ class PromoControllerTest extends TestCase
      *
      * @return int
      */
-    private function phone()
+    private function phone() : int
     {
-        return 79998887766;
+        return 79998887777; // тестовый 79998887766
     }
 
     /**
@@ -212,7 +214,7 @@ class PromoControllerTest extends TestCase
      *
      * @return string
      */
-    private function promocode()
+    private function promocode() : string
     {
         return '2--------2';
     }

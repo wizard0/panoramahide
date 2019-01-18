@@ -36,7 +36,7 @@ class PromoUserServiceTest extends TestCase
         $oPromoUser = PromoUser::first();
         $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
 
-        $oPromoCode = Promocode::where('release_end', '<', '2019-02-01 00:00:00')->first();
+        $oPromoCode = Promocode::where('release_end', '<', now())->first();
         $this->assertNotNull($oPromoCode);
 
         DB::transaction(function () use ($oPromoUser, $oPromoCode) {

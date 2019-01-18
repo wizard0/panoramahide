@@ -42,7 +42,9 @@ class CreatePromoUserTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('promo_users');
         Schema::dropIfExists('promo_user_promocode');
+        Schema::enableForeignKeyConstraints();
     }
 }
