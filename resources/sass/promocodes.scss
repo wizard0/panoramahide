@@ -12,6 +12,10 @@
   }
   .high-cell {
     height: 226px;
+    &.has-active {
+      height: 148px;
+      padding-top: 50px;
+    }
   }
   .inform {
     width: 50%;

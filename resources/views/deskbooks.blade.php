@@ -5,12 +5,14 @@
         <div class="promocodes __deskbooks">
             <div class="inform-holder">
                 <div class="inform-cell high-cell">
-                    <div class="inform">Вы можете выбрать <span class="checks-number">5</span> любых справочников и получить доступ к ним в личном кабинете.</div>
+                    <div class="inform">Вы можете выбрать <span class="checks-number">5</span> любых справочников и
+                        получить доступ к ним в личном кабинете.
+                    </div>
                 </div>
             </div>
             <form action="{{ route('deskbooks.save') }}" class="ajax-form --journal-checkboxes" data-max="5">
                 <div class="text-center">
-                    <button type="submit" class="btn deskbook-button">Получить доступ</button>
+                    <button type="submit" class="btn deskbook-button hidden">Получить доступ</button>
                 </div>
                 <div class="section">
                     <div class="deskbook-section-title">
