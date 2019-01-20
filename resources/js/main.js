@@ -53,7 +53,7 @@ const deskbooksForm = {
         self.setButtonActive();
         self.setDisabled(self.current === self.max);
 
-        self.$form.find('.journal-checkbox input').each(function () {
+        self.getCheckboxes().each(function () {
             $(this).on('change', function () {
                 self.checkCheckboxesEvent($(this), true);
             });
@@ -96,7 +96,7 @@ const deskbooksForm = {
      */
     setDisabled(disabled) {
         const self = this;
-        let $checkboxes = self.$form.find('.journal-checkbox input').not(':checked');
+        let $checkboxes = self.getCheckboxesNotChecked();
         if (disabled) {
             $checkboxes.prop('disabled', true);
         } else {
@@ -121,7 +121,7 @@ const deskbooksForm = {
      */
     getChecked() {
         const self = this;
-        return self.$form.find('.journal-checkbox input:checked').length;
+        return self.getCheckboxesChecked().length;
     },
 
     /**
@@ -148,14 +148,26 @@ const deskbooksForm = {
     htmlCanSet() {
         const self = this;
         if (self.current === self.max) {
-            return 'Вы выбрали <span class="checks-number">' + self.max + '</span> доступных вам справочников.';
+            return self.htmlMaxNumberWrapper('Вы выбрали', self.max, 'доступных вам справочников.');
         }
         if (self.current !== 0) {
             let odd = self.max - self.current;
-            return 'Вы можете выбрать еще <span class="checks-number">' + odd + '</span> ' + window.HELPER.units(odd, ['справочник', 'справочника', 'справочников']);
+            return self.htmlMaxNumberWrapper('Вы можете выбрать еще', self.max - self.current, window.HELPER.units(odd, ['справочник', 'справочника', 'справочников']) + '.');
         } else {
-            return 'Вы можете выбрать <span class="checks-number">' + self.max + '</span> любых справочников и получить доступ к ним в личном кабинете.';
+            return self.htmlMaxNumberWrapper('Вы можете выбрать', self.max, 'любых справочников и получить доступ к ним в личном кабинете.');
         }
+    },
+
+    /**
+     * Обертка для количества выбранных журналов
+     *
+     * @param before
+     * @param number
+     * @param after
+     * @returns {string}
+     */
+    htmlMaxNumberWrapper(before, number, after) {
+        return before + ' <span class="checks-number">' + number + '</span> ' + after;
     },
 
     /**
@@ -175,5 +187,35 @@ const deskbooksForm = {
                 $title.removeClass(hasActiveClass);
             }
         }
-    }
+    },
+
+    /**
+     * Все инпуты
+     *
+     * @returns {*}
+     */
+    getCheckboxes() {
+        const self = this;
+        return self.$form.find('.journal-checkbox input').not(':checked');
+    },
+
+    /**
+     * Все выбранные инпуты
+     *
+     * @returns {*}
+     */
+    getCheckboxesChecked() {
+        const self = this;
+        return self.$form.find('.journal-checkbox input:checked');
+    },
+
+    /**
+     * Все не выбранные инпуты
+     *
+     * @returns {*}
+     */
+    getCheckboxesNotChecked() {
+        const self = this;
+        return self.$form.find('.journal-checkbox input').not(':checked');
+    },
 };
