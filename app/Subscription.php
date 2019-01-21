@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -22,7 +23,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subscription extends Model
 {
+    use Translatable;
+
     protected $table = 'subscriptions';
+
+    public $translatedAttributes = [
+        'price_for_release', 'price_for_half_year', 'price_for_year'
+    ];
 
     const TYPE_PRINTED = 'printed';
     const TYPE_ELECTRONIC = 'electronic';

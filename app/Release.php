@@ -10,7 +10,11 @@ class Release extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name', 'code', 'number', 'image', 'description', 'preview_image', 'preview_description'];
+    public $translatedAttributes = [
+        'name', 'code', 'number', 'image', 'description',
+        'preview_image', 'preview_description',
+        'price_for_electronic', 'price_for_printed', 'price_for_articles'
+    ];
 
 //    protected $fillable = ['code'];
 
