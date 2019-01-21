@@ -28,6 +28,9 @@ class TestSeeder extends Seeder
         Schema::disableForeignKeyConstraints();
         foreach (DB::select('SHOW TABLES') as $k => $v) {
             $table = array_values((array)$v)[0];
+            if ($table === 'migrations') {
+                continue;
+            }
             DB::statement('TRUNCATE TABLE `' . $table . '`');
         }
         Schema::enableForeignKeyConstraints();
