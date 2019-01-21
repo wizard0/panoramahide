@@ -173,6 +173,8 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
+        App\Providers\HelpersServiceProvider::class,
+        Bulk\Toastr\ToastrServiceProvider::class,
 
     ],
 
@@ -229,6 +231,7 @@ return [
         'Author' => \App\Author::class,
         'Category' => \App\Category::class,
         'UserSearch' => \App\UserSearch::class,
+        'Toastr' => Bulk\Toastr\Facades\Toastr::class,
     ],
 
 ];

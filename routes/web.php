@@ -68,9 +68,14 @@ Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
 
-Route::get('/promo', function() {
-    return view('promo');
+Route::group(['prefix' => 'promo'], function () {
+    Route::get('/', 'PromoController@index')->name('promo.index');
+    Route::post('/access', 'PromoController@access')->name('promo.access');
+    Route::post('/code', 'PromoController@code')->name('promo.code');
+    Route::post('/password', 'PromoController@password')->name('promo.password');
+    Route::post('/activation', 'PromoController@activation')->name('promo.activation');
 });
 
 

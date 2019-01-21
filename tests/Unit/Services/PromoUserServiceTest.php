@@ -34,15 +34,15 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsReleaseEnd()
     {
         $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
 
-        $oPromoCode = Promocode::where('release_end', '<', '2019-02-01 00:00:00')->first();
+        $oPromoCode = Promocode::where('release_end', '<', now())->first();
         $this->assertNotNull($oPromoCode);
 
         DB::transaction(function () use ($oPromoUser, $oPromoCode) {
             $service = (new PromoUserService($oPromoUser));
             $result = $service->activatePromocode($oPromoCode);
-            $this->assertFalse($result, 'Activate by release_end, must be false');
+            $this->assertFalse($result, $this->textRed('Не прошла проверка просроченности промокода'));
             DB::rollBack();
         });
     }
@@ -53,7 +53,7 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsActivateExists()
     {
         $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
 
         $oPromocodes = $oPromoUser->promocodes;
         $this->assertNotEmpty($oPromocodes);
@@ -64,7 +64,7 @@ class PromoUserServiceTest extends TestCase
         DB::transaction(function () use ($oPromoUser, $oPromoCode) {
             $service = (new PromoUserService($oPromoUser));
             $result = $service->activatePromocode($oPromoCode);
-            $this->assertFalse($result, 'Activate by isset promocode, must be false');
+            $this->assertFalse($result, $this->textRed('Не прошла проверка активации существующего промокода'));
             DB::rollBack();
         });
     }
@@ -75,7 +75,7 @@ class PromoUserServiceTest extends TestCase
     public function testCheckExceptionsDeactivateNotExists()
     {
         $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, 'Table promo_users is empty');
+        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
 
         $oPromocodes = $oPromoUser->promocodes;
         $this->assertNotEmpty($oPromocodes);
@@ -86,7 +86,7 @@ class PromoUserServiceTest extends TestCase
         DB::transaction(function () use ($oPromoUser, $oPromoCode) {
             $service = (new PromoUserService($oPromoUser));
             $result = $service->deactivatePromocode($oPromoCode);
-            $this->assertFalse($result, 'Deactivate by isset promocode, must be false');
+            $this->assertFalse($result, $this->textRed('Не прошла проверка деактивации несуществующего промокода'));
             DB::rollBack();
         });
     }

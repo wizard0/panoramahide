@@ -44,7 +44,9 @@ class CreatePartnerUserTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('partner_users');
         Schema::dropIfExists('partner_user_quota');
+        Schema::enableForeignKeyConstraints();
     }
 }

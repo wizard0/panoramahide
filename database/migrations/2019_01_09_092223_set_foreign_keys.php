@@ -117,20 +117,20 @@ class SetForeignKeys extends Migration
     public function down()
     {
         Schema::table('subscriptions', function (Blueprint $table) {
-            $table->dropForeign('journal_id');
+            $table->dropForeign('subscriptions_journal_id_foreign');
         });
 
         Schema::table('quotas', function (Blueprint $table) {
-            $table->dropForeign('partner_id');
-            $table->dropForeign('journal_id');
-            $table->dropForeign('release_id');
+            $table->dropForeign('quotas_partner_id_foreign');
+            $table->dropForeign('quotas_journal_id_foreign');
+            $table->dropForeign('quotas_release_id_foreign');
         });
 
         Schema::dropIfExists('partner_user_release');
 
         Schema::table('promocodes', function (Blueprint $table) {
-            $table->dropForeign('journal_id');
-            $table->dropForeign('journal_for_releases_id');
+            $table->dropForeign('promocodes_journal_id_foreign');
+            $table->dropForeign('promocodes_journal_for_releases_id_foreign');
         });
 
         Schema::dropIfExists('promocode_publishing');
@@ -140,7 +140,17 @@ class SetForeignKeys extends Migration
         Schema::dropIfExists('promo_user_publishing');
         Schema::dropIfExists('promo_user_release');
 
+        Schema::disableForeignKeyConstraints();
+        Schema::table('jby_promo', function (Blueprint $table) {
+            $table->dropForeign('jby_promo_promo_user_id_foreign');
+            $table->dropForeign('jby_promo_promocode_id_foreign');
+        });
         Schema::dropIfExists('jby_promo');
+        Schema::table('jby_promo_journal', function (Blueprint $table) {
+            $table->dropForeign('jby_promo_journal_jby_promo_id_foreign');
+            $table->dropForeign('jby_promo_journal_journal_id_foreign');
+        });
         Schema::dropIfExists('jby_promo_journal');
+        Schema::enableForeignKeyConstraints();
     }
 }

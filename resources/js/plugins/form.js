@@ -84,8 +84,10 @@ let ajaxForm = {
                 if (result.toastr) {
                     self.notification(result.toastr);
                 }
+                self.after(result);
+
                 if (result.success) {
-                    self.after(result);
+                    //self.after(result);
                 } else if (result.error) {
                     self.showError(result.message);
                 }
@@ -122,7 +124,7 @@ let ajaxForm = {
     },
 
     notification(notification) {
-        window.toastr.options.closeButton = false;
+        window.toastr.options.closeButton = true;
         window.toastr.options.closeDuration = 10;
         switch (notification.type) {
             case 'warning':
@@ -138,6 +140,7 @@ let ajaxForm = {
                 window.toastr.info(notification.text, notification.title, notification.options);
                 break;
             default:
+                window.toastr.info(notification.text, notification.title, notification.options);
                 break;
         }
     },
@@ -265,7 +268,7 @@ let ajaxForm = {
     before() {
         const self = this;
         if (self.form.data('loading-container')) {
-            for (let key in this.loading.container) {
+            for (let key in self.loading.container) {
                 $(self.form.data('loading-container')).addClass(self.loading.container[key])
             }
         }
@@ -283,6 +286,12 @@ let ajaxForm = {
                     }
                 });
             }
+        }
+        let messageLoading = self.form.find('.message-loading');
+        if (messageLoading) {
+            messageLoading.empty();
+            messageLoading.addClass('is-loading');
+            messageLoading.removeClass('__is-danger');
         }
         return goToAjax;
     },
@@ -375,6 +384,11 @@ let ajaxForm = {
             if (key === 'error') {
                 self.showError(message);
             }
+            $input.closest('.form-holder').append(self.validationTemplate(message, false));
+            //this.form.find('.text-error[data-name="' + key + '"]').text(result.responseJSON[key][0]);
+            if (key === 'error') {
+                self.showError(message);
+            }
             if (key === 'g-recaptcha-response') {
                 self.form.find('textarea[name="' + key + '"]').closest('.form-group').append(self.validationTemplate(message, false));
             }
@@ -411,6 +425,15 @@ let ajaxForm = {
             delete data['bs.tooltip'];
         }
         if (self.form.data('form-data')) {
+            let supportData = [];
+            _.each(data, function (value, key) {
+                if (value.name === undefined) {
+                    let val = value;
+                    value.name = key;
+                    value.value = val;
+                }
+                supportData = self.getFormDataPushKeyValue(supportData, value.name, value.value);
+            });
             let sData = self.form.data('form-data');
             if (sData) {
                 sData = _.split(sData, ',');
@@ -418,23 +441,32 @@ let ajaxForm = {
                     let $element = $(_.trim(val));
                     if ($element.get(0).tagName === 'INPUT') {
                         if ($element.is(':checkbox')) {
-                            data[$element.attr('name')] = $element.is(':checked') ? 1 : 0;
+                            supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.is(':checked') ? 1 : 0);
                         } else {
-                            data[$element.attr('name')] = $element.val();
+                            supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.val());
                         }
                     }
                     if ($element.get(0).tagName === 'SELECT') {
-                        data[$element.attr('name')] = $element.val();
+                        supportData = self.getFormDataPushKeyValue(supportData, $element.attr('name'), $element.val());
                     }
                     if ($element.get(0).tagName === 'FORM') {
                         _.each($element.serializeArray(), function (val) {
-                            data[val.name] = val.value;
+                            supportData = self.getFormDataPushKeyValue(supportData, val.name, val.value);
                         });
                     }
                 });
             }
+            data = supportData;
         }
         console.log(data);
+        return data;
+    },
+
+    getFormDataPushKeyValue(data, key, value) {
+        data.push({
+            name: key,
+            value: value,
+        });
         return data;
     },
 

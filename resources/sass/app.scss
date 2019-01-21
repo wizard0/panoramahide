@@ -11,12 +11,28 @@ $brand-info: $blue;
 @import '~toastr/build/toastr.min.css';
 .toast {
   font-size: 14px;
-  box-shadow: none;
+  box-shadow: 0 0 6px #999 !important;
+  opacity: .9 !important;
+  padding: 10px 10px 10px 50px !important;
   &:hover {
     box-shadow: none;
+    opacity: 1 !important;
   }
   user-select: none;
+  .toast-close-button {
+    width: 20px;
+    position: absolute;
+    top: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    right: 5px;
+    outline: none;
+  }
 }
+//.modal-open #toast-container {
+//  position: absolute;
+//  padding-right: 17px;
+//}
 .toast-top-right {
   right: 25px;
 }
@@ -34,6 +50,15 @@ $brand-info: $blue;
 
 .modal-body input.is-danger {
   border: solid 1px #dc3545 !important;
+}
+.message-loading {
+  min-height: 50px;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  &.__is-danger {
+    color: #dc3545;
+  }
 }
 .modal {
   .form-group {
@@ -54,6 +79,28 @@ $brand-info: $blue;
 input[type="checkbox"].is-danger + label::before {
   border: solid 1px $red !important;
 }
+.form-field.__error.is-danger {
+  border-color: $red !important;
+}
+.form-field.is-danger {
+  border-color: $red !important;
+}
+.form-wrapper {
+  .form-holder {
+    position: relative;
+    .help {
+      font-size: 12px;
+      position: absolute;
+    }
+    input {
+      margin-bottom: 0px;
+      color: #212529;
+    }
+  }
+}
 
 // Promo
 @import 'promo';
+
+//
+@import 'modal';

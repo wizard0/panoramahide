@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-debugbar": "^3.2",
+        "bulk/toastr": "^0.0.3",
         "chelout/robokassa": "dev-master",
         "dimsav/laravel-translatable": "^9.2",
         "fideloper/proxy": "^4.0",

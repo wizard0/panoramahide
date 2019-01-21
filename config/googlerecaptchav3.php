@@ -124,4 +124,12 @@ return [
     | https://developers.google.com/recaptcha/docs/language
     */
     'language' => 'ru',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Except Value
+    |--------------------------------------------------------------------------
+    | Type: string
+    */
+    'except_value' => 'IQUAAAAAHX4dEIDDak'
 ];
