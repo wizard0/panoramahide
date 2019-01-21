@@ -15,7 +15,7 @@ deploy:
         - php72 ./artisan db:seed --class=TestSeeder -vvv
         - php72 ./artisan cache:clear
         - php72 ./artisan config:cache
-        - /usr/bin/phpunit --testdox tests
+        - php72 /usr/bin/phpunit --testdox tests
         - chmod 774 ./deploy
         - ./deploy
     only:
