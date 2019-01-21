@@ -18,7 +18,6 @@
     <script src="{{ asset('js/bootstrap-datetimepicker.js') }}"></script>
     <script src="{{ asset('js/default_scripts.js') }}"></script>
     <script src="{{ asset('js/CartManager.js') }}"></script>
-    <script src="{{ asset('js/actions.js') }}"></script>
     <script src="{{ asset('js/clipboard.min.js') }}"></script>
     <script src="{{ asset('js/SideBarManager.js') }}"></script>
     <script src="{{ asset('js/MagazinesDetailManager.js') }}"></script>
@@ -53,6 +52,8 @@
     @include('includes.header')
 
     @yield('content')
+
+    @yield('sidebar.modals')
 
     @include('includes.footer')
 

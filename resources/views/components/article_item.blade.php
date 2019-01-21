@@ -1,26 +1,3 @@
-@php
-    if (isset($article) && isset($journal)) {
-        $id = $article->id;
-        $author = $article->authors()->first()->name;
-        $code = $article->code;
-        $name = $article->name;
-        $journalCode = $journal->code;
-        $journalName = $journal->name;
-        $releaseCode = $article->release->code;
-        $releaseName = $article->release->name;
-        $number = $article->release->number;
-    } elseif (isset($s)) {
-        $id = $s->articleID;
-        $author = $s->authorName;
-        $code = $s->articleCode;
-        $name = $s->articleName;
-        $journalCode = $s->journalCode;
-        $journalName = $s->journalName;
-        $releaseCode = $s->releaseCode;
-        $releaseName = $s->releaseName;
-        $number = $s->releaseNumber;
-    }
-@endphp
 <div class="article-item entity-item d-flex _article" data-id="{{ $id }}">
     <div class="checkbox-col">
         <input id="article-index-{{ $id }}" type="checkbox" name="article-choise" value="{{ $id }}" data-type="article">
@@ -38,7 +15,7 @@
                 @endif
                 <div class="output">
                     <span>Журнал:</span>
-                    <a href="{{ route('release', ['journalCode' => $journalCode, 'releaseCode' => $releaseCode]) }}" class="grey-link">
+                    <a href="{{ route('release', ['journalCode' => $journalCode, 'releaseID' => $releaseID]) }}" class="grey-link">
                         {{ $journalName }} . №{{ $number }}						</a>
                 </div>
             </div>

@@ -8,6 +8,39 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Journal
+ *
+ * @property integer id
+ * @property string locale
+ * @property boolean active
+ * @property string active_date
+ * @property string ISSN
+ * @property string name
+ * @property string code
+ * @property string in_HAC_list
+ * @property string image
+ * @property string description
+ * @property string preview_image
+ * @property string preview_description
+ * @property string format
+ * @property string volume
+ * @property string periodicity
+ * @property string editorial_board
+ * @property string article_index
+ * @property string rubrics
+ * @property string review_procedure
+ * @property string article_submission_rules
+ * @property string chief_editor
+ * @property string phone
+ * @property string email
+ * @property string site
+ * @property string about_editor
+ * @property string contacts
+ * @property mixed  subscriptions
+ *
+ * @package App
+ */
 class Journal extends Model
 {
     use Translatable;
@@ -139,5 +172,40 @@ class Journal extends Model
         }
 
         return $byType;
+    }
+
+    /**
+     * This functions compiles subscriptions data as convenient array
+     *
+     * return array
+     */
+    public function getSubscriptionsCombos()
+    {
+        $subscriptions = $this->subscriptions;
+        $combos = [];
+        foreach ($subscriptions as $s) {
+            foreach([1, 2, 3, 4, 5, 6, 12] as $term) {
+
+                if ($s->period == Subscription::PERIOD_ONCE_2_MONTH)
+                    if ($term == 1 || $term == 3 || $term == 5) continue;
+                if ($s->period == Subscription::PERIOD_ONCE_3_MONTH)
+                    if ($term != 3 && $term != 6 && $term != 12) continue;
+                if ($s->period == Subscription::PERIOD_ONCE_HALFYEAR)
+                    if ($term != 6 && $term != 12) continue;
+
+                for ($year = date("Y"); $year <= date("Y")+2; $year++) {
+                    if ($s->year != $year) continue;
+
+                    for ($month = 1; $month <= 12; $month++) {
+                        $price = $s->getPrice($year, $month, $term);
+                        if ($price) {
+                            $combos[$s->type][$term][$year][$month] = $price;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $combos;
     }
 }

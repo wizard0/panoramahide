@@ -51,7 +51,9 @@ Route::group(['prefix' => 'magazines'], function () {
     Route::get('/', 'MagazinesController')->name('journals');
     Route::get('/{code}.html', 'MagazinesController@detail')->name('journal');
     Route::get('/ajax-get-page', 'MagazinesController@ajaxGetPage');
-    Route::get('/{journalCode}/numbers/{releaseID}.html', 'ReleasesController@detail')->name('release');
+    Route::post('/send-article', 'MagazinesController@sendArticle')->name('send.article');
+
+    Route::get('/{journalCode}/numbers/{releaseID}.html', 'ReleaseController@detail')->name('release');
 });
 
 Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');

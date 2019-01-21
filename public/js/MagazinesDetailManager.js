@@ -73,4 +73,16 @@
         });
     }
 
+    window.JSMagazineDetailManager.prototype.sendArticle = function (e, url) {
+        e.preventDefault();
+
+        console.log($(e.target).serializeArray());
+
+        $.ajax({
+
+        })
+
+        return false;
+    }
+
 })(window, jQuery)

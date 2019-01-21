@@ -33,7 +33,15 @@
 
             <div class="row col-xl-9 col-lg-9 col-12 order-3 order-xl-2 order-lg-2">
                 @foreach ($journals as $journal)
-                    @include('includes.journal_item', compact('journal'))
+                    @component('components.journal_item', [
+                        'id' => $journal->id,
+                        'image' => $journal->image,
+                        'name' => $journal->name,
+                        'code' => $journal->code,
+                        'issn' => $journal->issn,
+                        'releases' => $journal->releases->load('translations'),
+                    ])
+                    @endcomponent
                 @endforeach
 
                 <div class="w-100 pagination d-flex justify-content-center">

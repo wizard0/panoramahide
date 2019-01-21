@@ -19,13 +19,31 @@
                             <div class="issue-announce">
                                 <p></p>
                             </div>
+                            @if (!empty($journal->ISSN))
+                                <div class="out-issn"><span>ISSN:</span>{{ $journal->ISSN }}</div>
+                            @endif
+                            @if (!empty($journal->in_HAC_list))
+                                <div class="vak">
+								<span>
+									<a href="#">Входит в перечень ВАК</a>
+									<div class="vak-tooltip" style="display: none;">
+                                        {!! $journal->in_HAC_list !!}
+                                    </div>
+								</span>
+                                </div>
+                                <script>
+                                    $(".vak-tooltip").bind("clickoutside", function(event) {
+                                        $(this).hide();
+                                    });
+                                </script>
+                            @endif
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-xl-2 col-lg-2 col-12 order-2 order-xl-3 order-lg-3">
-                @include('includes.sidebar')
+                @include('includes.sidebar', ['hide' => ['title']])
             </div>
 
         </div>

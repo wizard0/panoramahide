@@ -1,5 +1,5 @@
 @php
-    $isJournalPage = isset($journal);
+    $isJournalPage = isset($isJournalPage) && $isJournalPage == true;
     if (!$isJournalPage) {
         $categories = Category::with('journals')->withTranslation()->get();
         $journals = Journal::withTranslation()->get();

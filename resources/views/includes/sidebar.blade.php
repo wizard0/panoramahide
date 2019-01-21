@@ -1,9 +1,11 @@
-<div class="actions-menu">
+<div class="actions-menu _share_container">
     <div class="row">
-        <div class="col-12">
-            <span class="action-menu-title">Действия с выбранными:</span>
-        </div>
-        @if (!isset($hide) || $hide != 'subscribe')
+        @if (!isset($hide) || !in_array('title', $hide))
+            <div class="col-12">
+                <span class="action-menu-title">Действия с выбранными:</span>
+            </div>
+        @endif
+        @if (!isset($hide) || !in_array('subscribe', $hide))
             <div class="col-xl-12 col-lg-12 col-sm-3 col-6">
                 <a class="get-access action-item accent _access" href="#subscribe">
                     <span>получить доступ</span>
@@ -25,10 +27,17 @@
                 <span>Цитировать</span>
             </a>
         </div>
+        @if (isset($article))
+            <div class="col-xl-12 col-lg-12 col-sm-3 col-6">
+                <a class="share action-item _share" href="#">
+                    <span>Поделиться</span>
+                </a>
+            </div>
+        @endif
     </div>
 </div>
 
-
+@section('sidebar.modals')
 <div class="modal" tabindex="-1" role="dialog" id="recommend">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -77,6 +86,9 @@
             </div>
             <div class="modal-body">
                 <p class="_text">
+                    @if (isset($article))
+                        {{ __('Статья') }} "{{ $article->name }}" <br>
+                    @endif
                     @if (isset($journal))
                         <a href="{{ route('journal', ['code' => $journal->code]) }}">Журнал "{{ $journal->name }} /
                             {{ $journal->translate('en', true)->name }}"</a>
@@ -98,8 +110,14 @@
 </div>
 <script>
     new ClipboardJS('#quote ._copy_clipboard');
-    @if (isset($journal))
-        var SideBarManager = new JSSideBarManager('<?= json_encode([
+    @if (isset($article))
+    var SideBarManager = new JSSideBarManager('<?= json_encode([
+            'id' => $article->id,
+            'type' => 'article',
+            'url' => route('article', ['code' => $article->code])
+        ]) ?>');
+    @elseif (isset($journal))
+    var SideBarManager = new JSSideBarManager('<?= json_encode([
             'id' => $journal->id,
             'type' => 'journal',
             'url' => route('journal', ['code' => $journal->code])
@@ -108,3 +126,4 @@
         var SideBarManager = new JSSideBarManager();
     @endif
 </script>
+@endsection

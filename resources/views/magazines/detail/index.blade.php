@@ -3,7 +3,7 @@
 @section('content')
     <div class="container"></div>
 
-    @include('includes.searchbar', compact('journal'))
+    @include('includes.searchbar', ['isJournalPage' => true])
 
     @include('magazines.detail.inner_menu')
 

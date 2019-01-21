@@ -60,7 +60,6 @@ class SearchController extends Controller
                         ANY_VALUE(article_translations.description) as articleDescr,
                         ANY_VALUE(journals.issn) as journalISSN,
                         ANY_VALUE(releases.id) as releaseID,
-                        ANY_VALUE(release_translations.name) as releaseName,
                         ANY_VALUE(author_translations.name) as authorName,
                         ANY_VALUE(authors.id) as authorID,
                         ANY_VALUE(journal_translations.name) as journalName,
@@ -79,11 +78,11 @@ class SearchController extends Controller
                             ANY_VALUE(articles.id) as articleID,
                             ANY_VALUE(article_translations.code) as articleCode,
                             ANY_VALUE(article_translations.description) as articleDescr,
-                            ANY_VALUE(release_translations.name) as releaseName,
                             ANY_VALUE(author_translations.name) as authorName,
                             ANY_VALUE(authors.id) as authorID,
                             ANY_VALUE(journal_translations.name) as journalName,
                             ANY_VALUE(journal_translations.code) as journalCode,
+                            ANY_VALUE(releases.id) as releaseID,
                             ANY_VALUE(release_translations.name) as releaseName,
                             ANY_VALUE(release_translations.code) as releaseCode,
                             ANY_VALUE(release_translations.number) as releaseNumber,
@@ -100,11 +99,11 @@ class SearchController extends Controller
                             ANY_VALUE(articles.id) as articleID,
                             ANY_VALUE(article_translations.code) as articleCode,
                             ANY_VALUE(article_translations.description) as articleDescr,
-                            ANY_VALUE(release_translations.name) as releaseName,
                             ANY_VALUE(author_translations.name) as authorName,
                             ANY_VALUE(authors.id) as authorID,
                             ANY_VALUE(journal_translations.name) as journalName,
                             ANY_VALUE(journal_translations.code) as journalCode,
+                            ANY_VALUE(releases.id) as releaseID,
                             ANY_VALUE(release_translations.name) as releaseName,
                             ANY_VALUE(release_translations.code) as releaseCode,
                             ANY_VALUE(articles.active_date) as articleActiveDate
@@ -153,6 +152,8 @@ class SearchController extends Controller
                 $q = $q->where('journals.id', '=', $params['journal']);
             if (isset($params['author_char']) && $params['author_char'])
                 $q = $q->where('author_translations.name', 'like', $params['author_char'] . '%');
+            if (isset($params['author']))
+                $q = $q->where('author_translations.name', '=', $params['author']);
             if (isset($params['active_from']) && $params['active_from'])
                 $q = $q->where('articles.active_date', '<', $params['active_from']);
             if (isset($params['active_to']) && $params['active_to'])

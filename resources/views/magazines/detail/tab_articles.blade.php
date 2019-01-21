@@ -27,7 +27,19 @@
             <div class="row">
 
                 @foreach($articles as $article)
-                    @include('includes.article_item', compact('article', 'journal'))
+                    @component('components.article_item', [
+                        'id' => $article->id,
+                        'author' => $article->authors->first()->name,
+                        'code' => $article->code,
+                        'name' => $article->name,
+                        'journalCode' => $journal->code,
+                        'journalName' => $journal->name,
+                        'releaseCode' => $release->code,
+                        'releaseID' => $release->id,
+                        'releaseName' => $release->name,
+                        'number' => $release->number,
+                    ])
+                    @endcomponent
                 @endforeach
 
                 <div class="article-item entity-item d-flex _article" data-id="443516">

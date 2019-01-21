@@ -66,7 +66,7 @@
         </div>
         <div class="col-xl-2 col-lg-2 col-12 order-2 order-xl-3 order-lg-3">
 
-            @include('includes.sidebar', ['hide' => 'subscribe'])
+            @include('includes.sidebar', ['hide' => ['subscribe', 'title']])
 
         </div>
     </div>

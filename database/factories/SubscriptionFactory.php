@@ -6,7 +6,7 @@ $factory->define(\App\Subscription::class, function (Faker $faker) {
     $randLocale = rand(0,1);
     $randType = rand(0,1);
     $randHalfYear = rand(0,1);
-    $randPeriod = rand(0,4);
+    $randPeriod = rand(0,5);
 
     $locale = [
         'ru', 'en'
@@ -25,7 +25,8 @@ $factory->define(\App\Subscription::class, function (Faker $faker) {
         \App\Subscription::PERIOD_ONCE_MONTH,
         \App\Subscription::PERIOD_ONCE_2_MONTH,
         \App\Subscription::PERIOD_ONCE_3_MONTH,
-        \App\Subscription::PERIOD_ONCE_HALFYEAR
+        \App\Subscription::PERIOD_ONCE_HALFYEAR,
+        \App\Subscription::PERIOD_ONCE,
     ];
 
     return [

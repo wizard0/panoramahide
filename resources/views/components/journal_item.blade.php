@@ -1,21 +1,3 @@
-@php
-if (isset($journal)) {
-    $id = $journal->id;
-    $image = $journal->image;
-    $name = $journal->name;
-    $code = $journal->code;
-    $issn = $journal->issn;
-    $releases = $journal->releases->load('translations');
-} elseif (isset($s)) {
-    $id = $s->journalID;
-    $image = $s->journalImage;
-    $name = $s->journalName;
-    $code = $s->journalCode;
-    $issn = $s->journalISSN;
-    $releases = Release::where('journal_id', '=', $s->journalID)->withTranslation()->get();
-}
-@endphp
-
 <div class="magazine-item entity-item d-flex col-12 _magazine"
      data-id="{{ $id }}"
      data-link="{{ route('journal', compact('code')) }}"

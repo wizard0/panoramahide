@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Author;
 use App\Category;
 use App\Journal;
+use App\JournalSentArticle;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
 class MagazinesController extends Controller
@@ -57,9 +59,28 @@ class MagazinesController extends Controller
                 case 'subscribe':
                     $subscriptions = $journal->getSubscriptionsByTypes();
                     return view('magazines.detail.tab_subscribe', compact('journal', 'subscriptions'));
+                case 'send_article':
+                    return view('magazines.detail.tab_send_article', compact('journal'));
+                case 'info':
+                    return view('magazines.detail.tab_info', compact('journal'));
             }
         } else {
             return Redirect::back();
         }
+    }
+
+    public function sendArticle(Request $request)
+    {
+        $store = new JournalSentArticle($request->only(['name', 'email', 'message']));
+        $store->journal_id = $request->get('journal');
+        $store->file = $request->file('files')
+            ->store('journal_sent_articles/' . $request->get('journal'));
+        if (Auth::check()) {
+            $store->user_id = Auth::id();
+        }
+        $store->save();
+
+        $request->session()->flash('status', __('Article sent'));
+        return Redirect::back();
     }
 }
