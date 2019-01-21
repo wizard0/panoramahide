@@ -29,10 +29,10 @@
                 <span>к номеру:</span>
                 <select name="number">
                     @foreach ($releases as $release)
-                        <option value="{{ route('release', ['journalCode' => $code, 'releaseCode' => $release->code]) }}">№ {{ $release->number }}, {{ $release->year }}</option>
+                        <option value="{{ route('release', ['journalCode' => $code, 'releaseID' => $release->id]) }}">№ {{ $release->number }}, {{ $release->year }}</option>
                     @endforeach
                 </select>
-                <a href="" class="_go_to_number_3697">перейти</a>
+                <a href="" class="_go_to_number_{{ $id }}">перейти</a>
             </div>
             <div class="d-flex col-xl-2 col-lg-2 col-md-4 col-sm-3 col-12 get-access-red justify-content-xl-end justify-content-lg-end justify-content-md-end justify-content-sm-end justify-content-start">
                 <a href="{{ route('journal', compact('code')) }}#subscribe" class="red-link">получить доступ</a>
@@ -40,3 +40,12 @@
         </div>
     </div>
 </div>
+<script>
+    $(function(){
+        $(document).on('click', '._go_to_number_{{ $id }}', function(){
+            var link = $(this).parents('.magazine-item').find('[name=number]').val();
+            location.href = link;
+            return false;
+        });
+    });
+</script>

@@ -58,6 +58,13 @@ Route::group(['prefix' => 'magazines'], function () {
 
 Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');
 
+Route::group(['prefix' => 'publishers'], function () {
+    Route::get('/', 'PublishersController')->name('publishers');
+    Route::get('/{code}', 'PublishersController@detail')->name('publisher');
+});
+
+Route::get('/categories', 'CategoriesController')->name('categories');
+
 Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
 

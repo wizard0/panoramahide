@@ -10,4 +10,9 @@ class Publishing extends Model
     use Translatable;
 
     public $translatedAttributes = ['name', 'code', 'image', 'description'];
+
+    public function journals()
+    {
+        return $this->belongsToMany(Journal::class);
+    }
 }
