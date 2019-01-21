@@ -33,25 +33,17 @@ class PromoControllerTest extends TestCase
     /**
      * Запрос несуществующего промокода
      */
-    public function testAccessPromocode()
+    public function testAccessPromocodeUser()
     {
         $oPromoController = (new PromoController());
         $request = new Request();
 
         $oPromoCode = $this->activePromocode();
 
-        $this->assertNotNull($oPromoCode, 'Active promocode not found');
+        $this->assertNotNull($oPromoCode, $this->textRed('Активный промокод не найден'));
 
         $user = $this->user();
-        if (Auth::guest()) {
-            // вывод модального окна с просьбой авторизоваться
-            $request->merge([
-                'promocode' => $oPromoCode->promocode, // существующий промокод
-                'email' => $user->email,
-            ]);
-            $result = $oPromoController->access($request);
-            $this->assertFalse($result['success']);
-        }
+
         // авторизация
         $this->actingAs($user);
         $this->assertAuthenticated();
@@ -59,7 +51,7 @@ class PromoControllerTest extends TestCase
 
         $request->merge([
             'promocode' => $oPromoCode->promocode, // существующий промокод
-            'phone' => $this->phone()
+            'phone' => $user->phone
         ]);
 
         // полуение кода подтверждения
@@ -73,6 +65,57 @@ class PromoControllerTest extends TestCase
         });
     }
 
+    /**
+     * Запрос несуществующего промокода
+     */
+    public function testAccessPromocodeGuest()
+    {
+        $oPromoController = (new PromoController());
+        $request = new Request();
+
+        $oPromoCode = $this->activePromocode();
+
+        $this->assertNotNull($oPromoCode, $this->textRed('Активный промокод не найден'));
+
+        $user = $this->user();
+
+        // вывод модального окна с просьбой авторизоваться
+        $request->merge([
+            'promocode' => $oPromoCode->promocode, // существующий промокод
+            'email' => $user->email,
+        ]);
+        $result = $oPromoController->access($request);
+
+        $this->assertFalse($result['success']);
+
+        $this->assertTrue($result['result'] === 2, $this->textRed('Пользователь не найден'));
+
+        $request->merge([
+            'promocode' => $oPromoCode->promocode, // существующий промокод
+            'email' => $this->email(), // неверный email
+            'phone' => $user->phone, // упадет ошибка потому что не уникальный
+        ]);
+
+        $result = $oPromoController->access($request);
+
+        $this->assertTrue($result->getStatusCode() === 422, $this->textRed('Пользователь был найден или телефон уникальный'));
+
+        $request->merge([
+            'promocode' => $oPromoCode->promocode, // существующий промокод
+            'email' => $this->email(), // неверный email
+            'phone' => $this->phone(), // неверный телефон, уникальный
+        ]);
+        // полуение кода подтверждения
+        DB::transaction(function () use ($oPromoController, $request) {
+            $result = $oPromoController->access($request);
+
+            $this->assertTrue($result['success']);
+
+            $this->assertIsInt($result['code'], $this->textRed('Не сгенерирован код подтверждения'));
+
+            DB::rollBack();
+        });
+    }
     /**
      * - проверка несуществующего промокода
      * - проверка неверного кода подтверждения по телефону
@@ -144,7 +187,7 @@ class PromoControllerTest extends TestCase
 
         $request->merge([
             'promocode' => $oPromoCode->promocode, // несуществующий промокод
-            'email' => 'user_wrong@user.com', // несуществующий email
+            'email' => $this->email(), // несуществующий email
             'password' => '1234567890',
         ]);
 
@@ -217,5 +260,15 @@ class PromoControllerTest extends TestCase
     private function promocode() : string
     {
         return '2--------2';
+    }
+
+    /**
+     * Не существующий email
+     *
+     * @return string
+     */
+    private function email() : string
+    {
+        return 'user_wrong@user.com';
     }
 }
