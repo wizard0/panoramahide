@@ -8,6 +8,9 @@ use Tests\TestCase;
 
 class CodeTest extends TestCase
 {
+    /**
+     * Тестирование генерации кода подтверждения
+     */
     public function testCode()
     {
         $oCode = (new Code());
