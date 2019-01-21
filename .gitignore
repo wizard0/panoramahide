@@ -19,3 +19,4 @@ package-lock.json
 mix-manifest.json
 public/js/app.js
 .DS_Store
+*.sublime-workspace
