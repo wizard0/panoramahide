@@ -60,7 +60,12 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "prestissimo": {
+            "maxConnections": 10,
+            "minConnections": 3,
+            "pipeline": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
