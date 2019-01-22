@@ -37,4 +37,8 @@ class Release extends Model
     {
         return '/magazines/' . $this->journal->code . '/numbers/' . $this->id . '.html';
     }
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class);
+    }
 }

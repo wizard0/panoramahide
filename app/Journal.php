@@ -76,5 +76,12 @@ class Journal extends Model
     {
         return (self::where('id', $id)->first())->name;
     }
-
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class, 'promocode_journal');
+    }
+    public function groups()
+    {
+        return $this->belongsToMany(Journal::class, 'groups_journals');
+    }
 }

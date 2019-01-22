@@ -11,4 +11,13 @@ class Publishing extends Model
 
     public $translatable = ['name'];
 
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class);
+    }
+
+    public function journals()
+    {
+        return $this->belongsToMany(Journal::class);
+    }
 }
