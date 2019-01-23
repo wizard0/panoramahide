@@ -2,11 +2,12 @@
 
 namespace App;
 
+use App\Models\PromoUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends \TCG\Voyager\Models\User
+class User extends Authenticatable
 {
     use Notifiable;
 
@@ -16,7 +17,7 @@ class User extends \TCG\Voyager\Models\User
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'private', 'name', 'last_name', 'email', 'phone', 'password',
     ];
 
     /**
@@ -36,5 +37,10 @@ class User extends \TCG\Voyager\Models\User
     public function searches()
     {
         return $this->hasMany(UserSearch::class);
+    }
+
+    public function promo()
+    {
+        return $this->hasOne(PromoUser::class, 'user_id');
     }
 }

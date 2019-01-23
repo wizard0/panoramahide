@@ -163,8 +163,7 @@ return [
         /*
          * Package Service Providers...
          */
-        TCG\Voyager\VoyagerServiceProvider::class,
-
+        Dimsav\Translatable\TranslatableServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -173,6 +172,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
+        App\Providers\HelpersServiceProvider::class,
+        Bulk\Toastr\ToastrServiceProvider::class,
 
     ],
 
@@ -225,9 +227,11 @@ return [
         'Cart' => App\Cart::class,
         'Paysystem' => App\Paysystem::class,
         'Journal' => \App\Journal::class,
+        'Release' => \App\Release::class,
         'Author' => \App\Author::class,
         'Category' => \App\Category::class,
         'UserSearch' => \App\UserSearch::class,
+        'Toastr' => Bulk\Toastr\Facades\Toastr::class,
     ],
 
 ];

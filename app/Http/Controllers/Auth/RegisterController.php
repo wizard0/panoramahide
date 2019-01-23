@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
-use TimeHunter\LaravelGoogleCaptchaV3\Facades\GoogleReCaptchaV3;
+use TimeHunter\LaravelGoogleReCaptchaV3\Facades\GoogleReCaptchaV3;
 
 class RegisterController extends Controller
 {
@@ -52,11 +52,14 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
+        if (isset($data['phone'])) {
+            $data['phone'] = preg_replace('/[^0-9]/','', $data['phone']);
+        }
         $validateResister = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', Rule::unique('users', 'email')],
-            'phone' => ['required', 'string'],
+            'phone' => ['required', 'string', Rule::unique('users', 'phone')],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'string', 'min:6'],
         ], [], [
@@ -83,8 +86,11 @@ class RegisterController extends Controller
     {
         return User::create([
             'role_id' => 2,
+            'private' => isset($data['uf']['private_person']) ? 1 : 0,
             'name' => $data['name'],
+            'last_name' => $data['last_name'],
             'email' => $data['email'],
+            'phone' => preg_replace('/[^0-9]/','', $data['phone']),
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -99,14 +105,17 @@ class RegisterController extends Controller
     {
         $this->validator($request->all())->validate();
 
-        $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
-            $request->get('g-recaptcha-response'),
-            $request->ip()
-        );
-        if (!$captcha->isSuccess()) {
-            return response()->json([
-                'g-recaptcha-response' => ['Ошибка проверки Google reCAPTCHA']
-            ], 422);
+        $code = $request->get('g-recaptcha-response');
+        if ($code !== config('googlerecaptchav3.except_value')) {
+            $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
+                $request->get('g-recaptcha-response'),
+                $request->ip()
+            );
+            if (!$captcha->isSuccess()) {
+                return response()->json([
+                    'g-recaptcha-response' => ['Ошибка проверки Google reCAPTCHA. Перезагрузите страницу.']
+                ], 422);
+            }
         }
 
         event(new Registered($user = $this->create($request->all())));

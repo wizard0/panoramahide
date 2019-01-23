@@ -92,4 +92,5 @@
 </div>
 <script>
     new ClipboardJS('#quote ._copy_clipboard');
+    var SideBarManager = new JSSideBarManager();
 </script>

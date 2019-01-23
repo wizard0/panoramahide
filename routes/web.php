@@ -43,13 +43,13 @@ Route::get('/test', function() {
     dd('ok');
 })->name('test');
 
-Route::get('/', 'MainpageController@index');
+Route::get('/', 'MainpageController@index')->name('index');
 
 //Route::get('/test/', 'TestController');
 
 
 Route::group(['prefix' => 'admin'], function () {
-    Voyager::routes();
+
 });
 
 //Auth::routes();
@@ -70,7 +70,7 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/complete/{id}', 'PersonalController@completeOrder')
         ->name('order.complete');
 
-    Route::group(['prefix' => 'robokassa'], function (){
+    Route::group(['prefix' => 'robokassa'], function () {
         Route::get('result_receiver', 'PaymentController@robokassaResult');
         Route::get('success', 'PaymentController@robokassaSuccess');
         Route::get('fail', 'PaymentController@robokassaFail');
@@ -81,17 +81,47 @@ Route::group(['prefix' => 'personal'], function () {
 
 Route::get('/magazines', 'MagazinesController')->name('magazines');
 Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
+Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');
+Route::get('/magazines/{journalCode}/numbers/{releaseCode}.html', 'ReleasesController@detail')->name('release');
 
-Route::post('/recommend', 'AjaxActionsController@recommendJournal')->name('recommend');
+Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
 
-Route::get('/search', 'SearchController')->name('search');
-Route::post('/search', 'SearchController');
-Route::post('/save-search', 'SearchController@saveSearch')->middleware('auth')->name('save.search');
-Route::get('/get-saved-search', 'SearchController@getSaved')->middleware('auth')->name('get.search');
-Route::post('/delete-search', 'SearchController@deleteSearch')->middleware('auth')->name('delete.search');
+Route::group(['prefix' => 'search'], function () {
+    Route::get('/', 'SearchController')->name('search');
+    Route::post('/', 'SearchController');
+    Route::post('/save', 'SearchController@saveSearch')->middleware('auth')->name('save.search');
+    Route::get('/get', 'SearchController@getSaved')->middleware('auth')->name('get.search');
+    Route::post('/delete', 'SearchController@deleteSearch')->middleware('auth')->name('delete.search');
+});
+
 
 Route::get('/logout', 'PersonalController@logout');
 
 Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
+
+Route::group(['prefix' => 'promo'], function () {
+    Route::get('/', 'PromoController@index')->name('promo.index');
+    Route::post('/access', 'PromoController@access')->name('promo.access');
+    Route::post('/code', 'PromoController@code')->name('promo.code');
+    Route::post('/password', 'PromoController@password')->name('promo.password');
+    Route::post('/activation', 'PromoController@activation')->name('promo.activation');
+});
+
+
+/**
+ * Промо-учасники
+ */
+Route::resource('promo_users', 'PromoUsersController');
+Route::group(['prefix' => 'promo_users'], function () {
+    Route::any('/{id}/promocodes', ['uses' => 'PromoUsersController@promocodes', 'as' => 'promo_users.promocodes']);
+    Route::any('/{id}/publishings', ['uses' => 'PromoUsersController@publishings', 'as' => 'promo_users.publishings']);
+    Route::any('/{id}/releases', ['uses' => 'PromoUsersController@releases', 'as' => 'promo_users.releases']);
+
+    Route::any('/{id}/promocode/{item_id}/activate', ['uses' => 'PromoUsersController@activatePromocode', 'as' => 'promo_users.promocode.activate']);
+    Route::any('/{id}/publishing/{item_id}/activate', ['uses' => 'PromoUsersController@activatePublishing', 'as' => 'promo_users.publishing.activate']);
+    Route::any('/{id}/release/{item_id}/activate', ['uses' => 'PromoUsersController@activateRelease', 'as' => 'promo_users.release.activate']);
+});
+

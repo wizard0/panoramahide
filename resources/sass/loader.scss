@@ -24,7 +24,7 @@
 }
 
 
-.btn {
+.btn, div {
   &.is-loading {
     position: relative;
     color: transparent !important;
@@ -40,6 +40,15 @@
         border-right-color: $brand-primary;
         border-top-color: $brand-primary;
       }
+    }
+  }
+}
+div {
+  &.is-loading {
+    min-height: 50px;
+    &:after {
+      border-right-color: $brand-primary;
+      border-top-color: $brand-primary;
     }
   }
 }

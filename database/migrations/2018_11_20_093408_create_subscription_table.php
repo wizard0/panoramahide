@@ -28,12 +28,10 @@ class CreateSubscriptionTable extends Migration
                 'once_at_3_months',
                 'once_at_half_year'
             ]);
-            $table->string('price_for_release');
-            $table->string('price_for_half_year')->nullable();
-            $table->string('price_for_year')->nullable();
+            $table->integer('price_for_release');
+            $table->integer('price_for_half_year')->nullable();
+            $table->integer('price_for_year')->nullable();
             $table->timestamps();
-
-            $table->foreign('journal_id')->references('id')->on('journals');
         });
     }
 
@@ -44,6 +42,6 @@ class CreateSubscriptionTable extends Migration
      */
     public function down()
     {
-
+        Schema::dropIfExists('subscriptions');
     }
 }

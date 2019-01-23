@@ -1,6 +1,9 @@
-@if (!Auth::check())
-    @include('includes.modals.register')
-@endif
+<div id="modals">
+    @if (!Auth::check())
+        @include('includes.modals.register')
+    @endif
+    @include('includes.modals.common')
+</div>
 
 <footer>
     <div class="container">

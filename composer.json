@@ -10,11 +10,12 @@
     "require": {
         "php": "^7.1.3",
         "barryvdh/laravel-debugbar": "^3.2",
+        "bulk/toastr": "^0.0.3",
         "chelout/robokassa": "dev-master",
+        "dimsav/laravel-translatable": "^9.2",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
-        "tcg/voyager": "^1.1",
         "timehunter/laravel-google-recaptcha-v3": "^2.0"
     },
     "require-dev": {
@@ -59,7 +60,12 @@
     "config": {
         "preferred-install": "dist",
         "sort-packages": true,
-        "optimize-autoloader": true
+        "optimize-autoloader": true,
+        "prestissimo": {
+            "maxConnections": 10,
+            "minConnections": 3,
+            "pipeline": true
+        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

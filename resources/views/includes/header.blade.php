@@ -11,11 +11,11 @@
             <div class="col-xl-7 col-lg-7 col-md-8 col-sm-8 order-5 order-xl-2 order-lg-2 order-md-4 order-sm-4">
                 <div class="row header-phones justify-content-center">
                     <div class="col-xl-auto col-lg-auto col-md-6 col-sm-6 col-6 header-phone">
-                        <span>Подписка:</span>
+                        <span>{{ __('Подписка') }}:</span>
                         <p>+7 495 274-22-22, доб.79</p>
                     </div>
                     <div class="col-xl-auto col-lg-auto col-md-6 col-sm-6 col-6 header-phone">
-                        <span>Телефон для справок:</span>
+                        <span>{{ __('Телефон для справок') }}:</span>
                         <p>+7 495 274-22-22</p>
                     </div>
                 </div>
@@ -24,29 +24,29 @@
             <div class="d-flex flex-column align-items-center col-xl-2 col-lg-2 col-md-4 col-sm-4 col-8 order-2 order-xl-3 order-lg-3 order-md-5 order-sm-5">
                 <div class="login">
                     @if (Auth::check())
-                        <a class="grey-link" href="/personal/">Личный кабинет</a>
+                        <a class="grey-link" href="/personal/">{{ __('Личный кабинет') }}</a>
                         /
-                        <a class="grey-link" href="/logout">Выйти</a>
+                        <a class="grey-link" href="/logout">{{ __('Выйти') }}</a>
                     @else
-                        <a href="#" class="grey-link" data-toggle="modal" data-target="#login-modal">Войти</a>
+                        <a href="#" class="grey-link" data-toggle="modal" data-target="#login-modal">{{ __('Войти') }}</a>
                         /
-                        <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">Регистрация</a>
+                        <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">{{ __('Регистрация') }}</a>
                     @endif
                 </div>
-                <div class="request"><a href="#" data-toggle="modal" data-target="#request-modal">Заявка на подписку</a></div>
+                <div class="request"><a href="#" data-toggle="modal" data-target="#request-modal">{{ __('Заявка на подписку') }}</a></div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
                 <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
                     <ul class="topmenu">
-                        <li><a href="{{ route('magazines', ['sort' => 'name_asc']) }}">Журналы по алфавиту</a></li>
+                        <li><a href="{{ route('magazines', ['sort_by' => 'name']) }}">Журналы по алфавиту</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" id="menu_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Журналы по темам</a>
                             <div class="dropdown-menu" aria-labelledby="menu_1">
                                 <div class="d-flex flex-wrap w-100">
                                     @foreach(\App\Category::with('journals')->where('active', 1)->get() as $category)
                                     <div class="col-xl-6 col-lg-6 col-12">
-                                        <a class="d-block grey-link" href="/search/?category={{ $category->id }}&amp;type=magazine&amp;extend=1">{{ $category->name }}</a>
+                                        <a class="d-block grey-link" href="/search/?category={{ $category->id }}&amp;type=journal&amp;extend=1">{{ $category->name }}</a>
                                     </div>
                                     @endforeach
                                 </div>

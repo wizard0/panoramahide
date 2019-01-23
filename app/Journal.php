@@ -2,19 +2,21 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
+use Illuminate\Support\Facades\App;
 
 class Journal extends Model
 {
     use Translatable;
 
-    public $translatable = [
+    public $translatedAttributes = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',
         'format', 'volume', 'periodicity', 'editorial_board', 'article_index', 'rubrics', 'review_procedure',
-        'article_submission_rules'
+        'article_submission_rules', 'chief_editor', 'phone', 'email', 'site', 'about_editor', 'contacts'
     ];
+
 //    protected $fillable = ['code'];
 
     /**
@@ -35,16 +37,6 @@ class Journal extends Model
     public function publishings()
     {
         return $this->belongsToMany(Publishing::class);
-    }
-
-    /**
-     * Contact of the journal
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function contact()
-    {
-        return $this->belongsTo(JournalContact::class, 'journal_contact_id');
     }
 
     public function releases()
@@ -76,6 +68,26 @@ class Journal extends Model
     {
         return (self::where('id', $id)->first())->name;
     }
+
+    public static function getSome($filters)
+    {
+        $sort = $filters['sort_by'];
+        $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
+
+        $q = self::where('active', 1);
+
+        switch ($sort) {
+            case 'name':
+                $q = $q->orderByTranslation('name', $order);
+                break;
+            case 'date':
+                $q = $q->orderBy('active_date', $order);
+                break;
+        }
+
+        return $q->paginate(10);
+    }
+
     public function promocode()
     {
         return $this->belongsToMany(Promocode::class, 'promocode_journal');

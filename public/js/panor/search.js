@@ -56,7 +56,7 @@
 			var _this = this;
 			if (!this.savedSearchLoaded) {
 		        load(
-		        	'/save-search',
+		        	'/search/save',
 		        	this.settings.savedSearchContainer,
 		        	function() {
 		            	_this.savedSearchLoaded = true;
@@ -114,7 +114,7 @@
 		        id: id,
 		    };
 		    var _this= this;
-		    ajax('/delete-search', data, function(res){
+		    ajax('/search/delete', data, function(res){
 		        if (res.ids) {
 		            res.ids.forEach(function(id){
 		                var savedSearch = $(_this.settings.savedSearch+'[data-id='+id+']');

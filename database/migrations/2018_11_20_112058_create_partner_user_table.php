@@ -35,16 +35,6 @@ class CreatePartnerUserTable extends Migration
 
             $table->primary(['p_user_id', 'quota_id']);
         });
-
-        Schema::create('partner_user_release', function (Blueprint $table) {
-            $table->unsignedInteger('p_user_id');
-            $table->unsignedInteger('release_id');
-
-            $table->foreign('p_user_id')->references('id')->on('partner_users');
-            $table->foreign('release_id')->references('id')->on('releases');
-
-            $table->primary(['p_user_id', 'release_id']);
-        });
     }
 
     /**
@@ -54,6 +44,9 @@ class CreatePartnerUserTable extends Migration
      */
     public function down()
     {
-
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('partner_users');
+        Schema::dropIfExists('partner_user_quota');
+        Schema::enableForeignKeyConstraints();
     }
 }

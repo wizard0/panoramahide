@@ -6,6 +6,7 @@ $factory->define(App\Release::class, function (Faker $faker) {
     return [
         "name" => $faker->sentence(3),
         "code" => $faker->unique()->slug(3),
+        "price_for_electronic" => $faker->randomNumber(3),
         "active" => true
     ];
 });
