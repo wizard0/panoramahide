@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateGroupsJournalsTable extends Migration
+class CreateGroupJournalTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateGroupsJournalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('groups_journals', function (Blueprint $table) {
+        Schema::create('group_journal', function (Blueprint $table) {
             $table->unsignedInteger('group_id');
             $table->unsignedInteger('journal_id');
 
@@ -31,6 +31,6 @@ class CreateGroupsJournalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('groups_journals');
+        Schema::dropIfExists('group_journal');
     }
 }

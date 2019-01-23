@@ -3,14 +3,20 @@
 namespace App\Models;
 
 use App\Journal;
-use App\Models\Promocode;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
 {
-    protected $primaryKey = 'group_id';
+    protected $table = 'groups';
 
-    protected $fillable = ['promocode_id', 'name'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'promocode_id', 'name',
+    ];
 
     public static function store($group, $promocode_id)
     {
