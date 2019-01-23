@@ -1,7 +1,9 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Journal;
+use App\Models\Promocode;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model

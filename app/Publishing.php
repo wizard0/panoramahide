@@ -4,6 +4,7 @@ namespace App;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Promocode;
 
 class Publishing extends Model
 {

@@ -14,12 +14,12 @@ class CreateGroupsTable extends Migration
     public function up()
     {
         Schema::create('groups', function (Blueprint $table) {
-            $table->increments('group_id');
+            $table->increments('id');
             $table->unsignedInteger('promocode_id');
             $table->string('name');
             $table->timestamps();
 
-            $table->foreign('promocode_id')->references('id')->on('promocodes');
+            $table->foreign('promocode_id')->references('id')->on('promocodes')->onDelete('cascade');
         });
     }
 

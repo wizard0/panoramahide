@@ -5,7 +5,7 @@ namespace App\Services;
 
 use App\Models\Activations;
 use App\Models\PromoUser;
-use App\Promocode;
+use App\Models\Promocode;
 use Carbon\Carbon;
 
 class PromoUserService

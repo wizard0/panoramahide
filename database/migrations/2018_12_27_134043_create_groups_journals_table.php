@@ -17,8 +17,8 @@ class CreateGroupsJournalsTable extends Migration
             $table->unsignedInteger('group_id');
             $table->unsignedInteger('journal_id');
 
-            $table->foreign('group_id')->references('group_id')->on('groups');
-            $table->foreign('journal_id')->references('id')->on('journals');
+            $table->foreign('group_id')->references('id')->on('groups')->onDelete('cascade');
+            $table->foreign('journal_id')->references('id')->on('journals')->onDelete('cascade');
 
             $table->primary(['group_id', 'journal_id']);
         });

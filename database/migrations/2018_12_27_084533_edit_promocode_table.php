@@ -26,6 +26,9 @@ class EditPromocodeTable extends Migration
      */
     public function down()
     {
-
+        Schema::table('promocodes', function (Blueprint $table) {
+            $table->unsignedInteger('journal_for_releases_id')->nullable();
+            $table->foreign('journal_for_releases_id')->references('id')->on('journals');
+        });
     }
 }

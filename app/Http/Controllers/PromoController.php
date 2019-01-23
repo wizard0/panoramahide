@@ -6,7 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Activations;
 use App\Models\PromoUser;
-use App\Promocode;
+use App\Models\Promocode;
 use App\Services\Code;
 use App\Services\PromoUserService;
 use App\Services\Toastr\Toastr;
