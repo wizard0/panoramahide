@@ -95,6 +95,6 @@ class Journal extends Model
     }
     public function groups()
     {
-        return $this->belongsToMany(Journal::class, 'groups_journals');
+        return $this->belongsToMany(Journal::class, 'group_journal');
     }
 }

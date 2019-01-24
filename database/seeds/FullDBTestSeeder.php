@@ -26,8 +26,16 @@ class FullDBTestSeeder extends Seeder
                                     $article->authors()->saveMany($authors);
                                 }));
                         });
-                    factory(App\Models\Promocode::class, 3)
-                        ->create(['journal_id' => $journal->id]);
+                    factory(App\Models\Promocode::class, 1)
+                        ->create(['journal_id' => $journal->id])
+                        ->each(function ($promocode) use ($journal) {
+                            $group = factory(App\Models\Group::class, 1)->create([
+                                'promocode_id' => $promocode->id,
+                            ])->each(function ($group) use ($journal) {
+                                $group->journals()->attach($journal->id);
+                                //$journal->groups()->attach($group->id);
+                            });
+                        });
                 }));
         });
     }

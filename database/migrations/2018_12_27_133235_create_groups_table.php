@@ -17,6 +17,7 @@ class CreateGroupsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('promocode_id');
             $table->string('name');
+            $table->boolean('active')->default(1);
             $table->timestamps();
 
             $table->foreign('promocode_id')->references('id')->on('promocodes')->onDelete('cascade');

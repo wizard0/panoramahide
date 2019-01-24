@@ -32,6 +32,6 @@ class Group extends Model
 
     public function journals()
     {
-        return $this->belongsToMany(Journal::class, 'groups_journals', 'group_id', 'journal_id');
+        return $this->belongsToMany(Journal::class, 'group_journal', 'group_id', 'journal_id');
     }
 }
