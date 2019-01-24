@@ -1,0 +1,186 @@
+.promocodes.__deskbooks {
+  /*--Справочники--*/
+  .inform-holder {
+    width: 100%;
+    display: table;
+  }
+  .inform-cell {
+    width: 100%;
+    display: table-cell;
+    height: 122px;
+    vertical-align: middle;
+  }
+  .high-cell {
+    height: 226px;
+    &.has-active {
+      height: 148px;
+      padding-top: 50px;
+    }
+  }
+  .inform {
+    width: 50%;
+    margin: 30px auto;
+    text-align: center;
+    font-size: 22px;
+  }
+  .inform a {
+    text-decoration: underline;
+  }
+  .inform a:link, .inform a:visited {
+    color: #e63201;
+  }
+  .inform a:hover {
+    color: #fa4717;
+  }
+  .inform span {
+    color: #e63201;
+  }
+  .deskbook-button {
+    background-color: #e63201;
+    max-width: 200px;
+  }
+  .section {
+    margin-bottom: 60px;
+    clear: both;
+  }
+  .deskbook-section-title {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-family: 'OpenSans-Light', sans-serif !important;
+    color: #728594;
+    font-weight: 100;
+  }
+  .journal-checkbox {
+    width: 184px;
+    height: 250px;
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    input {
+      & + span {
+        position: absolute;
+        width: 184px;
+        height: 250px;
+        cursor: pointer;
+        text-align: center;
+        img {
+          width: 167px;
+          height: 230px;
+          margin-top: 20px;
+          //height: 100%;
+          border: 1px solid #bbbbba;
+          transition-duration: .1s;
+        }
+        & > span {
+          background: url(./img/icons/check.png) left bottom no-repeat;
+          display: none;
+          user-select: none;
+          pointer-events: none;
+          position: absolute;
+
+          //left: -17px;
+          //bottom: -17px;
+
+          //top: calc(50% - 17px);
+          //left: calc(50% - 17px);
+
+          left: 10px;
+          bottom: 10px;
+          width: 34px;
+          height: 34px;
+        }
+      }
+      & + span img:hover {
+        width: 184px;
+        height: 250px;
+        margin-top: 0;
+        & + span {
+          opacity: .5;
+          display: inline-block;
+        }
+      }
+      &:checked {
+        & + span {
+          img {
+            width: 184px;
+            height: 250px;
+            margin-top: 0;
+            &:hover {
+              & + span {
+                opacity: 1;
+              }
+            }
+          }
+          & > span {
+            background: url(./img/icons/checked.png) left bottom no-repeat;
+            display: inline-block;
+          }
+        }
+      }
+      &:disabled {
+        & + span {
+          opacity: 0.5;
+          & > span {
+            background: none;
+          }
+        }
+      }
+    }
+    //.innerspan {
+    //  position: absolute;
+    //  //left: -17px;
+    //  //bottom: -17px;
+    //  top: calc(50% - 17px);
+    //  left: calc(50% - 17px);
+    //  width: 34px;
+    //  height: 34px;
+    //}
+  }
+}
+
+input[type="checkbox"] + span > span {
+  //background: url(../img/check.png) left bottom no-repeat;
+}
+
+input[type="checkbox"]:checked + span > span {
+  //background: url(../img/checked.png) left bottom no-repeat;
+}
+
+//.cover-label{
+//  width: 20%;
+//  float: left;
+//}
+.deskbook-button {
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+  color: #fff !important;
+  font-family: 'OpenSans-Regular';
+  padding: 10px 18px;
+  text-transform: none;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
+
+.added-deskbooks {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.added-item {
+  display: inline-block;
+  width: 115px;
+  margin: 0 5px;
+}
+
+.page-added-item {
+  display: inline-block;
+  width: 180px;
+  margin: 0 20px;
+}
+
+.added-item img, .page-added-item img {
+  width: 100%;
+}

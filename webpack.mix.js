@@ -15,46 +15,41 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
  |
  */
 
-mix
-    .sass('resources/sass/app.scss', 'public/css')
-    .js('resources/js/app.js', 'public/js');
-
+mix.js('resources/js/app.js', 'public/js');
 if (!mix.inProduction()) {
-    mix.options({
-        postCss: [
-            require('autoprefixer')({
+    mix.webpackConfig({
+        devtool: "inline-source-map"
+    });
+    mix.sass('resources/sass/app.scss', 'public/css').options({
+        autoprefixer: {
+            options: {
                 browsers: [
-                    'last 2 versions',
-                    'iOS >= 8',
-                    'Safari >= 8',
-                ],
-                cascade: false,
-                flexbox: "no-2009"
-            }),
+                    'last 6 versions',
+                ]
+            }
+        },
+        postCss: [
             require('postcss-font-magician'),
             require('css-mqpacker'),
             require('postcss-remove-root'),
         ],
         processCssUrls: true,
         extractVueStyles: 'css/vue.css',
-    });
-    mix.sourceMaps();
+    }).sourceMaps();
     mix.browserSync(process.env.APP_URL);
     mix.disableNotifications();
 }
 
 if (mix.inProduction()) {
-    mix.options({
-        postCss: [
-            require('autoprefixer')({
+    mix.sass('resources/sass/app.scss', 'public/css').options({
+        autoprefixer: {
+            options: {
                 browsers: [
-                    'last 2 versions',
-                    'iOS >= 8',
-                    'Safari >= 8',
-                ],
-                cascade: false,
-                flexbox: "no-2009"
-            }),
+                    'last 6 versions',
+                ]
+            }
+        },
+        postCss: [
             require('cssnano'),
             require('postcss-font-magician'),
             require('css-mqpacker'),
@@ -62,8 +57,7 @@ if (mix.inProduction()) {
         ],
         processCssUrls: true,
         clearConsole: true,
-    });
-    mix.version();
+    }).version();
 }
 
 
