@@ -98,8 +98,9 @@ Route::group(['prefix' => 'search'], function () {
 
 Route::get('/logout', 'PersonalController@logout');
 
-Route::post('/login', 'PersonalController@login')->name('login');
+//Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/auth/login', 'Auth\LoginController@login')->name('login');
 Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
 
 Route::group(['prefix' => 'promo'], function () {

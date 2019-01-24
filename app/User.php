@@ -43,4 +43,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
+
+    public function getPhoneFormatAttribute()
+    {
+        return phoneFormat($this->phone);
+    }
 }

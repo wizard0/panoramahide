@@ -58,9 +58,13 @@ class PromoUserService
      */
     public function activatePromocode(Promocode $promocode) : bool
     {
+        $oPromocodeServices = new PromocodeService();
+
         if ($this->checkPromocodeBeforeActivate($promocode)) {
-            $this->promoUser->promocodes()->attach($promocode->id);
-            $promocode->increment('used');
+            if (!$oPromocodeServices->activatePromocode($promocode, $this->promoUser)) {
+                $this->setMessage('Промокод не был активирован.');
+                return false;
+            }
             return true;
         }
         return false;
@@ -74,10 +78,15 @@ class PromoUserService
      */
     public function deactivatePromocode(Promocode $promocode) : bool
     {
+        $oPromocodeServices = new PromocodeService();
+
         $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
         if (is_null($exists)) {
-            $this->setMessage('Промокод не был применен.');
-            return false;
+            if (!$oPromocodeServices->deactivatePromocode($promocode, $this->promoUser)) {
+                $this->setMessage('Промокод не был деактивирован.');
+                return false;
+            }
+            return true;
         }
         return true;
     }
@@ -90,17 +99,17 @@ class PromoUserService
      */
     public function checkPromocodeBeforeActivate(Promocode $promocode) : bool
     {
-        if ($this->now > $promocode->release_end) {
-            $this->setMessage('Промокод не действителен.');
-            return false;
-        }
-        if ($promocode->used === $promocode->limit) {
-            $this->setMessage('Промокод невозможно выбрать. Количество ограничено.');
-            return false;
-        }
+//        if ($this->now > $promocode->release_end) {
+//            $this->setMessage('Промокод не действителен.');
+//            return false;
+//        }
+//        if ($promocode->used === $promocode->limit) {
+//            $this->setMessage('Промокод невозможно выбрать. Количество ограничено.');
+//            return false;
+//        }
         if (!is_null($this->promoUserPromocodes)) {
-            $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
-            if (!is_null($exists)) {
+            $exists = $this->promoUserPromocodes->where('id', $promocode->id);
+            if (count($exists) !== 0 && $promocode->release_limit <= count($exists)) {
                 $this->setMessage('Промокод уже применен.');
                 return false;
             }

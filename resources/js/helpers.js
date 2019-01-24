@@ -23,5 +23,27 @@ window.HELPER = {
             );
         }
         return word;
+    },
+    phoneFormat: function (value) {
+        let val = value;
+        if (val.length === 5) {
+            return val.replace(/(\d)(\d\d)(\d\d)/, "$1-$2-$3"); // #-##-##
+        }
+        if (val.length === 6) {
+            return val.replace(/(\d\d)(\d\d)(\d\d)/, "$1-$2-$3"); // ##-##-##
+        }
+        if (val.length === 7) {
+            return val.replace(/(\d\d\d)(\d\d)(\d\d)/, "$1-$2-$3"); // ###-##-##
+        }
+        if (val.length === 11) {
+            if (parseInt(val.charAt(0)) === 8) {
+                val.substring(1);
+                val = '7' + val;
+            }
+            return val.replace(/(\d)(\d\d\d)(\d\d\d)(\d\d)(\d\d)/, "+$1 ($2) $3-$4-$5");
+        }
+        return val;
     }
 };
+
+
