@@ -7,6 +7,9 @@ use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Release;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class PromocodeService
 {
@@ -41,6 +44,14 @@ class PromocodeService
             $this->setPromocode($promocode);
         }
         $this->now = Carbon::now();
+    }
+
+    /**
+     * @return PromoUser
+     */
+    public function promoUser(): PromoUser
+    {
+        return Auth::user()->promo;
     }
 
     /**
@@ -188,7 +199,7 @@ class PromocodeService
     /**
      * @return Release
      */
-    public function getReleases(): Release
+    public function getReleases(): Collection
     {
         $oPromocode = $this->promocode();
         $oReleases = Release::orderBy('created_at', 'desc');
@@ -208,6 +219,9 @@ class PromocodeService
             case 'publishing+release':
                 $oReleases = $this->queryReleasesByPublishingPlusRelease($oPromocode, $oReleases);
                 break;
+            case 'custom':
+                $oReleases = $this->queryReleasesByCustom($oPromocode, $oReleases);
+                break;
             default:
                 break;
         }
@@ -215,102 +229,130 @@ class PromocodeService
     }
 
     /**
+     * Общий - промо-выпуски (отмеченные как промо) журналов тех издательств, которые выбрал промо-участник.
+     *
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByCommon(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByCommon(Promocode $oPromocode, Builder $query): Builder
     {
-        $oReleases = $oReleases
+        $aPublishings = $this->promoUser()->publishings->pluck('id')->toArray();
+        //$aPublishings = $oPromocode->publishings->pluck('id')->toArray();
+
+        $query = $query
             ->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-            ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray())
+            ->whereIn('journal_publishing.publishing_id', $aPublishings)
             ->where('promo', true);
 
-        return $oReleases;
+        return $query;
     }
 
     /**
+     * На журнал - промо-выпуски журнала, указанного в промокоде (свойство "Журнал")
+     *
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByOnJournal(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByOnJournal(Promocode $oPromocode, Builder $query): Builder
     {
-        $oReleases = $oReleases
+        $query = $query
             ->where('journal_id', $oPromocode->journal_id)
             ->where('promo', true);
 
-        return $oReleases;
+        return $query;
     }
 
     /**
+     * На издательство - как и общий, но если заданы "дата начала выпусков" и "дата окончания выпусков", то они используются как ограничение по дате выхода выпусков.
+     *
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByOnPublishing(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByOnPublishing(Promocode $oPromocode, Builder $query): Builder
     {
-        $oReleases = $oReleases
-            ->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-            ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray());
+        $query = $this->queryReleasesByCommon($oPromocode, $query);
 
-        $oReleases = $this->queryReleasesByActiveDate($oPromocode, $oReleases);
+        $query = $this->queryReleasesByActiveDate($oPromocode, $query);
 
-        return $oReleases;
+        return $query;
     }
 
     /**
+     * На выпуск - выпуски из свойства "Выпуски" + если заданы свойства "дата начала выпусков", "дата окончания выпусков" и "журнал для выпусков", то все выпуски этого журнала,
+     * вышедшие в указанный интервал
+     *
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByOnRelease(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByOnRelease(Promocode $oPromocode, Builder $query): Builder
     {
-        $oReleases = $oReleases
+        $query = $query
             ->whereIn('id', $oPromocode->releases->pluck('id')->toArray());
 
-        $oReleases = $this->queryReleasesByActiveDate($oPromocode, $oReleases);
+        $query = $this->queryReleasesByActiveDate($oPromocode, $query);
 
         if ($oPromocode->journal_id) {
-            $oReleases = $oReleases->where('journal_id', $oPromocode->journal_id);
+            $query = $query->where('journal_id', $oPromocode->journal_id);
         }
-        return $oReleases;
+        return $query;
     }
 
     /**
+     * На издательство + на выпуски - объединение выпусков вида "На издательство" и "На выпуск"
+     *
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByPublishingPlusRelease(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByPublishingPlusRelease(Promocode $oPromocode, Builder $query): Builder
     {
-        $oReleases = $oReleases
-            ->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-            ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray())
+        $query = $this->queryReleasesByCommon($oPromocode, $query);
+
+        $query = $query
             ->whereIn('id', $oPromocode->releases->pluck('id')->toArray());
 
-        $oReleases = $this->queryReleasesByActiveDate($oPromocode, $oReleases);
+        $query = $this->queryReleasesByActiveDate($oPromocode, $query);
 
         if ($oPromocode->journal_id) {
-            $oReleases = $oReleases->where('journal_id', $oPromocode->journal_id);
+            $query = $query->where('journal_id', $oPromocode->journal_id);
         }
-        return $oReleases;
+        return $query;
+    }
+
+    /**
+     * Выборочный - промо-выпуски журналов из записи в "Выбранные журналы по промокоду" с привязкой к этому промокоду и этому пользователю
+     * При активации/использовании промокода у него увеличивается на 1 свойство "использован".
+     *
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return Builder
+     */
+    private function queryReleasesByCustom(Promocode $oPromocode, Builder $query): Builder
+    {
+        if ($oPromocode->journal_id) {
+            $query = $query->where('journal_id', $oPromocode->journal_id);
+        }
+        return $query;
     }
 
     /**
      * @param Promocode $oPromocode
-     * @param Release $oReleases
-     * @return Release
+     * @param Builder $query
+     * @return Builder
      */
-    private function queryReleasesByActiveDate(Promocode $oPromocode, Release $oReleases): Release
+    private function queryReleasesByActiveDate(Promocode $oPromocode, Builder $query): Builder
     {
         if (!is_null($oPromocode->release_begin)) {
-            $oReleases = $oReleases->where('releases.active_date', '>=', $oPromocode->release_begin);
+            $query = $query->where('releases.active_date', '>=', $oPromocode->release_begin);
         }
         if (!is_null($oPromocode->release_end)) {
-            $oReleases = $oReleases->where('releases.active_date', '<=', $oPromocode->release_end);
+            $query = $query->where('releases.active_date', '<=', $oPromocode->release_end);
         }
-        return $oReleases;
+        return $query;
     }
 
     /**
@@ -327,55 +369,5 @@ class PromocodeService
     public function getMessage(): string
     {
         return $this->message;
-    }
-
-
-    public function getRelease($group = null)
-    {
-        $oPromocode = $this->promocode;
-        $Releases = \App\Release::orderBy('id');
-        switch ($oPromocode->type) {
-            case 'common':
-                $Releases->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-                    ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray())
-                    ->where('promo', true);
-                break;
-            case 'on_journal':
-                $Releases->where('journal_id', $oPromocode->journal_id)
-                    ->where('promo', true);
-                break;
-            case 'on_publishing':
-                $Releases->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-                    ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray());
-                if ($oPromocode->release_begin)
-                    $Releases->where('releases.active_date', '>=', $oPromocode->release_begin);
-                if ($oPromocode->release_end)
-                    $Releases->where('releases.active_date', '<=', $oPromocode->release_end);
-                break;
-            case 'on_release':
-                $Releases->whereIn('id', $oPromocode->releases->pluck('id')->toArray());
-                if ($oPromocode->release_begin)
-                    $Releases->where('releases.active_date', '>=', $oPromocode->release_begin);
-                if ($oPromocode->release_end)
-                    $Releases->where('releases.active_date', '<=', $oPromocode->release_end);
-                if ($oPromocode->journal_id)
-                    $Releases->where('journal_id', $oPromocode->journal_id);
-                break;
-            case 'publishing+release':
-                $Releases->join('journal_publishing', 'releases.journal_id', '=', 'journal_publishing.journal_id')
-                    ->whereIn('publishing_id', $oPromocode->publishings->pluck('id')->toArray())
-                    ->whereIn('id', $oPromocode->releases->pluck('id')->toArray());
-                if ($oPromocode->release_begin)
-                    $Releases->where('releases.active_date', '>=', $oPromocode->release_begin);
-                if ($oPromocode->release_end)
-                    $Releases->where('releases.active_date', '<=', $oPromocode->release_end);
-                if ($oPromocode->journal_id)
-                    $Releases->where('journal_id', $oPromocode->journal_id);
-                break;
-            case 'custom':
-                dd($oPromocode->groups());
-                break;
-        }
-        return $Releases->get();
     }
 }
