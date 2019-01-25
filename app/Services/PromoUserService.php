@@ -60,7 +60,7 @@ class PromoUserService
     {
         $oPromocodeServices = new PromocodeService();
 
-        if ($this->checkPromocodeBeforeActivate($promocode)) {
+        if ($this->checkPromocodeBeforeActivate($promocode) && $oPromocodeServices->checkPromocodeBeforeActivate($promocode)) {
             if (!$oPromocodeServices->activatePromocode($promocode, $this->promoUser)) {
                 $this->setMessage('Промокод не был активирован.');
                 return false;
@@ -81,14 +81,14 @@ class PromoUserService
         $oPromocodeServices = new PromocodeService();
 
         $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
-        if (is_null($exists)) {
+        if (!is_null($exists)) {
             if (!$oPromocodeServices->deactivatePromocode($promocode, $this->promoUser)) {
                 $this->setMessage('Промокод не был деактивирован.');
                 return false;
             }
             return true;
         }
-        return true;
+        return false;
     }
 
     /**

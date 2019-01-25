@@ -64,9 +64,9 @@ class PromocodeService
 
     /**
      * @param array $data
-     * @return null
+     * @return Promocode
      */
-    public function create(array $data = [])
+    public function create(array $data = []): Promocode
     {
         $data = array_merge([
             'active' => 1,
@@ -85,9 +85,9 @@ class PromocodeService
     /**
      * @param $id
      * @param array $data
-     * @return null
+     * @return Promocode
      */
-    public function update($id, array $data = [])
+    public function update($id, array $data = []): Promocode
     {
         $this->promocode = Promocode::find($id);
         $this->promocode->update($data);
@@ -109,7 +109,7 @@ class PromocodeService
      * @param $id
      * @return Promocode
      */
-    public function findById(int $id): Promocode
+    public function findById(int $id): ?Promocode
     {
         $this->promocode = Promocode::where('id', $id)
             ->where('active', 1)
@@ -122,7 +122,7 @@ class PromocodeService
      * @param $code
      * @return Promocode
      */
-    public function findByCode(string $code): Promocode
+    public function findByCode(string $code): ?Promocode
     {
         $this->promocode = Promocode::where('promocode', $code)
             ->where('active', 1)
@@ -197,7 +197,7 @@ class PromocodeService
     }
 
     /**
-     * @return Release
+     * @return Collection
      */
     public function getReleases(): Collection
     {

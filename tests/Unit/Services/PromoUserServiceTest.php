@@ -4,7 +4,7 @@ namespace Tests\Unit\Services;
 
 
 use App\Models\PromoUser;
-use App\Promocode;
+use App\Models\Promocode;
 use App\Services\PromoUserService;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
