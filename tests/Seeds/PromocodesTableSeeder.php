@@ -2,7 +2,7 @@
 
 namespace Tests\Seeds;
 
-use App\Promocode;
+use App\Models\Promocode;
 use Illuminate\Database\Seeder;
 
 class PromocodesTableSeeder extends Seeder

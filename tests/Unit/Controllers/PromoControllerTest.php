@@ -4,7 +4,7 @@ namespace Tests\Unit\Controllers;
 
 
 use App\Http\Controllers\PromoController;
-use App\Promocode;
+use App\Models\Promocode;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

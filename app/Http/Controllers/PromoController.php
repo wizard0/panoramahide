@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Models\Activations;
+use App\Models\Group;
 use App\Models\PromoUser;
-use App\Promocode;
+use App\Models\Promocode;
 use App\Services\Code;
+use App\Services\PromocodeService;
 use App\Services\PromoUserService;
 use App\Services\Toastr\Toastr;
 use App\User;
@@ -29,6 +31,32 @@ class PromoController extends Controller
     }
 
     /**
+     * Страница /promo
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function deskbooks()
+    {
+        $oGroups = Group::with('journals')->where('active', true)->get();
+
+        return view('deskbooks', [
+            'oGroups' => $oGroups
+        ]);
+    }
+
+    /**
+     * Получить доступ к журналам
+     *
+     * @param Request $request
+     */
+    public function save(Request $request)
+    {
+        $aJournals = $request->get('journals');
+
+        dd($aJournals);
+    }
+
+    /**
      * Основная форма
      * - проверка промокода
      * - проверка промокода на активацию
@@ -41,12 +69,20 @@ class PromoController extends Controller
      */
     public function access(Request $request)
     {
-        $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
+        $oPromocodeService = new PromocodeService();
+        $oPromocode = $oPromocodeService->findByCode($request->get('promocode'));
+
         if (is_null($oPromocode)) {
             return responseCommon()->error([], 'Промокод не найден');
         }
 
         $oPromoUserService = new PromoUserService();
+
+
+        // Проверка промокода
+        if (!$oPromocodeService->checkPromocodeBeforeActivate($oPromocode)) {
+            return responseCommon()->error([], $oPromocodeService->getMessage());
+        }
 
         // Проверка промокода
         if (!$oPromoUserService->checkPromocodeBeforeActivate($oPromocode)) {
@@ -95,7 +131,9 @@ class PromoController extends Controller
      */
     public function code(Request $request)
     {
-        $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
+        $oPromocodeService = new PromocodeService();
+        $oPromocode = $oPromocodeService->findByCode($request->get('promocode'));
+
         if (is_null($oPromocode)) {
             return responseCommon()->error([], 'Промокод не найден');
         }
@@ -154,7 +192,9 @@ class PromoController extends Controller
      */
     public function password(Request $request)
     {
-        $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
+        $oPromocodeService = new PromocodeService();
+        $oPromocode = $oPromocodeService->findByCode($request->get('promocode'));
+
         if (is_null($oPromocode)) {
             return responseCommon()->error([], 'Промокод не найден');
         }
@@ -184,7 +224,9 @@ class PromoController extends Controller
      */
     public function activation(Request $request)
     {
-        $oPromocode = Promocode::where('promocode', $request->get('promocode'))->first();
+        $oPromocodeService = new PromocodeService();
+        $oPromocode = $oPromocodeService->findByCode($request->get('promocode'));
+
         if (is_null($oPromocode)) {
             return responseCommon()->error([], 'Промокод не найден');
         }
@@ -192,6 +234,7 @@ class PromoController extends Controller
         $oUser = Auth::user();
 
         $oPromoUserService = new PromoUserService();
+        $oPromocodeService = new PromocodeService();
 
         $oPromoUser = $oUser->promo;
         if (is_null($oPromoUser)) {

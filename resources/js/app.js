@@ -1,6 +1,7 @@
 
 //window.jQuery = window.$ = require('jquery');
 
+import HELPER from "./helpers";
 
 /**
  * -------------------------------------------
@@ -22,7 +23,8 @@ $.ajaxSetup({
  */
 require('lodash/lodash.min.js');
 window.toastr = require('toastr/build/toastr.min.js');
-
+require('./helpers.js');
 require('./plugins/form.js');
 require('./plugins/callbacks.js');
 require('./plugins/cleave-masks.js');
+require('./main.js');

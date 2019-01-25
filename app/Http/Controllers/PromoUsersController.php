@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PromoUser;
-use App\Promocode;
+use App\Models\Promocode;
 use App\Release;
 use App\Services\PromoUserService;
 use Illuminate\Http\Request;

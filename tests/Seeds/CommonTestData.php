@@ -24,7 +24,7 @@ class CommonTestData
     public $user = [
         'name' => 'Тестовый',
         'email' => 'test@test.com',
-        'password' => '$2y$10$pf83r3UTfcTuGMCfU0M0neords7hON3fEMAThuxvlwwbDpndd1W72', // testtets
+        'password' => '$2y$10$pf83r3UTfcTuGMCfU0M0neords7hON3fEMAThuxvlwwbDpndd1W72', // testtest
         'phone' => '79998887766',
     ];
 
