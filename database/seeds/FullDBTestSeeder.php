@@ -14,6 +14,7 @@ class FullDBTestSeeder extends Seeder
     public function run()
     {
         $this->clear();
+        $this->command->getOutput()->progressStart(50);
         factory(App\Category::class, 5)->create()->each(function ($category) {
             $journals = [];
             $category->journals()->saveMany(factory(App\Journal::class, 10)->create()
@@ -42,8 +43,10 @@ class FullDBTestSeeder extends Seeder
                                 });
                             });
                     }
+                    $this->command->getOutput()->progressAdvance();
                 }));
         });
+        $this->command->getOutput()->progressFinish();
     }
 
     private function clear()
