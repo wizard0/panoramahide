@@ -150,6 +150,7 @@ class CreateClearDatabase extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('journals');
         Schema::dropIfExists('categories');
         Schema::dropIfExists('publishings');
@@ -162,5 +163,6 @@ class CreateClearDatabase extends Migration
         Schema::dropIfExists('article_category');
         Schema::dropIfExists('news');
         Schema::dropIfExists('news_publishing');
+        Schema::enableForeignKeyConstraints();
     }
 }

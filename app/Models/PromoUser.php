@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Promocode;
+use App\Models\Promocode;
 use App\Publishing;
 use App\Release;
 use App\User;

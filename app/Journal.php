@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use App\Models\Promocode;
 
 /**
  * Class Journal
@@ -135,7 +136,6 @@ class Journal extends Model
 
         return $q->paginate(10);
     }
-
 
     public function getReleasesByYears()
     {
@@ -371,11 +371,22 @@ class Journal extends Model
 
         return $subscribe;
     }
-}
 
-function halfyear($month)
-{
-    if ($month < 6)
-        return Subscription::HALFYEAR_1;
-    else return Subscription::HALFYEAR_2;
+    function halfyear($month)
+    {
+        if ($month < 6)
+            return Subscription::HALFYEAR_1;
+        else return Subscription::HALFYEAR_2;
+    }
+
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class, 'promocode_journal');
+    }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Journal::class, 'group_journal');
+    }
+
 }

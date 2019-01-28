@@ -14,32 +14,38 @@
             </div>
             <div class="col-lg-6 col-lg-offset-2">
                 <div class="form-container">
-                    <form id="user_form">
+                    <form id="user_form" class="ajax-form --form-promo-access" action="{{ route('promo.access') }}"
+                        data-callback="callbackPromoAccess"
+                    >
                         <div class="form-wrapper">
 
                             <div class="form-row">
                                 <div class="form-label">Фамилия:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="surname" placeholder="" value="{{ Auth::user()->last_name ?? '' }}"></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Имя:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="name" placeholder="" value="{{ Auth::user()->name ?? '' }}"></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Отчество:</div>
-                                <div class="form-holder"><input type="text" class="form-field" name="patronymic" placeholder="" required="" value=""></div>
+                                <div class="form-holder"><input type="text" class="form-field" name="patronymic" placeholder="" value=""></div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Email:</div>
-                                <div class="form-holder"><input type="email" class="form-field" name="email" placeholder="" required="" value=""></div>
+                                <div class="form-holder">
+                                    <input type="email" class="form-field" name="email" placeholder="" value="{{ Auth::user()->email ?? '' }}">
+                                </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label">Моб. телефон:</div>
-                                <div class="form-holder"><input type="phone" class="form-field" name="phone" placeholder="+7(xxx)-xxx-xx-xx" required="" value=""></div>
+                                <div class="form-holder">
+                                    <input type="phone" class="form-field" name="phone" placeholder="+7 (xxx) xxx-xx-xx" value="{{ Auth::user()->phone ?? '' }}" data-role="js-mask-phone">
+                                </div>
                             </div>
 
                             <div class="form-row" id="publisher" style="display: none;">
@@ -80,13 +86,15 @@
 
                             <div class="form-row">
                                 <div class="form-label">Промокод:</div>
-                                <div class="form-holder"><input type="text" class="form-field promocode" name="promocode" required=""></div>
+                                <div class="form-holder">
+                                    <input type="text" class="form-field promocode" name="promocode" required>
+                                </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-label"></div>
                                 <div class="form-holder">
-                                    <input type="checkbox" value="1" name="UF_PROC_PER_DATA" checked="checked" required="">
+                                    <input type="checkbox" value="1" name="UF_PROC_PER_DATA" checked="checked" >
                                     &nbsp;Я согласен на обработку&nbsp;
                                     <a href="http://panor.ru/coglasie-na-obrabotku-personalnykh-dannykh/" target="_blank">
                                         своих персональных данных
@@ -97,7 +105,7 @@
                         </div>
 
                         <div class="button-holder">
-                            <button class="btn btn-primary text-uppercase" id="btn_access" value="Получить доступ">Получить доступ</button>
+                            <button type="submit" class="btn btn-primary text-uppercase inner-form-submit" id="btn_access" value="Получить доступ">Получить доступ</button>
                         </div>
 
                         <div class="text-center">

@@ -1,23 +1,30 @@
 @component('components.modal', ['id' => 'login-modal', 'title' => 'Войти в личный кабинет'])
     @slot('body')
-        <form name="system_auth_form6zOYVN" method="post" target="_top" action="{{ route('login') }}">
-            @csrf
-            <label class="col-12">Логин</label>
-            <input type="text" name="email" placeholder="grishchenkonikolay@gmail.com" autocomplete="username">
-            <label class="col-12">Пароль</label>
-            <input type="password" name="password" placeholder="" autocomplete="current-password">
-            <div class="d-flex justify-content-between" style="margin-bottom: 24px;">
-                <div class="simple-checkbox">
-                    <input id="remember_auth" name="remember" value="Y" type="checkbox" checked/>
-                    <label for="remember_auth"><span>Запомнить меня</span></label>
-                </div>
-                <noindex>
-                    <div><a href="/personal/profile/?forgot_password=yes&amp;backurl=%2F" rel="nofollow"
-                            class="grey-link" style="font-size: 14px;">Забыли пароль?</a></div>
-                </noindex>
+        <form action="{{ route('login') }}" class="ajax-form">
+            <div class="form-group">
+                <label>Логин</label>
+                <input type="text" name="email" placeholder="grishchenkonikolay@gmail.com" autocomplete="username">
             </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="basic-button"><span>Войти</span></button>
+            <div class="form-group">
+                <label>Пароль</label>
+                <input type="password" name="password" placeholder="" autocomplete="current-password">
+            </div>
+            <div class="form-group">
+                <div class="d-flex justify-content-between" style="margin-bottom: 24px;">
+                    <div class="simple-checkbox">
+                        <input id="remember_auth" name="remember" value="Y" type="checkbox" checked/>
+                        <label for="remember_auth"><span>Запомнить меня</span></label>
+                    </div>
+                    <noindex>
+                        <div><a href="/personal/profile/?forgot_password=yes&amp;backurl=%2F" rel="nofollow"
+                                class="grey-link" style="font-size: 14px;">Забыли пароль?</a></div>
+                    </noindex>
+                </div>
+            </div>
+            <div class="form-group m-0 text-right">
+                <button type="submit" class="btn inner-form-submit">
+                    <span>Войти</span>
+                </button>
             </div>
         </form>
     @endslot
@@ -49,7 +56,7 @@
             </div>
             <div class="form-group">
                 <label>Ваш телефон</label>
-                <input type="text" name="phone" class="_phone" value="" required>
+                <input type="text" name="phone" class="_phone" value="" data-role="js-mask-phone" required>
             </div>
             <div class="form-group">
                 <label>Придумайте пароль</label>

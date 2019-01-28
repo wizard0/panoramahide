@@ -5,6 +5,7 @@ namespace App;
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Promocode;
 
 class Release extends Model
 {
@@ -50,5 +51,9 @@ class Release extends Model
     public function getLink()
     {
         return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
+    }
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class);
     }
 }
