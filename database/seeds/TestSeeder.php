@@ -5,6 +5,7 @@ use Illuminate\Database\Seeder;
 use Tests\Seeds\UsersTableSeeder;
 use Tests\Seeds\PromocodesTableSeeder;
 use Tests\Seeds\PromoUsersTableSeeder;
+use Tests\Seeds\JournalsTableSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
@@ -21,6 +22,7 @@ class TestSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(PromoUsersTableSeeder::class);
         $this->call(PromocodesTableSeeder::class);
+        $this->call(JournalsTableSeeder::class);
     }
 
     private function clear()
