@@ -14,7 +14,7 @@ class UpdateUsersTableAddLastNameColumn extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->tinyInteger('private')->default(0)->after('role_id');
+            $table->tinyInteger('private')->default(0)->after('password');
             $table->bigInteger('phone')->nullable()->default(null)->unique()->after('email');
             $table->string('last_name')->nullable()->default(null)->after('name');
         });

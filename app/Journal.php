@@ -2,19 +2,21 @@
 
 namespace App;
 
+use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use TCG\Voyager\Traits\Translatable;
+use Illuminate\Support\Facades\App;
 
 class Journal extends Model
 {
     use Translatable;
 
-    public $translatable = [
+    public $translatedAttributes = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',
         'format', 'volume', 'periodicity', 'editorial_board', 'article_index', 'rubrics', 'review_procedure',
-        'article_submission_rules'
+        'article_submission_rules', 'chief_editor', 'phone', 'email', 'site', 'about_editor', 'contacts'
     ];
+
 //    protected $fillable = ['code'];
 
     /**
@@ -35,16 +37,6 @@ class Journal extends Model
     public function publishings()
     {
         return $this->belongsToMany(Publishing::class);
-    }
-
-    /**
-     * Contact of the journal
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function contact()
-    {
-        return $this->belongsTo(JournalContact::class, 'journal_contact_id');
     }
 
     public function releases()
@@ -79,20 +71,21 @@ class Journal extends Model
 
     public static function getSome($filters)
     {
-        if (
-            array_key_exists('sort_by', $filters) &&
-            Schema::hasColumn('journals', $filters['sort_by'])
-        ) {
-            $order = array_key_exists('sort_order', $filters)
-                ? $filters['sort_order']
-                : 'asc';
+        $sort = $filters['sort_by'];
+        $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
 
-            return self::where('active', 1)
-                ->orderBy($filters['sort_by'], $order)
-                ->paginate(10);
-        } else {
-            return Journal::where('active', 1)->orderBy('name', 'asc')->paginate(10);
+        $q = self::where('active', 1);
+
+        switch ($sort) {
+            case 'name':
+                $q = $q->orderByTranslation('name', $order);
+                break;
+            case 'date':
+                $q = $q->orderBy('active_date', $order);
+                break;
         }
+
+        return $q->paginate(10);
     }
 
 }

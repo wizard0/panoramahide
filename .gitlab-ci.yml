@@ -1,29 +1,21 @@
 stages:
-    # - phpunit_tests
-    # - qunit_tests
     - deploy
     # - production
 
-# phpunit_tests:
-#     stage: phpunit_tests
-#     script:
-#         - /usr/bin/phpunit tests
-#     only:
-#         - master
-
-# qunit_tests:
-#     stage: qunit_tests
-#     script:
-#         - /usr/bin/qunit testjs
-#     only:
-#         - master
-
 deploy:
     stage: deploy
-    variables:
-        CI_DEBUG_TRACE: "false"
     script:
-        - /usr/local/bin/deploy-dev.panor.ru $USER $PASS dev.panor.ru
+        - php72 /usr/bin/composer install
+        - npm install
+        - npm run prod
+        - cp /usr/local/bin/.env.dev.panor.ru ./.env
+        - php72 ./artisan migrate
+        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS dev_panor < ./database/dumps/panorama_dummydata.sql
+        - php72 ./artisan cache:clear
+        - php72 ./artisan config:cache
+        - /usr/bin/phpunit --testdox tests
+        - chmod 774 ./deploy
+        - ./deploy
     only:
         - master
 

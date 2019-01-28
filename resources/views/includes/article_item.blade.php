@@ -25,7 +25,7 @@
             <div class="share-this"><a href="#" class="_share" title="Поделиться"></a></div>
             {{--Here there must be yandex sharing buttons--}}
             <div class="get-access-link">
-                <a href="{{ route('article', ['code' => $articleCode]) }}" class="black-link _access_article" data-id="{{ $s->articleID }}">Получить доступ</a>
+                <a href="{{ route('article', ['code' => $s->articleCode]) }}" class="black-link _access_article" data-id="{{ $s->articleID }}">Получить доступ</a>
             </div>
         </div>
     </div>
