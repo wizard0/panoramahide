@@ -17,11 +17,7 @@ Route::get('/', 'MainpageController@index')->name('index');
 
 
 Route::group(['prefix' => 'admin'], function () {
-<<<<<<< HEAD
-//    Voyager::routes();
-=======
 
->>>>>>> master
 });
 
 //Auth::routes();
