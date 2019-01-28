@@ -175,7 +175,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\HelpersServiceProvider::class,
-        Bulk\Toastr\ToastrServiceProvider::class,
+//        Bulk\Toastr\ToastrServiceProvider::class,
 
     ],
 
