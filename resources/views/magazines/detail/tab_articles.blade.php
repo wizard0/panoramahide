@@ -27,6 +27,9 @@
             <div class="row">
 
                 @foreach($articles as $article)
+                    @php
+                        $release = $article->release->load('translations');
+                    @endphp
                     @component('components.article_item', [
                         'id' => $article->id,
                         'author' => $article->authors->first()->name,
@@ -54,6 +57,8 @@
         <div class="col-xl-2 col-lg-2 col-12 order-2 order-xl-3 order-lg-3">
             @include('includes.sidebar')
         </div>
+
+        @include('includes.sidebar_modals')
 
     </div>
 </div>

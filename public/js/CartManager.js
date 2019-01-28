@@ -17,7 +17,7 @@
             type = 'release',
             id = $(event.target).find('input[name="id"]');
 
-        $.proxy(this.addToCart(version, type, id), this);
+        $.proxy(this.addToCart(version, type, id, 1), this);
 
         return false;
     }
@@ -28,15 +28,19 @@
             type = $(event.target).data('product-type'),
             id = $(event.target).data('id');
 
-        $.proxy(this.addToCart(version, type, id), this);
+        $.proxy(this.addToCart(version, type, id, 1), this);
+        return false;
     };
 
-    window.JSCartManager.prototype.addToCart = function (version, type, id) {
-        console.log('addtocart');
+    window.JSCartManager.prototype.addToCart = function (version, type, id, quantity, additionalData) {
+        if (typeof additionalData == 'undefined')
+            additionalData = null;
         this.sendRequest('/add-to-cart', {
             'version': version,
             'type': type,
-            'id': id
+            'id': id,
+            'quantity': quantity,
+            'additionalData': additionalData
         }, 'Товар успешно добавлен в корзину');
     }
 
@@ -55,10 +59,6 @@
     };
 
     window.JSCartManager.prototype.sendRequest = function (url, data, message) {
-        console.log('request');
-        console.log(url);
-        console.log(data);
-        console.log(message);
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

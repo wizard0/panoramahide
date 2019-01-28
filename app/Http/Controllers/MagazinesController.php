@@ -17,17 +17,22 @@ class MagazinesController extends Controller
     public function __invoke(Request $request)
     {
         $journals = Journal::getSome($request->all());
-        $journals->load('releases');
-        $categories = Category::with('journals')->withTranslation()->get();
+//        $journals->load('releases');
+//        $categories = Category::with('journals')->withTranslation()->get();
         $authorAlphabet = Author::getAlphabet();
 
         return view('magazines.index', compact(
             'journals',
-            'categories',
+//            'categories',
             'authorAlphabet'
         ));
     }
 
+    /* TODO. Maybe need smth like this
+     * if (!$journal->active)
+     *     return response('You cannot', 401);
+     *
+     */
     public function detail(Request $request, $code)
     {
         $journal = Journal::whereTranslation('code', $code)->first();
@@ -50,6 +55,7 @@ class MagazinesController extends Controller
                     return view('magazines.detail.tab_releases', compact('journal', 'releases'));
                 case 'fresh_number':
                     $articles = $journal->getArticlesFresh(self::ITEMS_PER_PAGE);
+//                    dd($journal);
                     $articles->withPath(route('journal', ['code' => $journal->code])); // For paginate links
                     return view('magazines.detail.tab_articles', compact('journal', 'articles', 'tab'));
                 case 'articles':
@@ -57,7 +63,7 @@ class MagazinesController extends Controller
                     $articles->withPath(route('journal', ['code' => $journal->code])); // For paginate links
                     return view('magazines.detail.tab_articles', compact('journal', 'articles', 'tab'));
                 case 'subscribe':
-                    $subscriptions = $journal->getSubscriptionsByTypes();
+                    $subscriptions = $journal->getSubscribeInfo();
                     return view('magazines.detail.tab_subscribe', compact('journal', 'subscriptions'));
                 case 'send_article':
                     return view('magazines.detail.tab_send_article', compact('journal'));

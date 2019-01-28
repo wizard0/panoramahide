@@ -60,6 +60,8 @@
 
                 </div>
 
+                @include('includes.sidebar_modals')
+
             </div>
         </div>
     </div>

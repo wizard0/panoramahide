@@ -46,7 +46,7 @@ class TranslatableAllPrices extends Migration
             $table->dropColumn('price_for_half_year');
             $table->dropColumn('price_for_year');
         });
-        Schema::create('subscription_translates', function (Blueprint $table) {
+        Schema::create('subscription_translations', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('subscription_id');
             $table->string('locale')->index();

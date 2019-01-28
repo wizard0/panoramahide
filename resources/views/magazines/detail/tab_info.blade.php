@@ -50,5 +50,7 @@
             @include('includes.sidebar', ['hide' => ['title']])
         </div>
 
+        @include('includes.sidebar_modals')
+
     </div>
 </div>

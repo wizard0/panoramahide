@@ -9,6 +9,8 @@ use App\UserFavorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use PDF;
+use View;
 
 class AjaxActionsController extends Controller
 {
@@ -42,5 +44,60 @@ class AjaxActionsController extends Controller
             $fav->type = $dataRow['type'];
             $fav->save();
         }
+    }
+
+    public function printAbonement(Request $request)
+    {
+        $requestData = $request->all();
+        $abonementStartMonth = (date('d') < 20
+            ? date('n', strtotime('+1 month'))
+            : date('n', strtotime('+2 month')));
+        $abonementID = $requestData['provider'] == 'ROSP'
+            ? $requestData['index_rospechat']
+            : $requestData['index_pochta'];
+        $journalName = $requestData['element_name'];
+        $title = $requestData['provider'] == 'ROSP'
+            ? "Агентство &laquo;Роспечать&raquo;"
+            : "«Межрегиональное агентство подписки» (МАП)";
+        $catalog = $requestData['provider'] == 'ROSP'
+            ? "агентства &laquo;Роспечать&raquo;"
+            : "российской прессы";
+        $count = $requestData['rospechat_count'];
+        $userIndex = $requestData['rospechat_index'];
+        $userName = $requestData['rospechat_fio'];
+        $userAddr = $requestData['rospechat_address'];
+
+        if (array_key_exists('rospachat_form_button_pdf', $requestData)) {
+            // this means that user wanna to get PDF
+
+            $pdf = PDF::loadHTML(View::make('print.abonement', compact(
+                'abonementStartMonth',
+                'abonementID',
+                'journalName',
+                'title',
+                'catalog',
+                'count',
+                'userIndex',
+                'userName',
+                'userAddr'
+            ))->render())->setPaper('A4', 'portrait');
+
+            return $pdf->download('abonement.pdf');
+        } else {
+            // user just wanna to print it
+
+            return view('print.abonement', compact(
+                'abonementStartMonth',
+                'abonementID',
+                'journalName',
+                'title',
+                'catalog',
+                'count',
+                'userIndex',
+                'userName',
+                'userAddr'
+            ));
+        }
+
     }
 }

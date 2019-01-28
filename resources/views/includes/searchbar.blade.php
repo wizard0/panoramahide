@@ -19,7 +19,7 @@
 <div class="search-form extended-search">
 <form method="GET" action="{{ route('search') }}" id="searchBar">
     @if ($isJournalPage)
-        <input type="hidden" name="journal" value="3802">
+        <input type="hidden" name="journal" value="{{ $journal->id }}">
         <input type="hidden" name="type" value="article">
 
         <div class="row">

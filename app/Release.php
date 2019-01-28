@@ -47,7 +47,7 @@ class Release extends Model
             : $this->orderBy('active_date', 'desc')->withTranslation();
     }
 
-    public function getUrl()
+    public function getLink()
     {
         return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
     }

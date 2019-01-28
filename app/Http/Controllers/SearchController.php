@@ -182,11 +182,18 @@ class SearchController extends Controller
                 }
             }
 
+            // Translations
             $q = $q->where('journal_translations.locale' , '=', $searchLocale)
                 ->where('release_translations.locale' , '=', $searchLocale)
                 ->where('article_translations.locale' , '=', $searchLocale)
                 ->where('author_translations.locale' , '=', $searchLocale)
                 ->where('category_translations.locale' , '=', $searchLocale);
+
+            // Activity
+            $q = $q->where('journals.active', '=', '1')
+                ->where('releases.active', '=', '1')
+                ->where('articles.active', '=', '1')
+                ->where('categories.active', '=', '1');
 
             return $q->groupBy($groupBy);
         }

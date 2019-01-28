@@ -30,3 +30,13 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function () {
+        $('._access_article[data-id="{{ $id }}"]').on('click', function (e) {
+            e.preventDefault();
+
+            CartManager.addToCart('electronic', 'article', {{ $id }});
+            return false;
+        });
+    });
+</script>

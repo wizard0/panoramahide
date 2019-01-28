@@ -54,6 +54,8 @@
                 @include('includes.sidebar', compact('journal'))
             </div>
 
+            @include('includes.sidebar_modals')
+
         </div>
     </div>
 </div>

@@ -15,10 +15,26 @@ class CreateSubscriptions extends Seeder
         foreach($journals as $j) {
             factory(\App\Subscription::class)->make([
                 'journal_id' => $j->id,
+                'locale' => App::getLocale(),
+                'half_year' => 'first',
                 'type' => \App\Subscription::TYPE_ELECTRONIC
             ])->save();
             factory(\App\Subscription::class)->make([
                 'journal_id' => $j->id,
+                'locale' => App::getLocale(),
+                'half_year' => 'second',
+                'type' => \App\Subscription::TYPE_ELECTRONIC
+            ])->save();
+            factory(\App\Subscription::class)->make([
+                'journal_id' => $j->id,
+                'locale' => App::getLocale(),
+                'half_year' => 'first',
+                'type' => \App\Subscription::TYPE_PRINTED
+            ])->save();
+            factory(\App\Subscription::class)->make([
+                'journal_id' => $j->id,
+                'locale' => App::getLocale(),
+                'half_year' => 'second',
                 'type' => \App\Subscription::TYPE_PRINTED
             ])->save();
         }

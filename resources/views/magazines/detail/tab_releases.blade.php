@@ -41,14 +41,14 @@
                                                     </div>
 
                                                     <div class="issue-num">
-                                                        <a href="{{ $release->getUrl() }}" class="grey-link">№{{ $release->number }}</a>
+                                                        <a href="{{ $release->getLink() }}" class="grey-link">№{{ $release->number }}</a>
                                                     </div>
                                                     <div class="to-fav-this"><a href="#" class="_add_to_favorite" data-id="{{ $release->id }}"></a></div>
                                                     <div class="share-this"><a href="#" class="_share" title="Поделиться"></a></div>
                                                     <div class="ya-share2 _share_block ya-share2_inited" style="display: none;"
                                                          data-services="vkontakte,facebook,odnoklassniki,twitter,gplus,telegram,whatsapp,viber"
                                                          data-limit="5"
-                                                         data-url="{{ $release->getUrl() }}"
+                                                         data-url="{{ $release->getLink() }}"
                                                          data-title="{{  $journal->name }} / {{ $journal->translate('en', true)->name }}  №{{$release->number}}"
                                                          data-image="{{ $release->image }}">
                                                         <div class="ya-share2__container ya-share2__container_size_m">
@@ -78,6 +78,9 @@
             <div class="col-xl-2 col-lg-2 col-12 order-2 order-xl-3 order-lg-3">
                 @include('includes.sidebar')
             </div>
+
+            @include('includes.sidebar_modals')
+
         </div>
     </div>
 
@@ -96,14 +99,14 @@
             $('#number-type').modal('show');
         });
 
-        $(window.document).on('submit', '#number-type form', function() {
+        $(window.document).on('submit', '#number-type form', function(event) {
             event.preventDefault();
 
             var version = $(event.target).find('input[name="version"]:checked').val(),
                 type = 'release',
                 id = $(event.target).find('input[name="id"]').val();
 
-            CartManager.addToCart(version, type, id);
+            CartManager.addToCart(version, type, id, 1);
 
             return false;
         });

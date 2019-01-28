@@ -59,6 +59,8 @@
             <div class="col-xl-2 col-lg-2 col-12 order-2 order-xl-3 order-lg-3">
                 @include('includes.sidebar', ['hide' => ['title']])
             </div>
+
+            @include('includes.sidebar_modals')
         </div>
     </form>
 </div>

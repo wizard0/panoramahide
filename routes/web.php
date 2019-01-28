@@ -67,6 +67,7 @@ Route::get('/categories', 'CategoriesController')->name('categories');
 
 Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
+Route::any('/print-abonement', 'AjaxActionsController@printAbonement')->name('print.abonement');
 
 Route::group(['prefix' => 'search'], function () {
     Route::get('/', 'SearchController')->name('search');

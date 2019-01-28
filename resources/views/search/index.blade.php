@@ -47,6 +47,8 @@
                             @include('includes.sidebar')
                         </div>
 
+                        @include('includes.sidebar_modals')
+
                     @endif
                 </div>
             </div>

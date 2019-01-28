@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Article;
 use App\Cart;
+use App\OrderedSubscription;
 use App\Release;
 use App\Subscription;
 use Illuminate\Http\Request;
@@ -17,11 +18,20 @@ class ProductController extends Controller
             $type = $request->get('type');
             $id = $request->get('id');
             $version = $request->get('version');
-//            print_r($request->all());die;
-            $product = $this->getModel($type, $id);
+            $quantity = $request->get('quantity');
+            if ($request->has('additionalData')) {
+                $product = $this->getModel($type, $id, $request->get('additionalData'));
+            } else {
+                $product = $this->getModel($type, $id);
+            }
 
             $cart = $this->getCart();
-            $cart->add($product, $version);
+            if (!$cart->add($product, $version, $quantity))
+                return response()->json([
+                    'success' => false,
+                    'error' => 'true',
+                    'message' => 'No price'
+                ]);
             return $this->updateCart($cart);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
@@ -47,7 +57,7 @@ class ProductController extends Controller
         return view('personal.header_cart', compact('cart'));
     }
 
-    private function getModel($type, $id)
+    private function getModel($type, $id, $additionalData = null)
     {
         switch ($type) {
             case Cart::PRODUCT_TYPE_ARTICLE:
@@ -55,7 +65,8 @@ class ProductController extends Controller
             case Cart::PRODUCT_TYPE_RELEASE:
                 return Release::where('id', $id)->first();
             case Cart::PRODUCT_TYPE_SUBSCRIPTION:
-                return Subscription::where('id', $id)->first();
+                $orderedSubscription = OrderedSubscription::create($additionalData);
+                return $orderedSubscription;
         }
     }
 

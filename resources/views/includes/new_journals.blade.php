@@ -33,11 +33,12 @@ $releases->load('journal.translations');
                                 'journalCode' => $release->journal->code,
                                 'releaseID' => $release->id
                             ]) }}"
-                            class="red-link _access_number"
+                            class="red-link _access_number addToCart"
                             data-id="{{ $release->id }}"
                             data-type="electronic"
                         >
-                            {{ __('В корзину') }}						</a>
+                            {{ __('В корзину') }}
+                        </a>
                     </div>
                 </div>
             </div>

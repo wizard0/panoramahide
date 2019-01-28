@@ -5,6 +5,7 @@
     if (!!window.JSSideBarManager) return;
 
     window.JSSideBarManager = function (params) {
+        console.log('sidebar started');
         if (typeof params !== 'undefined') {
             params = JSON.parse(params);
             this.elementID = params.id;
@@ -91,9 +92,16 @@
         }
     }
 
-    window.JSSideBarManager.prototype.subscribeTo = function () {
-        if (!!this.elementUrl) {
+    window.JSSideBarManager.prototype.subscribeTo = function (event) {
+        event.preventDefault();
+        if (this.items.filter(':checked').data('type') == 'article') {
+            var id = this.items.filter(':checked').val();
+            CartManager.addToCart('electronic', 'article', id);
+            return;
+        }
+        if (typeof this.elementUrl != 'undefined') {
             window.location = this.elementUrl + '#subscribe';
+            window.location.reload();
             return;
         }
         var journal = this.items.filter(':checked').val();

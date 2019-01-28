@@ -164,6 +164,7 @@ return [
          * Package Service Providers...
          */
         Dimsav\Translatable\TranslatableServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -222,6 +223,9 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
         'Cart' => App\Cart::class,
         'Subscription' => \App\Subscription::class,
         'Paysystem' => App\Paysystem::class,
