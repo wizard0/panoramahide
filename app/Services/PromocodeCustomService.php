@@ -6,23 +6,15 @@ use App\Models\JbyPromo;
 use App\Journal;
 use App\Models\Promocode;
 use App\Models\PromoUser;
+use App\Services\GetSetable\PromocodeGetSetableTrait;
+use App\Services\GetSetable\PromoUserGetSetableTrait;
 use Illuminate\Support\Collection;
 
 class PromocodeCustomService
 {
     use Messageable;
-
-    /**
-     * Promocode
-     * @var null
-     */
-    private $promocode = null;
-
-    /**
-     * Promocode
-     * @var null
-     */
-    private $promoUser = null;
+    use PromocodeGetSetableTrait;
+    use PromoUserGetSetableTrait;
 
     /**
      * @var null
@@ -38,22 +30,6 @@ class PromocodeCustomService
     {
         $this->promocode = $promocode;
         $this->promoUser = $promoUser;
-    }
-
-    /**
-     * @return Promocode
-     */
-    public function promocode(): Promocode
-    {
-        return $this->promocode;
-    }
-
-    /**
-     * @return PromoUser
-     */
-    public function promoUser(): PromoUser
-    {
-        return $this->promoUser;
     }
 
     /**
@@ -88,13 +64,35 @@ class PromocodeCustomService
     public function attachJournal(Journal $oJournal): bool
     {
         if (!in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray())) {
-            $this->setMessage('Журнал не привязан к используемому промокод.');
-            return false;
+            $this->setMessage('Журнал не привязан к используемому промокоду.');
+
+            $this->promocode()->journals()->sync($oJournal->id);
+            //return false;
         }
         $oJbyPromo = $this->getJbyPromo();
 
         $oJbyPromo->journals()->sync($oJournal->id);
 
+        return true;
+    }
+
+    /**
+     * @param Collection $oJournals
+     * @return bool
+     */
+    public function syncJournal(Collection $oJournals): bool
+    {
+        $aId = $oJournals->pluck('id')->toArray();
+        foreach ($oJournals as $oJournal) {
+            if (!in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray())) {
+                $this->setMessage('Журнал не привязан к используемому промокоду.');
+                //$this->promocode()->journals()->attach($oJournal->id);
+                //return false;
+            }
+        }
+        $oJbyPromo = $this->getJbyPromo();
+        $this->promocode()->journals()->sync($aId);
+        $oJbyPromo->journals()->sync($aId);
         return true;
     }
 
@@ -105,7 +103,7 @@ class PromocodeCustomService
     public function detachJournal(Journal $oJournal): bool
     {
         if (!in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray())) {
-            $this->setMessage('Журнал не привязан к используемому промокод.');
+            $this->setMessage('Журнал не привязан к используемому промокоду.');
             return false;
         }
         $oJbyPromo = $this->getJbyPromo();

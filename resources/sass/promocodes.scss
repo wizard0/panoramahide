@@ -51,6 +51,12 @@
     font-family: 'OpenSans-Light', sans-serif !important;
     color: #728594;
     font-weight: 100;
+    position: relative;
+    .info-count {
+      position: absolute;
+      top: 0;
+      right: 14px;
+    }
   }
   .journal-checkbox {
     width: 184px;
@@ -58,6 +64,7 @@
     display: block;
     position: relative;
     margin: 0 auto;
+    outline: none;
     input {
       & + span {
         position: absolute;
