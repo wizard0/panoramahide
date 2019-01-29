@@ -86,7 +86,7 @@ class MagazinesController extends Controller
         }
         $store->save();
 
-        $request->session()->flash('status', __('Article sent'));
+//        $request->session()->flash('status', __('Article sent'));
         return Redirect::back();
     }
 }

@@ -189,7 +189,8 @@ class Journal extends Model
         // создать части подписки | generate subscribe parts
         foreach (array(Subscription::TYPE_PRINTED, Subscription::TYPE_ELECTRONIC) as $type) {
             if ($type == Subscription::TYPE_ELECTRONIC) {
-                $start_month = date('n');
+//                $start_month = date('n');
+                $start_month = 1;
             } else {
                 $start_month = (date('d') < 20
                     ? date('n', strtotime('+1 month'))
@@ -249,7 +250,8 @@ class Journal extends Model
                     }
 
                     $end_year = $_year;
-                    $end_month = $_month + $length - 1;
+                    $end_month = $_month + $length/* - 1*/
+                    ;
                     if ($end_month > 12) {
                         $end_month = $end_month - 12;
                         $end_year++;
@@ -265,6 +267,13 @@ class Journal extends Model
                         && !empty($price_year = $subscribeObject->price_for_year)
                     ) {
                         $price = $price_year;
+                    } elseif (
+                        $length == 6
+                        && $type == Subscription::TYPE_ELECTRONIC
+                        && $_month == 6
+                        && !empty($subscribeObject->price_for_half_year)
+                    ) {
+                        $price = $subscribeObject->price_for_half_year;
                     } elseif ( // в одном полугодии | in one halfyear
                         (   // начало в этом полугодии | start in this halfyear
                             halfyear($start_month) == halfyear($_month)
@@ -346,7 +355,7 @@ class Journal extends Model
                             }
 
                         }
-                        if ($price1 && $price2) {
+                        if ($price1/* && $price2*/) {
                             $price = $price1 + $price2 + $price3;
                         }
                     } else {
