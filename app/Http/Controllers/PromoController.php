@@ -40,31 +40,43 @@ class PromoController extends Controller
      */
     public function deskbooks(Request $request)
     {
+        if (Auth::guest()) {
+            return view('deskbooks', [
+                'oGroups' => collect([]),
+            ]);
+        }
+
         $oGroups = Group::with('journals', 'promocode')
             ->where('active', true);
 
         if ($request->exists('promocode')) {
             $oGroups = $oGroups->where('promocode_id', $request->get('promocode'));
         }
+        $oGroups = $oGroups->whereHas('promocode', function ($query) {
+            $query->where('type', 'custom');
+        });
+
         $oGroups = $oGroups->get();
 
         $oPromoUser = Auth::user()->promo;
 
         $oJournals = (new PromocodeCustomService())->setPromoUser($oPromoUser)->getPromoUserJournals();
 
-        $oGroups = $oGroups->transform(function ($item) use ($oJournals) {
-            $count = 0;
-            foreach ($item->journals as $key => $oJournal) {
-                $checked = !is_null($oJournals->where('id', $oJournal->id)->first());
-                $item->journals[$key]->checked = $checked;
-                if ($checked) {
-                    $count++;
+        if (count($oGroups) !== 0) {
+            $oGroups = $oGroups->transform(function ($item) use ($oJournals) {
+                $count = 0;
+                foreach ($item->journals as $key => $oJournal) {
+                    $checked = !is_null($oJournals->where('id', $oJournal->id)->first());
+                    $item->journals[$key]->checked = $checked;
+                    if ($checked) {
+                        $count++;
+                    }
                 }
-            }
-            $item->selected = $count;
-            $item->max = $item->promocode->release_limit;
-            return $item;
-        });
+                $item->selected = $count;
+                $item->max = $item->promocode->release_limit;
+                return $item;
+            });
+        }
 
         return view('deskbooks', [
             'oGroups' => $oGroups,
@@ -77,7 +89,7 @@ class PromoController extends Controller
      */
     public function save(Request $request)
     {
-        $aJournals = $request->get('journals::promocode');
+        $aJournals = $request->get('journal::promocode');
 
         $oPromoUser = Auth::user()->promo;
         $oService = new PromocodeCustomService(null, $oPromoUser);
@@ -86,15 +98,6 @@ class PromoController extends Controller
         foreach ($aJournals as $id) {
             $array = explode('::', $id);
             $a[$array[1]][] = $array[0];
-//            $oJournal = Journal::find($array[0]);
-//            $oPromocode = Promocode::find($array[1]);
-//
-//            $result = $oService->setPromocode($oPromocode)->attachJournal($oJournal);
-//            if (!$result) {
-//                return responseCommon()->error([
-//
-//                ], $oService->getMessage());
-//            }
         }
         foreach ($a as $promocode_id => $journals) {
             $oPromocode = Promocode::find($promocode_id);

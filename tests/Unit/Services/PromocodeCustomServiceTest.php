@@ -96,9 +96,6 @@ class PromocodeCustomServiceTest extends TestCase
 
         DB::transaction(function () use ($oJournal, $oService) {
 
-            $result = $oService->attachJournal($oJournal);
-            $this->assertFalse($result);
-
             $oJournal = $this->journal();
 
             $countBefore = $oService->getPromoUserJournals()->count();
@@ -123,9 +120,6 @@ class PromocodeCustomServiceTest extends TestCase
         $oService = $this->service();
 
         DB::transaction(function () use ($oJournal, $oService) {
-
-            $result = $oService->attachJournal($oJournal);
-            $this->assertFalse($result);
 
             $oJournal = $this->journal();
 
@@ -162,9 +156,6 @@ class PromocodeCustomServiceTest extends TestCase
 
         DB::transaction(function () use ($oJournal, $oService) {
 
-            $result = $oService->attachJournal($oJournal);
-            $this->assertFalse($result);
-
             $oJournal = $this->journal();
 
             $count = $oService->getPromoUserJournals()->count();
@@ -192,7 +183,6 @@ class PromocodeCustomServiceTest extends TestCase
         $oJournal = $this->journal();
 
         $this->assertTrue(in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray()));
-
     }
 
     /**
@@ -201,10 +191,6 @@ class PromocodeCustomServiceTest extends TestCase
     public function testNotIssetGetJbyPromo()
     {
         $oJournal = $this->journalNotIssetInPromocodes();
-
-        $result = $this->service()->attachJournal($oJournal);
-
-        $this->assertFalse($result);
 
         $this->assertTrue(!is_null($oJournal));
 
