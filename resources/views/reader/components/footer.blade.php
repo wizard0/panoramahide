@@ -1,6 +1,8 @@
 <div class="inform-string" style="">
     <div class="inform-string-holder">
-        <div class="inform-string-home"><a href=""></a></div>
+        <div class="inform-string-home">
+            <a href=""></a>
+        </div>
         <div class="inform-string-magazine"><a href="#"><p><span>№8, 2017 </span>Сметно-договорная работа в строительстве №8</p><div class="grad"></div></a></div>
         <div class="grad_01"></div>
         <div class="inform-string-article">

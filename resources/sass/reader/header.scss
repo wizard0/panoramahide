@@ -68,3 +68,25 @@
     }
   }
 }
+#header {
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  top: 0;
+  z-index: 2;
+}
+#body {
+  position: fixed;
+  width: 100%;
+  //min-height: calc(100vh - 70px);
+  //overflow: scroll;
+  height: calc(100vh - 100px);
+}
+#menu {
+  //position: fixed;
+}
+
+#panel {
+  overflow: auto;
+  height: calc(100vh - 130px);
+}

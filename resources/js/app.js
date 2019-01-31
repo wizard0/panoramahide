@@ -73,7 +73,7 @@ $('.nav-hidden').removeClass('hidden');
 
 
 import tippy from 'tippy.js'
-
+// data-tippy-popover data-tippy-content='html'
 tippy('[data-tippy-popover]', {
     interactive : true,
     theme: 'light',

@@ -77,7 +77,11 @@
 .slideout-open .slideout-panel {
   overflow: hidden;
 }
-
+.slideout-open {
+  #header {
+    position: absolute;
+  }
+}
 .slideout-open .slideout-menu {
   display: block;
 }

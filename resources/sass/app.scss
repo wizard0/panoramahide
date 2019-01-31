@@ -106,6 +106,7 @@ input[type="checkbox"].is-danger + label::before {
 }
 
 // Promo
+@import 'common';
 @import 'promo';
 @import 'promocodes';
 @import 'tippy';
@@ -113,6 +114,11 @@ input[type="checkbox"].is-danger + label::before {
 //
 @import 'modal';
 //@import 'print/print';
+
+p, a, h1, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
 @import 'reader/reader';
 
 
