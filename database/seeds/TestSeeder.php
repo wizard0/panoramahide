@@ -18,6 +18,9 @@ class TestSeeder extends Seeder
     public function run()
     {
         $this->clear();
+
+        $this->call(FullDBTestSeeder::class);
+
         $this->call(UsersTableSeeder::class);
         $this->call(PromoUsersTableSeeder::class);
         $this->call(PromocodesTableSeeder::class);
