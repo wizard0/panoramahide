@@ -6,9 +6,14 @@ $brand-success: $green;
 $brand-danger: $red;
 $brand-warning: $yellow;
 $brand-info: $blue;
+
+/* ---------------------------------------------- */
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
 /* ---------------------------------------------- */
 // Toast
 @import '~toastr/build/toastr.min.css';
+@import '~simplebar/dist/simplebar.css';
 .toast {
   font-size: 14px;
   box-shadow: 0 0 6px #999 !important;
@@ -105,3 +110,9 @@ input[type="checkbox"].is-danger + label::before {
 
 //
 @import 'modal';
+//@import 'print/print';
+@import 'print/new';
+
+
+
+
