@@ -3,7 +3,9 @@
 @section('content')
 
     <div id="menu">
-        @include('reader.components.sidebar')
+        @include('reader.components.sidebar', [
+
+        ])
     </div>
     <div id="body" class="panel">
         <div id="header">
@@ -11,6 +13,9 @@
         </div>
         <div id="panel">
 
+        </div>
+        <div id="footer">
+            @include('reader.components.footer')
         </div>
     </div>
 
