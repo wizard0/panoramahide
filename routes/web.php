@@ -10,6 +10,38 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/test', function() {
+
+    $p = \App\Promocode::getOne(29);
+    foreach($p->getReleases('GRP6') as $r)
+        dump($r->id);
+    dd('wer');
+    for($i=0;$i<10;$i++){
+        $groups = [['name' => 'GRP'.rand(1,9), 'journals' => [1,2,3,4,5]],
+                   ['name' => 'GRP'.rand(10,19), 'journals' => [3,2,13,4,15]]];
+        \App\Promocode::store(['promocode' => 'PC'.rand(100000,999999), 'groups' => $groups]);
+    }
+    for($i=0;$i<10;$i++){
+        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'releases' => [3,2,13,4,15]]);
+        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'journals' => [3,2,13,4,15]]);
+        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'publishings' => [3,9,10,4,8]]);
+    }
+
+    //\App\Promocode::store(['promocode' => 'PC'.rand(1000,9999), 'groups' => $groups]);
+    //$p = \App\Promocode::getOne(29);
+    $groups = [['name' => 'GRP'.rand(1,9), 'journals' => [1,2,3,4,5]],
+               ['name' => 'GRP'.rand(10,19), 'journals' => [3,2,13,4,15]]];
+    $p = \App\Promocode::updateOne(29, ['releases' => [3,2,13,15], 'journals' => [2,3,4,5], 'groups' => $groups]);
+    dump($p);
+    dump($p->releases);
+    dump($p->journals);
+    dump($p->publishings);
+    foreach($p->groups as $group) {
+        dump($group->name);
+        dump($group->journals);
+    }
+    dd('ok');
+})->name('test');
 
 Route::get('/', 'MainpageController@index')->name('index');
 
@@ -66,11 +98,22 @@ Route::group(['prefix' => 'search'], function () {
 
 Route::get('/logout', 'PersonalController@logout');
 
-Route::post('/login', 'PersonalController@login')->name('login');
+//Route::post('/login', 'PersonalController@login')->name('login');
 Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+Route::post('/auth/login', 'Auth\LoginController@login')->name('login');
+Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
 
-Route::get('/promo', function() {
-    return view('promo');
+Route::group(['prefix' => 'promo'], function () {
+    Route::get('/', 'PromoController@index')->name('promo.index');
+    Route::post('/access', 'PromoController@access')->name('promo.access');
+    Route::post('/code', 'PromoController@code')->name('promo.code');
+    Route::post('/password', 'PromoController@password')->name('promo.password');
+    Route::post('/activation', 'PromoController@activation')->name('promo.activation');
+});
+
+Route::group(['prefix' => 'deskbooks'], function () {
+    Route::get('/', 'PromoController@deskbooks')->name('deskbooks.index');
+    Route::post('/save', 'PromoController@save')->name('deskbooks.save');
 });
 
 

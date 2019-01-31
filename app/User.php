@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\PromoUser;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,5 +37,15 @@ class User extends Authenticatable
     public function searches()
     {
         return $this->hasMany(UserSearch::class);
+    }
+
+    public function promo()
+    {
+        return $this->hasOne(PromoUser::class, 'user_id');
+    }
+
+    public function getPhoneFormatAttribute()
+    {
+        return phoneFormat($this->phone);
     }
 }

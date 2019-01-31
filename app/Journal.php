@@ -6,6 +6,7 @@ use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use App\Models\Promocode;
 
 class Journal extends Model
 {
@@ -88,4 +89,12 @@ class Journal extends Model
         return $q->paginate(10);
     }
 
+    public function promocode()
+    {
+        return $this->belongsToMany(Promocode::class, 'promocode_journal');
+    }
+    public function groups()
+    {
+        return $this->belongsToMany(Journal::class, 'group_journal');
+    }
 }
