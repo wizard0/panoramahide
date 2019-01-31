@@ -21,6 +21,12 @@ class TestSeeder extends Seeder
         $this->call(UsersTableSeeder::class);
         $this->call(PromoUsersTableSeeder::class);
         $this->call(PromocodesTableSeeder::class);
+
+        $this->call(PaysystemSeeder::class);
+        $this->call(PaysystemDataSeeder::class);
+        $this->call(PublishingTestSeeder::class);
+        $this->call(setReleasesYear::class);
+        $this->call(CreateSubscriptions::class);
     }
 
     private function clear()
