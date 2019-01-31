@@ -1,4 +1,8 @@
 .reader-header {
+  padding: 1rem 0;
+  @media (max-width: 960px) {
+    padding: .5rem 0;
+  }
   a span {
     font-size: 10pt;
     font-family: 'OpenSans-Regular', sans-serif;
@@ -75,7 +79,7 @@
   top: 0;
   z-index: 2;
 }
-#body {
+#reader {
   position: fixed;
   width: 100%;
   //min-height: calc(100vh - 70px);
@@ -86,7 +90,4 @@
   //position: fixed;
 }
 
-#panel {
-  overflow: auto;
-  height: calc(100vh - 130px);
-}
+

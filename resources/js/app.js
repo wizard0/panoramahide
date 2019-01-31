@@ -1,4 +1,3 @@
-
 //window.jQuery = window.$ = require('jquery');
 
 import HELPER from "./helpers";
@@ -12,7 +11,7 @@ import HELPER from "./helpers";
 window.Laravel = $('meta[name="csrf-token"]').attr('content');
 
 $.ajaxSetup({
-    headers: { 'X-CSRF-TOKEN': window.Laravel }
+    headers: {'X-CSRF-TOKEN': window.Laravel}
 });
 
 /**
@@ -30,14 +29,10 @@ require('./plugins/cleave-masks.js');
 require('./main.js');
 
 const Slideout = require('slideout/dist/slideout.min');
-const SmoothScroll = require('smooth-scroll/dist/smooth-scroll.min');
-
-let scroll = new SmoothScroll('a[href*="#"]');
-
 import 'simplebar'; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
 let slideout = new Slideout({
-    'panel': document.getElementById('body'),
+    'panel': document.getElementById('reader'),
     'menu': document.getElementById('menu'),
     'padding': 300,
     'tolerance': 70
@@ -46,20 +41,21 @@ $('.toggle-button').click(function () {
     $('.nav-item[href="' + $(this).data('name') + '"]').tab('show');
     slideout.toggle();
 });
+
 function close(eve) {
     eve.preventDefault();
     slideout.close();
 }
+
 slideout
-    .on('beforeopen', function(event) {
+    .on('beforeopen', function (event) {
         this.panel.classList.add('panel-open');
         $('.hamburger-menu').toggleClass('animate');
-        console.log(event);
     })
-    .on('open', function() {
+    .on('open', function () {
         this.panel.addEventListener('click', close);
     })
-    .on('beforeclose', function() {
+    .on('beforeclose', function () {
         this.panel.classList.remove('panel-open');
         $('.hamburger-menu').toggleClass('animate');
         this.panel.removeEventListener('click', close);
@@ -71,11 +67,25 @@ slideout
 $('.nav-hidden').removeClass('hidden');
 
 
+//const SmoothScroll = require('smooth-scroll/dist/smooth-scroll.min');
+//require('jquery-smooth-scroll/jquery.smooth-scroll.min');
+
+
+
+// var scroll = new SmoothScroll('a[href*="#"][data-scroll]', {
+//     speed: 500,
+//     speedAsDuration: true,
+//     header: '#header'
+// });
+// document.addEventListener('scrollStart', function () {
+//     console.log('scroll');
+//     slideout.close();
+// }, false);
 
 import tippy from 'tippy.js'
 // data-tippy-popover data-tippy-content='html'
 tippy('[data-tippy-popover]', {
-    interactive : true,
+    interactive: true,
     theme: 'light',
     animateFill: false,
     //duration: [275, 250000],

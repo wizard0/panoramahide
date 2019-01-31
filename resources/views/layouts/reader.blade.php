@@ -12,6 +12,7 @@
 
     <!-- Scripts -->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/jquery.smooth-scroll.min.js') }}"></script>
     {{--<script src="{{ asset('js/popper.js') }}"></script>--}}
     <script src="{{ asset('js/bootstrap.js') }}"></script>
     {{--<script src="{{ asset('js/moment.js') }}"></script>--}}

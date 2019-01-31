@@ -1,4 +1,4 @@
-<header class="reader-header py-3 header-left">
+<header class="reader-header header-left">
     <div class="" style="padding: 0 15px">
         <div class="row flex-nowrap justify-content-between align-items-center ">
 

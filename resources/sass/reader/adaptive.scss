@@ -1,0 +1,80 @@
+@media (max-width: 768px) {
+  #panel {
+    .container {
+      width: 100%;
+      padding: 40px 10px;
+    }
+    .table-holder {
+      width: 100%;
+      overflow: auto;
+    }
+    p {
+      overflow: auto;
+    }
+  }
+}
+
+@media (max-width: 588px) {
+  .reklama, .picture, .contents p, .contents .contents-title, .contents-link, article p, article h2, article h3, .udk, .subscription p, .subscription h2, .subscription h3 {
+    padding: 0 20px 0 20px;
+  }
+  .footnote {
+    margin: 80px 20px 0 20px;
+  }
+  .incut, .heading {
+    padding: 10px 20px;
+  }
+}
+
+@media (min-width: 376px) and (max-width: 500px) {
+  .cover {
+    width: 70%;
+    margin-left: 15%;
+  }
+}
+
+@media (max-width: 425px) {
+  .bookmarks-holder {
+    position: relative;
+    width: 100%;
+    margin-left: 0;
+
+  }
+}
+
+@media (max-width: 375px) {
+  #panel .container {
+    padding-top: 10px;
+  }
+  article p {
+    font-size: 11pt;
+  }
+  .contents {
+    margin: 0;
+  }
+  .cover {
+    width: 80%;
+    margin-left: 10%;
+  }
+  .search-holder {
+    width: 100%;
+    margin: 0;
+  }
+  #search {
+    padding-left: 4px;
+  }
+
+  .cover {
+    padding-top: 30px;
+  }
+
+  .contents .heading {
+    padding: 10px 20px;
+  }
+  article h2 {
+    font-family: 'OpenSans-Semibold';
+    font-size: 16pt;
+  }
+
+}
+
