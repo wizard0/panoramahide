@@ -70,3 +70,13 @@ slideout
  */
 $('.nav-hidden').removeClass('hidden');
 
+
+
+import tippy from 'tippy.js'
+
+tippy('[data-tippy-popover]', {
+    interactive : true,
+    theme: 'light',
+    animateFill: false,
+    //duration: [275, 250000],
+});

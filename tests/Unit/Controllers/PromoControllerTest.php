@@ -212,6 +212,49 @@ class PromoControllerTest extends TestCase
         $this->assertFalse($result['success']);
     }
 
+    public function testDeskbooksSave()
+    {
+        $oPromoController = (new PromoController());
+
+        $user = $this->user();
+        // авторизация
+        $this->actingAs($user);
+        $this->assertAuthenticated();
+
+        $request = new Request();
+
+        $oGroups = $oPromoController->deskbooks($request)['oGroups'];
+
+        $oJournal = collect([]);
+
+        foreach ($oGroups as $oGroup) {
+            $oJournal = $oGroup->journals->first();
+        }
+
+        $this->assertNotNull($oJournal);
+
+        $oPromocode = $this->activePromocode();
+
+        $this->assertNotNull($oPromocode);
+
+        $aJournalPromocode[] = $oJournal->id.'::'.$oPromocode->id;
+
+        $request = new Request();
+        $request->merge([
+            'journal::promocode' => $aJournalPromocode,
+        ]);
+
+        // полуение кода подтверждения
+        DB::transaction(function () use ($oPromoController, $request, $oJournal) {
+
+            $result = $oPromoController->save($request);
+
+            $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
 
     /**
      * Активный промокод

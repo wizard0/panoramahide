@@ -25,11 +25,17 @@ class Group extends Model
         return $Self;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function promocode()
     {
         return $this->belongsTo(Promocode::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function journals()
     {
         return $this->belongsToMany(Journal::class, 'group_journal', 'group_id', 'journal_id');

@@ -54,7 +54,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 //Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+
 
 Route::post('/add-to-cart', 'ProductController@addToCart');
 Route::post('/delete-from-cart', 'ProductController@deleteFromCart');
@@ -119,7 +119,11 @@ Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
 });
 
-
+Route::group(['prefix' => 'home'], function () {
+    Route::get('/', 'HomeController@index')->name('home.index');
+    Route::get('/journals', 'HomeController@journals')->name('home.journals');
+    Route::post('/journals/save', 'HomeController@journalsSave')->name('home.journals.save');
+});
 /**
  * Промо-учасники
  */

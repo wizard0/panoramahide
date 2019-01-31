@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\JbyPromo;
 use App\Journal;
 use App\Publishing;
 use App\Release;
 use Illuminate\Database\Eloquent\Model;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class Promocode extends Model
 {
@@ -27,6 +28,37 @@ class Promocode extends Model
     public function journals()
     {
         return $this->belongsToMany(Journal::class, 'promocode_journal');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function jByPromo()
+    {
+        return $this->hasMany(JbyPromo::class, 'promocode_id');
+    }
+
+    public function jByPromoJournals()
+    {
+        $results = $this->jByPromo()->getResults();
+
+        $return = '';
+        dd($results->pluck('id')->toArray());
+        foreach ($results as $result) {
+            dd($result->journals);
+        }
+        dd($results->pluck(''));
+        return $this->belongsToMany(JbyPromo::class, 'promocode_journal');
+    }
+
+    /**
+     * По journal_id
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function journal()
+    {
+        return $this->belongsTo(Journal::class);
     }
 
     /**

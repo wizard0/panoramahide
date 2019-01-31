@@ -89,7 +89,7 @@ class Journal extends Model
         return $q->paginate(10);
     }
 
-    public function promocode()
+    public function promocodes()
     {
         return $this->belongsToMany(Promocode::class, 'promocode_journal');
     }

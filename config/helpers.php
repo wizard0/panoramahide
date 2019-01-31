@@ -31,3 +31,12 @@ if (!function_exists('phoneFormat')) {
         return $num;
     }
 }
+
+if (!function_exists('bladeHelper')) {
+
+    function bladeHelper()
+    {
+        return (new \App\Services\BladeHelper());
+    }
+}
+
