@@ -3,10 +3,11 @@ $(document).ready(function() {
 
     if ($('#reader').length) {
         $('#panel').on('scroll', function () {
-            let Wscroll = $(this).scrollTop() - 240;
+            let Wscroll = $(this).scrollTop();
             $('#panel article').each(function () {
                 let ThisOffset = $(this).offset();
-                if (Wscroll > ThisOffset.top && Wscroll < ThisOffset.top + $(this).outerHeight(true)) {
+                //console.log($(this).find('h2').attr('id'), Wscroll, ThisOffset.top, $(this).outerHeight(true));
+                if (ThisOffset.top < 220) {
                     let id = $(this).find('h2').attr('id');
                     console.log(id);
                     let $current = $('#cur_heading a');
