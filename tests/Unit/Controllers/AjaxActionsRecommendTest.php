@@ -39,6 +39,8 @@ class AjaxActionsRecommendTest extends TestCase
 
     public function testJournalRecommend()
     {
+        Mail::fake();
+
         $journal = Journal::where('active', 1)->first();
 
         $response = $this->post(route('recommend'), [
@@ -48,6 +50,8 @@ class AjaxActionsRecommendTest extends TestCase
                 ['id' => $journal->id, 'type' => UserSearch::TYPE_JOURNAL]
             ])
         ]);
+
+        Mail::assertSent(Recommend::class);
 
         return $response->assertOk();
     }
