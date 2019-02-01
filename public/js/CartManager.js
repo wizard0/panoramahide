@@ -4,33 +4,51 @@
 (function (window, $) {
     if (!!window.JSCartManager) return;
 
-    window.JSCartManager = function() {
-        $(window.document).on('click', '.addToCart', $.proxy(this.addToCart, this));
+    window.JSCartManager = function () {
+        $(window.document).on('click', '.addToCart', $.proxy(this.processAddToCart, this));
         $(window.document).on('click', '.deleteFromCart', $.proxy(this.deleteFromCart, this));
+
     };
 
-    window.JSCartManager.prototype.addToCart = function(event) {
+    window.JSCartManager.prototype.processByModal = function (event) {
+        event.preventDefault();
+        console.log('coming in');
+        var version = $(event.target).find('input[name="version"]'),
+            type = 'release',
+            id = $(event.target).find('input[name="id"]');
+
+        $.proxy(this.addToCart(version, type, id, 1), this);
+
+        return false;
+    }
+
+    window.JSCartManager.prototype.processAddToCart = function (event) {
         event.preventDefault;
         var version = $(event.target).data('version'),
             type = $(event.target).data('product-type'),
             id = $(event.target).data('id');
 
-        $.proxy(
-            this.sendRequest('/add-to-cart', {
-                'version': version,
-                'type': type,
-                'id': id
-            }, 'Товар успешно добавлен в корзину'),
-            this);
+        $.proxy(this.addToCart(version, type, id, 1), this);
+        return false;
     };
+
+    window.JSCartManager.prototype.addToCart = function (version, type, id, quantity, additionalData) {
+        if (typeof additionalData == 'undefined')
+            additionalData = null;
+        this.sendRequest('/add-to-cart', {
+            'version': version,
+            'type': type,
+            'id': id,
+            'quantity': quantity,
+            'additionalData': additionalData
+        }, 'Товар успешно добавлен в корзину');
+    }
 
     window.JSCartManager.prototype.deleteFromCart = function (event) {
         event.preventDefault();
         var item = $(event.target).parents('.cartItem'),
             type = item.data('type'),
             id = item.data('id');
-
-        console.log(item.data('type'));
 
         $.proxy(
             this.sendRequest('/delete-from-cart', {
