@@ -4,12 +4,14 @@ namespace Tests\Unit\Controllers;
 
 use App\Article;
 use App\Journal;
+use App\Mail\Recommend;
 use App\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Mail;
 
 class AjaxActionsRecommendTest extends TestCase
 {
@@ -18,6 +20,8 @@ class AjaxActionsRecommendTest extends TestCase
 
     public function testArticleRecommend()
     {
+        Mail::fake();
+
         $article = Article::where('active', 1)->first();
 
         $response = $this->post(route('recommend'), [
@@ -27,6 +31,8 @@ class AjaxActionsRecommendTest extends TestCase
                 ['id' => $article->id, 'type' => UserSearch::TYPE_ARTICLE]
             ])
         ]);
+
+        Mail::assertSent(Recommend::class);
 
         return $response->assertOk();
     }
