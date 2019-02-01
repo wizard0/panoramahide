@@ -12,10 +12,15 @@ class PublishingTestSeeder extends Seeder
     public function run()
     {
         factory(\App\Publishing::class, 10)->create()->each(function ($publisher) {
-            $journal = \App\Journal::find(rand(1,10));
+            $firstJournalID = rand(1,10);
+            $journal = \App\Journal::find($firstJournalID);
             $journal->publishings()->attach($publisher);
 
-            $journal = \App\Journal::find(rand(1,10));
+            $secondJournalID = rand(1,10);
+            while ($firstJournalID == $secondJournalID)
+                $secondJournalID = rand(1,10);
+
+            $journal = \App\Journal::find($secondJournalID);
             $journal->publishings()->attach($publisher);
         });
     }

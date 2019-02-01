@@ -191,14 +191,16 @@ class Journal extends Model
             if ($type == Subscription::TYPE_ELECTRONIC) {
 //                $start_month = date('n');
                 $start_month = 1;
+                $start_year = date('Y');
             } else {
                 $start_month = (date('d') < 20
                     ? date('n', strtotime('+1 month'))
                     : date('n', strtotime('+2 month')));
+
+                $start_year = ($start_month >= date('m')
+                    ? date('Y')
+                    : date('Y', strtotime('+1 year')));
             }
-            $start_year = ($start_month >= date('m')
-                ? date('Y')
-                : date('Y', strtotime('+1 year')));
 
             $subs = Subscription::where('active', '=', 1)
                 ->where('journal_id', '=', $this->id)

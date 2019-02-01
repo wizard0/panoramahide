@@ -6,6 +6,7 @@ use App\Article;
 use App\Journal;
 use App\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -13,6 +14,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class AjaxActionsAddToFavoriteTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutMiddleware;
 
     public function testAddJournalsToFavorite()
     {

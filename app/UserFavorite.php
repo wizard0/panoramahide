@@ -16,4 +16,6 @@ class UserFavorite extends Model
     const TYPE_JOURNAL = 'journal';
     const TYPE_RELEASE = 'release';
     const TYPE_ARTICLE = 'article';
+
+    protected $fillable = ['user_id', 'element_id', 'type'];
 }
