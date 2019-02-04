@@ -21,7 +21,7 @@ class Author extends Model
     public static function getAlphabet()
     {
         $alphabet = [];
-        $authors = self::all();
+        $authors = self::withTranslation()->get();
         foreach ($authors as $author) {
             $char = substr($author->name, 0, 1);
             if (!in_array($char, $alphabet)) {

@@ -31,3 +31,13 @@ if (!function_exists('phoneFormat')) {
         return $num;
     }
 }
+
+if (!function_exists('halfyear')) {
+
+    function halfyear($month)
+    {
+        if ($month < 6)
+            return \App\Subscription::HALFYEAR_1;
+        else return \App\Subscription::HALFYEAR_2;
+    }
+}

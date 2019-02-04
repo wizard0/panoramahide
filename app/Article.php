@@ -13,7 +13,8 @@ class Article extends Model
     const RESTRICTION_PAY = 'pay/subscribe';
 
     public $translatedAttributes = [
-        'name', 'code', 'keywords', 'image', 'description', 'preview_image', 'preview_description', 'bibliography'
+        'name', 'code', 'keywords', 'image', 'description',
+        'preview_image', 'preview_description', 'bibliography', 'price'
     ];
 
     public function release()

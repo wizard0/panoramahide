@@ -1,3 +1,7 @@
+@php
+$categories = \App\Category::has('journals')->where('active', 1)->withTranslation()->get();
+@endphp
+
 <div class="header">
     <div class="container">
         <div class="row align-items-center">
@@ -39,12 +43,12 @@
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
                 <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
                     <ul class="topmenu">
-                        <li><a href="{{ route('magazines', ['sort_by' => 'name']) }}">Журналы по алфавиту</a></li>
+                        <li><a href="{{ route('journals', ['sort_by' => 'name']) }}">{{ __('Журналы по алфавиту') }}</a></li>
                         <li class="dropdown">
                             <a class="dropdown-toggle" role="button" id="menu_1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">Журналы по темам</a>
                             <div class="dropdown-menu" aria-labelledby="menu_1">
                                 <div class="d-flex flex-wrap w-100">
-                                    @foreach(\App\Category::with('journals')->where('active', 1)->get() as $category)
+                                    @foreach($categories as $category)
                                     <div class="col-xl-6 col-lg-6 col-12">
                                         <a class="d-block grey-link" href="/search/?category={{ $category->id }}&amp;type=journal&amp;extend=1">{{ $category->name }}</a>
                                     </div>
