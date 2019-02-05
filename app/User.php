@@ -3,13 +3,18 @@
 namespace App;
 
 use App\Models\PromoUser;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
+
+    const PERMISSION_ADMIN = 'web admin';
 
     /**
      * The attributes that are mass assignable.
@@ -29,22 +34,22 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->hasRole('admin');
     }
 
-    public function searches()
+    public function searches(): Relation
     {
         return $this->hasMany(UserSearch::class);
     }
 
-    public function promo()
+    public function promo(): Relation
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
 
-    public function getPhoneFormatAttribute()
+    public function getPhoneFormatAttribute(): string
     {
         return phoneFormat($this->phone);
     }
