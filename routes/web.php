@@ -55,6 +55,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['permission:' . \App\User::PERMISSION_ADMIN]], function () {
         Route::get('/', 'Admin\DashboardController')->name('admin');
         Route::get('/dashboard', 'Admin\DashboardController')->name('admin.dashboard');
+        Route::get('/content-management', 'Admin\ContentManagementController')->name('admin.content');
     });
 });
 

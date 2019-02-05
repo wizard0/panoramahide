@@ -9,6 +9,11 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property string name
+ * @property string last_name
+ * @property string  phone
+ */
 class User extends Authenticatable
 {
     use Notifiable;
@@ -52,5 +57,10 @@ class User extends Authenticatable
     public function getPhoneFormatAttribute(): string
     {
         return phoneFormat($this->phone);
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->name . ' ' . $this->last_name;
     }
 }
