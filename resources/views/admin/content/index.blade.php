@@ -2,6 +2,6 @@
 
 @section('content')
 
-    Hello Wizard!
+    @component('components.admin.view_table', $data) @endcomponent
 
 @endsection

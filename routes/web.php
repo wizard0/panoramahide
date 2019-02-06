@@ -55,7 +55,19 @@ Route::group(['prefix' => 'admin'], function () {
     Route::group(['middleware' => ['permission:' . \App\User::PERMISSION_ADMIN]], function () {
         Route::get('/', 'Admin\DashboardController')->name('admin');
         Route::get('/dashboard', 'Admin\DashboardController')->name('admin.dashboard');
-        Route::get('/content-management', 'Admin\ContentManagementController')->name('admin.content');
+
+        // CRUD
+        Route::group(['prefix' => 'content-management'], function () {
+            Route::resource('categories', 'Admin\CategoryController');
+            Route::resource('publishings', 'Admin\PublishingController');
+            Route::resource('authors', 'Admin\AuthorController');
+            Route::resource('journals', 'Admin\JournalController');
+            Route::resource('releases', 'Admin\ReleaseController');
+            Route::resource('articles', 'Admin\ArticleController');
+
+            Route::resource('news', 'Admin\NewsController');
+        });
+
     });
 });
 

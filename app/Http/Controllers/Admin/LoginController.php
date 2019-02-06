@@ -22,8 +22,7 @@ class LoginController extends Controller
      */
     public function __invoke(Request $request)
     {
-        if (Auth::check() && Auth::user()->hasPermissionTo(User::PERMISSION_ADMIN))
-        {
+        if (Auth::check() && Auth::user()->hasPermissionTo(User::PERMISSION_ADMIN)) {
             return redirect()->route('admin.dashboard');
         }
 
