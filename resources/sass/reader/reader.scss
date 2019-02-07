@@ -146,7 +146,7 @@
 
 
 
-#panel {
+#reader-panel {
   background: #4c4c4c;
   border-radius: 0;
   margin: 0 !important;
@@ -161,26 +161,4 @@
     height: calc(100vh - 114px);
     margin-top: 54px !important;
   }
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-}
-
-ul li {
-  list-style-type: none;
-  padding-left: 10px;
-}
-
-ul {
-  counter-reset: li;
-  padding: 0;
-  list-style: none;
-}
-
-ul > li {
-  position: relative;
-  margin: 0 0 6px 1em;
-  padding: 0px;
 }

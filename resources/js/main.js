@@ -3,8 +3,8 @@ $(document).ready(function() {
 
     if ($('#reader').length) {
         let $currentFooterLink = $('#cur_heading a');
-        $('#panel').on('scroll', function () {
-            $('#panel article').each(function () {
+        $('#reader-panel').on('scroll', function () {
+            $('#reader-panel article').each(function () {
                 let ThisOffset = $(this).offset();
                 if (ThisOffset.top < 220) {
                     let id = $(this).find('h2').attr('id');
@@ -17,9 +17,9 @@ $(document).ready(function() {
         $currentFooterLink.attr('href', '#article00');
         $('a[href*="#"]').smoothScroll({
             offset: -100,
-            scrollElement: $('#panel'),
+            scrollElement: $('#reader-panel'),
             beforeScroll: function() {
-                //slideout.close();
+                //window.slideout.close();
             }
         });
     }

@@ -31,23 +31,23 @@ require('./main.js');
 const Slideout = require('slideout/dist/slideout.min');
 import 'simplebar'; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
-let slideout = new Slideout({
+window.slideout = new Slideout({
     'panel': document.getElementById('reader'),
-    'menu': document.getElementById('menu'),
+    'menu': document.getElementById('reader-menu'),
     'padding': 300,
     'tolerance': 70
 });
 $('.toggle-button').click(function () {
     $('.nav-item[href="' + $(this).data('name') + '"]').tab('show');
-    slideout.toggle();
+    window.slideout.toggle();
 });
 
 function close(eve) {
     eve.preventDefault();
-    slideout.close();
+    window.slideout.close();
 }
 
-slideout
+window.slideout
     .on('beforeopen', function (event) {
         this.panel.classList.add('panel-open');
         $('.hamburger-menu').toggleClass('animate');

@@ -2,16 +2,16 @@
 
 @section('content')
 
-    <div id="menu">
+    <div id="reader-menu">
         @include('reader.components.sidebar', [
 
         ])
     </div>
     <div id="reader" class="panel">
-        <div id="header">
+        <div id="reader-header">
             @include('reader.components.header')
         </div>
-        <div id="panel">
+        <div id="reader-panel">
             {{-- Обложка --}}
             <div class="panel-cover">
                 <img class="panel-cover" src="/img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png">
@@ -3265,7 +3265,7 @@
                 </section>
             </div>
         </div>
-        <div id="footer">
+        <div id="reader-footer">
             @include('reader.components.footer')
         </div>
     </div>
