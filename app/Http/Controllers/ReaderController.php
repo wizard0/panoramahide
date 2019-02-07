@@ -23,7 +23,10 @@ class ReaderController extends Controller
             return $item;
         });
 
+        $oRelease->cover = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
+
         return view('reader.index', [
+            'oRelease' => $oRelease,
             'oJournal' => $oJournal,
             'oArticles' => $oArticles,
         ]);

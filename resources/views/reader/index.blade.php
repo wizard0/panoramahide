@@ -14,7 +14,7 @@
         <div id="reader-panel">
             {{-- Обложка --}}
             <div class="panel-cover">
-                <img class="panel-cover" src="/img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png">
+                <img class="panel-cover" src="{{ $oRelease->cover }}">
             </div>
             {{-- Контент --}}
             <div class="container js-toc-content">
