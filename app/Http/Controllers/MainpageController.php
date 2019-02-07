@@ -16,9 +16,8 @@ class MainpageController extends Controller
 {
     public function index()
     {
-        $lastReleases = Release::allNew()->limit(4)->get();
-        $lastNews = News::allNew()->limit(5)->get();
-        $journalCategories = Category::has('journals')->get();
+        $lastNews = News::allNew()->withTranslation()->limit(5)->get();
+        $journalCategories = Category::has('journals')->withTranslation()->get();
 
 
         //$oService = new PromocodeService();
@@ -28,7 +27,6 @@ class MainpageController extends Controller
         //dd($oService->getReleases());
 
         return view('mainpage', compact(
-            'lastReleases',
             'lastNews',
             'journalCategories'
         ));

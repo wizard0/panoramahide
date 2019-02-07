@@ -1,9 +1,29 @@
 <div class="row col-xl-9 col-lg-9 col-12 order-3 order-xl-2 order-lg-2">
     @foreach($search as $s)
         @if ($params['type'] == 'journal')
-            @include('includes.journal_item', compact('s'))
+            @component('components.journal_item', [
+                'id' => $s->journalID,
+                'image' => $s->journalImage,
+                'name' => $s->journalName,
+                'code' => $s->journalCode,
+                'issn' => $s->journalISSN,
+                'releases' => Release::where('journal_id', '=', $s->journalID)->withTranslation()->get(),
+            ])
+            @endcomponent
         @else
-            @include('includes.article_item', compact('s'))
+            @component('components.article_item', [
+                'id' => $s->articleID,
+                'author' => $s->authorName,
+                'code' => $s->articleCode,
+                'name' => $s->articleName,
+                'journalCode' => $s->journalCode,
+                'journalName' => $s->journalName,
+                'releaseCode' => $s->releaseCode,
+                'releaseID' => $s->releaseID,
+                'releaseName' => $s->releaseName,
+                'number' => $s->releaseNumber,
+            ])
+            @endcomponent
         @endif
     @endforeach
 

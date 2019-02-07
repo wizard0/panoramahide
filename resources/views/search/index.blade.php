@@ -43,7 +43,11 @@
 
                         @include('search.search_results', compact('search', 'params'))
 
-                        @include('includes.sidebar')
+                        <div class="col-xl-2 col-lg-3 col-12 order-2 order-xl-3 order-lg-3 offset-xl-1">
+                            @include('includes.sidebar')
+                        </div>
+
+                        @include('includes.sidebar_modals')
 
                     @endif
                 </div>

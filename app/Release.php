@@ -11,7 +11,11 @@ class Release extends Model
 {
     use Translatable;
 
-    public $translatedAttributes = ['name', 'code', 'number', 'image', 'description', 'preview_image', 'preview_description'];
+    public $translatedAttributes = [
+        'name', 'code', 'number', 'image', 'description',
+        'preview_image', 'preview_description',
+        'price_for_electronic', 'price_for_printed', 'price_for_articles'
+    ];
 
 //    protected $fillable = ['code'];
 
@@ -30,14 +34,23 @@ class Release extends Model
         return $this->hasMany(Article::class);
     }
 
-    public function scopeAllNew(Builder $query)
+    public function scopeNewest(Builder $query, $limit = null)
     {
-        return $query->orderBy('created_at', 'desc');
+        return (is_numeric($limit))
+            ? $this->orderBy('active_date', 'desc')->limit($limit)
+            : $this->orderBy('active_date', 'desc');
     }
 
-    public function getUrl()
+    public function scopeNewestTranslated(Builder $query, $limit = null)
     {
-        return '/magazines/' . $this->journal->code . '/numbers/' . $this->id . '.html';
+        return (is_numeric($limit))
+            ? $this->orderBy('active_date', 'desc')->limit($limit)->withTranslation()
+            : $this->orderBy('active_date', 'desc')->withTranslation();
+    }
+
+    public function getLink()
+    {
+        return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
     }
     public function promocode()
     {

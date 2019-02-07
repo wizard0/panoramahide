@@ -32,6 +32,16 @@ if (!function_exists('phoneFormat')) {
     }
 }
 
+if (!function_exists('halfyear')) {
+
+    function halfyear($month)
+    {
+        if ($month < 6)
+            return \App\Subscription::HALFYEAR_1;
+        else return \App\Subscription::HALFYEAR_2;
+    }
+}
+
 if (!function_exists('bladeHelper')) {
 
     function bladeHelper()

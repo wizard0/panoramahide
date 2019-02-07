@@ -19,7 +19,7 @@ class FullDBTestSeeder extends Seeder
      */
     public function run()
     {
-        $this->clear();
+//        $this->clear();
         $this->command->getOutput()->progressStart(FullDBTestSeeder::TOTAL);
         factory(App\Category::class, FullDBTestSeeder::CATEGORIES) // 5
             ->create()

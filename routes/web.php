@@ -79,13 +79,27 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/payment', 'PaymentController@payment')->name('personal.order.payment');
 });
 
-Route::get('/magazines', 'MagazinesController')->name('magazines');
-Route::get('/magazines/{code}.html', 'MagazinesController@detail')->name('magazine');
+Route::group(['prefix' => 'magazines'], function () {
+    Route::get('/', 'MagazinesController')->name('journals');
+    Route::get('/{code}.html', 'MagazinesController@detail')->name('journal');
+    Route::get('/ajax-get-page', 'MagazinesController@ajaxGetPage');
+    Route::post('/send-article', 'MagazinesController@sendArticle')->name('send.article');
+
+    Route::get('/{journalCode}/numbers/{releaseID}.html', 'ReleaseController@detail')->name('release');
+});
+
 Route::get('/articles/{code}.html', 'ArticlesController@detail')->name('article');
-Route::get('/magazines/{journalCode}/numbers/{releaseCode}.html', 'ReleasesController@detail')->name('release');
+
+Route::group(['prefix' => 'publishers'], function () {
+    Route::get('/', 'PublishersController')->name('publishers');
+    Route::get('/{code}', 'PublishersController@detail')->name('publisher');
+});
+
+Route::get('/categories', 'CategoriesController')->name('categories');
 
 Route::post('/recommend', 'AjaxActionsController@recommend')->name('recommend');
 Route::post('/add-to-favorite', 'AjaxActionsController@addToFavorite')->middleware('auth')->name('to.favorite');
+Route::any('/print-abonement', 'AjaxActionsController@printAbonement')->name('print.abonement');
 
 Route::group(['prefix' => 'search'], function () {
     Route::get('/', 'SearchController')->name('search');
