@@ -28,3 +28,13 @@ require('./plugins/form.js');
 require('./plugins/callbacks.js');
 require('./plugins/cleave-masks.js');
 require('./main.js');
+
+
+import tippy from 'tippy.js'
+
+tippy('[data-tippy-popover]', {
+    interactive : true,
+    theme: 'light',
+    animateFill: false,
+    //duration: [275, 250000],
+});

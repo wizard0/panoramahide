@@ -22,6 +22,7 @@ class PromocodesTableSeeder extends Seeder
             'used' => 1,
             'release_begin' => now()->subDay(),
             'release_end' => now()->addYear(),
+            'release_limit' => 1,
         ]);
         Promocode::create([
             'promocode' => '2',
@@ -31,6 +32,7 @@ class PromocodesTableSeeder extends Seeder
             'used' => 1,
             'release_begin' => now()->subDay(),
             'release_end' => now()->addYear(),
+            'release_limit' => 1,
         ]);
         Promocode::create([
             'promocode' => '3',
@@ -40,6 +42,18 @@ class PromocodesTableSeeder extends Seeder
             'used' => 1,
             'release_begin' => now()->subDays(5),
             'release_end' => now()->subDays(4),
+            'release_limit' => 1,
+        ]);
+
+        Promocode::create([
+            'promocode' => '4',
+            'active' => 1,
+            'type' => 'custom',
+            'limit' => 10,
+            'used' => 1,
+            'release_begin' => now()->subDays(5),
+            'release_end' => now()->subDay(4),
+            'release_limit' => 1,
         ]);
 
         $oPromoUser = testData()->promoUser();

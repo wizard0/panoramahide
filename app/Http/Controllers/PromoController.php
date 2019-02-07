@@ -4,11 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Journal;
 use App\Models\Activations;
 use App\Models\Group;
 use App\Models\PromoUser;
 use App\Models\Promocode;
 use App\Services\Code;
+use App\Services\PromocodeCustomService;
 use App\Services\PromocodeService;
 use App\Services\PromoUserService;
 use App\Services\Toastr\Toastr;
@@ -31,29 +33,85 @@ class PromoController extends Controller
     }
 
     /**
-     * Страница /promo
+     *  Страница /deskbooks
      *
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function deskbooks()
+    public function deskbooks(Request $request)
     {
-        $oGroups = Group::with('journals')->where('active', true)->get();
+        if (Auth::guest()) {
+            return view('deskbooks', [
+                'oGroups' => collect([]),
+            ]);
+        }
+
+        $oGroups = Group::with('journals', 'promocode')
+            ->where('active', true);
+
+        if ($request->exists('promocode')) {
+            $oGroups = $oGroups->where('promocode_id', $request->get('promocode'));
+        }
+        $oGroups = $oGroups->whereHas('promocode', function ($query) {
+            $query->where('type', 'custom');
+        });
+
+        $oGroups = $oGroups->get();
+
+        $oPromoUser = Auth::user()->promo;
+
+        $oJournals = (new PromocodeCustomService())->setPromoUser($oPromoUser)->getPromoUserJournals();
+
+        if (count($oGroups) !== 0) {
+            $oGroups = $oGroups->transform(function ($item) use ($oJournals) {
+                $count = 0;
+                foreach ($item->journals as $key => $oJournal) {
+                    $checked = !is_null($oJournals->where('id', $oJournal->id)->first());
+                    $item->journals[$key]->checked = $checked;
+                    if ($checked) {
+                        $count++;
+                    }
+                }
+                $item->selected = $count;
+                $item->max = $item->promocode->release_limit;
+                return $item;
+            });
+        }
 
         return view('deskbooks', [
-            'oGroups' => $oGroups
+            'oGroups' => $oGroups,
         ]);
     }
 
     /**
-     * Получить доступ к журналам
-     *
      * @param Request $request
+     * @return array
      */
     public function save(Request $request)
     {
-        $aJournals = $request->get('journals');
+        $aJournals = $request->get('journal::promocode');
 
-        dd($aJournals);
+        $oPromoUser = Auth::user()->promo;
+        $oService = new PromocodeCustomService(null, $oPromoUser);
+
+        $a = [];
+        foreach ($aJournals as $id) {
+            $array = explode('::', $id);
+            $a[$array[1]][] = $array[0];
+        }
+        foreach ($a as $promocode_id => $journals) {
+            $oPromocode = Promocode::find($promocode_id);
+            $oJournals = Journal::find($journals);
+            $result = $oService->setPromocode($oPromocode)->syncJournal($oJournals);
+            if (!$result) {
+                return responseCommon()->error([
+
+                ], $oService->getMessage());
+            }
+        }
+        return responseCommon()->success([
+
+        ], 'Журналы успешно сохранены');
     }
 
     /**
@@ -234,7 +292,6 @@ class PromoController extends Controller
         $oUser = Auth::user();
 
         $oPromoUserService = new PromoUserService();
-        $oPromocodeService = new PromocodeService();
 
         $oPromoUser = $oUser->promo;
         if (is_null($oPromoUser)) {
@@ -259,8 +316,10 @@ class PromoController extends Controller
 
         (new Toastr('Промокод успешно активирован'))->success(false);
 
+        $redirect = $oPromocodeService->redirectsByType();
+
         return responseCommon()->success([
-            'redirect' => '/promo',
+            'redirect' => $redirect,
         ], 'Промокод успешно активирован');
     }
 
