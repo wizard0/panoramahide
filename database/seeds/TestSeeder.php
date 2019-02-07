@@ -19,10 +19,19 @@ class TestSeeder extends Seeder
     public function run()
     {
         $this->clear();
+
+        $this->call(FullDBTestSeeder::class);
+
         $this->call(UsersTableSeeder::class);
         $this->call(PromoUsersTableSeeder::class);
         $this->call(PromocodesTableSeeder::class);
         $this->call(JournalsTableSeeder::class);
+
+        $this->call(PaysystemSeeder::class);
+        $this->call(PaysystemDataSeeder::class);
+        $this->call(PublishingTestSeeder::class);
+        $this->call(setReleasesYear::class);
+        $this->call(CreateSubscriptions::class);
     }
 
     private function clear()

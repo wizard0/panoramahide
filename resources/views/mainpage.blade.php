@@ -53,44 +53,8 @@
         </div>
     </div>
 
-    <div class="holder latest-issues">
-        <h2 class="text-uppercase text-center">Новые журналы</h2>
-        <div class="container">
-            <div class="row">
-                @foreach ($lastReleases as $release)
-                <div class="col-xl-3 col-lg-3 col-md-6 col-sm-6 col-12">
-                    <div class="row mainpage-issue align-items-center">
-                        <div class="issue-image col-12">
-                            <a href="{{ $release->getUrl() }}" class="d-block">
-                                <img src="{{ $release->image }}">
-                            </a>
-                        </div>
-                        <div class="issue-number col-12">{{ $release->number }}</div>
-                        <div class="issue-title col-12">
-                            <a href="{{ $release->getUrl() }}" class="black-link">
-                                {{ $release->name }}						</a>
-                        </div>
-                        <div class="issue-price col-6">{{ $release->price_for_electronic }} <span>р.</span></div>
-                        <div class="col-6 issue-to-cart">
-                            <a  href="javascript:void(0);"
-                                class="red-link _access_number addToCart"
-                                data-id="{{ $release->id }}"
-                                data-version="<?= Cart::VERSION_ELECTRONIC ?>"
-                                data-product-type="<?= Cart::PRODUCT_TYPE_RELEASE ?>"
-                            >
-                                В корзину
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-            <div class="row justify-content-center">
-                <div class="col-auto">
-                    <a href="/search/?type=magazine&extend=1" class="more d-block"><span>Все журналы</span></a>
-                </div>
-            </div>
-        </div></div>
+    @include('includes.new_journals')
+
     <div class="holder">
         <div class="container">
             <div class="row">

@@ -11,7 +11,7 @@
                          data-type="{{ $item->type }}">
                         <div class="col-11">
                             <div style="font-size: 14px;">
-                                <a href="{{ $item->product->getUrl() }}" style="background: none; padding-left: 0;">
+                                <a href="{{ $item->product->getLink() }}" style="background: none; padding-left: 0;">
                                     {{ $item->product->name }}
                                 </a>
                             </div>

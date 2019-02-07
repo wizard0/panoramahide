@@ -14,8 +14,8 @@ class Cart
     const PRODUCT_TYPE_ARTICLE = 'article';
     const PRODUCT_TYPE_SUBSCRIPTION = 'subscription';
 
-    const VERSION_PRINTED = 'printed';
-    const VERSION_ELECTRONIC = 'electronic';
+    const VERSION_PRINTED = Subscription::TYPE_PRINTED;
+    const VERSION_ELECTRONIC = Subscription::TYPE_ELECTRONIC;
 
     public function __construct($oldCart)
     {
@@ -26,7 +26,7 @@ class Cart
         }
     }
 
-    public function add($product, $version)
+    public function add($product, $version, $quantity = 1)
     {
         switch (get_class($product)) {
             case Release::class:
@@ -39,11 +39,18 @@ class Cart
                 $price = $product->price;
                 $type = self::PRODUCT_TYPE_ARTICLE;
                 break;
-//            case Subscription::class:
-//                break;
+            case OrderedSubscription::class:
+                $price = $product->single_price;
+                $type = self::PRODUCT_TYPE_SUBSCRIPTION;
+                break;
         }
+
+        if ($price == null || $price == 0) {
+            return false;
+        }
+
         $storedItems = (object)[
-            'qty' => 0,
+            'qty' => $quantity,
             'type' => $type,
             'version' => $version,
             'price' => $price,
@@ -53,10 +60,10 @@ class Cart
         if ($this->items) {
             if (array_key_exists($type . $product->id, $this->items)) {
                 $storedItems = $this->items[$type . $product->id];
+                $storedItems->qty++;
             }
         }
 
-        $storedItems->qty++;
         $storedItems->price = $price * $storedItems->qty;
         $this->items[$type . $product->id] = $storedItems;
         $this->totalQty = sizeof($this->items);
