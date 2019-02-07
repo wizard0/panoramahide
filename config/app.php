@@ -164,6 +164,7 @@ return [
          * Package Service Providers...
          */
         Dimsav\Translatable\TranslatableServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
         /*
          * Application Service Providers...
          */
@@ -174,7 +175,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\ComposerServiceProvider::class,
         App\Providers\HelpersServiceProvider::class,
-        Bulk\Toastr\ToastrServiceProvider::class,
+//        Bulk\Toastr\ToastrServiceProvider::class,
 
     ],
 
@@ -224,7 +225,11 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+
+        'PDF' => Barryvdh\DomPDF\Facade::class,
+
         'Cart' => App\Cart::class,
+        'Subscription' => \App\Subscription::class,
         'Paysystem' => App\Paysystem::class,
         'Journal' => \App\Journal::class,
         'Release' => \App\Release::class,

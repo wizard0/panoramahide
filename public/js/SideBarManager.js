@@ -5,32 +5,48 @@
     if (!!window.JSSideBarManager) return;
 
     window.JSSideBarManager = function (params) {
+        console.log('sidebar started');
+        if (typeof params !== 'undefined') {
+            params = JSON.parse(params);
+            this.elementID = params.id;
+            this.elementType = params.type;
+            this.elementUrl = params.url;
+
+            this.dataset = [{
+                id: this.elementID,
+                type: this.elementType
+            }];
+
+            $('#recommend input[name="ids"]').val(JSON.stringify(this.dataset));
+        }
         this.subscribeBtn = $('.get-access._access');
         this.items = $('input[name="article-choise"]');
         this.favoriteBtn = $('a.action-item._add_to_favorite');
-        // this.quoteBtn = $('.actions-menu .action-item._quote');
-        // this.copyQuoteBtn = $()
 
         $('input[name="article-choise"]').on('change', $.proxy(this.processChoice, this));
+
         this.subscribeBtn.on('click', $.proxy(this.subscribeTo, this));
+
         $('#recommend form').on('submit', $.proxy(this.recommendSubmit, this));
         this.favoriteBtn.on('click', $.proxy(this.addToFavorites, this));
     }
 
     window.JSSideBarManager.prototype.recommendSubmit = function (event) {
         event.preventDefault();
-        console.log(event.target);
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            url: $(event.target).attr('action'),
-            method: 'POST',
-            data: $(event.target).serialize(),
-            success: function (res) {
-                console.log('recommend return succeess');
-            }
-        });
+
+        var data = $(event.target).serialize();
+
+        if (data.length > 0) {
+            $.proxy(this.sendRequest(
+                $(event.target).attr('action'),
+                data,
+                function (res) {
+                    $('#recommend .close').click();
+                    alert('Вы порекомендовали');
+                }
+            ), this);
+        }
+
         return false;
     }
 
@@ -44,7 +60,13 @@
         var text = "";
         $.each(this.items.filter(':checked'), function (index, item) {
             var element = $('.entity-item[data-id="' + $(item).val() + '"]');
-            text += '<a href="' + $(element).data('link') + '">' + $(element).find('.itemName').text() + "</a><br>";
+            if ($(element).find('.itemName').length > 0) {
+                text += $(element).find('.itemName').text() + "<br>";
+            } else {
+                var releaseName = $('.issue-line._number[data-id="' + $(item).val() + '"] .issue-num').text();
+                var journalName = $('#journalName').text();
+                text += journalName + '. ' + releaseName + "<br>";
+            }
         });
         $('#quote ._text').html(text);
     }
@@ -53,11 +75,11 @@
         var recommendArrayIds = $('#recommend input[name="ids"]');
         recommendArrayIds.val('');
         /**
-         * jsonData has to be like "[]{id:id, type:type}"
+         * jsonData has to be like "[{id:id, type:type}]"
          */
         var idByType = [];
         $.each(this.items.filter(':checked'), function (index, element) {
-            idByType[index] = {id : $(element).val(), type:  $(element).data('type')};
+            idByType[index] = {id: $(element).val(), type: $(element).data('type')};
         });
         recommendArrayIds.val(JSON.stringify(idByType));
     }
@@ -70,27 +92,56 @@
         }
     }
 
-    window.JSSideBarManager.prototype.subscribeTo = function () {
+    window.JSSideBarManager.prototype.subscribeTo = function (event) {
+        event.preventDefault();
+        if (this.items.filter(':checked').data('type') == 'article') {
+            var id = this.items.filter(':checked').val();
+            CartManager.addToCart('electronic', 'article', id);
+            return;
+        }
+        if (typeof this.elementUrl != 'undefined') {
+            window.location = this.elementUrl + '#subscribe';
+            window.location.reload();
+            return;
+        }
         var journal = this.items.filter(':checked').val();
         window.location = $('._magazine.magazine-item[data-id="' + journal + '"]').data('link-subscribe');
     }
 
-    window.JSSideBarManager.prototype.addToFavorites = function (event) {
+    window.JSSideBarManager.prototype.addToFavorites = function (event, data) {
         event.preventDefault();
         // taking ids from recommendation modal form, cause this
-        // this would be a string like ',1,2,3'
-        var data = $('#recommend input[name="ids"]').val();
+        // this would be a string like '[{id:id, type:type}]'
+        if (typeof data == 'undefined') {
+            var data = $('#recommend input[name="ids"]').val();
+        }
 
+        if (data.length > 0) {
+            $.proxy(this.sendRequest(
+                '/add-to-favorite',
+                {data: data},
+                function (res) {
+                    alert('Добавлено в избранное');
+                },
+                function (xhr, textStatus) {
+                    if (xhr.status == 401) {
+                        $('#login-modal').modal('show')
+                    }
+                }
+            ), this);
+        }
+    }
+
+    window.JSSideBarManager.prototype.sendRequest = function (url, data, successCallback, completeCallback) {
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            url: this.favoriteBtn.attr('href'),
+            url: url,
             method: 'POST',
-            data: {data: data},
-            success: function (res) {
-                console.log('warewarewa return succeess');
-            }
+            data: data,
+            success: successCallback,
+            complete: completeCallback
         });
     }
 })(window, jQuery)

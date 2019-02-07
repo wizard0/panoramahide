@@ -9,6 +9,12 @@
     </div>
 
     @foreach ($cart->items as $item)
+        @php
+            $title = $item->product->name;
+            if ($item->type == Cart::PRODUCT_TYPE_RELEASE) {
+                $title = $item->product->journal->name . ' №' . $item->product->number . '. ' . $item->product->year;
+            }
+        @endphp
         <div id="{{ $item->id }}" class="acc-table-row">
             <div class="acc-table-item acc-table-item-img">
                 <a href="">
@@ -16,15 +22,15 @@
                             @if (!$item->product->image)
                             src="/img/no_photo.png"
                             @else
-                            src="{{ $item->product->translate('en')->image }}"
+                            src="{{ $item->product->image }}"
                             @endif
-                            title="{{ $item->product->name }}"
-                            alt="{{ $item->product->name }}">
+                            title="{{ $title }}"
+                            alt="{{ $title }}">
                 </a>
             </div>
 
             <div class="acc-table-item acc-table-item-about">
-                <h4>{{ $item->product->name }}</h4>
+                <h4>{{ $title }}</h4>
                 <div class="cart-item-subscr-info">
                 </div>
                 <div class="price">{{ $item->price }} руб.</div>

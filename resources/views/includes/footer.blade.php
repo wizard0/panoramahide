@@ -5,6 +5,8 @@
     @include('includes.modals.common')
 </div>
 
+@include('includes.modals.number_type')
+
 <footer>
     <div class="container">
         <div class="row">
