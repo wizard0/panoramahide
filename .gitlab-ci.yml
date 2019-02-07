@@ -1,21 +1,53 @@
 stages:
+    - build
+    - dbseed
+    - test
     - deploy
     # - production
+
+cache:
+    key: ${CI_JOB_NAME}
+    paths:
+        - .env
+        - composer.lock
+        - package-lock.json
+        - bootstrap/
+        - node_modules/
+        - public/
+        - vendor/
+
+build:
+    stage: build
+    script:
+        - php72 /usr/bin/composer install
+        - npm update
+        - npm install
+        - npm run prod
+        - cp /usr/local/bin/.env.dev.panor.ru ./.env
+        - php72 ./artisan cache:clear
+        - php72 ./artisan config:cache
+    only:
+        - master
+
+dbseed:
+    stage: dbseed
+    script:
+        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
+        - php72 ./artisan migrate -vvv
+        - php72 ./artisan db:seed --class=TestSeeder -vvv
+    only:
+        - master
+
+test:
+    stage: test
+    script:
+        - php72 /usr/bin/phpunit --testdox tests
+    only:
+        - master
 
 deploy:
     stage: deploy
     script:
-        - php72 /usr/bin/composer install
-        - npm install
-        - npm run prod
-        - cp /usr/local/bin/.env.dev.panor.ru ./.env
-        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
-        - php72 ./artisan migrate -vvv
-        - php72 ./artisan db:seed -vvv
-        - php72 ./artisan db:seed --class=TestSeeder -vvv
-        - php72 ./artisan cache:clear
-        - php72 ./artisan config:cache
-        - php72 /usr/bin/phpunit --testdox tests
         - chmod 774 ./deploy
         - ./deploy
     only:
