@@ -2,20 +2,19 @@ $(document).ready(function() {
     deskbooksForm.initEvents();
 
     if ($('#reader').length) {
+        let $currentFooterLink = $('#cur_heading a');
         $('#panel').on('scroll', function () {
-            let Wscroll = $(this).scrollTop();
             $('#panel article').each(function () {
                 let ThisOffset = $(this).offset();
-                //console.log($(this).find('h2').attr('id'), Wscroll, ThisOffset.top, $(this).outerHeight(true));
                 if (ThisOffset.top < 220) {
                     let id = $(this).find('h2').attr('id');
-                    console.log(id);
-                    let $current = $('#cur_heading a');
-                    $current.text($(this).closest('section').find('.heading').text());
-                    $current.attr('href', '#' + id);
+                    $currentFooterLink.text($(this).closest('section').find('.heading').text());
+                    $currentFooterLink.attr('href', '#' + id);
                 }
             });
         });
+        $currentFooterLink.text($('#article00').closest('section').find('.heading').text());
+        $currentFooterLink.attr('href', '#article00');
         $('a[href*="#"]').smoothScroll({
             offset: -100,
             scrollElement: $('#panel'),
