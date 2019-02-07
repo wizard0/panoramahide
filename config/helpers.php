@@ -41,3 +41,12 @@ if (!function_exists('halfyear')) {
         else return \App\Subscription::HALFYEAR_2;
     }
 }
+
+if (!function_exists('bladeHelper')) {
+
+    function bladeHelper()
+    {
+        return (new \App\Services\BladeHelper());
+    }
+}
+

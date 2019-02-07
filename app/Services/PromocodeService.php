@@ -3,9 +3,13 @@
 namespace App\Services;
 
 
+use App\Journal;
+use App\Models\JbyPromo;
 use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Release;
+use App\Services\GetSetable\PromocodeGetSetableTrait;
+use App\Services\GetSetable\PromoUserGetSetableTrait;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -13,12 +17,8 @@ use Illuminate\Support\Facades\Auth;
 
 class PromocodeService
 {
-
-    /**
-     * Promocode
-     * @var null
-     */
-    private $promocode = null;
+    use PromocodeGetSetableTrait;
+    use PromoUserGetSetableTrait;
 
     /**
      * Текущая дата
@@ -51,15 +51,8 @@ class PromocodeService
      */
     public function promoUser(): PromoUser
     {
-        return Auth::user()->promo;
-    }
-
-    /**
-     * @return Promocode
-     */
-    public function promocode(): Promocode
-    {
-        return $this->promocode;
+        $this->promoUser = Auth::user()->promo;
+        return $this->promoUser;
     }
 
     /**
@@ -133,17 +126,6 @@ class PromocodeService
 
     /**
      * @param Promocode $promocode
-     * @return PromocodeService
-     */
-    public function setPromocode(Promocode $promocode): PromocodeService
-    {
-        $this->promocode = $promocode;
-
-        return $this;
-    }
-
-    /**
-     * @param Promocode $promocode
      * @return bool
      */
     public function checkPromocodeBeforeActivate(Promocode $promocode): bool
@@ -169,7 +151,15 @@ class PromocodeService
     public function activatePromocode(Promocode $promocode, PromoUser $promoUser): bool
     {
         try {
-            $promoUser->promocodes()->attach($promocode->id);
+            if ($promocode->type === 'custom') {
+                JbyPromo::create([
+                    'promo_user_id' => $promoUser->id,
+                    'promocode_id' => $promocode->id,
+                ]);
+                //$promoUser->promocodes()->attach($promocode->id);
+            } else {
+                $promoUser->promocodes()->attach($promocode->id);
+            }
             $promocode->increment('used');
             return true;
         } catch (\Exception $e) {
@@ -193,6 +183,22 @@ class PromocodeService
         } catch (\Exception $e) {
             $this->setMessage('' . $e->getMessage());
             return false;
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function redirectsByType()
+    {
+        $oPromocode = $this->promocode();
+        switch ($oPromocode->type) {
+            case 'custom':
+                return route('deskbooks.index', [
+                    'promocode' => $oPromocode->id
+                ]);
+            default:
+                return route('home.journals');
         }
     }
 
@@ -353,6 +359,121 @@ class PromocodeService
             $query = $query->where('releases.active_date', '<=', $oPromocode->release_end);
         }
         return $query;
+    }
+
+
+    /**
+     * @return Collection
+     */
+    public function getJournals()
+    {
+        $oPromocode = $this->promocode();
+        $oJournals = Journal::orderBy('created_at', 'desc');
+        switch ($oPromocode->type) {
+            case 'common':
+                $oJournals = $this->queryJournalsByCommon($oPromocode, $oJournals);
+                break;
+            case 'on_journal':
+                $oJournals = $this->queryJournalsByOnJournal($oPromocode, $oJournals);
+                break;
+            case 'on_publishing':
+                $oJournals = $this->queryJournalsByOnPublishing($oPromocode, $oJournals);
+                break;
+            case 'on_release':
+                $oJournals = $this->queryJournalsByOnRelease($oPromocode, $oJournals);
+                break;
+            case 'publishing+release':
+                $oJournals = $this->queryJournalsByPublishingPlusRelease($oPromocode, $oJournals);
+                break;
+            case 'custom':
+                $oJournals = $this->queryJournalsByCustom($oPromocode, $oJournals);
+                break;
+            default:
+                break;
+        }
+        return $oJournals;
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return Collection
+     */
+    private function queryJournalsByCommon(Promocode $oPromocode, Builder $query): Collection
+    {
+        return $query->get();
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return \Illuminate\Support\Collection
+     */
+    private function queryJournalsByOnJournal(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    {
+        $oJournal = $oPromocode->journal;
+
+        $oJournals = collect([])->push($oJournal);
+
+        return $oJournals;
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return \Illuminate\Support\Collection
+     */
+    private function queryJournalsByOnPublishing(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    {
+        $oPublishings = $oPromocode->publishings;
+
+        $oJournals = collect([]);
+
+        foreach ($oPublishings as $oPublishing) {
+            $oJournals = $oJournals->merge($oPublishing->journals);
+        }
+
+        return $oJournals;
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return \Illuminate\Support\Collection
+     */
+    private function queryJournalsByOnRelease(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    {
+        $oReleases = $oPromocode->releases;
+
+        $oJournals = collect([]);
+
+        foreach ($oReleases as $oRelease) {
+            $oJournals = $oJournals->merge(collect([])->push($oRelease->journal));
+        }
+
+        return $oJournals;
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return Collection
+     */
+    private function queryJournalsByPublishingPlusRelease(Promocode $oPromocode, Builder $query): Collection
+    {
+        return $query->get();
+    }
+
+    /**
+     * @param Promocode $oPromocode
+     * @param Builder $query
+     * @return \Illuminate\Support\Collection
+     */
+    private function queryJournalsByCustom(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    {
+        $oJournals = new PromocodeCustomService($oPromocode, $this->promoUser);
+
+        return $oJournals->getPromoUserJournals();
     }
 
     /**
