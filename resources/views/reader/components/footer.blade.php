@@ -6,7 +6,7 @@
         <div class="inform-string-magazine">
             <a href="#">
                 <p>
-                    <span>№8, 2017 </span>Сметно-договорная работа в строительстве №8</p>
+                    <span>№{{ $oRelease->number }}, {{ $oRelease->year }} </span>{{ $oRelease->name }}</p>
                 <div class="grad"></div>
             </a>
         </div>

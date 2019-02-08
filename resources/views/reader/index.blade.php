@@ -4,7 +4,8 @@
 
     <div id="reader-menu">
         @include('reader.components.sidebar', [
-            'oArticles' => $oArticles
+            'oArticles' => $oArticles,
+            'oReleases' => $oReleases,
         ])
     </div>
     <div id="reader" class="panel">
@@ -14,7 +15,7 @@
         <div id="reader-panel">
             {{-- Обложка --}}
             <div class="panel-cover">
-                <img class="panel-cover" src="{{ $oRelease->cover }}">
+                <img class="panel-cover" src="{{ $oRelease->image }}">
             </div>
             {{-- Контент --}}
             <div class="container js-toc-content">
@@ -92,7 +93,9 @@
             </div>
         </div>
         <div id="reader-footer">
-            @include('reader.components.footer')
+            @include('reader.components.footer', [
+                'oRelease' => $oRelease,
+            ])
         </div>
     </div>
 

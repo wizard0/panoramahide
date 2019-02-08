@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Journal;
 use App\Release;
+use Illuminate\Support\Facades\File;
 
 class ReaderService
 {
@@ -15,6 +17,11 @@ class ReaderService
      * @var null
      */
     private $oArticles = null;
+
+    /**
+     * Release
+     */
+    private $oRelease;
 
     /**
      * ReaderService constructor.
@@ -30,20 +37,48 @@ class ReaderService
      */
     public function byRelease(Release $oRelease): ReaderService
     {
-        $this->oJournal = $oRelease->journal;
-        $this->oArticles = $oRelease->articles()->with('authors')->get();
-
+        $this->oRelease = $oRelease;
         return $this;
     }
 
     /**
-     * @return array
+     * @return Journal
      */
-    public function data(): array
+    public function getJournal(): Journal
     {
-        return [
-            $this->oJournal,
-            $this->oArticles,
-        ];
+        return $this->oRelease->journal;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArticles()
+    {
+        $oArticles = $this->oRelease->articles()->with('authors')->get();
+
+        $oArticles = $oArticles->transform(function ($item) {
+            $file = resource_path('views/reader/html/article_00'.sprintf("%02d", $item->id).'.html');
+            $item->html = File::exists($file) ? file_get_contents($file) : '';
+            return $item;
+        });
+
+        return $oArticles;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLibrary()
+    {
+        $oReleases = Release::where('id', '<>', $this->oRelease->id)->get();
+
+        $oReleases = $oReleases->transform(function ($item) {
+
+            $item->image = asset('img/covers/9051c8d54a4e0d8c0629ba88c2ff292f.png');
+
+            return $item;
+        });
+
+        return $oReleases;
     }
 }
