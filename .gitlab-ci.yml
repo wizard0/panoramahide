@@ -11,7 +11,7 @@ stages:
 build:
     stage: build
     only:
-        - ci-debug
+        - master
     script:
         - php72 /usr/bin/composer install
         - npm update
@@ -35,7 +35,7 @@ build:
 dbseed:
     stage: dbseed
     only:
-        - ci-debug
+        - master
     script:
         - echo $MYSQL_PASS
         - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
@@ -47,7 +47,7 @@ dbseed:
 test:
     stage: test
     only:
-        - ci-debug
+        - master
     script:
         - php72 ./vendor/phpunit/phpunit/phpunit --testdox tests
     dependencies:
@@ -57,7 +57,7 @@ test:
 deploy:
     stage: deploy
     only:
-        - ci-debug
+        - master
     script:
         - sftp -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru <<< 'put -r ../laravel-panor /var/www/html/dev.panor.ru.new'
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder'
@@ -76,5 +76,5 @@ deploy:
 #         - echo "Deploy to PRODUCTION..."
 #         - /usr/local/bin/prod-dev.panor.ru $USER $PASS dev.panor.ru
 #     only:
-#         - ci-debug
+#         - master
 #     when: manual
