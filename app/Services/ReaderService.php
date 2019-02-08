@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Article;
 use App\Journal;
 use App\Release;
 use Illuminate\Support\Facades\File;
@@ -57,8 +58,7 @@ class ReaderService
         $oArticles = $this->oRelease->articles()->with('authors', 'translations', 'authors.translations')->get();
 
         $oArticles = $oArticles->transform(function ($item) {
-            $file = resource_path('views/reader/html/article_00'.sprintf("%02d", $item->id).'.html');
-            $item->html = File::exists($file) ? file_get_contents($file) : '';
+            $item->html = $this->getArticleHtml($item);
             return $item;
         });
 
@@ -81,4 +81,22 @@ class ReaderService
 
         return $oReleases;
     }
+
+    /**
+     * @param $oArticle
+     * @return string
+     */
+    private function getArticleHtml(Article $oArticle): string
+    {
+        $path = resource_path('views/reader/html/');
+
+        $name = 'article_00'.sprintf("%02d", $oArticle->id);
+
+        $html = $name.'.html';
+
+        $file = $path.$html;
+
+        return File::exists($file) ? trim(file_get_contents($file)) : '';
+    }
+
 }
