@@ -54,7 +54,7 @@ class ReaderService
      */
     public function getArticles()
     {
-        $oArticles = $this->oRelease->articles()->with('authors')->get();
+        $oArticles = $this->oRelease->articles()->with('authors', 'translations', 'authors.translations')->get();
 
         $oArticles = $oArticles->transform(function ($item) {
             $file = resource_path('views/reader/html/article_00'.sprintf("%02d", $item->id).'.html');
@@ -70,7 +70,7 @@ class ReaderService
      */
     public function getLibrary()
     {
-        $oReleases = Release::where('id', '<>', $this->oRelease->id)->get();
+        $oReleases = Release::with('translations')->where('id', '<>', $this->oRelease->id)->get();
 
         $oReleases = $oReleases->transform(function ($item) {
 
