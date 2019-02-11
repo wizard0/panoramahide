@@ -1,7 +1,3 @@
-//window.jQuery = window.$ = require('jquery');
-
-import HELPER from "./helpers";
-
 /**
  * -------------------------------------------
  * Append laravel token
@@ -18,18 +14,28 @@ $.ajaxSetup({
  * -------------------------------------------
  * Lodash
  * -------------------------------------------
- *
  */
 require('lodash/lodash.min.js');
+
+/**
+ * -------------------------------------------
+ * Lodash
+ * -------------------------------------------
+ */
 window.toastr = require('toastr/build/toastr.min.js');
+
 require('./helpers.js');
 require('./plugins/form.js');
 require('./plugins/callbacks.js');
 require('./plugins/cleave-masks.js');
 require('./main.js');
 
+/**
+ * -------------------------------------------
+ * Slideout
+ * -------------------------------------------
+ */
 const Slideout = require('slideout/dist/slideout.min');
-import 'simplebar'; // or "import SimpleBar from 'simplebar';" if you want to use it manually.
 
 window.slideout = new Slideout({
     'panel': document.getElementById('reader'),
@@ -60,30 +66,28 @@ window.slideout
         $('.hamburger-menu').toggleClass('animate');
         this.panel.removeEventListener('click', close);
     });
+/**
+ * -------------------------------------------
+ * simplebar
+ * or "import SimpleBar from 'simplebar';" if you want to use it manually.
+ * -------------------------------------------
+ */
+import 'simplebar';
 
 /**
  * Удалить .nav-hidden .hidden, чтобы при загрузке не светились
  */
 $('.nav-hidden').removeClass('hidden');
 
-
-//const SmoothScroll = require('smooth-scroll/dist/smooth-scroll.min');
-//require('jquery-smooth-scroll/jquery.smooth-scroll.min');
-
-
-
-// var scroll = new SmoothScroll('a[href*="#"][data-scroll]', {
-//     speed: 500,
-//     speedAsDuration: true,
-//     header: '#header'
-// });
-// document.addEventListener('scrollStart', function () {
-//     console.log('scroll');
-//     slideout.close();
-// }, false);
-
+/**
+ * -------------------------------------------
+ * tippy
+ *
+ * data-tippy-popover data-tippy-content='html'
+ * -------------------------------------------
+ */
 import tippy from 'tippy.js'
-// data-tippy-popover data-tippy-content='html'
+
 tippy('[data-tippy-popover]', {
     interactive: true,
     theme: 'light',
