@@ -1,3 +1,5 @@
+[![pipeline status](https://gl.panor.ru/web/laravel-panor/badges/master/pipeline.svg)](https://gl.panor.ru/web/laravel-panor/commits/master)
+
 # Промокоды
 
 ## ФАЙЛЫ:
