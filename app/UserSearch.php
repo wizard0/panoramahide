@@ -42,21 +42,21 @@ class UserSearch extends Model
             case 'journal':
                 $groupBy = 'journal_translations.code';
                 $q = Journal::selectRaw("
-                        ANY_VALUE(journals.id) as journalID,
-                        ANY_VALUE(journal_translations.image) as journalImage,
-                        ANY_VALUE(journals.active_date) as journalActiveDate,
-                        ANY_VALUE(article_translations.name) as articleName,
-                        ANY_VALUE(articles.id) as articleID,
-                        ANY_VALUE(article_translations.code) as articleCode,
-                        ANY_VALUE(article_translations.description) as articleDescr,
-                        ANY_VALUE(journals.issn) as journalISSN,
-                        ANY_VALUE(releases.id) as releaseID,
-                        ANY_VALUE(author_translations.name) as authorName,
-                        ANY_VALUE(authors.id) as authorID,
-                        ANY_VALUE(journal_translations.name) as journalName,
-                        ANY_VALUE(journal_translations.code) as journalCode,
-                        ANY_VALUE(release_translations.name) as releaseName,
-                        ANY_VALUE(release_translations.code) as releaseCode"
+                        journals.id as journalID,
+                        journal_translations.image as journalImage,
+                        journals.active_date as journalActiveDate,
+                        article_translations.name as articleName,
+                        articles.id as articleID,
+                        article_translations.code as articleCode,
+                        article_translations.description as articleDescr,
+                        journals.issn as journalISSN,
+                        releases.id as releaseID,
+                        author_translations.name as authorName,
+                        authors.id as authorID,
+                        journal_translations.name as journalName,
+                        journal_translations.code as journalCode,
+                        release_translations.name as releaseName,
+                        release_translations.code as releaseCode"
                 )
                     ->leftJoin('releases', 'releases.journal_id', '=', 'journals.id')
                     ->leftJoin('articles', 'releases.id', '=', 'articles.release_id');
@@ -65,39 +65,39 @@ class UserSearch extends Model
             default:
                 if (isset($params['q']) && $params['q']) {
                     $q = Article::selectRaw("
-                            ANY_VALUE(article_translations.name) as articleName,
-                            ANY_VALUE(articles.id) as articleID,
-                            ANY_VALUE(article_translations.code) as articleCode,
-                            ANY_VALUE(article_translations.description) as articleDescr,
-                            ANY_VALUE(author_translations.name) as authorName,
-                            ANY_VALUE(authors.id) as authorID,
-                            ANY_VALUE(journal_translations.name) as journalName,
-                            ANY_VALUE(journal_translations.code) as journalCode,
-                            ANY_VALUE(releases.id) as releaseID,
-                            ANY_VALUE(release_translations.name) as releaseName,
-                            ANY_VALUE(release_translations.code) as releaseCode,
-                            ANY_VALUE(release_translations.number) as releaseNumber,
-                            ANY_VALUE(articles.active_date) as articleActiveDate,
+                            article_translations.name as articleName,
+                            articles.id as articleID,
+                            article_translations.code as articleCode,
+                            article_translations.description as articleDescr,
+                            author_translations.name as authorName,
+                            authors.id as authorID,
+                            journal_translations.name as journalName,
+                            journal_translations.code as journalCode,
+                            releases.id as releaseID,
+                            release_translations.name as releaseName,
+                            release_translations.code as releaseCode,
+                            release_translations.number as releaseNumber,
+                            articles.active_date as articleActiveDate,
                             CASE
-                                WHEN ANY_VALUE(article_translations.description) like '%{$params['q']}%'
-                                  THEN ANY_VALUE(article_translations.description)
+                                WHEN article_translations.description like '%{$params['q']}%'
+                                  THEN article_translations.description
                                   ELSE null
                             END as found
                         ");
                 } else {
                     $q = Article::selectRaw("
-                            ANY_VALUE(article_translations.name) as articleName,
-                            ANY_VALUE(articles.id) as articleID,
-                            ANY_VALUE(article_translations.code) as articleCode,
-                            ANY_VALUE(article_translations.description) as articleDescr,
-                            ANY_VALUE(author_translations.name) as authorName,
-                            ANY_VALUE(authors.id) as authorID,
-                            ANY_VALUE(journal_translations.name) as journalName,
-                            ANY_VALUE(journal_translations.code) as journalCode,
-                            ANY_VALUE(releases.id) as releaseID,
-                            ANY_VALUE(release_translations.name) as releaseName,
-                            ANY_VALUE(release_translations.code) as releaseCode,
-                            ANY_VALUE(articles.active_date) as articleActiveDate
+                            article_translations.name as articleName,
+                            articles.id as articleID,
+                            article_translations.code as articleCode,
+                            article_translations.description as articleDescr,
+                            author_translations.name as authorName,
+                            authors.id as authorID,
+                            journal_translations.name as journalName,
+                            journal_translations.code as journalCode,
+                            releases.id as releaseID,
+                            release_translations.name as releaseName,
+                            release_translations.code as releaseCode,
+                            articles.active_date as articleActiveDate
                         ");
                 }
                 $q = $q->leftJoin('releases', 'articles.release_id', '=', 'releases.id')
@@ -174,11 +174,11 @@ class UserSearch extends Model
             }
 
             // Translations
-            $q = $q->where('journal_translations.locale' , '=', $searchLocale)
-                ->where('release_translations.locale' , '=', $searchLocale)
-                ->where('article_translations.locale' , '=', $searchLocale)
-                ->where('author_translations.locale' , '=', $searchLocale)
-                ->where('category_translations.locale' , '=', $searchLocale);
+            $q = $q->where('journal_translations.locale', '=', "'".$searchLocale."'")
+                ->where('release_translations.locale', '=', "'".$searchLocale."'")
+                ->where('article_translations.locale', '=', "'".$searchLocale."'")
+                ->where('author_translations.locale', '=', "'".$searchLocale."'")
+                ->where('category_translations.locale', '=', "'".$searchLocale."'");
 
             // Activity
             $q = $q->where('journals.active', '=', '1')
