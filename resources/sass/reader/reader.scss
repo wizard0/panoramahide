@@ -153,12 +153,12 @@
   padding: 0 !important;
   min-width: 100%;
   //min-height: calc(100vh - 70px);
-  margin-top: 70px !important;
+  margin-top: 60px !important;
   font-size: 14px;
   overflow: auto;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 120px);
   @media (max-width: 960px) {
-    height: calc(100vh - 114px);
+    height: calc(100vh - 104px);
     margin-top: 54px !important;
   }
 }

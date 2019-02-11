@@ -13,8 +13,8 @@ $(document).ready(function() {
                 }
             });
         });
-        $currentFooterLink.text($('#article00').closest('section').find('.heading').text());
-        $currentFooterLink.attr('href', '#article00');
+        $currentFooterLink.text($('#content-title').text());
+        $currentFooterLink.attr('href', '#content-title');
         $('a[href*="#"]').smoothScroll({
             offset: -100,
             scrollElement: $('#reader-panel'),
