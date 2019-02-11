@@ -5,6 +5,7 @@ namespace Tests\Seeds;
 use App\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
+use App\Release;
 use Illuminate\Database\Seeder;
 
 class JournalsTableSeeder extends Seeder
@@ -35,6 +36,12 @@ class JournalsTableSeeder extends Seeder
 
         $oPromocode = Promocode::where('type', 'custom')->first();
         $oPromocode->journals()->attach($journal->id);
+
+        $oRelease = Release::create([
+            'journal_id' => $journal->id,
+            'year' => 2019,
+            'active' => 1,
+        ]);
 
         $oGroup = Group::create([
             'promocode_id' => $oPromocode->id,
