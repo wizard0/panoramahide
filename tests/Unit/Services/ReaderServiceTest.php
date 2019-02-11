@@ -15,9 +15,14 @@ class ReaderServiceTest extends TestCase
     {
         $oService = (new ReaderService())->byRelease($this->release());
 
+        // Журнал релиза
         $oJournal = $oService->getJournal();
+
+        // Статьи релиза
         $oArticles = $oService->getArticles();
-        $oReleases = $oService->getLibrary();
+
+        // Другие релизы по релизу
+        $oReleases = $oService->getReleases();
     }
 
     /**
@@ -30,6 +35,9 @@ class ReaderServiceTest extends TestCase
         return Release::first();
     }
 
+    /**
+     * Тест выбрки журнала по релизу
+     */
     public function testGetJournal()
     {
         $oService = (new ReaderService())->byRelease($this->release());
@@ -39,16 +47,35 @@ class ReaderServiceTest extends TestCase
         $this->assertNotNull($oJournal);
     }
 
+    /**
+     * Тестирование выборки статей и нахождения в них html
+     */
     public function testGetArticles()
     {
-        $this->assertTrue(true);
+        $oService = (new ReaderService())->byRelease($this->release());
+
+        $oArticles = $oService->getArticles();
+
+        $oArticle = $oArticles->first();
+
+        $this->assertNotNull($oArticle);
+
+        $this->assertNotNull($oArticle->html);
     }
 
     /**
-     * Collection Releases
+     * Тест выборки релизов для вкладки Библиотека в читалке
      */
-    public function testGetLibrary()
+    public function testGetReleases()
     {
-        $this->assertTrue(true);
+        $oService = (new ReaderService())->byRelease($this->release());
+
+        $oReleases = $oService->getReleases();
+
+        $oRelease = $oReleases->first();
+
+        $this->assertNotNull($oRelease);
+
+        $this->assertNotNull($oRelease->image);
     }
 }

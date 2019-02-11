@@ -17,7 +17,7 @@ class ReaderController extends Controller
 
         $oJournal = $oService->getJournal();
         $oArticles = $oService->getArticles();
-        $oReleases = $oService->getLibrary();
+        $oReleases = $oService->getReleases();
 
         $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
 

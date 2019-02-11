@@ -2,6 +2,7 @@
 
 namespace Tests\Seeds;
 
+use App\Article;
 use App\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
@@ -37,10 +38,25 @@ class JournalsTableSeeder extends Seeder
         $oPromocode = Promocode::where('type', 'custom')->first();
         $oPromocode->journals()->attach($journal->id);
 
+        // релиз для читалки
         $oRelease = Release::create([
             'journal_id' => $journal->id,
             'year' => 2019,
             'active' => 1,
+        ]);
+
+        // релиз для читалки для библиотеки
+        $oRelease = Release::create([
+            'journal_id' => $journal->id,
+            'year' => 2020,
+            'active' => 1,
+        ]);
+
+        $oArticle = Article::create([
+            'name' => 'Test',
+            'code' => 'test',
+            'description' => 'Test',
+            'release_id' => $oRelease->id,
         ]);
 
         $oGroup = Group::create([
