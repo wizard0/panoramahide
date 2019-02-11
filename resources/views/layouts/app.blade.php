@@ -62,18 +62,8 @@
     <script src="{{ asset('js/app.js') }}"></script>
 
     <div id="scripts">
-        @if(Auth::guest())
-            {!!  GoogleReCaptchaV3::render([
-               'auth_register_id' => 'auth/register'
-            ]) !!}
-        @endif
-        @if(Session::has('toastr::notifications'))
-            {!! Toastr::render() !!}
-        @else
-            <script>
-                toastr.options = {!! json_encode(config('toastr.options')) !!};
-            </script>
-        @endif
+        @include('layouts.components.scripts.captcha')
+        @include('layouts.components.scripts.toastr')
     </div>
 </body>
 </html>

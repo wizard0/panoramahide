@@ -1,0 +1,114 @@
+.reader-header {
+  padding: 1rem 0;
+  @media (max-width: 960px) {
+    padding: .5rem 0;
+  }
+  a span {
+    font-size: 10pt;
+    font-family: 'OpenSans-Regular', sans-serif;
+    padding: 6px 0 6px 30px;
+    background: url(../img/sprite-nav.png);
+    background-repeat: no-repeat;
+    text-decoration: none;
+    text-transform: uppercase;
+    i {
+      font-style: normal;
+    }
+  }
+  a span.contents {
+    background-position: 0 -60px;
+  }
+  a span.contents:hover {
+    background-position: 0 -90px;
+  }
+  a span.bookmark {
+    background-position: 0 0;
+  }
+  a span.bookmark:hover {
+    background-position: 0 -30px;
+  }
+  a span.library {
+    background-position: 0 -120px;
+  }
+  a span.library:hover {
+    background-position: 0 -150px;
+  }
+  a span.setbookmark {
+    background-position: 0 -180px;
+    border-bottom: 1px #e63201 solid;
+    border-radius: 0;
+    &:hover {
+      background-position: 0 -210px;
+    }
+  }
+  a span.exit {
+    background-position: 0 -330px;
+    &:hover {
+      background-position: 0 -360px;
+    }
+  }
+  a span.empty {
+    background: none;
+  }
+  a span:hover {
+    color: #e63201;
+  }
+  a:hover {
+    color: #e63201;
+  }
+  .search {
+    .search-input {
+      outline: none;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      border-radius: 0;
+      padding-left: 0px;
+      &:focus {
+        outline: none;
+      }
+    }
+    .search-icon .__close {
+      display: none;
+    }
+  }
+}
+#reader-header {
+  position: fixed;
+  width: 100%;
+  background-color: #fff;
+  top: 0;
+  z-index: 2;
+}
+#reader {
+  position: fixed;
+  width: 100%;
+  //min-height: calc(100vh - 70px);
+  //overflow: scroll;
+  height: calc(100vh - 100px);
+}
+#reader-menu {
+  //position: fixed;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
+
+  ul li {
+    list-style-type: none;
+    padding-left: 10px;
+  }
+
+  ul {
+    counter-reset: li;
+    padding: 0;
+    list-style: none;
+  }
+
+  ul > li {
+    position: relative;
+    margin: 0 0 6px 1em;
+    padding: 0px;
+  }
+}
+
+

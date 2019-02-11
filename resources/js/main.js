@@ -1,5 +1,28 @@
 $(document).ready(function() {
     deskbooksForm.initEvents();
+
+    if ($('#reader').length) {
+        let $currentFooterLink = $('#cur_heading a');
+        $('#reader-panel').on('scroll', function () {
+            $('#reader-panel article').each(function () {
+                let ThisOffset = $(this).offset();
+                if (ThisOffset.top < 220) {
+                    let id = $(this).find('h2').attr('id');
+                    $currentFooterLink.text($(this).closest('section').find('.heading').text());
+                    $currentFooterLink.attr('href', '#' + id);
+                }
+            });
+        });
+        $currentFooterLink.text($('#article00').closest('section').find('.heading').text());
+        $currentFooterLink.attr('href', '#article00');
+        $('a[href*="#"]').smoothScroll({
+            offset: -100,
+            scrollElement: $('#reader-panel'),
+            beforeScroll: function() {
+                //window.slideout.close();
+            }
+        });
+    }
 });
 
 /**

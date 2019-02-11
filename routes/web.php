@@ -129,6 +129,9 @@ Route::group(['prefix' => 'deskbooks'], function () {
     Route::get('/', 'PromoController@deskbooks')->name('deskbooks.index');
     Route::post('/save', 'PromoController@save')->name('deskbooks.save');
 });
+Route::group(['prefix' => 'reader'], function () {
+    Route::get('/', 'ReaderController@index')->name('reader.index');
+});
 
 Route::group(['prefix' => 'home'], function () {
     Route::get('/', 'HomeController@index')->name('home.index');
