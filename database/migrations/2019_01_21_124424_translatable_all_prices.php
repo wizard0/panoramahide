@@ -66,6 +66,6 @@ class TranslatableAllPrices extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('subscription_translations');
     }
 }

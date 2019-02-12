@@ -46,7 +46,7 @@ class JournalsTableSeeder extends Seeder
         ]);
 
         // релиз для читалки для библиотеки
-        $oRelease = Release::create([
+        Release::create([
             'journal_id' => $journal->id,
             'year' => 2020,
             'active' => 1,

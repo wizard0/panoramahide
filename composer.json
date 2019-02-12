@@ -16,6 +16,7 @@
         "dimsav/laravel-translatable": "^9.2",
         "doctrine/dbal": "^2.9",
         "fideloper/proxy": "^4.0",
+        "jenssegers/agent": "^2.6",
         "laravel/framework": "5.7.*",
         "laravel/tinker": "^1.0",
         "timehunter/laravel-google-recaptcha-v3": "^2.0"

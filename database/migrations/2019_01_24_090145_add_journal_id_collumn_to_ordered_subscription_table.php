@@ -25,7 +25,7 @@ class AddJournalIdCollumnToOrderedSubscriptionTable extends Migration
      */
     public function down()
     {
-        Schema::table('ordered_subscription', function (Blueprint $table) {
+        Schema::table('ordered_subscriptions', function (Blueprint $table) {
             $table->dropColumn('journal_id');
         });
     }
