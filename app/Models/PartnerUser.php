@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
@@ -53,7 +53,7 @@ class PartnerUser extends Model
 
     public function releases()
     {
-        return $this->belongsToMany(Release::class, 'partner_user_release', 'p_user_id', 'release_id');
+        return $this->belongsToMany(\App\Release::class, 'partner_user_release', 'p_user_id', 'release_id');
     }
 
     public function quotas()

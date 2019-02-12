@@ -5,9 +5,9 @@ namespace Tests\Unit;
 use Tests\TestCase;
 use App\Release;
 use App\Journal;
-use App\Quota;
-use App\Partner;
-use App\PartnerUser;
+use App\Models\Quota;
+use App\Models\Partner;
+use App\Models\PartnerUser;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
@@ -37,7 +37,7 @@ class Quota extends Model
 
     public function getReleases()
     {
-        $Releases = Release::where(function ($query) {
+        $Releases = \App\Release::where(function ($query) {
             if ($this->journal_id) {
                 $query->where('journal_id', $this->journal_id);
                 if ($this->release_begin && $this->release_end) {
