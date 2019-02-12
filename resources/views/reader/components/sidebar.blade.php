@@ -19,27 +19,13 @@
         <h3 class="text-uppercase text-center m-t-15 m-b-15">Содержание</h3>
         <div class="tab-content-item" data-simplebar>
             <ul class="content contents-nav">
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
-                <li>
-                    @include('reader.components.item.chapter')
-                </li>
+                @foreach($oArticles as $oArticle)
+                    <li>
+                        @include('reader.components.item.chapter', [
+                            'oArticle' => $oArticle
+                        ])
+                    </li>
+                @endforeach
             </ul>
 
         </div>
@@ -56,30 +42,13 @@
         <h3 class="text-uppercase text-center m-t-15 m-b-15">Библиотека</h3>
         <div class="tab-content-item" data-simplebar>
             <ul class="content contents-nav">
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
-                <li>
-                    @include('reader.components.item.journal')
-                </li>
+                @foreach($oReleases as $oRelease)
+                    <li>
+                        @include('reader.components.item.journal', [
+                            'oRelease' => $oRelease
+                        ])
+                    </li>
+                @endforeach
             </ul>
         </div>
     </div>

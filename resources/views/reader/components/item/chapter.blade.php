@@ -1,6 +1,8 @@
 <div class="reader-sidebar-chapter">
     <span>
-        <a href="#article00" data-scroll>Колонка главного редактора</a>
-        <p>Об информационной системе ценообразования</p>
+        <a href="#article{{ sprintf("%02d", $oArticle->id) }}" data-scroll>{{ $oArticle->name }}</a>
+        @if(!is_null($oArticle->description))
+            <p>{{ $oArticle->description }}</p>
+        @endif
     </span>
 </div>
