@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Traits\ActiveField;
+use App\Models\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
 
 class PartnerUser extends Model
