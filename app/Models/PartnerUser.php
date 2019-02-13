@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use App\Models\Traits\ActiveField;
+use App\Models\Traits\UsersDevices;
 use Illuminate\Database\Eloquent\Model;
 
 class PartnerUser extends Model
 {
     use ActiveField;
+    use UsersDevices;
 
     protected $fillable = [
         'user_id', 'active', 'partner_id', 'email'
@@ -44,6 +46,11 @@ class PartnerUser extends Model
             $this->quotas()->save($quota);
         }
         return true;
+    }
+    // Добавляем устровство пользователю
+    public function createDevice()
+    {
+        $this->devices()->save(Device::create(['owner_type' => 'partner_user']));
     }
 
     public function partner()
