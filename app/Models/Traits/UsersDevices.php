@@ -6,6 +6,12 @@ use App\Models\Device;
 
 trait UsersDevices
 {
+    // Добавляем новое устровство пользователю
+    public function createDevice()
+    {
+        $this->devices()->save(Device::create(['owner_type' => 'partner_user']));
+    }
+
     public function devices()
     {
         // Регулярным выражением проверяем, из какого класса вызван метод трейта

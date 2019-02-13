@@ -47,11 +47,6 @@ class PartnerUser extends Model
         }
         return true;
     }
-    // Добавляем устровство пользователю
-    public function createDevice()
-    {
-        $this->devices()->save(Device::create(['owner_type' => 'partner_user']));
-    }
 
     public function partner()
     {
