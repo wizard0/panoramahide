@@ -28,7 +28,7 @@ class DeviceServiceTest extends TestCase
 
         $this->actingAs($user);
 
-        $oDeviceService = new DeviceService();
+        $oDeviceService = new DeviceService($user);
 
         // авторизация
 
@@ -52,7 +52,7 @@ class DeviceServiceTest extends TestCase
 
         $this->actingAs($user);
 
-        $oDeviceService = new DeviceService();
+        $oDeviceService = new DeviceService($user);
 
         $oDeviceService->setAgent($this->agent());
 
@@ -74,7 +74,7 @@ class DeviceServiceTest extends TestCase
 
         $this->actingAs($user);
 
-        $oDeviceService = new DeviceService();
+        $oDeviceService = new DeviceService($user);
 
         $oDeviceService->setAgent($this->agent());
 
@@ -98,7 +98,7 @@ class DeviceServiceTest extends TestCase
 
         $this->actingAs($user);
 
-        $oDeviceService = new DeviceService();
+        $oDeviceService = new DeviceService($user);
 
         $oDeviceService->setAgent($this->agent());
 

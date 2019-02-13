@@ -3,7 +3,7 @@
         <form action="{{ route('login') }}" class="ajax-form">
             <div class="form-group">
                 <label>Логин</label>
-                <input type="text" name="email" placeholder="grishchenkonikolay@gmail.com" autocomplete="username">
+                <input type="text" name="email" placeholder="test@test.com" autocomplete="username">
             </div>
             <div class="form-group">
                 <label>Пароль</label>

@@ -131,6 +131,7 @@ Route::group(['prefix' => 'deskbooks'], function () {
 });
 Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
+    Route::post('/code', 'ReaderController@code')->name('reader.code');
 });
 
 Route::group(['prefix' => 'home'], function () {

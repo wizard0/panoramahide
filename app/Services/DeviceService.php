@@ -37,34 +37,45 @@ class DeviceService
      *
      * @var int
      */
-    private $storeMinutes = 60;
+    private $storeMinutes = 1440;
 
     /**
      * DeviceService constructor.
+     * @param User $user
      */
-    public function __construct()
+    public function __construct(User $user)
     {
         $this->agent = new Agent();
-        $this->user = Auth::user();
+        $this->user = $user;
     }
 
     /**
      * @return string
      */
-    private function getDevicePlatformBrowser(): string
+    private function getDevicePlatformBrowser(): ?string
     {
         $key = $this->salt();
 
         $device = $this->getAgentValue('device');
         $browser = $this->getAgentValue('browser');
         $platform = $this->getAgentValue('platform');
-
-        return $this->nameDevice($key, $device . ':' . $platform . ':' . $browser);
+        if (empty($platform) && empty($device) && empty($browser)) {
+            return null;
+        }
+        return $this->nameDevice($key, $platform . ':' . $device . ':' . $browser);
     }
 
-    private function nameDevice($salt, $name)
+    /**
+     * Конечное имя истройства
+     *
+     * @param $salt
+     * @param $name
+     * @return mixed
+     */
+    private function nameDevice(string $salt, ?string $name): ?string
     {
-        return $salt . ':' . $name;
+        return $name;
+        //return $salt . ':' . $name;
     }
 
     /**
@@ -115,8 +126,9 @@ class DeviceService
     /**
      * @return string
      */
-    public function getUserDevice(): string
+    public function getUserDevice(): ?string
     {
+        //return $this->getDevicePlatformBrowser();
         if (!$this->has()) {
             $this->set($this->getDevicePlatformBrowser());
         }
@@ -142,7 +154,7 @@ class DeviceService
     /**
      * @param $value
      */
-    public function set(string $value): void
+    public function set(?string $value): void
     {
         Session::put($this->storeKey, $value);
     }
@@ -158,18 +170,33 @@ class DeviceService
     /**
      * @return bool
      */
-    public function isOnline(): bool
+    public function setOnline(): bool
     {
-        $device = $this->getUserDevice();
+        $device = $this->getDevice();
 
-        // сохранить куда-нибудь
+        if (is_null($device)) {
+            return false;
+        }
+
+        $oDevices = $this->getAll();
+
+        foreach ($oDevices as $oDevice) {
+            $oDevice->update([
+                'is_online' => 0,
+            ]);
+        }
+        $device->update([
+            'is_online' => 1,
+        ]);
+        return true;
     }
 
-    public function confirmEmail()
+    /**
+     *
+     */
+    public function sendEmail(): void
     {
-        if (!$this->has()) {
-            // отправить email
-        }
+
     }
 
     /**
@@ -232,8 +259,27 @@ class DeviceService
             return false;
         }
         $device->update([
+            'code_at' => now(),
+            'expires_at' => now()->addMinutes($this->storeMinutes),
             'status' => 2,
         ]);
+        return true;
+    }
+
+    /**
+     * @param $code
+     * @return bool
+     */
+    public function checkCode(int $code): bool
+    {
+        $device = $this->getDevice();
+
+        if ($device->code !== $code) {
+            $this->setMessage('Устройство не найдено');
+            return false;
+        }
+
+        $this->activateDevice();
         return true;
     }
 
@@ -250,23 +296,23 @@ class DeviceService
      */
     public function getDevice(): ?UserDevice
     {
-        return $this->user->devices()
-            ->where('name', $this->getUserDevice())
-            ->first();
+        $nameDevice = $this->getUserDevice();
+
+        $devices = $this->user->devices();
+        if (!is_null($nameDevice)) {
+            $devices = $devices->where('name', $nameDevice);
+        }
+        $device = $devices->first();
+
+        return $device;
     }
 
     /**
+     * @param UserDevice $device
      * @return bool
      */
-    public function checkDevice(): bool
+    public function checkDevice(UserDevice $device): bool
     {
-        $device = $this->getDevice();
-
-        if (is_null($device)) {
-            $this->setMessage('Устройство не найдено');
-            return false;
-        }
-
         if ($device->status === 1) {
             $this->setMessage('Устройство не подтверждено');
             return false;
@@ -277,7 +323,7 @@ class DeviceService
             return false;
         }
 
-        if ($device->expires_at > now()) {
+        if ($device->expires_at < now()) {
             $device->update([
                 'status' => 3,
             ]);
@@ -290,7 +336,7 @@ class DeviceService
     /**
      * @return string
      */
-    public function salt(): string
+    private function salt(): string
     {
         return Hash::make($this->user->id . '' . $this->user->email);
     }
@@ -298,7 +344,7 @@ class DeviceService
     /**
      * @return int
      */
-    public function getCode(): int
+    private function getCode(): int
     {
         return mt_rand(100000, 999999);
     }
