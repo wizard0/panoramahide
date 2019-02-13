@@ -49,7 +49,7 @@ test:
     only:
         - master
     script:
-        - php72 ./vendor/phpunit/phpunit/phpunit --testdox tests
+        - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
     dependencies:
         - build
         - dbseed
