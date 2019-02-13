@@ -15,7 +15,7 @@ trait UsersDevices
     public function devices()
     {
         // Регулярным выражением проверяем, из какого класса вызван метод трейта
-        if (preg_match("#.*\\PartnerUser$#", __CLASS__))
+        if (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__, $match))
             // Для пользователей партнёров, определяем отношения через таблицу device_partner_user
             return $this->belongsToMany(Device::class, 'device_partner_user', 'user_id', 'device_id');
         else

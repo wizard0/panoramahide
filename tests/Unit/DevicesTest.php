@@ -21,7 +21,7 @@ class DevicesTest extends TestCase
     public function testPartnerUserCreateDevice()
     {
         $result = true;
-        for ($i=0; $i < 100; $i++) {
+        for ($i=0; $i < 10; $i++) {
             $user = PartnerUser::inRandomOrder()->first();
             $user->createDevice();
             if ($user->devices()->count() == 0)
@@ -32,7 +32,7 @@ class DevicesTest extends TestCase
     public function testGetDeviceUser()
     {
         $result = true;
-        for ($i=0; $i < 100; $i++) {
+        for ($i=0; $i < 10; $i++) {
             $device = Device::inRandomOrder()->first();
             if ($device->user == null)
                 $result = false;
@@ -42,7 +42,7 @@ class DevicesTest extends TestCase
     public function testGetUserDevices()
     {
         $result = true;
-        for ($i=0; $i < 100; $i++) {
+        for ($i=0; $i < 10; $i++) {
             $user = PartnerUser::inRandomOrder()->first();
             if ($user->devices == null)
                 $result = false;
@@ -52,7 +52,7 @@ class DevicesTest extends TestCase
     public function testDeviceActivateByCode()
     {
         $result = true;
-        for ($i=0; $i < 50; $i++) {
+        for ($i=0; $i < 10; $i++) {
             $device = Device::inRandomOrder()->first();
             $device->sendCodeToUser();
             if ($device->activate_code == null)
@@ -66,7 +66,7 @@ class DevicesTest extends TestCase
     }
     public function testResetUserDevices()
     {
-        for ($i=0; $i < 50; $i++) {
+        for ($i=0; $i < 5; $i++) {
             $user = null;
             do {
                 $user = PartnerUser::inRandomOrder()->first();
