@@ -231,21 +231,15 @@ class DeviceService
     /**
      * @return UserDevice
      */
-    public function saveDevice(): UserDevice
+    public function createDevice(): UserDevice
     {
-        $device = $this->getDevice();
-
-        if (is_null($device)) {
-            return UserDevice::create([
-                'user_id' => $this->user->id,
-                'code' => $this->getCode(),
-                'name' => $this->getUserDevice(),
-                'expires_at' => now()->addMinutes($this->storeMinutes),
-                'status' => 1,
-            ]);
-        } else {
-            return $device;
-        }
+        return UserDevice::create([
+            'user_id' => $this->user->id,
+            'code' => $this->getCode(),
+            'name' => $this->getUserDevice(),
+            'expires_at' => now()->addMinutes($this->storeMinutes),
+            'status' => 1,
+        ]);
     }
 
     /**
@@ -303,6 +297,10 @@ class DeviceService
             $devices = $devices->where('name', $nameDevice);
         }
         $device = $devices->first();
+
+        if (is_null($device)) {
+            $device = $this->createDevice();
+        }
 
         return $device;
     }

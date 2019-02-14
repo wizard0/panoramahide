@@ -105,7 +105,7 @@ class DeviceServiceTest extends TestCase
 
         DB::transaction(function () use ($oDeviceService) {
 
-            $oDeviceService->saveDevice();
+            $oDeviceService->createDevice();
 
             $this->assertNotNull($oDeviceService->getDevice());
 

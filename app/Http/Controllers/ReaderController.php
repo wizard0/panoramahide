@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Order;
 use App\Release;
 use App\Services\DeviceService;
 use App\Services\ReaderService;
@@ -34,11 +33,7 @@ class ReaderController extends Controller
 
         $device = $oDeviceService->getDevice();
 
-        if (is_null($device)) {
-            $device = $oDeviceService->saveDevice();
-        } else {
-            $oDeviceService->checkDevice($device);
-        }
+        $oDeviceService->checkDevice($device);
 
         if (is_null($device->code_at)) {
 

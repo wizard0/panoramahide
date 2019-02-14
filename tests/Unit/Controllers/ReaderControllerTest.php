@@ -83,7 +83,8 @@ class ReaderControllerTest extends TestCase
             $oDevice = $user->devices()->first();
 
             $oDevice->update([
-                'expires_at' => now()->subDay()
+                'code_at' => now(),
+                'expires_at' => now()->subDay(),
             ]);
 
             $request = new Request();
