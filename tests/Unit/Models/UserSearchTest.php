@@ -24,7 +24,7 @@ class UserSearchModelTest extends TestCase
         $this->actingAs($user);
         $this->assertAuthenticated();
         $res = UserSearch::retrieve();
-		$this->assertNotEmpty($res);
+		$this->assertNotEmpty($res, $this->textRed(' Таблица user_search пуста '));
 	}
 
 	public function testSearch()
