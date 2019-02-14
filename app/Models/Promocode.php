@@ -12,6 +12,13 @@ class Promocode extends Model
 {
     protected $table = 'promocodes';
 
+    const TYPE_COMMON = 'common';
+    const TYPE_ON_JOURNAL = 'on_journal';
+    const TYPE_ON_PUBLISHING = 'on_publishing';
+    const TYPE_ON_RELEASE = 'on_release';
+    const TYPE_PUBL_RELEASE = 'publishing+release';
+    const TYPE_CUSTOM = 'custom';
+
     /**
      * The attributes that are mass assignable.
      *

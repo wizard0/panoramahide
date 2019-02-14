@@ -68,7 +68,21 @@ Route::group(['prefix' => 'admin'], function () {
             Route::resource('news', 'Admin\NewsController');
 
             Route::resource('subscriptions', 'Admin\SubscriptionController');
+            Route::resource('paysystems', 'Admin\PaysystemController');
+            Route::resource('order_phys_users', 'Admin\OrderPhysUserController');
+            Route::resource('order_legal_users', 'Admin\OrderLegalUserController');
+            Route::resource('orders', 'Admin\OrderController');
+            Route::resource('promocodes', 'Admin\PromocodeController');
+            Route::resource('promo_users', 'Admin\PromoUserController');
+            Route::resource('jby_promo', 'Admin\JbyPromoController');
+            Route::resource('partners', 'Admin\PartnerController');
+            Route::resource('quotas', 'Admin\QuotaController');
+            Route::resource('partner_users', 'Admin\PartnerUserController');
+            Route::resource('users', 'Admin\UserController');
+            Route::resource('roles', 'Admin\RoleController');
         });
+
+
 
     });
 });
