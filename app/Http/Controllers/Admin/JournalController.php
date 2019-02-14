@@ -2,80 +2,41 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 class JournalController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    protected $attributeTypes = [
+        'locale' => self::TYPE_STRING,
+        'active' => self::TYPE_BOOL,
+        'active_date' => self::TYPE_DATE,
+        'ISSN' => self::TYPE_STRING,
+        'price_prev_halfyear' => self::TYPE_BOOL,
+        'created_at' => self::TYPE_DATE,
+        'updated_at' => self::TYPE_DATE,
+        'index_rospechat' => self::TYPE_STRING,
+        'index_krp' => self::TYPE_STRING,
+        'name' => self::TYPE_STRING,
+        'code' => self::TYPE_STRING,
+        'in_HAC_list' => self::TYPE_TEXT,
+        'image' => self::TYPE_IMAGE,
+        'description' => self::TYPE_TEXT,
+        'preview_image' => self::TYPE_STRING,
+        'preview_description' => self::TYPE_TEXT,
+        'format' => self::TYPE_STRING,
+        'volume' => self::TYPE_STRING,
+        'periodicity' => self::TYPE_STRING,
+        'editorial_board' => self::TYPE_TEXT,
+        'article_index' => self::TYPE_TEXT,
+        'rubrics' => self::TYPE_TEXT,
+        'review_procedure' => self::TYPE_TEXT,
+        'article_submission_rules' => self::TYPE_TEXT,
+        'chief_editor' => self::TYPE_STRING,
+        'phone' => self::TYPE_STRING,
+        'email' => self::TYPE_STRING,
+        'site' => self::TYPE_STRING,
+        'about_editor' => self::TYPE_TEXT,
+        'contacts' => self::TYPE_TEXT,
+        'categories' => self::TYPE_REL_BELONGS_TO_MANY,
+        'publishings' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
 }

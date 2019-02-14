@@ -8,12 +8,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user_id" content="{{ Auth()->id() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('pageTitle', 'Admin')</title>
 
 
     <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
 
     <!-- Fontfaces CSS-->
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('css/admin/font-face.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('vendor/font-awesome-4.7/css/font-awesome.min.css') }}" rel="stylesheet" media="all">
     <link href="{{ asset('vendor/font-awesome-5/css/fontawesome-all.min.css') }}" rel="stylesheet" media="all">
@@ -37,6 +38,7 @@
 
 </head>
 <body class="animsition">
+{{--{{ dd(config('admin.menu')) }}--}}
     <div class="page-wrapper">
         @include('includes.admin.header_mobile')
         @include('includes.admin.menu_sidebar')
@@ -81,5 +83,13 @@
     <!-- Main JS-->
     <script src="{{ asset('js/admin/main.js') }}"></script>
 
+    <script src="{{ asset('/js/admin/CRUDManager.js') }}"></script>
+
+
+    @yield('javascript')
+
+    <script>
+        CRUDManager = new JSCRUDManager();
+    </script>
 </body>
 </html>

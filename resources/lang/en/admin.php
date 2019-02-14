@@ -15,4 +15,11 @@ return [
     'articles' => 'Articles',
     'news' => 'News',
 
+    'actions' => 'Actions',
+
+    'subscription management' => 'Subscription Management',
+    'subscription type electronic' => 'Electronic subscription',
+    'subscription type printed' => 'Printed subscription',
+
+
 ];

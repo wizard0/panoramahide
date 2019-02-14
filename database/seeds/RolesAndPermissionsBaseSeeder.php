@@ -19,10 +19,10 @@ class RolesAndPermissionsBaseSeeder extends Seeder
         // create permissions
         Permission::create(['name' => \App\User::PERMISSION_ADMIN]);
 
-        $role = Role::create(['name' => 'admin']);
+        $role = Role::create(['name' => \App\User::ROLE_ADMIN]);
         $role->givePermissionTo(\App\User::PERMISSION_ADMIN);
 
-        $role = Role::create(['name' => 'super-admin']);
+        $role = Role::create(['name' => \App\User::ROLE_SUPERADMIN]);
         $role->givePermissionTo(Permission::all());
     }
 }

@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
+    use Translatable, WithTranslationTrait;
+
     const RESTRICTION_NO = 'no';
     const RESTRICTION_REGISTER = 'register';
     const RESTRICTION_PAY = 'pay/subscribe';

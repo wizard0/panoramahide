@@ -2,80 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
-
 class NewsController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  int                      $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int $id
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
+    protected $attributeTypes = [
+        'active' => self::TYPE_BOOL,
+        'publishing_date' => self::TYPE_DATE,
+        'created_at' => self::TYPE_DATE,
+        'updated_at' => self::TYPE_DATE,
+        'name' => self::TYPE_STRING,
+        'code' => self::TYPE_STRING,
+        'description' => self::TYPE_TEXT,
+        'image' => self::TYPE_IMAGE,
+        'preview' => self::TYPE_TEXT,
+        'preview_image' => self::TYPE_STRING,
+        'publishings' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
 }

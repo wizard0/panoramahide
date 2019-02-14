@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = ['name', 'code', 'description', 'image', 'preview', 'preview_image'];
 

@@ -1528,7 +1528,7 @@ section {
 }
 
 .account-dropdown__item a:hover {
-    background: #4272d7;
+    background: #e63201;
     color: #fff;
 }
 
@@ -1555,7 +1555,7 @@ section {
 }
 
 .account-dropdown__footer a:hover {
-    background: #4272d7;
+    background: #e63201;
     color: #fff;
 }
 
@@ -1631,11 +1631,11 @@ section {
 }
 
 .navbar-sidebar .navbar__list li a:hover {
-    color: #4272d7;
+    color: #e58b72;
 }
 
 .navbar-sidebar .navbar__list li.active > a {
-    color: #4272d7;
+    color: #e63201;
 }
 
 .has-sub {

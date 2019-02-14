@@ -10,6 +10,11 @@
     <script src="{{ asset('js/app.js') }}"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
+
+    <link href="{{ asset('vendor/font-awesome-5/css/fontawesome-all.min.css') }}" rel="stylesheet" media="all">
+
+    <!-- Main CSS-->
+    <link href="{{ asset('css/admin/theme.css') }}" rel="stylesheet" media="all">
 </head>
 <body>
     <div class="container">
@@ -17,15 +22,29 @@
             <div class="col-4">
                 <div class="card">
                     <div class="card-body">
-                        <form action="" autocomplete="off" method="POST">
+                        <form action="" method="post" class="">
                             @csrf
                             <div class="form-group">
-                                <input type="text" class="form-control" name="username">
+                                <div class="input-group">
+                                    <div class="input-group-addon">Username</div>
+                                    <input type="text" id="username" name="username" class="form-control">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-group">
-                                <input type="password" class="form-control" name="password">
+                                <div class="input-group">
+                                    <div class="input-group-addon">Password</div>
+                                    <input type="password" id="password" name="password" class="form-control">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-asterisk"></i>
+                                    </div>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">login</button>
+                            <div class="form-actions form-group">
+                                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                            </div>
                         </form>
                     </div>
                 </div>

@@ -66,6 +66,8 @@ Route::group(['prefix' => 'admin'], function () {
             Route::resource('articles', 'Admin\ArticleController');
 
             Route::resource('news', 'Admin\NewsController');
+
+            Route::resource('subscriptions', 'Admin\SubscriptionController');
         });
 
     });

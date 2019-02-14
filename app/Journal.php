@@ -45,7 +45,7 @@ use App\Models\Promocode;
  */
 class Journal extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',
@@ -60,7 +60,7 @@ class Journal extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'journal_category');
     }
 
     /**
@@ -70,7 +70,7 @@ class Journal extends Model
      */
     public function publishings()
     {
-        return $this->belongsToMany(Publishing::class);
+        return $this->belongsToMany(Publishing::class, 'journal_publishing');
     }
 
     public function releases()

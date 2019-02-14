@@ -20,6 +20,8 @@ class User extends Authenticatable
     use HasRoles;
 
     const PERMISSION_ADMIN = 'web admin';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_SUPERADMIN = 'super-admin';
 
     /**
      * The attributes that are mass assignable.

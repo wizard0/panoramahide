@@ -2,111 +2,134 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
+use App\Article;
+use App\Author;
+use App\Category;
 use App\Http\Controllers\Controller;
+use App\Journal;
+use App\News;
+use App\Publishing;
+use App\Release;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App;
 
 class CRUDController extends Controller
 {
-    /**
-     * @var array of model attributes which should be displayed at index CRUD action
-     */
-    protected $displayAttributes;
+    use IndexPageTrait;
+    use EditCreatePageTrait;
+    use ShowPageTrait;
 
     protected $modelName;
+    protected $model;
+    protected $slug;
+    protected $locale;
+    protected $relations;
 
-    private $tableBody = [];
-    private $collection;
+    const TYPE_STRING = 'string';
+    const TYPE_TEXT = 'text';
+    const TYPE_HTML = 'html';
+    const TYPE_SELECT = 'select';
+    const TYPE_IMAGE = 'image';
+    const TYPE_BOOL = 'bool';
+    const TYPE_REL_BELONGS_TO = 'relation-belongs-to';
+    const TYPE_REL_BELONGS_TO_MANY = 'relation-belongs-to-many';
+    const TYPE_DATE = 'date';
+    const TYPE_PRICE = 'price';
+
+    const LOCALE_VAR = 'translate_locale';
 
     /**
-     * Display a listing of the resource.
-     * TODO. sorting
+     * CRUDController constructor.
+     * Auto defining model name for CRUD operations
      *
      * @param \Illuminate\Http\Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->defineModelNameAndSlug()
+            ->defineLocale($request);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int $id
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function destroy($id)
     {
-        $data = $this->getTableData($request->get('sort'));
-
-        return view('admin.content.index', compact('data'));
-    }
-
-    private function getModelCollection()
-    {
-        if (isset($this->modelName)) {
-            $modelName = $this->modelName;
-
-            if (in_array('Dimsav\Translatable\Translatable', class_uses($modelName))) {
-                $this->collection = $modelName::withTranslation()->get();
-            } else {
-                $this->collection = $modelName::all();
-            }
-
-            return $this;
+        if ($this->getModel($id)->deleteModel()) {
+            return redirect()->back();
+        } else {
+            return redirect()->back();
         }
-
-        return false;
     }
 
-    private function defineModelName()
+    /**
+     * To define correct model name controller which extends this feature should be named like:
+     *     <Model_Name>Controller
+     *
+     * @return $this
+     */
+    private function defineModelNameAndSlug()
     {
         if (!isset($this->modelName)) {
             $className = get_class($this);
             if (preg_match('/\\\\([a-zA-Z]*)Controller$/', $className, $matches)) {
                 $this->modelName = '\\App\\' . $matches[1];
+                $this->slug = str_plural(strtolower($matches[1]));
             }
         }
 
         return $this;
     }
 
-    protected function getTableData($sort = null)
+    private function defineLocale(Request $request)
     {
-        if ($this->prepareTableData()) {
-            return [
-                'head' => $this->displayAttributes,
-                'body' => $this->tableBody
-            ];
-        } else {
-            return false;
-        }
-    }
-
-    private function prepareTableData()
-    {
-        try {
-            $this->defineModelName()
-                ->getModelCollection()
-                ->prepareTableBodyData();
-        } catch (\Exception $e) {
-            return false;
-        }
+        $this->locale = $request->has(self::LOCALE_VAR)
+            ? $request->get(self::LOCALE_VAR)
+            : App::getLocale();
 
         return $this;
     }
 
-    private function prepareTableBodyData()
+    private function isTranslatable()
     {
-        foreach ($this->collection as $model) { // row
-            $row = [];
-            foreach ($this->displayAttributes as $attribute) { // item
-                $value = $model->$attribute;
-                if (is_numeric($value)) {
-                    $html = (object)[
-                        'class' => 'text-right'
-                    ];
-                } else {
-                    $html = false;
+        if (!isset($this->modelName)) {
+            return false;
+        }
+        return in_array('Dimsav\Translatable\Translatable', class_uses($this->modelName));
+    }
+
+    private function getModel($id)
+    {
+        if (!isset($this->model)) {
+//            if ($this->isTranslatable()) {
+//                $this->model = $this->modelName::find($id);
+//                dd($this->model->getTranslation($this->locale)->code);
+//                dd($this->model->translations);
+//            } else {
+                $this->model = $this->modelName::find($id);
+                if (!$this->model) {
+                    $this->createModel();
                 }
-                $row[] = (object)[
-                    'html' => $html,
-                    'value' => $value
-                ];
-
-            }
-            $this->tableBody[] = $row;
+//            }
         }
+
         return $this;
+    }
+
+    private function deleteModel()
+    {
+        $this->model->delete();
+
+        return $this;
+    }
+
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

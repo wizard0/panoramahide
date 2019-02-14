@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subscription extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     protected $table = 'subscriptions';
 

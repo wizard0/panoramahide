@@ -30,6 +30,8 @@ class TestSeeder extends Seeder
         $this->call(PublishingTestSeeder::class);
         $this->call(setReleasesYear::class);
         $this->call(CreateSubscriptions::class);
+
+        $this->call(RolesAndPermissionsBaseSeeder::class);
     }
 
     private function clear()
