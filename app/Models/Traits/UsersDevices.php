@@ -9,7 +9,7 @@ trait UsersDevices
     // Добавляем новое устровство пользователю
     public function createDevice()
     {
-        $this->devices()->save(Device::create(['owner_type' => 'partner_user']));
+        $this->devices()->save(Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]));
     }
 
     public function devices()

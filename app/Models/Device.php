@@ -48,7 +48,7 @@ class Device extends Model
             $device->activateDevice();
             return $device;
         }
-        return false;
+        return null;
     }
 
     // В сети ли устройство
@@ -107,7 +107,7 @@ class Device extends Model
     public function users()
     {
         if ($this->owner_type === 'user')
-            return $this->belongsToMany(User::class, 'device_user', 'device_id', 'user_id');
+            return $this->belongsToMany(\App\User::class, 'device_user', 'device_id', 'user_id');
         else
             return $this->belongsToMany(PartnerUser::class, 'device_partner_user', 'device_id', 'user_id');
     }

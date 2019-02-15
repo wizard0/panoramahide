@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\PromoUser;
+use App\Models\Traits\UsersDevices;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use UsersDevices;
 
     /**
      * The attributes that are mass assignable.
