@@ -3,7 +3,10 @@
 namespace App;
 
 use App\Models\PromoUser;
+
 use App\Models\Traits\UsersDevices;
+//use App\Models\UserDevice;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -50,4 +53,10 @@ class User extends Authenticatable
     {
         return phoneFormat($this->phone);
     }
+
+/*  public function devices()
+    {
+        return $this->hasMany(UserDevice::class);
+    }
+*/
 }

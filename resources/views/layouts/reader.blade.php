@@ -49,10 +49,22 @@
         {{--<link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">--}}
     @endif
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script>
+        window.modal = {
+            active: '{{ Session::has('modal') ? Session::get('modal') : null }}'
+        };
+    </script>
 </head>
 <body>
 
 @yield('content')
+
+<div id="modals">
+    @if(!Auth::check())
+        @include('includes.modals.register')
+    @endif
+    @include('includes.modals.reader')
+</div>
 
 <script src="{{ asset('js/app.js') }}"></script>
 

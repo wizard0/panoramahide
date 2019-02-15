@@ -52,7 +52,8 @@ class LoginController extends Controller
         return $this->authenticated($request, $this->guard()->user())
             ?: [
                 'success' => true,
-                'redirect' => url($this->redirectTo)
+                'redirect' => redirect()->back()->getTargetUrl(),
+               //'redirect' => url($this->redirectTo)
             ];
     }
 }
