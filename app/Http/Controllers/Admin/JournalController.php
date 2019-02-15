@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
+use App\Publishing;
+
 class JournalController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
     protected $attributeTypes = [
-        'locale' => self::TYPE_STRING,
+        'journal_locale' => self::TYPE_STRING,
         'active' => self::TYPE_BOOL,
         'active_date' => self::TYPE_DATE,
         'ISSN' => self::TYPE_STRING,
@@ -20,7 +23,7 @@ class JournalController extends CRUDController
         'in_HAC_list' => self::TYPE_TEXT,
         'image' => self::TYPE_IMAGE,
         'description' => self::TYPE_TEXT,
-        'preview_image' => self::TYPE_STRING,
+        'preview_image' => self::TYPE_IMAGE,
         'preview_description' => self::TYPE_TEXT,
         'format' => self::TYPE_STRING,
         'volume' => self::TYPE_STRING,
@@ -37,6 +40,11 @@ class JournalController extends CRUDController
         'about_editor' => self::TYPE_TEXT,
         'contacts' => self::TYPE_TEXT,
         'categories' => self::TYPE_REL_BELONGS_TO_MANY,
-        'publishings' => self::TYPE_REL_BELONGS_TO_MANY
+        'publishings' => self::TYPE_REL_BELONGS_TO_MANY,
+    ];
+
+    protected $relatedModelName = [
+        'categories' => Category::class,
+        'publishings' => Publishing::class
     ];
 }

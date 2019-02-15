@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Journal;
 use App\Subscription;
 
 class SubscriptionController extends CRUDController
@@ -36,5 +37,9 @@ class SubscriptionController extends CRUDController
             Subscription::PERIOD_ONCE_3_MONTH => 'Once at 3 Months',
             Subscription::PERIOD_ONCE_HALFYEAR => 'Once at Half Year'
         ]
+    ];
+
+    protected $relatedModelName = [
+        'journal_id' => Journal::class
     ];
 }

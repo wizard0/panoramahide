@@ -85,10 +85,6 @@ trait EditCreatePageTrait
                         break;
                     case self::TYPE_REL_BELONGS_TO_MANY:
                     case self::TYPE_REL_BELONGS_TO:
-                        if ($attribute == 'categories')
-                        {
-                            echo 'hello wizard';
-                        }
                         $value = $this->getRelationData($attribute);
                         break;
                     default:
@@ -149,15 +145,12 @@ trait EditCreatePageTrait
         $data = [];
         switch ($this->attributeTypes[$relation]) {
             case self::TYPE_REL_BELONGS_TO:
+                $data['available'] = $this->getAvailableRelationData($relation);
                 $relation = substr($relation, 0, strpos($relation, '_id'));
                 $related = $this->model->$relation;
                 $data['slug'] = str_plural($relation);
-                $data['value'] = $related->id;
-                foreach (get_class($related)::withPresetTranslation($this->locale)->get() as $r) {
-                    $data['available'][] = [
-                        'name' => $r->name,
-                        'id' => $r->id
-                    ];
+                if (!is_null($related)) {
+                    $data['value'] = $related->id;
                 }
                 break;
 
@@ -167,7 +160,10 @@ trait EditCreatePageTrait
                 foreach ($related as $rValue) {
                     $data['value'][] = $rValue->id;
                 }
-                foreach (get_class($this->model->$relation()->getRelated())::withPresetTranslation($this->locale)->get() as $r) {
+                $relatedCollection = ($this->isTranslatable(get_class($this->model->$relation()->getRelated())))
+                    ? get_class($this->model->$relation()->getRelated())::withPresetTranslation($this->locale)->get()
+                    : get_class($this->model->$relation()->getRelated())::all();
+                foreach ($relatedCollection as $r) {
                     $data['available'][] = [
                         'name' => $r->name,
                         'id' => $r->id
@@ -176,5 +172,21 @@ trait EditCreatePageTrait
                 break;
         }
         return $data;
+    }
+
+    private function getAvailableRelationData($relation)
+    {
+        $available = [];
+        $relatedCollection = ($this->isTranslatable($this->relatedModelName[$relation]))
+            ? $this->relatedModelName[$relation]::withPresetTranslation($this->locale)->get()
+            : $this->relatedModelName[$relation]::all();
+        foreach ($relatedCollection as $r) {
+            $available[] = [
+                'name' => $r->name,
+                'id' => $r->id
+            ];
+        }
+
+        return $available;
     }
 }

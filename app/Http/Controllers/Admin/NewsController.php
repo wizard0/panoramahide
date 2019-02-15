@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Publishing;
+
 class NewsController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
@@ -17,5 +19,9 @@ class NewsController extends CRUDController
         'preview' => self::TYPE_TEXT,
         'preview_image' => self::TYPE_STRING,
         'publishings' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
+
+    protected $relatedModelName = [
+        'publishings' => Publishing::class
     ];
 }

@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Journal;
 use App\Models\Promocode;
+use App\Publishing;
+use App\Release;
 
 class PromocodeController extends CRUDController
 {
@@ -33,5 +36,12 @@ class PromocodeController extends CRUDController
             Promocode::TYPE_PUBL_RELEASE => 'Publishing + Release',
             Promocode::TYPE_CUSTOM => 'Custom'
         ]
+    ];
+    protected $relatedModelName = [
+        'journal_id' => Journal::class,
+        'journal_for_releases_id' => Journal::class,
+        'journals' => Journal::class,
+        'publishings' => Publishing::class,
+        'releases' => Release::class
     ];
 }

@@ -102,6 +102,7 @@
                                 @php
                                     $hasValues = array_key_exists('value', $row->value);
                                 @endphp
+                                    <option value="">{{ __('Nothing choosed') }}</option>
                                 @foreach($row->value['available'] as $available)
                                     <option value="{{ $available['id'] }}"
                                     {{ ($hasValues && $available['id'] == $row->value['value'])  ? 'selected' : '' }}>

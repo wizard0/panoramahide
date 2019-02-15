@@ -48,6 +48,7 @@ trait IndexPageTrait
             $this->getModelCollection()
                 ->prepareTableBodyData();
         } catch (\Exception $e) {
+
             return false;
         }
 

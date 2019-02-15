@@ -13,7 +13,7 @@ use App\Models\Promocode;
  * Class Journal
  *
  * @property integer id
- * @property string  locale
+ * @property string  journal_locale
  * @property boolean active
  * @property string  active_date
  * @property string  ISSN

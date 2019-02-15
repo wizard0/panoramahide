@@ -29,7 +29,7 @@ return [
             'name' => 'admin.promocodes',
             'sub' => [
                 ['name' => 'admin.promocodes management', 'route' => 'promocodes.index'],
-                ['name' => 'admin.promousers management', 'route' => 'promo_users.index'],
+                ['name' => 'admin.promousers management', 'route' => 'promo_userz.index'],
                 ['name' => 'admin.journals by promocodes', 'route' => 'jby_promo.index']
             ]
         ],
@@ -45,7 +45,7 @@ return [
             'name' => 'admin.users and roles',
             'sub' => [
                 ['name' => 'admin.users', 'route' => 'users.index'],
-                ['name' => 'admin.roles', 'route' => 'roles.index']
+//                ['name' => 'admin.roles', 'route' => 'roles.index']
             ]
         ]
     ]

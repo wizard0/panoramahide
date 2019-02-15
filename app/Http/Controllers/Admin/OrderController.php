@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Order;
+use App\OrderLegalUser;
+use App\OrderPhysUser;
+use App\Paysystem;
 
 class OrderController extends CRUDController
 {
@@ -26,5 +29,11 @@ class OrderController extends CRUDController
             Order::STATUS_PAYED => 'Payed',
             Order::STATUS_COMPLETED => 'Completed'
         ]
+    ];
+
+    protected $relatedModelName = [
+        'phys_user_id' => OrderPhysUser::class,
+        'legal_user_id' => OrderLegalUser::class,
+        'paysystems_id' => Paysystem::class
     ];
 }

@@ -2,16 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
-use App\Author;
-use App\Category;
 use App\Http\Controllers\Controller;
-use App\Journal;
-use App\News;
-use App\Publishing;
-use App\Release;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App;
 
 class CRUDController extends Controller
@@ -22,6 +14,7 @@ class CRUDController extends Controller
 
     protected $modelName;
     protected $model;
+    protected $relatedModelName;
     protected $slug;
     protected $locale;
     protected $relations;
@@ -45,7 +38,7 @@ class CRUDController extends Controller
      *
      * @param \Illuminate\Http\Request $request
      */
-    public function __construct(Request $request)
+    public function __construct(Request $request = null)
     {
         $this->defineModelNameAndSlug()
             ->defineLocale($request);
@@ -79,43 +72,45 @@ class CRUDController extends Controller
             $className = get_class($this);
             if (preg_match('/\\\\([a-zA-Z]*)Controller$/', $className, $matches)) {
                 $this->modelName = '\\App\\' . $matches[1];
-                $this->slug = str_plural(strtolower($matches[1]));
+                if (!isset($this->slug) || $this->slug == '') {
+                    $this->slug = str_plural(strtolower($matches[1]));
+                }
             }
         }
 
         return $this;
     }
 
-    private function defineLocale(Request $request)
+    private function defineLocale(Request $request = null)
     {
-        $this->locale = $request->has(self::LOCALE_VAR)
+        $this->locale = ($request != null && $request->has(self::LOCALE_VAR))
             ? $request->get(self::LOCALE_VAR)
             : App::getLocale();
 
         return $this;
     }
 
-    private function isTranslatable()
+    private function isTranslatable($modelName = null)
     {
-        if (!isset($this->modelName)) {
-            return false;
+        if (!$modelName) {
+
+            if (!isset($this->modelName)) {
+                return false;
+            }
+            $modelName = $this->modelName;
+
         }
-        return in_array('Dimsav\Translatable\Translatable', class_uses($this->modelName));
+
+        return in_array('Dimsav\Translatable\Translatable', class_uses($modelName));
     }
 
     private function getModel($id)
     {
         if (!isset($this->model)) {
-//            if ($this->isTranslatable()) {
-//                $this->model = $this->modelName::find($id);
-//                dd($this->model->getTranslation($this->locale)->code);
-//                dd($this->model->translations);
-//            } else {
-                $this->model = $this->modelName::find($id);
-                if (!$this->model) {
-                    $this->createModel();
-                }
-//            }
+            $this->model = $this->modelName::find($id);
+            if (!$this->model) {
+                $this->createModel();
+            }
         }
 
         return $this;

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Journal;
+use App\Models\Promocode;
 use Illuminate\Http\Request;
 
 class ReleaseController extends CRUDController
@@ -26,5 +28,10 @@ class ReleaseController extends CRUDController
         'price_for_printed' => self::TYPE_STRING,
         'price_for_articles' => self::TYPE_STRING,
         'promocode' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
+
+    protected $relatedModelName = [
+        'journal_id' => Journal::class,
+        'promocode' => Promocode::class
     ];
 }

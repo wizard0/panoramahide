@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Article;
+use App\Journal;
+
 class CategoryController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
@@ -16,5 +19,10 @@ class CategoryController extends CRUDController
         'description' => self::TYPE_TEXT,
         'journals' => self::TYPE_REL_BELONGS_TO_MANY,
         'articles' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
+
+    protected $relatedModelName = [
+        'journals' => Journal::class,
+        'articles' => Article::class
     ];
 }

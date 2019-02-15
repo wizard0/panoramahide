@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Journal;
+use App\Models\Promocode;
+
 class PublishingController extends CRUDController
 {
     protected $displayAttributes = ['id', 'name', 'code', 'updated_at'];
@@ -16,5 +19,10 @@ class PublishingController extends CRUDController
         'description' => self::TYPE_TEXT,
         'promocode' => self::TYPE_REL_BELONGS_TO_MANY,
         'journals' => self::TYPE_REL_BELONGS_TO_MANY
+    ];
+
+    protected $relatedModelName = [
+        'promocode' => Promocode::class,
+        'journals' => Journal::class
     ];
 }

@@ -4,6 +4,8 @@ namespace Tests\Unit\Controllers\Admin;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -62,5 +64,39 @@ class CRUDControllerTest extends TestCase
 
         $this->assertDatabaseMissing('categories', ['id' => $category->id]);
         $this->assertDatabaseMissing('category_translations', ['category_id' => $category->id]);
+    }
+
+    public function testRelation()
+    {
+        $category = factory(App\Category::class)->create();
+        $journal = factory(App\Journal::class)->create();
+
+        $oCRUDController = new App\Http\Controllers\Admin\JournalController();
+        $oCRUDController->update((new Request())->merge([
+            'name' => 'new_journal_test_name_no_more_such_names2',
+            'categories' => [$category->id]
+        ]), $journal->id);
+
+        $this->assertDatabaseHas('journal_category', [
+            'journal_id' => $journal->id,
+            'category_id' => $category->id
+        ]);
+    }
+
+    public function testImageUpload()
+    {
+        Storage::fake('journal_images_test');
+        $journal = factory(App\Journal::class)->create();
+
+        $oCRUDController = new App\Http\Controllers\Admin\JournalController();
+        $request = new Request();
+        $request->merge([
+            'name' => 'new_journal_test_name_no_more_such_names2',
+        ]);
+        $image = UploadedFile::fake()->image('journal.png');
+        $request->files->set('image', $image);
+        $oCRUDController->update($request, $journal->id);
+
+        $this->assertTrue(App\Journal::find($journal->id)->image !== '');
     }
 }

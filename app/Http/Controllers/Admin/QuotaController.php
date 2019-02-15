@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Journal;
+use App\Partner;
+use App\Release;
+
 class QuotaController extends CRUDController
 {
     protected $displayAttributes = ['id', 'partner_id', 'used'];
@@ -14,5 +18,10 @@ class QuotaController extends CRUDController
         'release_end' => self::TYPE_DATE,
         'quota_size' => self::TYPE_STRING,
         'used' => self::TYPE_STRING
+    ];
+    protected $relatedModelName = [
+        'partner_id' => Partner::class,
+        'journal_id' => Journal::class,
+        'release_id' => Release::class
     ];
 }

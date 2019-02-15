@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Article;
+use App\Author;
+use App\Category;
+use App\Release;
 
 class ArticleController extends CRUDController
 {
@@ -38,5 +41,11 @@ class ArticleController extends CRUDController
             Article::RESTRICTION_PAY => 'Pay or subscribe',
             Article::RESTRICTION_REGISTER => 'Registering'
         ]
+    ];
+
+    protected $relatedModelName = [
+        'release_id' => Release::class,
+        'authors' => Author::class,
+        'categories' => Category::class
     ];
 }

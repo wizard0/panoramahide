@@ -15,7 +15,7 @@ class Author extends Model
 
     public function articles()
     {
-        $this->belongsToMany(Article::class);
+        return $this->belongsToMany(Article::class);
     }
 
     public static function getAlphabet()
