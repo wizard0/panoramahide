@@ -31,30 +31,38 @@ class ReaderController extends Controller
 
         $oDeviceService = new DeviceService($oUser);
 
-        $device = $oDeviceService->getDevice();
+        $device = $oDeviceService->getCurrentDevice();
+
+        if (is_null($device)) {
+
+            if ($oDeviceService->canCreate()) {
+                $device = $oDeviceService->createDevice();
+            } else {
+                (new Toastr($oDeviceService->getMessage()))->error(false);
+
+                return view('reader.index', []);
+            }
+        }
 
         $oDeviceService->checkDevice($device);
 
         if (is_null($device->code_at)) {
 
-            $oDeviceService->sendEmail();
-
-            (new Toastr('На email '.$oUser->email.' был отправлен код подтверждения устройства. '.$device->code))->info(false);
-
-            session()->flash('modal', 'reader-code-modal');
+            $this->sessionModalError('code_at', $oDeviceService, $oUser, $device);
 
             return view('reader.index', []);
         }
 
         if ($device->expires_at < now()) {
 
-            $oDeviceService->sendEmail();
+            $this->sessionModalError('expires_at', $oDeviceService, $oUser, $device);
 
-            (new Toastr('Срок действия устройства истек.'))->error(false);
+            return view('reader.index', []);
+        }
 
-            (new Toastr('На email '.$oUser->email.' был отправлен код подтверждения устройства. '.$device->code))->info(false);
+        if ($oDeviceService->hasOnline() && !$oDeviceService->checkOnline()) {
 
-            session()->flash('modal', 'reader-code-modal');
+            $this->sessionModalError('online', $oDeviceService, $oUser, $device);
 
             return view('reader.index', []);
         }
@@ -79,6 +87,45 @@ class ReaderController extends Controller
         ]);
     }
 
+    /**
+     * @param $type
+     * @param DeviceService $oDeviceService
+     * @param $oUser
+     * @param $device
+     */
+    private function sessionModalError($type, DeviceService $oDeviceService, $oUser, $device)
+    {
+        switch ($type) {
+            case 'code_at':
+                $oDeviceService->sendEmail();
+
+                (new Toastr('На email '.$oUser->email.' был отправлен код подтверждения устройства. '.$device->code))->info(false);
+
+                session()->flash('modal', 'reader-code-modal');
+
+                break;
+            case 'expires_at':
+                $oDeviceService->sendEmail();
+
+                (new Toastr('Срок действия устройства истек.'))->error(false);
+
+                (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства. ' . $device->code))->info(false);
+
+                session()->flash('modal', 'reader-code-modal');
+
+                break;
+            case 'online':
+
+                (new Toastr('Читалка уже открыта на другом устройстве'))->info(false);
+
+                session()->flash('modal', 'reader-confirm-online-modal');
+
+                break;
+            default:
+                break;
+        }
+    }
+
 
     /**
      * @param Request $request
@@ -100,5 +147,38 @@ class ReaderController extends Controller
             'redirect' => url('/reader'),
         ], 'Код успешно подтвержден');
     }
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function online(Request $request)
+    {
+        $oUser = User::find(Auth::user()->id);
+
+        $oDeviceService = new DeviceService($oUser);
+
+        if (!$request->exists('online') && !$oDeviceService->checkOnline()) {
+
+            return responseCommon()->error([
+
+            ], 'Читалка уже открыта на другом устройстве');
+        }
+
+        if ($request->exists('online') && (int)$request->get('online') === 1) {
+
+            $oDeviceService->setOnline();
+
+            return responseCommon()->success([
+                'result' => 4,
+                'redirect' => url('/reader'),
+            ], 'Устройство успешно подтверждено');
+        }
+
+        return responseCommon()->success([
+
+        ]);
+    }
+
 
 }

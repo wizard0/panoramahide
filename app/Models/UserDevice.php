@@ -15,12 +15,13 @@ class UserDevice extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id', 'code', 'name', 'code_at', 'expires_at', 'is_online', 'status',
+        'user_id', 'code', 'name', 'code_at', 'expires_at', 'is_online', 'is_online_at', 'status',
     ];
 
     public $dates = [
         'code_at',
-        'expires_at'
+        'expires_at',
+        'is_online_at',
     ];
 
     private $statuses = [

@@ -21,6 +21,7 @@ class CreateUserDevicesTable extends Migration
             $table->timestamp('code_at')->nullable()->default(null);
             $table->timestamp('expires_at')->nullable()->default(null);
             $table->tinyInteger('is_online')->default(0);
+            $table->timestamp('is_online_at')->nullable()->default(null);
             $table->tinyInteger('status')->default(1);
             $table->timestamps();
         });

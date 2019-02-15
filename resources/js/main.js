@@ -22,6 +22,33 @@ $(document).ready(function() {
                 //window.slideout.close();
             }
         });
+
+        let userDeviceSetOnline = setInterval(function() {
+            let $confirmModal = $('#reader-code-modal');
+            if ($confirmModal.hasClass('show')) {
+                return;
+            }
+            $.ajax({
+                url: '/reader/online',
+                type: "POST",
+                data: {},
+                success: function (result) {
+                    if (result.success) {
+
+                    } else {
+                        let $modal = $('#reader-confirm-online-modal');
+                        if (!$modal.hasClass('show')) {
+                            $modal.modal('show');
+                            clearInterval(userDeviceSetOnline);
+                        }
+                    }
+                },
+                error: function (data, status, headers, config) {
+
+                }
+            });
+        }, 5000);
+        // 60000
     }
 });
 
