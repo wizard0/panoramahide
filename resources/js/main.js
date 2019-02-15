@@ -1,5 +1,28 @@
 $(document).ready(function() {
     deskbooksForm.initEvents();
+
+    if ($('#reader').length) {
+        let $currentFooterLink = $('#cur_heading a');
+        $('#reader-panel').on('scroll', function () {
+            $('#reader-panel article').each(function () {
+                let ThisOffset = $(this).offset();
+                if (ThisOffset.top < 220) {
+                    let id = $(this).find('h2').attr('id');
+                    $currentFooterLink.text($(this).closest('section').find('.heading').text());
+                    $currentFooterLink.attr('href', '#' + id);
+                }
+            });
+        });
+        $currentFooterLink.text($('#content-title').text());
+        $currentFooterLink.attr('href', '#content-title');
+        $('a[href*="#"]').smoothScroll({
+            offset: -100,
+            scrollElement: $('#reader-panel'),
+            beforeScroll: function() {
+                //window.slideout.close();
+            }
+        });
+    }
 });
 
 /**
@@ -28,6 +51,11 @@ const deskbooksForm = {
     $checkboxes: null,
 
     /**
+     *
+     */
+    $sections: null,
+
+    /**
      * Кнопка submit
      */
     button: {
@@ -44,15 +72,17 @@ const deskbooksForm = {
     initEvents() {
         const self = this;
         self.$form = $('.--journal-checkboxes');
-        self.max = self.$form.data('max');
-        let maxChecked = self.getChecked();
-        if (maxChecked > self.max) {
-            self.max = maxChecked;
-        }
-        self.setCurrent();
-        self.setButtonActive();
-        self.setDisabled(self.current === self.max);
+        self.$sections = self.$form.find('.--journal-section-checkboxes');
 
+        self.max = 0;
+        self.$sections.each(function () {
+            let $section = $(this);
+            let current = self.getCheckedBySection($section).length;
+            let max = self.getMaxBySection($section);
+            self.setCurrentBySection($section, current);
+            self.setDisabledBySection($section, current === max);
+            self.max += $section.data('max');
+        });
         self.getCheckboxes().each(function () {
             $(this).on('change', function () {
                 self.checkCheckboxesEvent($(this), true);
@@ -76,8 +106,76 @@ const deskbooksForm = {
                 $item.prop('checked', false);
             }
         }
-        self.setCurrent();
-        self.setDisabled(self.current === self.max);
+        let $section = $item.closest('.--journal-section-checkboxes');
+
+        let current = self.getCheckedBySection($section).length;
+        let max = self.getMaxBySection($section);
+        self.setCurrentBySection($section, current);
+        self.setDisabledBySection($section, current === max);
+    },
+    /**
+     *
+     * @param $section
+     * @returns {number}
+     */
+    getMaxBySection($section) {
+        return parseInt($section.find('.info-count .max').text());
+    },
+
+    /**
+     *
+     * @param $section
+     * @returns {number}
+     */
+    getCurrentBySection($section) {
+        return parseInt($section.find('.info-count .selected').text());
+    },
+
+    /**
+     *
+     * @param $section
+     * @returns {*}
+     */
+    getCheckedBySection($section) {
+        return $section.find('.journal-checkbox input:checked');
+    },
+
+    /**
+     *
+     * @param $section
+     * @param value
+     * @returns {*}
+     */
+    setMaxBySection($section, value) {
+        return $section.find('.info-count .max').text(value);
+    },
+
+    /**
+     *
+     * @param $section
+     * @param value
+     * @returns {*}
+     */
+    setCurrentBySection($section, value) {
+        return $section.find('.info-count .selected').text(value);
+    },
+
+    /**
+     *
+     * @param $section
+     * @param disabled
+     */
+    setDisabledBySection($section, disabled) {
+        const self = this;
+        let $checkboxes = $section.find('.journal-checkbox input').not(':checked');
+        if (disabled) {
+            $checkboxes.prop('disabled', true);
+        } else {
+            $checkboxes.prop('disabled', false);
+        }
+        if (self.max !== undefined) {
+            self.$form.parent().find('.inform').html(self.htmlCanSet());
+        }
     },
 
     /**
@@ -102,7 +200,9 @@ const deskbooksForm = {
         } else {
             $checkboxes.prop('disabled', false);
         }
-        self.$form.parent().find('.inform').html(self.htmlCanSet());
+        if (self.max !== undefined) {
+            self.$form.parent().find('.inform').html(self.htmlCanSet());
+        }
     },
 
     /**
@@ -147,6 +247,8 @@ const deskbooksForm = {
      */
     htmlCanSet() {
         const self = this;
+        self.current = self.getCheckboxesChecked().length;
+        self.setButtonActive();
         if (self.current === self.max) {
             return self.htmlMaxNumberWrapper('Вы выбрали', self.max, 'доступных вам справочников.');
         }
@@ -196,7 +298,8 @@ const deskbooksForm = {
      */
     getCheckboxes() {
         const self = this;
-        return self.$form.find('.journal-checkbox input').not(':checked');
+        return self.$form.find('.journal-checkbox input');
+        //return self.$form.find('.journal-checkbox input').not(':checked');
     },
 
     /**

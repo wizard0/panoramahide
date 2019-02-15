@@ -26,6 +26,18 @@ window['after-callbackPromoAccess'] = function (result, $form) {
 };
 
 /**
+ * После отправки формы на Получить доступ по промокоду
+ *
+ * @param result
+ * @param $form
+ */
+window['after-callbackReaderAccess'] = function (result, $form) {
+    if (result.result === 3) {
+        $('.modal').modal('hide');
+    }
+};
+
+/**
  * Закрытие модального окна
  *
  * @param result

@@ -1,25 +1,71 @@
+variables:
+  CI_DEBUG_TRACE: "false"
+
 stages:
+    - build
+    - dbseed
+    - test
     - deploy
-    # - production
+    - production
+
+build:
+    stage: build
+    only:
+        - master
+    script:
+        - php72 /usr/bin/composer install
+        - npm update
+        - npm install
+        - npm run prod
+        - cp /home/gitlab-runner/.env.dev.panor.ru ./.env
+        - php72 ./artisan cache:clear
+        - php72 ./artisan config:cache
+    artifacts:
+        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
+        untracked: true
+        paths:
+            - .env
+            - composer.lock
+            - package-lock.json
+            - bootstrap/
+            - node_modules/
+            - public/
+            - vendor/
+
+dbseed:
+    stage: dbseed
+    only:
+        - master
+    script:
+        - echo $MYSQL_PASS
+        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
+        - php72 ./artisan migrate -vvv
+        - php72 ./artisan db:seed --class=TestSeeder -vvv
+    dependencies:
+        - build
+
+test:
+    stage: test
+    only:
+        - master
+    script:
+        - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+    dependencies:
+        - build
+        - dbseed
 
 deploy:
     stage: deploy
-    script:
-        - php72 /usr/bin/composer install
-        - npm install
-        - npm run prod
-        - cp /usr/local/bin/.env.dev.panor.ru ./.env
-        - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
-        - php72 ./artisan migrate -vvv
-        - php72 ./artisan db:seed -vvv
-        - php72 ./artisan db:seed --class=TestSeeder -vvv
-        - php72 ./artisan cache:clear
-        - php72 ./artisan config:cache
-        - php72 /usr/bin/phpunit --testdox tests
-        - chmod 774 ./deploy
-        - ./deploy
     only:
         - master
+    script:
+        - sftp -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru <<< 'put -r ../laravel-panor /var/www/html/dev.panor.ru.new'
+        - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder'
+        - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && chmod 774 ./deploy && ./deploy'
+    dependencies:
+        - build
+        - dbseed
+        - test
 
 # Задача на развертывание PRODUCTION релиза
 # Обычно проускается

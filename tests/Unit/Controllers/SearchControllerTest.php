@@ -2,12 +2,13 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\Http\Controllers\SearchController;
+use App\User;
 use App\UserSearch;
+use App\Http\Controllers\SearchController;
 use Illuminate\Http\Request;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class SearchControllerTest extends TestCase
 {
@@ -27,11 +28,11 @@ class SearchControllerTest extends TestCase
         'sort_order'
     ];
 
-    public function testWithFullParams()
+    public function testSerachArticleGuest()
     {
-        foreach ([UserSearch::TYPE_ARTICLE, UserSearch::TYPE_JOURNAL] as $type) {
+        foreach (['name', 'date'] as $sort) {
             $requestParams = [
-                'type' => $type,
+                'type' => UserSearch::TYPE_ARTICLE,
                 'q' => 'corrupt',
                 'favorite' => 'Y',
                 'access' => 'Y',
@@ -42,7 +43,7 @@ class SearchControllerTest extends TestCase
                 'active_from' => "01.01.2019",
                 'active_to' => "06.06.2019",
                 'udk' => '123-456',
-                'sort_by' => 'name',
+                'sort_by' => $sort,
                 'sort_order' => 'desc'
             ];
 
@@ -52,14 +53,72 @@ class SearchControllerTest extends TestCase
             $oSearchController = new SearchController();
 
             $response = $oSearchController->__invoke($request);
-            if (!$response) break;
+            $this->assertNotNull($response);
         }
+    }
 
+    public function testSerachJournalGuest()
+    {
+        foreach (['name', 'date'] as $sort) {
+            $requestParams = [
+                'type' => UserSearch::TYPE_JOURNAL,
+                'q' => 'corrupt',
+                'favorite' => 'Y',
+                'access' => 'Y',
+                'category' => rand(1, 5),
+                'journal' => rand(1, 50),
+                'author_char' => 'A',
+                'author' => 'Sebastian',
+                'active_from' => "01.01.2019",
+                'active_to' => "06.06.2019",
+                'udk' => '123-456',
+                'sort_by' => $sort,
+                'sort_order' => 'desc'
+            ];
 
-        if ($response)
-            return $this->assertTrue(true);
-        else return $this->assertTrue(false);
+            $request = new Request();
+            $request->merge($requestParams);
 
+            $oSearchController = new SearchController();
+
+            $response = $oSearchController->__invoke($request);
+            $this->assertNotNull($response);
+        }
+    }
+
+    public function testSerachArticleAuthUser()
+    {
+        $user = $this->user();
+
+        // авторизация
+        $this->actingAs($user);
+        $this->assertAuthenticated();
+
+        foreach (['name', 'date'] as $sort) {
+            $requestParams = [
+                'type' => UserSearch::TYPE_ARTICLE,
+                'q' => 'corrupt',
+                'favorite' => 'Y',
+                'access' => 'Y',
+                'category' => rand(1, 5),
+                'journal' => rand(1, 50),
+                'author_char' => 'A',
+                'author' => 'Sebastian',
+                'active_from' => "01.01.2019",
+                'active_to' => "06.06.2019",
+                'udk' => '123-456',
+                'sort_by' => $sort,
+                'sort_order' => 'desc'
+            ];
+
+            $request = new Request();
+            $request->merge($requestParams);
+
+            $oSearchController = new SearchController();
+
+            $response = $oSearchController->__invoke($request);
+            $this->assertNotNull($response);
+        }
     }
 
     public function testWithNoParams()
@@ -70,8 +129,16 @@ class SearchControllerTest extends TestCase
 
         $response = $oSearchController->__invoke($request);
 
-        if ($response)
-            return $this->assertTrue(true);
-        else return $this->assertTrue(false);
+        $this->assertNotNull($response);
+    }
+
+    /**
+     * Тестовый пользователь
+     *
+     * @return mixed
+     */
+    private function user() : User
+    {
+        return testData()->user();
     }
 }

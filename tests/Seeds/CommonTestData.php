@@ -28,6 +28,11 @@ class CommonTestData
         'phone' => '79998887766',
     ];
 
+    public $userDevice = [
+        'code' => 100000,
+        'name' => 'Windows:WebKit:Chrome',
+    ];
+
     /**
      * Модель пользователя
      *

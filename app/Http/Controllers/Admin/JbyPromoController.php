@@ -7,7 +7,7 @@ use App\Models\PromoUser;
 
 class JbyPromoController extends CRUDController
 {
-    protected $modelName = '\\App\\JbyPromo';
+    protected $modelName = '\\App\\Models\\JbyPromo';
     protected $slug = 'jby_promo';
     protected $displayAttributes = ['id', 'promo_user_id', 'promocode_id'];
     protected $attributeTypes = [

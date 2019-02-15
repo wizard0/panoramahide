@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\JbyPromo;
 use App\Models\Promocode;
 use App\Publishing;
 use App\Release;
@@ -64,5 +65,21 @@ class PromoUser extends Model
     public function releases()
     {
         return $this->belongsToMany(Release::class);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function jByPromo()
+    {
+        return $this->hasMany(JbyPromo::class, 'promo_user_id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function jByPromocodes()
+    {
+        return $this->belongsToMany(Promocode::class, 'jby_promo');
     }
 }

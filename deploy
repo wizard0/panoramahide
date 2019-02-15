@@ -3,13 +3,9 @@
 WEB=/var/www/html
 PROJECT=$WEB/dev.panor.ru
 
-mkdir $PROJECT.new
-cp -R ./. $PROJECT.new
-chown -R deployer:nginx $PROJECT.new
-/usr/local/bin/rightchk $PROJECT.new/storage deployer:nginx 775 664
+chown -R gitlab-runner:nginx $PROJECT.new
 
 if [ -d "$PROJECT.prev" ]; then
-    chmod 775 $PROJECT.prev
     rm -rf $PROJECT.prev
 fi
 
@@ -17,6 +13,6 @@ if [ -d "$PROJECT" ]; then
     mv $PROJECT $PROJECT.prev
     mv $PROJECT.new $PROJECT
     cd $PROJECT
-    php72 ./artisan cache:clear
     php72 ./artisan config:cache
+    php72 ./artisan cache:clear
 fi
