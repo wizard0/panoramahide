@@ -1,4 +1,8 @@
 <?php
+/*
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+ */
 
 namespace App\Models;
 
@@ -17,8 +21,6 @@ class Quota extends Model
     {
         if (!$this->isActive())
             return false;
-        if (!$this->quota_size || !$this->used)
-            return true;
         if ($this->used < $this->quota_size)
             return true;
         return false;
@@ -55,14 +57,6 @@ class Quota extends Model
 
     public function partner()
     {
-        return $this->hasOne(Partner::class);
-    }
-    public function journal()
-    {
-        return $this->hasOne(Journal::class);
-    }
-    public function release()
-    {
-        return $this->hasOne(Release::class);
+        return $this->belongsTo(Partner::class);
     }
 }

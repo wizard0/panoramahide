@@ -1,4 +1,8 @@
 <?php
+/*
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+ */
 
 namespace App\Models\Traits;
 
