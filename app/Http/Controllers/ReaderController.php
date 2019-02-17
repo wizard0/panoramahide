@@ -69,21 +69,53 @@ class ReaderController extends Controller
 
         $oDeviceService->setOnline();
 
+        //$oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
+
+        //$oService = (new ReaderService())->byRelease($oRelease);
+
+        //$oJournal = $oService->getJournal();
+        //$oArticles = $oService->getArticles();
+        //$oReleases = $oService->getReleases();
+
+        //$oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
+
+        return view('reader.index', []);
+    }
+
+    public function release(Request $request)
+    {
+        $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
+
+        $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
+
+        return responseCommon()->success([
+            'data' => $oRelease->toArray()
+        ]);
+    }
+
+    public function releases(Request $request)
+    {
+        $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
+
+        $oService = (new ReaderService())->byRelease($oRelease);
+
+        $oReleases = $oService->getReleases();
+
+        return responseCommon()->success([
+            'data' => $oReleases->toArray()
+        ]);
+    }
+
+    public function articles(Request $request)
+    {
         $oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
 
         $oService = (new ReaderService())->byRelease($oRelease);
 
-        $oJournal = $oService->getJournal();
         $oArticles = $oService->getArticles();
-        $oReleases = $oService->getReleases();
 
-        $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
-
-        return view('reader.index', [
-            'oRelease' => $oRelease,
-            'oReleases' => $oReleases,
-            'oJournal' => $oJournal,
-            'oArticles' => $oArticles,
+        return responseCommon()->success([
+            'data' => $oArticles->toArray()
         ]);
     }
 

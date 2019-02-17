@@ -1,0 +1,555 @@
+<template>
+    <div>
+        <div id="reader-menu">
+            <nav>
+                <div class="nav nav-tabs nav-hidden hidden" role="tablist">
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-contents" role="tab"
+                       aria-controls="nav-home" aria-selected="true">
+                        <span class="text-uppercase">Содержание</span>
+                    </a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-bookmark" role="tab"
+                       aria-controls="nav-profile" aria-selected="false">
+                        <span class="text-uppercase">Закладки</span>
+                    </a>
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-library" role="tab"
+                       aria-controls="nav-contact" aria-selected="false">
+                        <span class="text-uppercase">Библиотека</span>
+                    </a>
+                </div>
+            </nav>
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tab-reader-contents" role="tabpanel">
+                    <h3 class="text-uppercase text-center m-t-15 m-b-15">Содержание</h3>
+                    <div class="tab-content-item" data-simplebar>
+                        <div :class="{'is-loading': tab.content.loading}">
+                            <ul class="content contents-nav" v-if="articles.data !== null">
+                                <li class="reader-sidebar-chapter" v-for="article in articles.data">
+                                    <span>
+                                        <a href="#" role="button"
+                                           v-scroll-to="scrollOptions('#article0' + article.id)"
+                                        >{{ article.name }}</a>
+                                        <p v-if="article.description">{{ article.description }}</p>
+                                    </span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-reader-bookmark" role="tabpanel">
+                    <h3 class="text-uppercase text-center m-t-15 m-b-15">Закладки</h3>
+                    <div class="tab-content-item" data-simplebar>
+                        <div :class="{'is-loading': tab.bookmark.loading}">
+                            <ul class="content contents-nav">
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-reader-library" role="tabpanel">
+                    <h3 class="text-uppercase text-center m-t-15 m-b-15">Библиотека</h3>
+                    <div class="tab-content-item" data-simplebar>
+                        <!--<div v-if="releases.data !== null">-->
+                        <div :class="{'is-loading': tab.library.loading}">
+                            <ul class="content contents-nav" v-if="releases.data !== null">
+                                <li class="reader-sidebar-journal d-flex align-items-center flex-column" v-for="release in releases.data">
+                                    <a :href="'/reader?release_id=' + release.id" role="button"
+                                       @click="getRelease(release.id)">
+                                        <img :src="release.image">
+                                    </a>
+                                    <a :href="'/reader?release_id=' + release.id" role="button"
+                                       class="text-center red-link __j-on-hover m-t-10" @click="getRelease(release.id)">
+                                        <b>№{{ release.number }}/{{ release.year }}</b>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="reader" class="panel">
+            <div id="reader-header">
+                <header class="reader-header header-left">
+                    <div class="" style="padding: 0 15px">
+                        <div class="row flex-nowrap justify-content-between align-items-center">
+                            <div class="col-2 col-lg-4">
+                                <div class="show-less-xl hide-more-xl" v-if="!user.guest">
+                                    <div class="menu-wrapper toggle-button" data-name="#tab-reader-contents">
+                                        <div class="hamburger-menu"></div>
+                                    </div>
+                                </div>
+                                <div class="hide-less-xl show-more-xl" v-if="!user.guest">
+                                    <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
+                                       data-name="#tab-reader-contents"
+                                       @click="tabContent()"
+                                    >
+                                        <span class="text-uppercase contents">
+                                            Содержание
+                                        </span>
+                                    </a>
+                                    <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
+                                       data-name="#tab-reader-bookmark"
+                                       @click="tabBookmark()"
+                                    >
+                                        <span class="text-uppercase bookmark">
+                                            Закладки
+                                        </span>
+                                    </a>
+                                    <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
+                                       data-name="#tab-reader-library"
+                                       @click="tabLibrary()"
+                                    >
+                                        <span class="text-uppercase library">
+                                            Библиотека
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-8 col-lg-4 text-center" :class="{'is-disabled' : user.guest}">
+                                <div class="search mx-3" style="position: relative">
+                                    <input type="text" class="form-control search-input" placeholder="Поиск по тексту">
+                                    <div class="search-icon" style="position: absolute; top: 10px; right: 10px;">
+                                        <a class="text-muted" href="#">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                                 viewBox="0 0 24 24"
+                                                 fill="none"
+                                                 stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                                 stroke-linejoin="round"
+                                                 class="__search" focusable="false" role="img">
+                                                <title>Search</title>
+                                                <circle cx="10.5" cy="10.5" r="7.5"></circle>
+                                                <line x1="21" y1="21" x2="15.8" y2="15.8"></line>
+                                            </svg>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-2 col-lg-4 d-flex justify-content-end align-items-center">
+                                <a class="text-muted" href="#" style="margin-right: 10px;" v-if="!user.guest">
+                                    <span class="setbookmark">
+                                        <i class="hide-less-lg">В ЗАКЛАДКИ</i>
+                                    </span>
+                                </a>
+                                <a class="text-muted" href="/logout" v-if="!user.guest">
+                                    <span class="exit hide-more-lg">
+                                        <i class="hide-less-lg">ВЫХОД</i>
+                                    </span>
+                                    <span class="empty show-more-xl hide-less-lg">
+                                        ВЫХОД
+                                    </span>
+                                </a>
+                                <a class="text-muted" href="#" data-toggle="modal" data-target="#login-modal" v-if="user.guest">
+                                    <span class="exit hide-more-lg">
+                                        <i class="hide-less-lg">ВОЙТИ</i>
+                                    </span>
+                                    <span class="empty show-more-xl hide-less-lg">
+                                        ВОЙТИ
+                                    </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+            </div>
+            <div id="reader-panel" v-if="release.data !== null" :class="{'is-loading': articles.data === null}">
+                <div class="panel-cover">
+                    <img class="panel-cover" :src="release.data.image">
+                </div>
+                <div class="container" v-if="articles.data !== null">
+                    <div class="bookmarks-holder"></div>
+                    <nav>
+                        <div class="contents">
+                            <div>
+                                <span class="contents-title" id="content-title">Содержание</span>
+                            </div>
+                            <div v-for="article in articles.data">
+                                <div class="heading">
+                                    <a href="#" role="button"
+                                       v-scroll-to="scrollOptions('#article0' + article.id)"
+                                    >{{ article.name }}</a>
+                                </div>
+                                <div class="contents-author" v-for="author in article.authors">
+                                    <p>{{ author.name }},</p>
+                                </div>
+                                <div class="announce" v-if="article.description">
+                                    <p>{{ article.description }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                    <div v-for="article in articles.data">
+                        <div v-html="article.html"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="reader-footer" v-if="release.data !== null">
+                <div class="inform-string" style="">
+                    <div class="inform-string-holder">
+                        <div class="inform-string-home">
+                            <a href=""></a>
+                        </div>
+                        <div class="inform-string-magazine">
+                            <a href="#">
+                                <p><span>№{{ release.data.number }}, {{ release.data.year }} </span>{{ release.data.name
+                                    }}</p>
+                                <div class="grad"></div>
+                            </a>
+                        </div>
+                        <div class="grad_01"></div>
+                        <div class="inform-string-article" style="overflow: visible;">
+                            <p>
+                                <a :href="footer.hrefDefault"
+                                   v-scroll-to="scrollOptions(footer.hrefDefault)"
+                                >
+                                    {{ footer.headingDefault }}
+                                </a>
+                            </p>
+                        </div>
+                        <div class="inform-string-article" v-if="footer.href !== null">
+                            <p id="cur_heading">
+                                <a :href="footer.href"
+                                   v-scroll-to="scrollOptions(footer.href)"
+                                >
+                                    {{ footer.heading }}
+                                </a>
+                            </p>
+                        </div>
+                        <div class="grad_02" v-if="footer.href !== null"></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <vue-modal title="Введите код подтверждения" :name="$root.options.modal.readerCode" :width="356"
+        >
+            <form action="/reader/code" class="ajax-form"
+                  data-callback="callbackReaderAccess"
+            >
+                    <span style="font-size: 12px;">
+                        На указанный ваш email был отправлен код подтверждения устройства.
+                    </span>
+                <div class="form-group">
+                    <label>Код подтверждения</label>
+                    <input type="text" name="code" value="" required data-role="js-mask-int" data-length="6">
+                </div>
+                <div class="form-group m-0 text-right">
+                    <button type="submit" class="btn inner-form-submit">
+                        <span>Подтвердить</span>
+                    </button>
+                </div>
+            </form>
+        </vue-modal>
+        <vue-modal title="Подтвердите устройство" :name="$root.options.modal.readerOnline" :width="356"
+        >
+            <form class="ajax-form" action="/reader/online?online=1"
+                  data-callback="callbackReaderAccess"
+            >
+                <h3 class="text-center">
+                    Читать с этого устройства?
+                </h3>
+                <span style="font-size: 12px;">
+                Одновременно использовать читалку разрешено только с одного устройства.
+            </span>
+                <div class="form-group m-t-10 m-b-0 text-center">
+                    <button type="submit" class="btn inner-form-submit">
+                        <span>Подтвердить устройство</span>
+                    </button>
+                </div>
+            </form>
+        </vue-modal>
+    </div>
+
+</template>
+
+<script>
+    /**
+     * Импортирует библиотеки, но можно брать и глобавльные
+     */
+    import vueModal from './../plugins/modal-template.vue';
+    import axios from 'axios';
+    import slideout from 'slideout';
+
+    export default {
+        name: 'Reader',
+        components: {
+            'vue-modal': vueModal,
+        },
+        data() {
+            /**
+             * Данные приложения
+             * В методах через this
+             * В шаблонах без
+             */
+            return {
+                user: {},
+                release: {
+                    data: null,
+                },
+                releases: {
+                    data: null,
+                },
+                favorites: {
+                    data: null,
+                },
+                articles: {
+                    data: null,
+                },
+                device: {
+                    hasOnline: false,
+                },
+                tab: {
+                    content: {
+                        loading: false,
+                    },
+                    favorites: {
+                        loading: false,
+                    },
+                    bookmark: {
+                        loading: false,
+                    },
+                    library: {
+                        loading: false,
+                    },
+                },
+                footer: {
+                    heading: null,
+                    headingDefault: 'Содержание',
+                    href: null,
+                    hrefDefault: '#content-title'
+                }
+            }
+        },
+        /**
+         *
+         */
+        methods: {
+            /**
+             *
+             */
+            getRelease(id) {
+                const self = this;
+                let data = {};
+                if (id !== undefined) {
+                    data.id = id;
+                }
+                axios.post('/reader/release', data)
+                    .then(response => {
+                        self.release = response.data;
+                        self.getArticles();
+                        console.log(self.release);
+                    })
+                    .catch();
+            },
+            /**
+             *
+             */
+            getReleases() {
+                const self = this;
+                if (self.releases.data !== null) {
+                    return;
+                }
+                self.releases.data = null;
+                self.tab.library.loading = true;
+                axios.get('/reader/releases')
+                    .then(response => {
+                        self.releases = response.data;
+                        self.tab.library.loading = false;
+                        console.log(self.releases);
+                    })
+                    .catch();
+            },
+            /**
+             *
+             */
+            getFavorites() {
+                const self = this;
+                self.favorites = favorites;
+            },
+            /**
+             *
+             */
+            getBookmark() {
+                const self = this;
+            },
+            /**
+             *
+             */
+            getArticles() {
+                const self = this;
+                let data = {};
+                data.release_id = self.release.data.id;
+                if (self.articles.data !== null) {
+                    return;
+                }
+                self.articles.data = null;
+                self.tab.content.loading = true;
+                axios.post('/reader/articles', data)
+                    .then(response => {
+                        self.articles = response.data;
+                        self.tab.content.loading = false;
+                        console.log(self.articles);
+                        window.Vue.nextTick(function () {
+                            self.scrollToInit();
+                        });
+
+                    })
+                    .catch();
+            },
+            scrollToInit() {
+                const self = this;
+                $('#reader-panel').on('scroll', function () {
+                    let beSet = false;
+                    $('#reader-panel article').each(function () {
+                        let ThisOffset = $(this).offset();
+                        console.log(ThisOffset);
+                        if (ThisOffset.top < 220) {
+                            let id = $(this).find('h2').attr('id');
+                            self.footerSet($(this).closest('section').find('.heading').text(), '#' + id);
+                            beSet = true;
+                        }
+                    });
+                    if (!beSet) {
+                        self.footerSet(null, null);
+                    }
+                });
+            },
+            footerSet(title, href) {
+                const self = this;
+                self.footer.heading = title;
+                self.footer.href = href;
+            },
+            /**
+             *
+             */
+            deviceCheckOnline() {
+                const self = this;
+                axios.get('/reader/online')
+                    .then(response => {
+                        self.device.hasOnline = !response.data.success;
+                        if (self.device.hasOnline) {
+                            self.$root.modalShow(self.$root.options.modal.callEventStop);
+                        }
+                    })
+                    .catch();
+            },
+            /**
+             * Проверка устройства каждые 5 секунд
+             */
+            intervalDeviceCheckOnline() {
+                const self = this;
+                let userDeviceSetOnline = setInterval(function () {
+                    if (self.device.hasOnline) {
+                        clearInterval(userDeviceSetOnline);
+                    } else {
+                        self.deviceCheckOnline();
+                    }
+                }, 5000)
+            },
+            tabContent() {
+                const self = this;
+                self.getArticles();
+            },
+            tabFavorites() {
+                const self = this;
+                self.getReleases();
+            },
+            tabBookmark() {
+                const self = this;
+                self.getBookmark();
+            },
+            tabLibrary() {
+                const self = this;
+                self.getReleases();
+            },
+            scrollOptions(element) {
+                const self = this;
+                return {
+                    el: element,
+                    onStart: self.scrollOnStart,
+                    onDone: self.scrollOnDone,
+                };
+            },
+            scrollOnStart() {
+                //console.log('scrollOnStart');
+            },
+            scrollOnDone() {
+                //console.log('scrollOnDone');
+            },
+            tabOnOpen() {
+                const self = this;
+                $('.nav-item').on('show.bs.tab', function () {
+                    let href = $(this).attr('href');
+                    if (href === '#tab-reader-contents') {
+                        self.getArticles();
+                    }
+                    if (href === '#tab-reader-bookmark') {
+                        self.getBookmark();
+                    }
+                    if (href === '#tab-reader-library') {
+                        self.getReleases();
+                    }
+                });
+            },
+            checkModal() {
+                const self = this;
+                setTimeout(function () {
+                    self.$root.modalShow(self.$root.options.modal.readerOnline);
+                }, 2000)
+            }
+        },
+        /**
+         *
+         * Вызывается при построении компонента
+         */
+        mounted() {
+            const self = this;
+            self.tabOnOpen();
+            self.user = window.user;
+            if (self.user.guest) {
+                $('#login-modal').modal('show');
+            } else {
+                self.getRelease();
+                //self.checkModal();
+                $('#tab-reader-bookmark').tab('show');
+            }
+        },
+    }
+</script>
+<style lang="scss">
+    #reader-panel {
+        &.is-loading {
+            overflow: hidden;
+            &:before {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+            }
+        }
+    }
+    .v--modal {
+        .modal-content {
+            /*border-radius: 0;*/
+            /*.action-block {*/
+                /*.btn {*/
+                    /*height: inherit;*/
+                    /*background-color: transparent;*/
+                    /*border-color: transparent;*/
+                    /*color: #212529;*/
+                /*}*/
+            /*}*/
+            /*.btn.focus, .btn:focus {*/
+                /*box-shadow: none;*/
+            /*}*/
+        }
+        .modal {
+            padding-left: 0 !important;
+        }
+    }
+</style>
