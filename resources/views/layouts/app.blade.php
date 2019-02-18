@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -57,7 +57,11 @@
 
     @include('includes.footer')
 
-    @yield('javascript');
+    <script>
+        var CartManager = new JSCartManager()
+    </script>
+
+    @yield('javascript')
 
     <script src="{{ asset('js/app.js') }}"></script>
 

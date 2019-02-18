@@ -260,7 +260,7 @@
 @endif
 
 
-@section('javascript')
+{{--@section('searchbar-js')--}}
     <script>
         var searchResultLoading = false;
         var time_animation = 500;
@@ -320,7 +320,7 @@
             });
 
             // применить сохраенный поиск
-            P.search.settings.form.on('click', P.search.settings.savedSearchApply, function(event){
+            $(P.search.settings.savedSearchApply).on('click', function(event){
                 event.preventDefault();
                 P.search.applySavedSearch($(this).data('id'));
                 return false;
@@ -370,4 +370,4 @@
             P.search.toggleExtend();
         });
     </script>
-@endsection
+{{--@endsection--}}

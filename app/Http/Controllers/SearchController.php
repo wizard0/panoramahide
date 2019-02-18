@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
-use App\Journal;
 use App\UserSearch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -21,7 +17,7 @@ class SearchController extends Controller
 
         $params = $request->all();
 
-        if (!isset($params['type'])) $params['type'] = 'any';
+        if (!isset($params['type'])) $params['type'] = UserSearch::TYPE_ARTICLE;
 
         $searchDBResult = UserSearch::search($params);
         if ($searchDBResult) {
@@ -60,7 +56,7 @@ class SearchController extends Controller
     {
         $userSearch = UserSearch::create([
             'user_id' => Auth::id(),
-            'search_params' => json_decode($request->get('data'))
+            'search_params' => json_encode($request->get('data'))
         ]);
 
         return json_encode(['success' => true, 'ID' => $userSearch->id]);

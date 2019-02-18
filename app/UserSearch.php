@@ -26,6 +26,9 @@ class UserSearch extends Model
                     $search[$s->id]->{$value->name} = $value->value;
                 }
                 $search[$s->id]->created = $s->created_at;
+                if (!isset($search[$s->id]->type)) {
+                    $search[$s->id]->type = UserSearch::TYPE_ARTICLE;
+                }
             }
 
             return $search;

@@ -1,14 +1,13 @@
 @foreach (UserSearch::retrieve() as $id => $search)
     <div class="d-flex _saved_search"
          data-id="{{ $id }}"
-         data-search_in="{{ $search->search_in }}"
-         @if (isset($search->journal))
-         data-journal="{{ $search->journal }}"
-         @endif
-         data-type="{{ $search->type }}">
+         @foreach($search as $key=>$value)
+            data-{{ $key }}="{{ $value }}"
+         @endforeach
+        >
         <button class="leftsharp _saved_search_delete" title="Удалить" data-id="{{ $id }}"><span></span></button>
         <div class="found-item">
-            <span><a href="#" class="black-link _saved_search_apply" data-id="{{ $id }}">
+            <span><a href="javascript:void(0);" class="black-link _saved_search_apply" data-id="{{ $id }}">
                     @if (isset($search->q))
                         {{ $search->q }}
                     @else
