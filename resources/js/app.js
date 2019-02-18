@@ -51,7 +51,3 @@ tippy('[data-tippy-popover]', {
     animateFill: false,
     //duration: [275, 250000],
 });
-
-if (window.modal !== undefined && window.modal.active !== null) {
-    //$('#' + window.modal.active).modal('show');
-}

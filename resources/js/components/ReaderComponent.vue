@@ -153,8 +153,8 @@
                 </header>
 
             </div>
-            <div id="reader-panel" v-if="release.data !== null" :class="{'is-loading': articles.data === null}">
-                <div class="panel-cover">
+            <div id="reader-panel" :class="{'is-loading': articles.data === null}">
+                <div class="panel-cover" v-if="release.data !== null">
                     <img class="panel-cover" :src="release.data.image">
                 </div>
                 <div class="container" v-if="articles.data !== null">
@@ -222,43 +222,43 @@
                 </div>
             </div>
         </div>
-        <vue-modal title="Введите код подтверждения" :name="$root.options.modal.readerCode" :width="356"
-        >
-            <form action="/reader/code" class="ajax-form"
-                  data-callback="callbackReaderAccess"
-            >
-                    <span style="font-size: 12px;">
-                        На указанный ваш email был отправлен код подтверждения устройства.
-                    </span>
-                <div class="form-group">
-                    <label>Код подтверждения</label>
-                    <input type="text" name="code" value="" required data-role="js-mask-int" data-length="6">
-                </div>
-                <div class="form-group m-0 text-right">
-                    <button type="submit" class="btn inner-form-submit">
-                        <span>Подтвердить</span>
-                    </button>
-                </div>
-            </form>
-        </vue-modal>
-        <vue-modal title="Подтвердите устройство" :name="$root.options.modal.readerOnline" :width="356"
-        >
-            <form class="ajax-form" action="/reader/online?online=1"
-                  data-callback="callbackReaderAccess"
-            >
-                <h3 class="text-center">
-                    Читать с этого устройства?
-                </h3>
-                <span style="font-size: 12px;">
-                Одновременно использовать читалку разрешено только с одного устройства.
-            </span>
-                <div class="form-group m-t-10 m-b-0 text-center">
-                    <button type="submit" class="btn inner-form-submit">
-                        <span>Подтвердить устройство</span>
-                    </button>
-                </div>
-            </form>
-        </vue-modal>
+        <!--<vue-modal title="Введите код подтверждения" :name="$root.options.modal.readerCode" :width="356"-->
+        <!--&gt;-->
+            <!--<form class="ajax-form" :action="url.code"-->
+                  <!--data-callback="callbackReaderAccess"-->
+            <!--&gt;-->
+                    <!--<span style="font-size: 12px;">-->
+                        <!--На указанный ваш email был отправлен код подтверждения устройства.-->
+                    <!--</span>-->
+                <!--<div class="form-group">-->
+                    <!--<label>Код подтверждения</label>-->
+                    <!--<input type="text" name="code" value="" required data-role="js-mask-int" data-length="6">-->
+                <!--</div>-->
+                <!--<div class="form-group m-0 text-right">-->
+                    <!--<button type="submit" class="btn inner-form-submit">-->
+                        <!--<span>Подтвердить</span>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</vue-modal>-->
+        <!--<vue-modal title="Подтвердите устройство" :name="$root.options.modal.readerOnline" :width="356"-->
+        <!--&gt;-->
+            <!--<form class="ajax-form" :action="url.online"-->
+                  <!--data-callback="callbackReaderAccess"-->
+            <!--&gt;-->
+                <!--<h3 class="text-center">-->
+                    <!--Читать с этого устройства?-->
+                <!--</h3>-->
+                <!--<span style="font-size: 12px;">-->
+                <!--Одновременно использовать читалку разрешено только с одного устройства.-->
+            <!--</span>-->
+                <!--<div class="form-group m-t-10 m-b-0 text-center">-->
+                    <!--<button type="submit" class="btn inner-form-submit">-->
+                        <!--<span>Подтвердить устройство</span>-->
+                    <!--</button>-->
+                <!--</div>-->
+            <!--</form>-->
+        <!--</vue-modal>-->
     </div>
 
 </template>
@@ -283,6 +283,20 @@
              * В шаблонах без
              */
             return {
+                url: {
+                    code: '/reader/code',
+                    online: '/reader/online?online=1',
+                    onlineCheck: '/reader/online',
+
+                    release: '/reader/release',
+                    releases: '/reader/releases',
+                    articles: '/reader/articles',
+                },
+                modal: {
+                    login: '#login-modal',
+                    code: '#reader-code-modal',
+                    online: '#reader-confirm-online-modal',
+                },
                 user: {},
                 release: {
                     data: null,
@@ -334,9 +348,9 @@
                 if (id !== undefined) {
                     data.id = id;
                 }
-                axios.post('/reader/release', data)
+                axios.post(self.url.release, data)
                     .then(response => {
-                        self.release = response.data;
+                        self.release.data = response.data.data;
                         self.getArticles();
                         console.log(self.release);
                     })
@@ -352,9 +366,9 @@
                 }
                 self.releases.data = null;
                 self.tab.library.loading = true;
-                axios.get('/reader/releases')
+                axios.get(self.url.releases)
                     .then(response => {
-                        self.releases = response.data;
+                        self.releases.data = response.data.data;
                         self.tab.library.loading = false;
                         console.log(self.releases);
                     })
@@ -385,9 +399,9 @@
                 }
                 self.articles.data = null;
                 self.tab.content.loading = true;
-                axios.post('/reader/articles', data)
+                axios.post(self.url.articles, data)
                     .then(response => {
-                        self.articles = response.data;
+                        self.articles.data = response.data.data;
                         self.tab.content.loading = false;
                         console.log(self.articles);
                         window.Vue.nextTick(function () {
@@ -403,7 +417,6 @@
                     let beSet = false;
                     $('#reader-panel article').each(function () {
                         let ThisOffset = $(this).offset();
-                        console.log(ThisOffset);
                         if (ThisOffset.top < 220) {
                             let id = $(this).find('h2').attr('id');
                             self.footerSet($(this).closest('section').find('.heading').text(), '#' + id);
@@ -425,11 +438,11 @@
              */
             deviceCheckOnline() {
                 const self = this;
-                axios.get('/reader/online')
+                axios.get(self.url.onlineCheck)
                     .then(response => {
                         self.device.hasOnline = !response.data.success;
                         if (self.device.hasOnline) {
-                            self.$root.modalShow(self.$root.options.modal.callEventStop);
+                            self.modalShow(self.modal.online);
                         }
                     })
                     .catch();
@@ -497,6 +510,12 @@
                 setTimeout(function () {
                     self.$root.modalShow(self.$root.options.modal.readerOnline);
                 }, 2000)
+            },
+            /**
+             *
+             */
+            modalShow(id) {
+                $(id).modal('show');
             }
         },
         /**
@@ -508,11 +527,14 @@
             self.tabOnOpen();
             self.user = window.user;
             if (self.user.guest) {
-                $('#login-modal').modal('show');
+                self.modalShow(self.modal.login);
+            }
+            console.log(window.modal.active);
+            if (window.modal.active !== '') {
+                self.modalShow('#' + window.modal.active);
             } else {
                 self.getRelease();
-                //self.checkModal();
-                $('#tab-reader-bookmark').tab('show');
+                self.intervalDeviceCheckOnline();
             }
         },
     }

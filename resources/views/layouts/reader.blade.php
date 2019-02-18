@@ -54,6 +54,10 @@
         window.user = {
             guest: {{ Auth::guest() ? 1: 0 }},
         };
+        window.modal = {
+            active: '{{ Session::has('modal') ? Session::get('modal') : null }}'
+        };
+
     </script>
 </head>
 <body>
