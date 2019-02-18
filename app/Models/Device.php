@@ -90,9 +90,7 @@ class Device extends Model
         $user = $this->user;
         if (!$user->email)
             return false;
-        Mail::send('email.device_activation', ['code' => $code], function ($message) use ($user) {
-            $message->to($user->email)->subject('Device activation');
-        });
+        Mail::to($user->email)->send(new \App\Mail\DeviceCode($code));
 
         return true;
     }
