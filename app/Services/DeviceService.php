@@ -418,6 +418,8 @@ class DeviceService
         $nameDevice = $this->getUserDevice();
 
         $devices = $this->user->devices();
+
+        // возможно только во время тестов
         if (!is_null($nameDevice)) {
             $devices = $devices->where('name', $nameDevice);
         }

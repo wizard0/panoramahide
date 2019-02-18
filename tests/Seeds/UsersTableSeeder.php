@@ -30,5 +30,11 @@ class UsersTableSeeder extends Seeder
             'name' => testData()->userDevice['name'],
             'status' => 1,
         ]);
+        UserDevice::create([
+            'user_id' => $oUser->id,
+            'code' => testData()->userDevice['code'],
+            'name' => testData()->userDevice['name'].'2',
+            'status' => 1,
+        ]);
     }
 }

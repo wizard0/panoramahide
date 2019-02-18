@@ -34,10 +34,23 @@ class ReaderController extends Controller
 
         $device = $oDeviceService->getCurrentDevice();
 
+        if ($request->exists('agent')) {
+
+            $oDeviceService->setAgent($request->get('agent'));
+
+            $device = $oDeviceService->getCurrentDevice();
+        }
+
         if (is_null($device)) {
 
             if ($oDeviceService->canCreate()) {
-                $device = $oDeviceService->createDevice();
+                try {
+                    $device = $oDeviceService->createDevice();
+                } catch (\Exception $e) {
+                    (new Toastr($e->getMessage()))->error(false);
+
+                    return view('reader.index', []);
+                }
             } else {
                 $this->sessionModalError('exists', $oDeviceService, $oUser, $device);
 
@@ -226,9 +239,7 @@ class ReaderController extends Controller
             ], 'Устройство успешно подтверждено');
         }
 
-        return responseCommon()->success([
-
-        ]);
+        return responseCommon()->success([]);
     }
 
 
