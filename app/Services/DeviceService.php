@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
+use App\Mail\Device;
 use App\Models\UserDevice;
 use App\User;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 use Jenssegers\Agent\Agent;
 
@@ -39,8 +41,15 @@ class DeviceService
      */
     private $storeMinutes = 10080; // 1 неделя в минутах
 
-
+    /**
+     * @var int
+     */
     private $onlineMinutes = 5;
+
+    /**
+     * @var int
+     */
+    private $maxDevices = 2;
 
     /**
      * DeviceService constructor.
@@ -59,13 +68,24 @@ class DeviceService
     {
         $key = $this->salt();
 
+        $name = '';
+
         $device = $this->getAgentValue('device');
         $browser = $this->getAgentValue('browser');
         $platform = $this->getAgentValue('platform');
         if (empty($platform) && empty($device) && empty($browser)) {
             return null;
         }
-        return $this->nameDevice($key, $platform . ':' . $device . ':' . $browser);
+        if (!empty($platform)) {
+            $name .= $platform . ':';
+        }
+        if (!empty($device)) {
+            $name .= $device . ':';
+        }
+        if (!empty($browser)) {
+            $name .= $browser;
+        }
+        return $this->nameDevice($key, $name);
     }
 
     /**
@@ -261,9 +281,19 @@ class DeviceService
     /**
      *
      */
-    public function sendEmail(): void
+    public function sendEmailConfirmDevice(): void
     {
+        $device = $this->getDevice();
 
+        Mail::to($this->user)->send(new Device('confirm', $this->user, $device));
+    }
+
+    /**
+     *
+     */
+    public function sendEmailResetDevice(): void
+    {
+        Mail::to($this->user)->send(new Device('reset', $this->user));
     }
 
     /**
@@ -366,11 +396,14 @@ class DeviceService
         return $device;
     }
 
+    /**
+     * @return bool
+     */
     public function canCreate()
     {
         $devices = $this->getDevices();
 
-        if (count($devices) >= 2) {
+        if (count($devices) >= $this->maxDevices) {
             $this->setMessage('Достигнуто максимально количество разрешенных устройств.');
             return false;
         }
@@ -394,6 +427,9 @@ class DeviceService
         return $device;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
     public function getDevices(): \Illuminate\Database\Eloquent\Collection
     {
         $nameDevice = $this->getUserDevice();

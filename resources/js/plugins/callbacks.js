@@ -40,6 +40,10 @@ window['after-callbackReaderAccess'] = function (result, $form) {
     if (result.result === 4) {
         $('.modal').modal('hide');
     }
+    // Ссылка успешно отправлена
+    if (result.result === 5) {
+
+    }
 };
 
 /**

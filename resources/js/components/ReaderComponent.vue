@@ -222,43 +222,6 @@
                 </div>
             </div>
         </div>
-        <!--<vue-modal title="Введите код подтверждения" :name="$root.options.modal.readerCode" :width="356"-->
-        <!--&gt;-->
-            <!--<form class="ajax-form" :action="url.code"-->
-                  <!--data-callback="callbackReaderAccess"-->
-            <!--&gt;-->
-                    <!--<span style="font-size: 12px;">-->
-                        <!--На указанный ваш email был отправлен код подтверждения устройства.-->
-                    <!--</span>-->
-                <!--<div class="form-group">-->
-                    <!--<label>Код подтверждения</label>-->
-                    <!--<input type="text" name="code" value="" required data-role="js-mask-int" data-length="6">-->
-                <!--</div>-->
-                <!--<div class="form-group m-0 text-right">-->
-                    <!--<button type="submit" class="btn inner-form-submit">-->
-                        <!--<span>Подтвердить</span>-->
-                    <!--</button>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</vue-modal>-->
-        <!--<vue-modal title="Подтвердите устройство" :name="$root.options.modal.readerOnline" :width="356"-->
-        <!--&gt;-->
-            <!--<form class="ajax-form" :action="url.online"-->
-                  <!--data-callback="callbackReaderAccess"-->
-            <!--&gt;-->
-                <!--<h3 class="text-center">-->
-                    <!--Читать с этого устройства?-->
-                <!--</h3>-->
-                <!--<span style="font-size: 12px;">-->
-                <!--Одновременно использовать читалку разрешено только с одного устройства.-->
-            <!--</span>-->
-                <!--<div class="form-group m-t-10 m-b-0 text-center">-->
-                    <!--<button type="submit" class="btn inner-form-submit">-->
-                        <!--<span>Подтвердить устройство</span>-->
-                    <!--</button>-->
-                <!--</div>-->
-            <!--</form>-->
-        <!--</vue-modal>-->
     </div>
 
 </template>
@@ -283,6 +246,9 @@
              * В шаблонах без
              */
             return {
+                /**
+                 * Ссылки для запросов
+                 */
                 url: {
                     code: '/reader/code',
                     online: '/reader/online?online=1',
@@ -292,13 +258,31 @@
                     releases: '/reader/releases',
                     articles: '/reader/articles',
                 },
+
+                /**
+                 * Модальные окна
+                 */
                 modal: {
                     login: '#login-modal',
                     code: '#reader-code-modal',
                     online: '#reader-confirm-online-modal',
+                    max: '#reader-max-devices-modal',
                 },
+
+                /**
+                 * Пользователь
+                 * - guest по window.user
+                 */
                 user: {},
+
+                /**
+                 * Выпуск по api
+                 * вне data может хранится еще что вспомогательное
+                 */
                 release: {
+                    /**
+                     * Данные выпуска
+                     */
                     data: null,
                 },
                 releases: {
@@ -310,9 +294,17 @@
                 articles: {
                     data: null,
                 },
+
+                /**
+                 * Устройство
+                 */
                 device: {
                     hasOnline: false,
                 },
+
+                /**
+                 * Вкладки в сайдбаре
+                 */
                 tab: {
                     content: {
                         loading: false,
@@ -327,10 +319,29 @@
                         loading: false,
                     },
                 },
+
+                /**
+                 * Футер
+                 */
                 footer: {
+                    /**
+                     * Заголовок
+                     */
                     heading: null,
+
+                    /**
+                     * Заголовок по умолчанию
+                     */
                     headingDefault: 'Содержание',
+
+                    /**
+                     * Якорь
+                     */
                     href: null,
+
+                    /**
+                     * Якорь по умолчанию
+                     */
                     hrefDefault: '#content-title'
                 }
             }
@@ -340,7 +351,7 @@
          */
         methods: {
             /**
-             *
+             * Получить релиз
              */
             getRelease(id) {
                 const self = this;
@@ -356,8 +367,9 @@
                     })
                     .catch();
             },
+
             /**
-             *
+             * Получить релизы
              */
             getReleases() {
                 const self = this;
@@ -374,21 +386,24 @@
                     })
                     .catch();
             },
+
             /**
-             *
+             * Все избранные
              */
             getFavorites() {
                 const self = this;
                 self.favorites = favorites;
             },
+
             /**
-             *
+             * Все заметки
              */
             getBookmark() {
                 const self = this;
             },
+
             /**
-             *
+             * Получить все статьи по выпуску
              */
             getArticles() {
                 const self = this;
@@ -411,6 +426,10 @@
                     })
                     .catch();
             },
+
+            /**
+             * События для скрола, чтобы футер менялся
+             */
             scrollToInit() {
                 const self = this;
                 $('#reader-panel').on('scroll', function () {
@@ -428,13 +447,18 @@
                     }
                 });
             },
+
+            /**
+             * Присвоить данные для футера
+             */
             footerSet(title, href) {
                 const self = this;
                 self.footer.heading = title;
                 self.footer.href = href;
             },
+
             /**
-             *
+             * Отправить запрос с проверкой устроства
              */
             deviceCheckOnline() {
                 const self = this;
@@ -447,6 +471,7 @@
                     })
                     .catch();
             },
+
             /**
              * Проверка устройства каждые 5 секунд
              */
@@ -460,22 +485,42 @@
                     }
                 }, 5000)
             },
+
+            /**
+             * Вкладка Содержание в сайдбаре
+             */
             tabContent() {
                 const self = this;
                 self.getArticles();
             },
+
+            /**
+             * Вкладка Избранные в сайдбаре
+             */
             tabFavorites() {
                 const self = this;
                 self.getReleases();
             },
+
+            /**
+             * Вкладка Закладки в сайдбаре
+             */
             tabBookmark() {
                 const self = this;
                 self.getBookmark();
             },
+
+            /**
+             * Вкладка Библиотека в сайдбаре
+             */
             tabLibrary() {
                 const self = this;
                 self.getReleases();
             },
+
+            /**
+             * Опции для переха со скролом
+             */
             scrollOptions(element) {
                 const self = this;
                 return {
@@ -484,12 +529,25 @@
                     onDone: self.scrollOnDone,
                 };
             },
+
+            /**
+             * Переход со скролом начался
+             * Можно добавить закрытие сайдбара
+             */
             scrollOnStart() {
                 //console.log('scrollOnStart');
             },
+
+            /**
+             * Переход со скролом окончен
+             */
             scrollOnDone() {
                 //console.log('scrollOnDone');
             },
+
+            /**
+             * Открытие вкладки в sidebar
+             */
             tabOnOpen() {
                 const self = this;
                 $('.nav-item').on('show.bs.tab', function () {
@@ -505,21 +563,15 @@
                     }
                 });
             },
-            checkModal() {
-                const self = this;
-                setTimeout(function () {
-                    self.$root.modalShow(self.$root.options.modal.readerOnline);
-                }, 2000)
-            },
+
             /**
-             *
+             * Открыть бутстрап модальное окно по селектору
              */
             modalShow(id) {
                 $(id).modal('show');
             }
         },
         /**
-         *
          * Вызывается при построении компонента
          */
         mounted() {
@@ -529,7 +581,6 @@
             if (self.user.guest) {
                 self.modalShow(self.modal.login);
             }
-            console.log(window.modal.active);
             if (window.modal.active !== '') {
                 self.modalShow('#' + window.modal.active);
             } else {

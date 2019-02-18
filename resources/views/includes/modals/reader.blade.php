@@ -38,3 +38,23 @@
         </form>
     @endslot
 @endcomponent
+
+@component('components.modal', ['id' => 'reader-max-devices-modal', 'title' => 'Подтвердите устройство', 'header' => false, 'backdop' => false, 'closeHeader' => false])
+    @slot('body')
+        <form class="ajax-form" action="{{ route('reader.online', ['reset' => 1]) }}"
+              data-callback="callbackReaderAccess"
+        >
+            <h3 class="text-center">
+                Достигнуто максимально количество разрешенных устройств.
+            </h3>
+            <span style="font-size: 12px;">
+                Сбросить разрешенные устройства Вы можете по ссылке в email сообщении.
+            </span>
+            <div class="form-group m-t-10 m-b-0 text-center">
+                <button type="submit" class="btn inner-form-submit">
+                    <span>Получить ссылку</span>
+                </button>
+            </div>
+        </form>
+    @endslot
+@endcomponent

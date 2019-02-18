@@ -9,6 +9,7 @@ use App\Services\Toastr\Toastr;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ReaderController extends Controller
 {
@@ -38,6 +39,8 @@ class ReaderController extends Controller
             if ($oDeviceService->canCreate()) {
                 $device = $oDeviceService->createDevice();
             } else {
+                $this->sessionModalError('exists', $oDeviceService, $oUser, $device);
+
                 (new Toastr($oDeviceService->getMessage()))->error(false);
 
                 return view('reader.index', []);
@@ -69,19 +72,13 @@ class ReaderController extends Controller
 
         $oDeviceService->setOnline();
 
-        //$oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
-
-        //$oService = (new ReaderService())->byRelease($oRelease);
-
-        //$oJournal = $oService->getJournal();
-        //$oArticles = $oService->getArticles();
-        //$oReleases = $oService->getReleases();
-
-        //$oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
-
         return view('reader.index', []);
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function release(Request $request)
     {
         $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
@@ -89,10 +86,14 @@ class ReaderController extends Controller
         $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
 
         return responseCommon()->success([
-            'data' => $oRelease->toArray()
+            'data' => $oRelease->toArray(),
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function releases(Request $request)
     {
         $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
@@ -102,10 +103,14 @@ class ReaderController extends Controller
         $oReleases = $oService->getReleases();
 
         return responseCommon()->success([
-            'data' => $oReleases->toArray()
+            'data' => $oReleases->toArray(),
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return array
+     */
     public function articles(Request $request)
     {
         $oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
@@ -115,7 +120,7 @@ class ReaderController extends Controller
         $oArticles = $oService->getArticles();
 
         return responseCommon()->success([
-            'data' => $oArticles->toArray()
+            'data' => $oArticles->toArray(),
         ]);
     }
 
@@ -128,20 +133,25 @@ class ReaderController extends Controller
     private function sessionModalError($type, DeviceService $oDeviceService, $oUser, $device)
     {
         switch ($type) {
-            case 'code_at':
-                $oDeviceService->sendEmail();
+            case 'exists':
 
-                (new Toastr('На email '.$oUser->email.' был отправлен код подтверждения устройства. '.$device->code))->info(false);
+                session()->flash('modal', 'reader-max-devices-modal');
+
+                break;
+            case 'code_at':
+                $oDeviceService->sendEmailConfirmDevice();
+
+                (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
 
                 session()->flash('modal', 'reader-code-modal');
 
                 break;
             case 'expires_at':
-                $oDeviceService->sendEmail();
+                $oDeviceService->sendEmailConfirmDevice();
 
                 (new Toastr('Срок действия устройства истек.'))->error(false);
 
-                (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства. ' . $device->code))->info(false);
+                (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
 
                 session()->flash('modal', 'reader-code-modal');
 
@@ -189,6 +199,15 @@ class ReaderController extends Controller
         $oUser = User::find(Auth::user()->id);
 
         $oDeviceService = new DeviceService($oUser);
+
+        if ($request->exists('reset') && (int)$request->get('reset') === 1) {
+
+            $oDeviceService->sendEmailResetDevice();
+
+            return responseCommon()->success([
+                'result' => 5,
+            ], 'Ссылка успешно отправлена.');
+        }
 
         if (!$request->exists('online') && !$oDeviceService->checkOnline()) {
 

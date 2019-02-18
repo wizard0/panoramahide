@@ -192,7 +192,7 @@
         /*font-weight: bold;*/
     }
     .title-bar {
-        background: linear-gradient(top, #ebebeb, #d5d5d5);
+        //background: linear-gradient(top, #ebebeb, #d5d5d5);
         color: #4d494d;
         font-size: 11pt;
         line-height: 20px;
