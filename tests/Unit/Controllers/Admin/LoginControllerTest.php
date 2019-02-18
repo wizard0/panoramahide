@@ -4,7 +4,9 @@ namespace Tests\Unit\Controllers\Admin;
 
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Session;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -38,6 +40,8 @@ class LoginControllerTest extends TestCase
 
     public function testLoginAction()
     {
+        Session::start();
+
         $user = factory(User::class)->create();
         $admin = factory(User::class)
             ->create()
@@ -45,11 +49,13 @@ class LoginControllerTest extends TestCase
 
         $responseNoAdmin = $this->post(route('admin.login'), [
             'username' => $user->email,
-            'password' => 'secret'
+            'password' => 'secret',
+            '_token' => csrf_token()
         ]);
         $responseAdmin = $this->post(route('admin.login'), [
             'username' => $admin->email,
-            'password' => 'secret'
+            'password' => 'secret',
+            '_token' => csrf_token()
         ]);
 
         $responseAdmin->assertRedirect(route('admin.dashboard'));
