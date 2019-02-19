@@ -49,10 +49,15 @@
         {{--<link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">--}}
     @endif
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vue.css') }}" rel="stylesheet">
     <script>
+        window.user = {
+            guest: {{ Auth::guest() ? 1: 0 }},
+        };
         window.modal = {
             active: '{{ Session::has('modal') ? Session::get('modal') : null }}'
         };
+
     </script>
 </head>
 <body>

@@ -1,5 +1,6 @@
 <?php
 
+use \Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -99,6 +100,13 @@ Route::group(['prefix' => 'deskbooks'], function () {
 Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
     Route::post('/code', 'ReaderController@code')->name('reader.code');
+    Route::any('/online', 'ReaderController@online')->name('reader.online');
+    Route::any('/release', 'ReaderController@release')->name('reader.release');
+    Route::any('/releases', 'ReaderController@releases')->name('reader.releases');
+    Route::any('/articles', 'ReaderController@articles')->name('reader.articles');
+    Route::group(['prefix' => 'favorites'], function () {
+        Route::get('/', 'ReaderController@favorites')->name('reader.favorites');
+    });
 });
 
 Route::group(['prefix' => 'home'], function () {

@@ -9,7 +9,7 @@ namespace App\Models;
 use App\Models\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class Device extends Model
 {

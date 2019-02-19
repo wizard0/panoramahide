@@ -7,13 +7,16 @@
 namespace App\Models\Traits;
 
 use App\Models\Device;
+use Illuminate\Database\Eloquent\Collection;
 
 trait UsersDevices
 {
     // Добавляем новое устровство пользователю
     public function createDevice()
     {
-        $this->devices()->save(Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]));
+        $oDevice = Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]);
+        $this->devices()->save($oDevice);
+        return $oDevice;
     }
 
     public function devices()
@@ -28,9 +31,56 @@ trait UsersDevices
     }
     public function resetAllDevices()
     {
-        foreach ($this->devices()->whereActive(true)->get() as $device) {
+        foreach ($this->getActivationDevices() as $device) {
             $device->activateDevice(false);
         }
+    }
+
+    public function getOnlineDevices()
+    {
+        return $this->devices->reject(function ($oDevice) {
+            return !$oDevice->isOnline();
+        });
+    }
+
+
+    /**
+     * Активированные устройства с исключением текущего
+     *
+     * @param Device|null $oSelectedDevice
+     * @return mixed
+     */
+    public function getActivationDevices(?Device $oSelectedDevice = null): Collection
+    {
+        $query = $this->devices();
+
+        if (!is_null($oSelectedDevice)) {
+            $query = $query->where('id', '<>', $oSelectedDevice->id);
+        }
+
+        return $query->whereActive(true)->get();
+    }
+
+    /**
+     * Онлайн устройства с исключением текущего
+     *
+     * @param Device|null $oSelectedDevice
+     * @return bool
+     */
+    public function hasOnlineDevices(?Device $oSelectedDevice = null): bool
+    {
+        if (!is_null($oSelectedDevice)) {
+            $oDevices = $this->devices->where('id', '<>', $oSelectedDevice->id);
+        } else {
+            $oDevices = $this->devices;
+        }
+
+        foreach ($oDevices as $oDevice) {
+            if ($oDevice->isOnline()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
