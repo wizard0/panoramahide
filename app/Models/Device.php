@@ -90,9 +90,12 @@ class Device extends Model
         $user = $this->user;
         if (!$user->email)
             return false;
-        Mail::to($user->email)->send(new \App\Mail\DeviceCode($code));
-
-        return true;
+        try {
+            Mail::to($user->email)->send(new \App\Mail\DeviceCode($code));
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
     }
     // Связь с пользователем
     public function __get($name)

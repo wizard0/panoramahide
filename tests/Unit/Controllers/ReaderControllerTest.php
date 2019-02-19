@@ -5,8 +5,8 @@ namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReaderController;
+use App\Models\Device;
 use App\Models\Promocode;
-use App\Models\UserDevice;
 use App\Services\DeviceService;
 use App\User;
 use Illuminate\Http\Request;
@@ -17,42 +17,48 @@ use Tests\TestCase;
 class ReaderControllerTest extends TestCase
 {
     /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->setUserAndDevice();
+    }
+
+    /**
+     * Созд
+     */
+    public function setUserAndDevice()
+    {
+        $this->user = $this->user();
+    }
+
+    /**
+     * Тестовый пользователь
+     *
+     * @return mixed
+     */
+    private function user(): User
+    {
+        return testData()->user();
+    }
+
+    /**
      * Не авторизованный пользователь
      */
     public function testIndexGuest()
     {
         $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([
+        DB::transaction(function () use ($oController) {
 
-        ]);
-
-        $result = $oController->index($request);
-
-        $this->assertTrue(session()->has('modal'));
-
-        $this->assertTrue(session()->get('modal') === 'login-modal');
-    }
-
-    /**
-     * Устройство не активировано
-     */
-    public function testIndexCodeAt()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        $oController = (new ReaderController());
-
-        DB::transaction(function () use ($user, $oController) {
-
-            $oDevice = $user->devices()->first();
-
-            $oDevice->update([
-                'code_at' => null
-            ]);
+            //$this->user->createDevice();
+            //$this->user->createDevice();
 
             $request = new Request();
             $request->merge([
@@ -63,31 +69,26 @@ class ReaderControllerTest extends TestCase
 
             $this->assertTrue(session()->has('modal'));
 
-            $this->assertTrue(session()->get('modal') === 'reader-code-modal');
+            $this->assertTrue(session()->get('modal') === 'login-modal');
 
             DB::rollBack();
         });
     }
 
     /**
-     * Устройство просрочено
+     * Не авторизованный пользователь
      */
-    public function testIndexExpiresAt()
+    public function testIndexDeviceNull()
     {
-        $user = $this->user();
+        $user = $this->user;
 
         $this->actingAs($user);
 
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($user, $oController) {
+        DB::transaction(function () use ($oController) {
 
-            $oDevice = $user->devices()->first();
-
-            $oDevice->update([
-                'code_at' => now(),
-                'expires_at' => now()->subDay(),
-            ]);
+            $countBefore = $this->user->devices()->count();
 
             $request = new Request();
             $request->merge([
@@ -95,6 +96,157 @@ class ReaderControllerTest extends TestCase
             ]);
 
             $result = $oController->index($request);
+
+            $countAfter = $this->user->devices()->count();
+
+            $this->assertTrue($countAfter > $countBefore);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testIndexDeviceIsset()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+
+            $countBefore = $this->user->devices()->count();
+
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->index($request);
+
+            $countAfter = $this->user->devices()->count();
+
+            $this->assertTrue($countAfter === $countBefore);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testIndexDeviceNotIsset()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+
+            $countBefore = $this->user->devices()->count();
+
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = Device::orderBy('id', 'desc')->first()->id + 1;
+
+            $result = $oController->index($request);
+
+            $countAfter = $this->user->devices()->count();
+
+            $this->assertTrue($countAfter > $countBefore);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testIndexDeviceMax()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $countBefore = $this->user->devices()->count();
+
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = null;
+
+            $result = $oController->index($request);
+
+            $countAfter = $this->user->devices()->count();
+
+            $this->assertTrue($countAfter > $countBefore);
+
+            $this->assertTrue(session()->has('modal'));
+
+            $this->assertTrue(session()->get('modal') === 'reader-max-devices-modal');
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testIndexDeviceActivation()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+
+            $countBefore = $this->user->devices()->count();
+
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = null;
+
+            $result = $oController->index($request);
+
+            $countAfter = $this->user->devices()->count();
+
+            $this->assertTrue($countAfter > $countBefore);
 
             $this->assertTrue(session()->has('modal'));
 
@@ -105,46 +257,31 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Другое устройство онлайн
+     * Не авторизованный пользователь
      */
-    public function testIndexHasOnline()
+    public function testIndexDeviceOnline()
     {
-        $user = $this->user();
+        $user = $this->user;
 
         $this->actingAs($user);
 
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($user, $oController) {
+        DB::transaction(function () use ($oController) {
 
-            $oFirstDevice = $user->devices()->first();
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+            $oDevice->setOnline();
 
-            $oDevices = $user->devices;
-
-            $oDevice = $oDevices->reject(function ($item) use ($oFirstDevice) {
-                return $item->id === $oFirstDevice->id;
-            })->first();
-
-            $oFirstDevice->update([
-                'is_online' => 0,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
-
-            $oDevice->update([
-                'is_online' => 1,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
 
             $request = new Request();
             $request->merge([
 
             ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
 
             $result = $oController->index($request);
 
@@ -157,157 +294,33 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Другое устройство онлайн, новое создать нельзя
-     */
-    public function testIndexCantCreate()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        $oController = (new ReaderController());
-
-
-        DB::transaction(function () use ($user, $oController) {
-
-            $oDevices = $user->devices()->get();
-
-            $request = new Request();
-            $request->merge([
-                'agent' => $this->agent()
-            ]);
-
-            $result = $oController->index($request);
-
-            $oDevices = $user->devices()->get();
-
-            $this->assertTrue(session()->has('modal'));
-
-            $this->assertTrue(session()->get('modal') === 'reader-max-devices-modal');
-
-            DB::rollBack();
-        });
-    }
-
-    /**
-     * Другое устройство онлайн
-     */
-    public function testIndexCantCreateException()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        $oController = (new ReaderController());
-
-        DB::transaction(function () use ($user, $oController) {
-
-            $oDevices = $user->devices()->get();
-
-            foreach ($oDevices as $oDevice) {
-                $oDevice->delete();
-            }
-
-            $request = new Request();
-            $request->merge([
-
-            ]);
-
-            $result = $oController->index($request);
-
-            $this->assertTrue(session()->has('toastr::notifications'));
-
-            DB::rollBack();
-        });
-    }
-
-    /**
-     * Успешная проверка устройства и переход в читалку с данными
+     * Не авторизованный пользователь
      */
     public function testIndexSuccess()
     {
-        $user = $this->user();
+        $user = $this->user;
 
         $this->actingAs($user);
 
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($user, $oController) {
+        DB::transaction(function () use ($oController) {
 
-            $oDevice = $user->devices()->first();
-
-            $oDevice->update([
-                'is_online' => 0,
-            ]);
-
-            $oDevice->update([
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
 
             $request = new Request();
             $request->merge([
 
             ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
 
             $result = $oController->index($request);
 
-            $oDevice = $user->devices()->first();
+            $oDevice = $this->user->devices()->first();
 
-            $this->assertTrue($oDevice->is_online === 1);
-
-            DB::rollBack();
-        });
-    }
-
-    /**
-     * Проверка с неправильным кодом подтверждения
-     */
-    public function testCodeError()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        DB::transaction(function () {
-
-            $oController = (new ReaderController());
-
-            $request = new Request();
-            $request->merge([
-                'code' => $this->code(), // несуществующий промокод
-            ]);
-
-            $result = $oController->code($request);
-
-            $this->assertFalse($result->getData()->success);
-
-            DB::rollBack();
-        });
-    }
-
-    /**
-     * Проверка с правильным кодом подтверждения
-     */
-    public function testCodeSuccess()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        DB::transaction(function () {
-
-            $oController = (new ReaderController());
-
-            $request = new Request();
-            $request->merge([
-                'code' => testData()->userDevice['code']
-            ]);
-
-            $result = $oController->code($request);
-
-            $this->assertTrue($result['success']);
+            $this->assertTrue($oDevice->isOnline());
 
             DB::rollBack();
         });
@@ -365,84 +378,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Запрос на сброс устройств
+     * Не авторизованный пользователь
      */
-    public function testOnlineReset()
+    public function testCodeNullDevice()
     {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        $oController = (new ReaderController());
-
-        $request = new Request();
-        $request->merge([
-            'reset' => 1
-        ]);
-
-        $result = $oController->online($request);
-
-        $this->assertTrue($result['result'] === 5);
-    }
-
-    /**
-     * Сообщение устройство уже онлайн
-     */
-    public function testOnlineLock()
-    {
-        $user = $this->user();
-
-        $this->actingAs($user);
-
-        $oController = (new ReaderController());
-
-        DB::transaction(function () use ($user, $oController) {
-
-            $oFirstDevice = $user->devices()->first();
-
-            $oDevices = $user->devices;
-
-            $oDevice = $oDevices->reject(function ($item) use ($oFirstDevice) {
-                return $item->id === $oFirstDevice->id;
-            })->first();
-
-            $oFirstDevice->update([
-                'is_online' => 0,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
-
-            $oDevice->update([
-                'is_online' => 1,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
-
-            $request = new Request();
-            $request->merge([
-
-            ]);
-
-            $result = $oController->online($request);
-
-            $this->assertFalse($result['success']);
-
-            $this->assertTrue(isset($result['toastr']));
-
-            DB::rollBack();
-        });
-    }
-
-    /**
-     * Тестирование назначить устройство онлайн
-     */
-    public function testOnlineSetOnline()
-    {
-        $user = $this->user();
+        $user = $this->user;
 
         $this->actingAs($user);
 
@@ -450,80 +390,248 @@ class ReaderControllerTest extends TestCase
 
         DB::transaction(function () use ($oController) {
 
+            $oDevice = $this->user->createDevice();
+            $oDevice->sendCodeToUser();
+
             $request = new Request();
             $request->merge([
-                'online' => 1
+                'code' => $oDevice->activate_code.'00000',
             ]);
 
-            $result = $oController->online($request);
+            $_COOKIE['device_id'] = null;
 
-            $this->assertTrue($result['result'] === 4);
+            $result = $oController->code($request);
+
+            $this->assertFalse($result->getData()->success);
 
             DB::rollBack();
         });
     }
 
     /**
-     * Без какого либо исхода
+     * Не авторизованный пользователь
      */
-    public function testOnlineEmpty()
+    public function testCodeWrongCode()
     {
-        $user = $this->user();
+        $user = $this->user;
 
         $this->actingAs($user);
 
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($user, $oController) {
+        DB::transaction(function () use ($oController) {
 
-            $oFirstDevice = $user->devices()->first();
-
-            $oDevices = $user->devices;
-
-            $oDevice = $oDevices->reject(function ($item) use ($oFirstDevice) {
-                return $item->id === $oFirstDevice->id;
-            })->first();
-
-            $oFirstDevice->update([
-                'is_online' => 1,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
-
-            $oDevice->update([
-                'is_online' => 0,
-                'is_online_at' => now()->addMinute(2),
-                'code_at' => now()->subDay(),
-                'expires_at' => now()->addDay(),
-                'status' => 2,
-            ]);
+            $oDevice = $this->user->createDevice();
+            $oDevice->sendCodeToUser();
 
             $request = new Request();
             $request->merge([
-
+                'code' => $oDevice->activate_code.'00000',
             ]);
 
-            $result = $oController->online($request);
+            $_COOKIE['device_id'] = $oDevice->id;
 
-            $this->assertTrue($result['success']);
+            $result = $oController->code($request);
 
-            $this->assertTrue(!isset($result['toastr']));
+            $this->assertFalse($result->getData()->success);
 
             DB::rollBack();
         });
     }
 
     /**
-     * Тестовый пользователь
-     *
-     * @return mixed
+     * Не авторизованный пользователь
      */
-    private function user(): User
+    public function testCodeSuccess()
     {
-        return testData()->user();
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->sendCodeToUser();
+
+            $request = new Request();
+            $request->merge([
+                'code' => $oDevice->activate_code,
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->code($request);
+
+            $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
     }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testOnlineNullDevice()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = null;
+
+            $result = $oController->online($request);
+
+            $this->assertFalse($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testOnlineSetOnline()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+                'online' => 1
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->online($request);
+
+            $oDevice = $this->user->devices()->first();
+
+            $this->assertTrue($oDevice->isOnline());
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testOnlineReset()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+                'reset' => 1
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->online($request);
+
+            $this->assertTrue($result['result'] === 5);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testOnlineHasOnline()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+            $oDevice->setOnline();
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->online($request);
+
+            $this->assertFalse($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не авторизованный пользователь
+     */
+    public function testOnlineSuccess()
+    {
+        $user = $this->user;
+
+        $this->actingAs($user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+            $oDevice->setOnline();
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $_COOKIE['device_id'] = $oDevice->id;
+
+            $result = $oController->online($request);
+
+            $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
 
     /**
      * Неверный код
@@ -533,15 +641,5 @@ class ReaderControllerTest extends TestCase
     public function code(): int
     {
         return 100001;
-    }
-
-    /**
-     * Тестовое устройство
-     *
-     * @return string
-     */
-    private function agent(): string
-    {
-        return 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.13+ (KHTML, like Gecko) Version/5.1.7 Safari/534.57.2';
     }
 }

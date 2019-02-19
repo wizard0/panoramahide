@@ -32,7 +32,7 @@ class ReaderController extends Controller
 
         $oUser = User::find(Auth::user()->id);
 
-        $deviceID = $request->cookie('device_id');
+        $deviceID = $this->getCookieDeviceId($request);
 
         if (is_null($deviceID)) {
             $oDevice = null;
@@ -124,7 +124,6 @@ class ReaderController extends Controller
      * @param $type
      * @param $oDevice
      * @param $oUser
-     * @param $device
      */
     private function sessionModalError($type, $oDevice, $oUser)
     {
@@ -164,7 +163,7 @@ class ReaderController extends Controller
     {
         $oUser = User::find(Auth::user()->id);
 
-        $deviceID = $request->cookie('device_id');
+        $deviceID = $this->getCookieDeviceId($request);
 
         if (is_null($deviceID)) {
             return responseCommon()->validationMessages(null, [
@@ -195,7 +194,7 @@ class ReaderController extends Controller
     {
         $oUser = User::find(Auth::user()->id);
 
-        $deviceID = $request->cookie('device_id');
+        $deviceID = $this->getCookieDeviceId($request);
 
         if (is_null($deviceID)) {
             return responseCommon()->error([
@@ -224,7 +223,7 @@ class ReaderController extends Controller
         if ($request->exists('reset') && (int)$request->get('reset') === 1) {
 
             // Отправить ссылку на почту, ссылка уже вызывает этот метод
-            $oDevice->resetAllDevices();
+            //$oDevice->resetAllDevices();
 
             return responseCommon()->success([
                 'result' => 5,
@@ -241,6 +240,12 @@ class ReaderController extends Controller
         //$oDevice->setOnline();
 
         return responseCommon()->success([]);
+    }
+
+    private function getCookieDeviceId(Request $request)
+    {
+        return !is_null($request->cookie('device_id')) ?
+            $request->cookie('device_id') : $_COOKIE['device_id'] ?? null;
     }
 
 
