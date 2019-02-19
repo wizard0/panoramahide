@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\Models\UserDevice;
+use App\Models\Device as ModelDevice;
 use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -19,7 +19,7 @@ class Device extends Mailable
     private $oUser;
 
     /**
-     * @var UserDevice|null
+     * @var ModelDevice|null
      */
     private $oDevice = null;
 
@@ -34,7 +34,7 @@ class Device extends Mailable
      * @param $oUser
      * @param $oDevice
      */
-    public function __construct(string $type, User $oUser, ?UserDevice $oDevice = null)
+    public function __construct(string $type, User $oUser, ?ModelDevice $oDevice = null)
     {
         $this->oUser = $oUser;
         $this->oDevice = $oDevice;
@@ -48,19 +48,16 @@ class Device extends Mailable
      */
     public function build()
     {
-        $from = [
-            'address' => config('mail.from.address'),
-            'name' => config('mail.from.name'),
-        ];
+        $this->from(config('mail.from.address'), config('mail.from.name'));
 
         switch ($this->type) {
             case 'confirm':
                 $title = config('app.name').' - Подтвердите устройство';
                 return $this->view('email.device.confirm')->with([
                     'title' => $title,
+                    'code' => $this->oDevice->activate_code,
                     'oUser' => $this->oUser,
-                    'oDevice' => $this->oDevice,
-                ])->subject($title)->from($from['address'], $from['name']);
+                ])->subject($title);
                 break;
             case 'reset':
                 $title = config('app.name').' - Сброс устройств';
@@ -68,7 +65,7 @@ class Device extends Mailable
                     'title' => $title,
                     'link' => url('/'),
                     'oUser' => $this->oUser,
-                ])->subject($title)->from($from['address'], $from['name']);
+                ])->subject($title);
                 break;
             default:
                 return null;

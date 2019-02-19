@@ -91,9 +91,10 @@ class Device extends Model
         if (!$user->email)
             return false;
         try {
-            Mail::to($user->email)->send(new \App\Mail\DeviceCode($code));
+            Mail::to($user->email)->send(new \App\Mail\Device('confirm', $user, $this));
             return true;
         } catch (\Exception $e) {
+            info($e->getMessage());
             return false;
         }
     }
