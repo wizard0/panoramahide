@@ -37,7 +37,7 @@
 
 
 </head>
-<body class="animsition">
+<body>
 {{--{{ dd(config('admin.menu')) }}--}}
     <div class="page-wrapper">
         @include('includes.admin.header_mobile')
@@ -52,7 +52,9 @@
                 <div class="section__content section__content--p30">
                     <div class="container-fluid">
 
+                        <div id="ajax-container">
                         @yield('content')
+                        </div>
 
                         @include('includes.admin.footer')
                     </div>
@@ -84,12 +86,14 @@
     <script src="{{ asset('js/admin/main.js') }}"></script>
 
     <script src="{{ asset('/js/admin/CRUDManager.js') }}"></script>
+    <script src="{{ asset('/js/admin/AdminMenuManager.js') }}"></script>
 
 
     @yield('javascript')
 
     <script>
         CRUDManager = new JSCRUDManager();
+        AdminMenuManager = new JSAdminMenuManager();
     </script>
 </body>
 </html>

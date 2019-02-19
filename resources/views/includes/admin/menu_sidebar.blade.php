@@ -1,5 +1,5 @@
 <!-- MENU SIDEBAR-->
-<aside class="menu-sidebar d-none d-lg-block">
+<aside class="menu-sidebar d-none d-lg-block" id="admin-menu-sidebar">
     <div class="admin_logo_container">
         <a class="admin_logo" href="{{ route('admin') }}">
         </a>
