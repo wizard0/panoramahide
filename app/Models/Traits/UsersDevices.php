@@ -35,4 +35,31 @@ trait UsersDevices
         }
     }
 
+    public function getOnlineDevices()
+    {
+        return $this->devices->reject(function ($oDevice) {
+            return !$oDevice->isOnline();
+        });
+    }
+
+    /**
+     * @param Device|null $oSelectedDevice
+     * @return bool
+     */
+    public function hasOnlineDevices(?Device $oSelectedDevice = null): bool
+    {
+        if (!is_null($oSelectedDevice)) {
+            $oDevices = $this->devices->where('id', '<>', $oSelectedDevice->id);
+        } else {
+            $oDevices = $this->devices;
+        }
+
+        foreach ($oDevices as $oDevice) {
+            if ($oDevice->isOnline()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

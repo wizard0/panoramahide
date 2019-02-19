@@ -54,6 +54,14 @@ class ReaderController extends Controller
             return view('reader.index', []);
         }
 
+        if ($oUser->hasOnlineDevices($oDevice)) {
+
+            (new Toastr('Читалка уже открыта на другом устройстве'))->info(false);
+
+            session()->flash('modal', 'reader-confirm-online-modal');
+
+            return view('reader.index', []);
+        }
         $oDevice->setOnline();
 
         return view('reader.index', []);
@@ -204,6 +212,12 @@ class ReaderController extends Controller
 
         if ($request->exists('online') && (int)$request->get('online') === 1) {
 
+            $oDevices = $oUser->devices;
+
+            foreach ($oDevices as $device) {
+                $device->online_datetime = null;
+                $device->save();
+            }
             $oDevice->setOnline();
 
             return responseCommon()->success([
