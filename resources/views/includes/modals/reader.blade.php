@@ -8,7 +8,9 @@
             </span>
             <div class="form-group">
                 <label>Код подтверждения</label>
-                <input type="text" name="code" value="" required data-role="js-mask-int" data-length="6">
+                <input type="text" name="code" value="" required
+                       {{--data-role="js-mask-int" data-length="6"--}}
+                >
             </div>
             <div class="form-group m-0 text-right">
                 <button type="submit" class="btn inner-form-submit">

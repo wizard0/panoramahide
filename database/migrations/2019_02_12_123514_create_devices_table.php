@@ -52,6 +52,10 @@ class CreateDevicesTable extends Migration
      */
     public function down()
     {
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('device_user');
+        Schema::dropIfExists('device_partner_user');
         Schema::dropIfExists('devices');
+        Schema::enableForeignKeyConstraints();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Device;
 use App\Release;
 use App\Services\DeviceService;
 use App\Services\ReaderService;
@@ -9,6 +10,7 @@ use App\Services\Toastr\Toastr;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
 
 class ReaderController extends Controller
@@ -30,60 +32,29 @@ class ReaderController extends Controller
 
         $oUser = User::find(Auth::user()->id);
 
-        $oDeviceService = new DeviceService($oUser);
+        $deviceID = $request->cookie('device_id');
 
-        $device = $oDeviceService->getCurrentDevice();
-
-        if ($request->exists('agent')) {
-
-            $oDeviceService->setAgent($request->get('agent'));
-
-            $device = $oDeviceService->getCurrentDevice();
+        if (is_null($deviceID)) {
+            $oDevice = null;
+        } else {
+            $oDevice = Device::find($deviceID);
         }
-
-        if (is_null($device)) {
-
-            if ($oDeviceService->canCreate()) {
-                try {
-                    $device = $oDeviceService->createDevice();
-                } catch (\Exception $e) {
-                    (new Toastr($e->getMessage()))->error(false);
-
-                    return view('reader.index', []);
-                }
-            } else {
-                $this->sessionModalError('exists', $oDeviceService, $oUser, $device);
-
-                (new Toastr($oDeviceService->getMessage()))->error(false);
-
-                return view('reader.index', []);
-            }
+        if (is_null($oDevice)) {
+            $oDevice = $oUser->createDevice();
+            Cookie::queue('device_id', $oDevice->id, Device::ACTIVE_DAYS * 1440);
         }
+        if (!$oDevice->checkActivation()) {
 
-        $oDeviceService->checkDevice($device);
+            $oDevice->sendCodeToUser();
 
-        if (is_null($device->code_at)) {
+            (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
 
-            $this->sessionModalError('code_at', $oDeviceService, $oUser, $device);
+            session()->flash('modal', 'reader-code-modal');
 
             return view('reader.index', []);
         }
 
-        if ($device->expires_at < now()) {
-
-            $this->sessionModalError('expires_at', $oDeviceService, $oUser, $device);
-
-            return view('reader.index', []);
-        }
-
-        if ($oDeviceService->hasOnline() && !$oDeviceService->checkOnline()) {
-
-            $this->sessionModalError('online', $oDeviceService, $oUser, $device);
-
-            return view('reader.index', []);
-        }
-
-        $oDeviceService->setOnline();
+        $oDevice->setOnline();
 
         return view('reader.index', []);
     }
@@ -190,13 +161,23 @@ class ReaderController extends Controller
     {
         $oUser = User::find(Auth::user()->id);
 
-        $oDeviceService = new DeviceService($oUser);
+        $deviceID = $request->cookie('device_id');
 
-        if (!$oDeviceService->checkCode((int)$request->get('code'))) {
+        if (is_null($deviceID)) {
+            return responseCommon()->validationMessages(null, [
+                'code' => 'Устройство не найдено',
+            ]);
+        } else {
+            $oDevice = Device::find($deviceID);
+        }
+        $oDevice = $oDevice->activateByCode($request->get('code'));
+
+        if (is_null($oDevice)) {
             return responseCommon()->validationMessages(null, [
                 'code' => 'Неверный код подтверждения',
             ]);
         }
+
         return responseCommon()->success([
             'result' => 3,
             'redirect' => url('/reader'),
@@ -211,33 +192,44 @@ class ReaderController extends Controller
     {
         $oUser = User::find(Auth::user()->id);
 
-        $oDeviceService = new DeviceService($oUser);
+        $deviceID = $request->cookie('device_id');
 
-        if ($request->exists('reset') && (int)$request->get('reset') === 1) {
-
-            $oDeviceService->sendEmailResetDevice();
-
-            return responseCommon()->success([
-                'result' => 5,
-            ], 'Ссылка успешно отправлена.');
-        }
-
-        if (!$request->exists('online') && !$oDeviceService->checkOnline()) {
-
+        if (is_null($deviceID)) {
             return responseCommon()->error([
 
-            ], 'Читалка уже открыта на другом устройстве');
+            ], 'Устройство не найдено');
+        } else {
+            $oDevice = Device::find($deviceID);
         }
 
         if ($request->exists('online') && (int)$request->get('online') === 1) {
 
-            $oDeviceService->setOnline();
+            $oDevice->setOnline();
 
             return responseCommon()->success([
                 'result' => 4,
                 'redirect' => url('/reader'),
             ], 'Устройство успешно подтверждено');
         }
+
+        if ($request->exists('reset') && (int)$request->get('reset') === 1) {
+
+            // Отправить ссылку на почту, ссылка уже вызывает этот метод
+            $oDevice->resetAllDevices();
+
+            return responseCommon()->success([
+                'result' => 5,
+            ], 'Ссылка успешно отправлена.');
+        }
+
+        if (!$oDevice->isOnline()) {
+
+            return responseCommon()->error([
+
+            ], 'Читалка уже открыта на другом устройстве');
+        }
+
+        //$oDevice->setOnline();
 
         return responseCommon()->success([]);
     }

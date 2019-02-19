@@ -13,7 +13,9 @@ trait UsersDevices
     // Добавляем новое устровство пользователю
     public function createDevice()
     {
-        $this->devices()->save(Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]));
+        $oDevice = Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]);
+        $this->devices()->save($oDevice);
+        return $oDevice;
     }
 
     public function devices()
