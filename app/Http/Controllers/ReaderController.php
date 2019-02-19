@@ -43,22 +43,26 @@ class ReaderController extends Controller
             $oDevice = $oUser->createDevice();
             Cookie::queue('device_id', $oDevice->id, Device::ACTIVE_DAYS * 1440);
         }
+
+        $oActivationDevices = $oUser->getActivationDevices($oDevice);
+
+        if (count($oActivationDevices) >= 2) {
+
+            $this->sessionModalError('max', $oDevice, $oUser);
+
+            return view('reader.index', []);
+        }
+
         if (!$oDevice->checkActivation()) {
 
-            $oDevice->sendCodeToUser();
-
-            (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
-
-            session()->flash('modal', 'reader-code-modal');
+            $this->sessionModalError('activation', $oDevice, $oUser);
 
             return view('reader.index', []);
         }
 
         if ($oUser->hasOnlineDevices($oDevice)) {
 
-            (new Toastr('Читалка уже открыта на другом устройстве'))->info(false);
-
-            session()->flash('modal', 'reader-confirm-online-modal');
+            $this->sessionModalError('online', $oDevice, $oUser);
 
             return view('reader.index', []);
         }
@@ -118,30 +122,21 @@ class ReaderController extends Controller
 
     /**
      * @param $type
-     * @param DeviceService $oDeviceService
+     * @param $oDevice
      * @param $oUser
      * @param $device
      */
-    private function sessionModalError($type, DeviceService $oDeviceService, $oUser, $device)
+    private function sessionModalError($type, $oDevice, $oUser)
     {
         switch ($type) {
-            case 'exists':
+            case 'max':
 
                 session()->flash('modal', 'reader-max-devices-modal');
 
                 break;
-            case 'code_at':
-                $oDeviceService->sendEmailConfirmDevice();
+            case 'activation':
 
-                (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
-
-                session()->flash('modal', 'reader-code-modal');
-
-                break;
-            case 'expires_at':
-                $oDeviceService->sendEmailConfirmDevice();
-
-                (new Toastr('Срок действия устройства истек.'))->error(false);
+                $oDevice->sendCodeToUser();
 
                 (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
 

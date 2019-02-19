@@ -7,6 +7,7 @@
 namespace App\Models\Traits;
 
 use App\Models\Device;
+use Illuminate\Database\Eloquent\Collection;
 
 trait UsersDevices
 {
@@ -30,7 +31,7 @@ trait UsersDevices
     }
     public function resetAllDevices()
     {
-        foreach ($this->devices()->whereActive(true)->get() as $device) {
+        foreach ($this->getActivationDevices() as $device) {
             $device->activateDevice(false);
         }
     }
@@ -42,7 +43,27 @@ trait UsersDevices
         });
     }
 
+
     /**
+     * Активированные устройства с исключением текущего
+     *
+     * @param Device|null $oSelectedDevice
+     * @return mixed
+     */
+    public function getActivationDevices(?Device $oSelectedDevice = null): Collection
+    {
+        $query = $this->devices();
+
+        if (!is_null($oSelectedDevice)) {
+            $query = $query->where('id', '<>', $oSelectedDevice->id);
+        }
+
+        return $query->whereActive(true)->get();
+    }
+
+    /**
+     * Онлайн устройства с исключением текущего
+     *
      * @param Device|null $oSelectedDevice
      * @return bool
      */
