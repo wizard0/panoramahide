@@ -38,6 +38,7 @@ class UserSearch extends Model
     {
         $searchLocale = App::getLocale();
         $groupBy = 'article_translations.code';
+
         switch ($params['type']) {
             case 'journal':
                 $groupBy = 'journal_translations.code';
@@ -118,6 +119,7 @@ class UserSearch extends Model
                 }
                 break;
         }
+
         if (isset($q) && isset($params)) {
             $q = $q->leftJoin('article_author', 'article_author.article_id', '=', 'articles.id')
                 ->leftJoin('authors', 'article_author.author_id', '=', 'authors.id')
@@ -187,6 +189,8 @@ class UserSearch extends Model
                 ->where('categories.active', '=', '1');
 
             return $q->groupBy($groupBy);
+        } else {
+            return false;
         }
     }
 }
