@@ -20,7 +20,7 @@ class Device extends Model
     const CODE_LENGTH = 8;
 
     protected $fillable = [
-        'owner_type'
+        'owner_type', 'active', 'activate_date',
     ];
 
     // Проверить, не устарело ли подтверждение устройства
@@ -91,13 +91,16 @@ class Device extends Model
         if (!$user->email)
             return false;
         try {
-            Mail::to($user->email)->send(new \App\Mail\Device('confirm', $user, $this));
+            Mail::to($user->email)->send(new \App\Mail\Device('confirm', $user, [
+                'code' => $code
+            ]));
             return true;
         } catch (\Exception $e) {
             info($e->getMessage());
             return false;
         }
     }
+
     // Связь с пользователем
     public function __get($name)
     {

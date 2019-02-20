@@ -23,11 +23,23 @@ class ReaderController extends Controller
     {
         if (Auth::guest()) {
 
-            (new Toastr('Необходимо авторизоваться'))->info(false);
-
-            session()->flash('modal', 'login-modal');
+            $this->sessionModalError('login', null, null);
 
             return view('reader.index', []);
+        }
+
+        if (session()->exists('reset-wrong')) {
+
+            $this->sessionModalError('reset-wrong-modal', null, null);
+
+            return view('reader.index', []);
+        }
+
+        if (session()->exists('reset-success')) {
+
+            session()->forget('reset-success');
+
+            (new Toastr('Устройства успешно сброшены'))->success(false);
         }
 
         $oUser = User::find(Auth::user()->id);
@@ -125,12 +137,40 @@ class ReaderController extends Controller
      * @param $oDevice
      * @param $oUser
      */
-    private function sessionModalError($type, $oDevice, $oUser)
+    private function sessionModalError($type, $oDevice = null, $oUser = null)
     {
         switch ($type) {
+            case 'login':
+
+                (new Toastr('Необходимо авторизоваться'))->info(false);
+
+                session()->flash('modal', 'login-modal');
+
+                break;
             case 'max':
 
                 session()->flash('modal', 'reader-max-devices-modal');
+
+                break;
+            case 'reset-wrong-modal':
+
+                if (session()->has('wrong-reset')) {
+                    session()->forget('wrong-reset');
+                }
+
+                (new Toastr('Неверный код сброса устройств'))->error(false);
+
+                session()->flash('modal', 'reader-max-devices-modal');
+
+                break;
+            case 'reset-wrong':
+
+                session()->put('reset-wrong', 'reader-max-devices-modal');
+
+                break;
+            case 'reset-success':
+
+                session()->put('reset-success', 'reader-max-devices-modal');
 
                 break;
             case 'activation':
@@ -192,7 +232,7 @@ class ReaderController extends Controller
      */
     public function online(Request $request)
     {
-        $oUser = User::find(Auth::user()->id);
+        $oUser = Auth::user();
 
         $deviceID = $this->getCookieDeviceId($request);
 
@@ -222,8 +262,7 @@ class ReaderController extends Controller
 
         if ($request->exists('reset') && (int)$request->get('reset') === 1) {
 
-            // Отправить ссылку на почту, ссылка уже вызывает этот метод
-            //$oDevice->resetAllDevices();
+            $oUser->sendResetCodeToUser();
 
             return responseCommon()->success([
                 'result' => 5,
@@ -242,10 +281,44 @@ class ReaderController extends Controller
         return responseCommon()->success([]);
     }
 
+    /**
+     * @param Request $request
+     * @return array|null|string
+     */
     private function getCookieDeviceId(Request $request)
     {
         return !is_null($request->cookie('device_id')) ?
             $request->cookie('device_id') : $_COOKIE['device_id'] ?? null;
+    }
+
+    /**
+     * @param Request $request
+     * @param $code
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     */
+    public function reset(Request $request, $code)
+    {
+        if (Auth::guest()) {
+
+            $this->sessionModalError('login', null, null);
+
+            return view('reader.index', []);
+        }
+
+        $oUser = Auth::user();
+
+        if (!$oUser->checkResetCode($code)) {
+
+            $this->sessionModalError('reset-wrong', null, null);
+
+            return redirect()->to('/reader');
+        }
+
+        $oUser->resetAllDevices();
+
+        $this->sessionModalError('reset-success', null, null);
+
+        return redirect()->to('/reader');
     }
 
 

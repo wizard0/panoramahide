@@ -8,6 +8,8 @@ namespace App\Models\Traits;
 
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 trait UsersDevices
 {
@@ -32,7 +34,10 @@ trait UsersDevices
     public function resetAllDevices()
     {
         foreach ($this->getActivationDevices() as $device) {
-            $device->activateDevice(false);
+            $device->update([
+                'active' => 0,
+                'activate_date' => null,
+            ]);
         }
     }
 
@@ -81,6 +86,60 @@ trait UsersDevices
             }
         }
         return false;
+    }
+
+    // Отправляем пользователю email со сбросом всех устройств
+    public function sendResetCodeToUser($new = false)
+    {
+        $user = Auth::user();
+
+        if (!$user->email) {
+            return false;
+        }
+        $code = encrypt($user->id.':'.$user->email);
+
+        $link = route('reader.reset', [
+            'code' => $code,
+        ]);
+
+        try {
+            Mail::to($user->email)->send(new \App\Mail\Device('reset', $user, [
+                'link' => $link
+            ]));
+            return true;
+        } catch (\Exception $e) {
+            info($e->getMessage());
+            return false;
+        }
+    }
+
+
+    /**
+     * Проверка кода сброса устройств
+     *
+     * @param $code
+     * @return bool
+     */
+    public function checkResetCode(string $code): bool
+    {
+        $user = Auth::user();
+
+        try {
+            $code = decrypt($code);
+        } catch (\Exception $e) {
+            // некорректный код сброса
+            return false;
+        }
+
+        $code = explode(':', $code);
+
+        if (!isset($code[0]) || !isset($code[1])) {
+            return false;
+        }
+        if ((int)$code[0] !== $user->id || $code[1] !== $user->email) {
+            return false;
+        }
+        return true;
     }
 
 }

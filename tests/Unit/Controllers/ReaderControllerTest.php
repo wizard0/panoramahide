@@ -49,6 +49,58 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
+     * Проверка обработки сессии на не успешный сброс устройств
+     */
+    public function testIndexResetWrong()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            session()->put('reset-wrong', 1);
+
+            $result = $oController->index($request);
+
+            $this->assertTrue(session()->has('modal'));
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Проверка обработки сессии на успешный сброс устройств
+     */
+    public function testIndexResetSuccess()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            session()->put('reset-success', 1);
+
+            $result = $oController->index($request);
+
+            $this->assertTrue(!session()->has('reset-success'));
+
+            DB::rollBack();
+        });
+    }
+
+    /**
      * Не авторизованный пользователь
      */
     public function testIndexGuest()
@@ -76,13 +128,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка. Устройство не найдено
      */
     public function testIndexDeviceNull()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -106,13 +156,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка. Устройство найдено по id
      */
     public function testIndexDeviceIsset()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -141,13 +189,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка. Устройство не сущенствует по id
      */
     public function testIndexDeviceNotIsset()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -176,13 +222,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка. Максимальное количество устройств
      */
     public function testIndexDeviceMax()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -218,13 +262,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка. Подтвержите устройство
      */
     public function testIndexDeviceActivation()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -257,13 +299,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка, есть устройство онлайн
      */
     public function testIndexDeviceOnline()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -294,13 +334,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читалка открыт доступ
      */
     public function testIndexSuccess()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -378,13 +416,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Подтверждение устройства, устройство не найдено
      */
     public function testCodeNullDevice()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -409,13 +445,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Неверный код подтверждения
      */
     public function testCodeWrongCode()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -440,13 +474,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Код подтверждения успешный
      */
     public function testCodeSuccess()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -471,13 +503,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Проверка онлайн, устройство не найдено
      */
     public function testOnlineNullDevice()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -502,13 +532,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Читать с этого устройства
      */
     public function testOnlineSetOnline()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -535,13 +563,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Запрос ссылки сброса устройств
      */
     public function testOnlineReset()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -566,13 +592,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Есть онлайн устройства
      */
     public function testOnlineHasOnline()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -601,13 +625,11 @@ class ReaderControllerTest extends TestCase
     }
 
     /**
-     * Не авторизованный пользователь
+     * Проверка онлайн успешна
      */
     public function testOnlineSuccess()
     {
-        $user = $this->user;
-
-        $this->actingAs($user);
+        $this->actingAs($this->user);
 
         $oController = (new ReaderController());
 
@@ -627,6 +649,94 @@ class ReaderControllerTest extends TestCase
             $result = $oController->online($request);
 
             $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Сброс устройств для неавторизованного пользователя
+     */
+    public function testResetGuest()
+    {
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $result = $oController->reset($request, 'code');
+
+            $this->assertTrue(session()->has('modal'));
+
+            $this->assertTrue(session()->get('modal') === 'login-modal');
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Не успешный сброс устройств, неверный код
+     */
+    public function testResetCheckError()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $result = $oController->reset($request, 'code');
+
+            $this->assertTrue(session()->has('reset-wrong'));
+
+            $oDevice = $this->user->devices()->first();
+
+            $this->assertTrue($oDevice->active === 1);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Успешный сброс устройств
+     */
+    public function testResetCheckSuccess()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+
+            $oDevice = $this->user->createDevice();
+            $oDevice->activateDevice();
+
+            $request = new Request();
+            $request->merge([
+
+            ]);
+
+            $code = encrypt($this->user->id.':'.$this->user->email);
+
+            $result = $oController->reset($request, $code);
+
+            $this->assertTrue(session()->has('reset-success'));
+
+            $oDevice = $this->user->devices()->first();
+
+            $this->assertTrue($oDevice->active === 0);
 
             DB::rollBack();
         });
