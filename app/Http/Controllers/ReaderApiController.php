@@ -7,6 +7,7 @@ use App\Models\Partner;
 use App\Models\PartnerUser;
 use App\Models\Quota;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 
 class ReaderApiController extends Controller
 {
@@ -42,8 +43,10 @@ class ReaderApiController extends Controller
                 // Устанавливаем отношение пользователь->выпуск
                 $user->releases()->save($release);
             }
-            // Здесь будет редирект на читалку
-            return redirect(route('release', [$release->journal_id, $release->id]));
+            Cookie::queue(PartnerUser::COOKIE_NAME, $user->partner->id.PartnerUser::COOKIE_NAME_SEPORATOR.$user->user_id);
+
+            // Отправляем пользователя на читалку
+            return redirect(route('reader.index', ['release_id' => $release->id]));
         }
     }
 }

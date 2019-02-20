@@ -9,16 +9,34 @@ namespace App\Models;
 use App\Models\Traits\ActiveField;
 use App\Models\Traits\UsersDevices;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cookie;
 
 class PartnerUser extends Model
 {
     use ActiveField;
     use UsersDevices;
 
+    const COOKIE_NAME           = 'PartnerUser';
+    const COOKIE_NAME_SEPORATOR = '|@|@|';
+
     protected $fillable = [
         'user_id', 'active', 'partner_id', 'email'
     ];
 
+    public static function getUserByCookie(&$User)
+    {
+        if (Cookie::has(self::COOKIE_NAME)) {
+            $cookie = explode(self::COOKIE_NAME_SEPORATOR, Cookie::get(self::COOKIE_NAME));
+            if (count($cookie) != 2)
+                return false;
+            $partner_user = PartnerUser::whereUserId($cookie[1])->first();
+            if ($partner_user && $partner_user->partner->id == $cookie[0]) {
+                $User = $partner_user;
+                return true;
+            }
+        }
+        return false;
+    }
     public function isAvailable()
     {
         // Проверяем, активен ли партнёр
@@ -66,4 +84,5 @@ class PartnerUser extends Model
     {
         return $this->belongsToMany(Quota::class, 'partner_user_quota', 'p_user_id', 'quota_id');
     }
+
 }

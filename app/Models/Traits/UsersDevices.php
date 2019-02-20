@@ -8,6 +8,7 @@ namespace App\Models\Traits;
 
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cookie;
 
 trait UsersDevices
 {
@@ -16,6 +17,7 @@ trait UsersDevices
     {
         $oDevice = Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]);
         $this->devices()->save($oDevice);
+        Cookie::queue('device_id', $oDevice->id, Device::ACTIVE_DAYS * 1440);
         return $oDevice;
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PartnerUser;
 use App\Models\Device;
 use App\Release;
 use App\Services\DeviceService;
@@ -10,8 +11,8 @@ use App\Services\Toastr\Toastr;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Mail;
+use View;
 
 class ReaderController extends Controller
 {
@@ -19,54 +20,74 @@ class ReaderController extends Controller
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+
+    public static function getUser(Request $request)
+    {
+        $isAjax = $request->ajax();
+
+        if (!$isAjax) {
+            // Для представления задаём значения: не партнёр, простой вид читалки
+            View::share('isPartnerUser', false);
+            View::share('simpleReader', true);
+        }
+
+        // Если пользователь авторизован, получаем его
+        $User = Auth::guest() ? null : Auth::user();
+
+        // Если юзер портала, то вид читалки - расширенный
+        if ($User && !$isAjax)
+            View::share('simpleReader', false);
+
+        // Получаем пользователя партнёра по куке
+        if (PartnerUser::getUserByCookie($User)) {
+            // Если юзер партнёра, то вид читалки - простой
+            if (!$isAjax)
+                View::share('isPartnerUser', true);
+        }
+        return $User;
+    }
     public function index(Request $request)
     {
-        if (Auth::guest()) {
+        $oUser = self::getUser($request);
 
+        if (!$oUser) {
             (new Toastr('Необходимо авторизоваться'))->info(false);
-
             session()->flash('modal', 'login-modal');
-
             return view('reader.index', []);
         }
 
-        $oUser = User::find(Auth::user()->id);
-
-        $deviceID = $request->cookie('device_id');
-
-        if (is_null($deviceID)) {
-            $oDevice = null;
-        } else {
-            $oDevice = Device::find($deviceID);
-        }
+        // Проверяем куку устройства
+        $oDevice = $request->cookie('device_id');
         if (is_null($oDevice)) {
+            // Если устройство новое
             $oDevice = $oUser->createDevice();
-            Cookie::queue('device_id', $oDevice->id, Device::ACTIVE_DAYS * 1440);
+        } else {
+            $oDevice = $oUser->devices()->find($oDevice);
+            // В жизни врятли повторится, но при тестировании возникло. Если с одного устройства заходят разные пользователи
+            if (!$oDevice)
+                $oDevice = $oUser->createDevice();
         }
 
         $oActivationDevices = $oUser->getActivationDevices($oDevice);
-
         if (count($oActivationDevices) >= 2) {
-
             $this->sessionModalError('max', $oDevice, $oUser);
-
             return view('reader.index', []);
         }
 
         if (!$oDevice->checkActivation()) {
-
             $this->sessionModalError('activation', $oDevice, $oUser);
-
             return view('reader.index', []);
         }
 
         if ($oUser->hasOnlineDevices($oDevice)) {
-
             $this->sessionModalError('online', $oDevice, $oUser);
-
             return view('reader.index', []);
         }
+
         $oDevice->setOnline();
+
+        if ($request->has('release_id'))
+            View::share('release_id', $request->get('release_id'));
 
         return view('reader.index', []);
     }
@@ -77,7 +98,11 @@ class ReaderController extends Controller
      */
     public function release(Request $request)
     {
+        $User = self::getUser($request);
         $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
+        if (!$oRelease->userHasPermission($User)) {
+            return responseCommon()->error([], 'У вас нет доступа к данному выпуску');
+        }
 
         $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
 
@@ -162,7 +187,7 @@ class ReaderController extends Controller
      */
     public function code(Request $request)
     {
-        $oUser = User::find(Auth::user()->id);
+        //$oUser = User::find(Auth::user()->id);
 
         $deviceID = $request->cookie('device_id');
 
@@ -183,7 +208,7 @@ class ReaderController extends Controller
 
         return responseCommon()->success([
             'result' => 3,
-            'redirect' => url('/reader'),
+            'redirect' => redirect()->back()->getTargetUrl(),
         ], 'Код успешно подтвержден');
     }
 
@@ -193,8 +218,6 @@ class ReaderController extends Controller
      */
     public function online(Request $request)
     {
-        $oUser = User::find(Auth::user()->id);
-
         $deviceID = $request->cookie('device_id');
 
         if (is_null($deviceID)) {
@@ -204,6 +227,8 @@ class ReaderController extends Controller
         } else {
             $oDevice = Device::find($deviceID);
         }
+
+        $oUser = $oDevice->user;
 
         if ($request->exists('online') && (int)$request->get('online') === 1) {
 
@@ -217,7 +242,7 @@ class ReaderController extends Controller
 
             return responseCommon()->success([
                 'result' => 4,
-                'redirect' => url('/reader'),
+                'redirect' => redirect()->back()->getTargetUrl(),
             ], 'Устройство успешно подтверждено');
         }
 
