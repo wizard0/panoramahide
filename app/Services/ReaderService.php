@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Article;
 use App\Journal;
 use App\Release;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class ReaderService
@@ -66,6 +67,19 @@ class ReaderService
         });
 
         return $oArticles;
+    }
+
+    /**
+     * Статьи для читалки по релизу со вставкой html кода
+     *
+     * @return mixed
+     */
+    public function getBookmarks()
+    {
+        $oUser = Auth::user();
+
+        $oBookmarks = $oUser->bookmarks()->where('release_id', $this->oRelease->id)->get();
+        return $oBookmarks;
     }
 
     /**

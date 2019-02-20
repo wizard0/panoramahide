@@ -133,6 +133,23 @@ class ReaderController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function bookmarks(Request $request)
+    {
+        $oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
+
+        $oService = (new ReaderService())->byRelease($oRelease);
+
+        $oBookmarks = $oService->getBookmarks();
+
+        return responseCommon()->success([
+            'data' => $oBookmarks->toArray(),
+        ]);
+    }
+
+    /**
      * @param $type
      * @param $oDevice
      * @param $oUser

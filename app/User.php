@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\PromoUser;
 
+use App\Models\Traits\UserBookmarks;
 use App\Models\Traits\UsersDevices;
 //use App\Models\UserDevice;
 
@@ -15,6 +16,7 @@ class User extends Authenticatable
 {
     use Notifiable;
     use UsersDevices;
+    use UserBookmarks;
 
     /**
      * The attributes that are mass assignable.

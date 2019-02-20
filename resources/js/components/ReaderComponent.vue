@@ -7,7 +7,7 @@
                        aria-controls="nav-home" aria-selected="true">
                         <span class="text-uppercase">Содержание</span>
                     </a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-bookmark" role="tab"
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-bookmarks" role="tab"
                        aria-controls="nav-profile" aria-selected="false">
                         <span class="text-uppercase">Закладки</span>
                     </a>
@@ -35,12 +35,26 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-reader-bookmark" role="tabpanel">
+                <div class="tab-pane fade" id="tab-reader-bookmarks" role="tabpanel">
                     <h3 class="text-uppercase text-center m-t-15 m-b-15">Закладки</h3>
                     <div class="tab-content-item" data-simplebar>
-                        <div :class="{'is-loading': tab.bookmark.loading}">
+                        <div :class="{'is-loading': tab.bookmarks.loading}">
                             <ul class="content contents-nav">
-
+                                <li class="bookmarks-list-item">
+                                    <div class="bookmark-flag">
+                                        <span>1</span>
+                                    </div>
+                                    <div class="bookmark-cont">
+                                        <span>
+                                            <a href="#bookmark1">sdfsdf</a>
+                                        </span>
+                                        <span>
+                                            <i class="fa fa-close" title="Удалить закладку"></i>
+                                        </span>
+                                        <!--<span class="glyphicon glyphicon-remove red del_bookmark pointer" data-id="226" title="удалить закладку"></span>-->
+                                    </div>
+                                    <div class="clear"></div>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -89,8 +103,8 @@
                                         </span>
                                     </a>
                                     <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
-                                       data-name="#tab-reader-bookmark"
-                                       @click="tabBookmark()"
+                                       data-name="#tab-reader-bookmarks"
+                                       @click="tabBookmarks()"
                                     >
                                         <span class="text-uppercase bookmark">
                                             Закладки
@@ -257,6 +271,7 @@
                     release: '/reader/release',
                     releases: '/reader/releases',
                     articles: '/reader/articles',
+                    bookmarks: '/reader/bookmarks',
                 },
 
                 /**
@@ -288,7 +303,7 @@
                 releases: {
                     data: null,
                 },
-                favorites: {
+                bookmarks: {
                     data: null,
                 },
                 articles: {
@@ -309,10 +324,7 @@
                     content: {
                         loading: false,
                     },
-                    favorites: {
-                        loading: false,
-                    },
-                    bookmark: {
+                    bookmarks: {
                         loading: false,
                     },
                     library: {
@@ -363,6 +375,7 @@
                     .then(response => {
                         self.release.data = response.data.data;
                         self.getArticles();
+                        self.getBookmarks();
                         console.log(self.release);
                     })
                     .catch();
@@ -390,16 +403,23 @@
             /**
              * Все избранные
              */
-            getFavorites() {
+            getBookmarks() {
                 const self = this;
-                self.favorites = favorites;
-            },
+                let data = {};
+                data.release_id = self.release.data.id;
+                if (self.bookmarks.data !== null) {
+                    //return;
+                }
+                self.bookmarks.data = null;
+                self.tab.bookmarks.loading = true;
+                axios.post(self.url.bookmarks, data)
+                    .then(response => {
+                        self.bookmarks.data = response.data.data;
+                        self.tab.bookmarks.loading = false;
+                        console.log(self.bookmarks);
 
-            /**
-             * Все заметки
-             */
-            getBookmark() {
-                const self = this;
+                    })
+                    .catch();
             },
 
             /**
@@ -497,17 +517,9 @@
             /**
              * Вкладка Избранные в сайдбаре
              */
-            tabFavorites() {
+            tabBookmarks() {
                 const self = this;
-                self.getReleases();
-            },
-
-            /**
-             * Вкладка Закладки в сайдбаре
-             */
-            tabBookmark() {
-                const self = this;
-                self.getBookmark();
+                self.getBookmarks();
             },
 
             /**
@@ -556,7 +568,7 @@
                         self.getArticles();
                     }
                     if (href === '#tab-reader-bookmark') {
-                        self.getBookmark();
+                        self.getBookmarks();
                     }
                     if (href === '#tab-reader-library') {
                         self.getReleases();

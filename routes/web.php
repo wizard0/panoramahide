@@ -105,6 +105,7 @@ Route::group(['prefix' => 'reader'], function () {
     Route::any('/release', 'ReaderController@release')->name('reader.release');
     Route::any('/releases', 'ReaderController@releases')->name('reader.releases');
     Route::any('/articles', 'ReaderController@articles')->name('reader.articles');
+    Route::any('/bookmarks', 'ReaderController@bookmarks')->name('reader.bookmarks');
     Route::group(['prefix' => 'favorites'], function () {
         Route::get('/', 'ReaderController@favorites')->name('reader.favorites');
     });
