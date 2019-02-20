@@ -22,6 +22,8 @@
                 'releaseID' => $s->releaseID,
                 'releaseName' => $s->releaseName,
                 'number' => $s->releaseNumber,
+                'found' => $s->found,
+                'length' => $s->length
             ])
             @endcomponent
         @endif

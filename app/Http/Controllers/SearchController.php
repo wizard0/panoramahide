@@ -24,7 +24,7 @@ class SearchController extends Controller
             $search = $searchDBResult->paginate(10);
             $rowCount = $search->total();
             foreach ($search as $s) {
-                if (property_exists($s, 'found')) {
+                if ($s->found && $s->found != '') {
                     $found = $this->getFoundString($request->get('q'), $s->found);
                     if ($found) {
                         $s->found = $found[0];

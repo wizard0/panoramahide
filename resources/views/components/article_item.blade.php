@@ -9,9 +9,10 @@
         <div class="d-flex article-texts-holder justify-content-between">
             <div class="article-item-announce">
                 <h3><a href="/articles/{{ $code }}.html" class="black-link itemName">{{ $name }}</a></h3>
-                @if (isset($s) && property_exists($s, 'found') && $s->found != null)
-                    <div class="col-12"><p>...{{ $s->found }}...</p></div>
-                    <div class="coincidence-counter">И еще {{ $s->length }} совпадений <a href="/articles/{{ $s->articleCode }}.html" class="red-link">в статье</a></div>
+                @if ($found)
+                    <div class="col-12"><p>...{{ $found }}...</p></div>
+                    <div class="coincidence-counter">И еще {{ $length }} совпадений
+                        <a href="{{ route('article', compact('code')) }}" class="red-link">в статье</a></div>
                 @endif
                 <div class="output">
                     <span>Журнал:</span>

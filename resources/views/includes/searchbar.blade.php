@@ -50,7 +50,7 @@
                     @foreach ($categories as $category)
                         <option value="{{ $category->id }}" @php
                         if (isset($params)) {
-                            if (isset($params['$category']) && $params['$category'] == $category->id)
+                            if (isset($params['category']) && $params['category'] == $category->id)
                                 echo 'selected';
                         }
                         @endphp >{{ $category->name }}</option>

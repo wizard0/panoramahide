@@ -60,7 +60,7 @@ class Journal extends Model
      */
     public function categories()
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class, 'journal_category');
     }
 
     /**
