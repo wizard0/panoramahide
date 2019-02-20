@@ -78,7 +78,10 @@ class ReaderService
     {
         $oUser = Auth::user();
 
-        $oBookmarks = $oUser->bookmarks()->where('release_id', $this->oRelease->id)->get();
+        $oBookmarks = $oUser->bookmarks()
+            ->where('release_id', $this->oRelease->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
         return $oBookmarks;
     }
 
@@ -131,6 +134,27 @@ class ReaderService
         $file = $path.$html;
 
         return File::exists($file) ? trim(file_get_contents($file)) : null;
+    }
+
+    /**
+     * Удаление закладки
+     *
+     * @param $id
+     * @return bool
+     */
+    public function bookmarkDestroy($id)
+    {
+        $oUser = Auth::user();
+
+        $oBookmark = $oUser->bookmarks()
+            ->where('id', $id)
+            ->first();
+
+        if (!is_null($oBookmark)) {
+            $oBookmark->delete();
+        }
+
+        return true;
     }
 
 }

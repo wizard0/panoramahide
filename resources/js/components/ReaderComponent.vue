@@ -26,7 +26,7 @@
                                 <li class="reader-sidebar-chapter" v-for="article in articles.data">
                                     <span>
                                         <a href="#" role="button"
-                                           v-scroll-to="scrollOptions('#article0' + article.id)"
+                                           v-scroll-to="scrollOptions(articleHref(article.id))"
                                         >{{ article.name }}</a>
                                         <p v-if="article.description">{{ article.description }}</p>
                                     </span>
@@ -39,21 +39,25 @@
                     <h3 class="text-uppercase text-center m-t-15 m-b-15">Закладки</h3>
                     <div class="tab-content-item" data-simplebar>
                         <div :class="{'is-loading': tab.bookmarks.loading}">
-                            <ul class="content contents-nav">
-                                <li class="bookmarks-list-item">
+                            <ul class="content contents-nav" v-if="bookmarks.data !== null">
+                                <li class="bookmarks-list-item" v-for="(bookmark, key) in bookmarks.data">
                                     <div class="bookmark-flag">
-                                        <span>1</span>
+                                        <span>{{ key + 1 }}</span>
                                     </div>
                                     <div class="bookmark-cont">
                                         <span>
-                                            <a href="#bookmark1">sdfsdf</a>
+                                            <a href="#" role="button"
+                                               v-scroll-to="scrollOptions(articleHref(bookmark.article_id))"
+                                            >
+                                                {{ bookmark.title }}
+                                            </a>
                                         </span>
-                                        <span>
-                                            <i class="fa fa-close" title="Удалить закладку"></i>
-                                        </span>
-                                        <!--<span class="glyphicon glyphicon-remove red del_bookmark pointer" data-id="226" title="удалить закладку"></span>-->
                                     </div>
-                                    <div class="clear"></div>
+                                    <div class="bookmark-remove">
+                                        <a href="#" title="Удалить закладку" @click="bookmarkRemove(bookmark.id, $event)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </div>
                                 </li>
                             </ul>
                         </div>
@@ -408,7 +412,7 @@
                 let data = {};
                 data.release_id = self.release.data.id;
                 if (self.bookmarks.data !== null) {
-                    //return;
+                    return;
                 }
                 self.bookmarks.data = null;
                 self.tab.bookmarks.loading = true;
@@ -581,6 +585,26 @@
              */
             modalShow(id) {
                 $(id).modal('show');
+            },
+
+            /**
+             */
+            bookmarkRemove(id, event) {
+                const self = this;
+                event.target.closest('a').classList.add('is-loading');
+                let data = {};
+                axios.post(self.url.bookmarks + '/' + id + '/destroy', data)
+                    .then(response => {
+                        self.bookmarks.data = null;
+                        self.getBookmarks();
+                    })
+                    .catch();
+            },
+
+            /**
+             */
+            articleHref(id) {
+                return '#article0' + id;
             }
         },
         /**

@@ -150,6 +150,18 @@ class ReaderController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @param $id
+     * @return array
+     */
+    public function bookmarksDestroy(Request $request, $id)
+    {
+        $oService = (new ReaderService())->bookmarkDestroy($id);
+
+        return responseCommon()->success([]);
+    }
+
+    /**
      * @param $type
      * @param $oDevice
      * @param $oUser

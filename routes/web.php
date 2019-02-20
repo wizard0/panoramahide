@@ -105,9 +105,12 @@ Route::group(['prefix' => 'reader'], function () {
     Route::any('/release', 'ReaderController@release')->name('reader.release');
     Route::any('/releases', 'ReaderController@releases')->name('reader.releases');
     Route::any('/articles', 'ReaderController@articles')->name('reader.articles');
-    Route::any('/bookmarks', 'ReaderController@bookmarks')->name('reader.bookmarks');
     Route::group(['prefix' => 'favorites'], function () {
         Route::get('/', 'ReaderController@favorites')->name('reader.favorites');
+    });
+    Route::group(['prefix' => 'bookmarks'], function () {
+        Route::any('/', 'ReaderController@bookmarks')->name('reader.bookmarks');
+        Route::post('/{id}/destroy', 'ReaderController@bookmarksDestroy')->name('reader.bookmarks.destroy');
     });
 });
 
