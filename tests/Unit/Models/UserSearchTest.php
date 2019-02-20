@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use App\User;
 use App\UserSearch;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -11,6 +12,8 @@ use Tests\TestCase;
 
 class UserSearchModelTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public function testRetrieveGuest()
     {
         $res = UserSearch::retrieve();
@@ -20,9 +23,23 @@ class UserSearchModelTest extends TestCase
 	public function testRetrieve()
 	{
         // авторизация
-        $user = $this->user();
+        $user = factory(User::class)->create();
         $this->actingAs($user);
         $this->assertAuthenticated();
+
+        // Creating new data row at DB
+        $userSearch = UserSearch::create([
+            'user_id' => $user->id,
+            'search_params' => json_encode([
+                ['name' => 'q', 'value' => 'atata'],
+                ['name' => 'author', 'value' => 'Gogol'],
+                ['name' => 'whoisthebest', 'value' => 'me']
+            ])
+        ]);
+        // Checking data existence
+        $this->assertDatabaseHas('user_search', ['id' => $userSearch->id]);
+
+
         $res = UserSearch::retrieve();
 		$this->assertNotEmpty($res, $this->textRed(' Таблица user_search пуста '));
 	}
