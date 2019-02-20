@@ -356,7 +356,7 @@ class ReaderControllerTest extends TestCase
 
             $result = $oController->index($request);
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->isOnline());
 
@@ -554,7 +554,7 @@ class ReaderControllerTest extends TestCase
 
             $result = $oController->online($request);
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->isOnline());
 
@@ -701,7 +701,7 @@ class ReaderControllerTest extends TestCase
 
             $this->assertTrue(session()->has('reset-wrong'));
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->active === 1);
 

@@ -70,7 +70,7 @@ class ReaderController extends Controller
             (new Toastr('Устройства успешно сброшены'))->success(false);
         }
 
-        $oDevice = $this->getCookieDeviceId($request);
+        $oDevice = Device::getCookieDeviceId($request);
 
         if (is_null($oDevice)) {
             // Если устройство новое
@@ -230,7 +230,7 @@ class ReaderController extends Controller
     {
         //$oUser = User::find(Auth::user()->id);
 
-        $deviceID = $this->getCookieDeviceId($request);
+        $deviceID = Device::getCookieDeviceId($request);
 
         if (is_null($deviceID)) {
             return responseCommon()->validationMessages(null, [
@@ -259,7 +259,7 @@ class ReaderController extends Controller
      */
     public function online(Request $request)
     {
-        $deviceID = $this->getCookieDeviceId($request);
+        $deviceID = Device::getCookieDeviceId($request);
 
         if (is_null($deviceID)) {
             return responseCommon()->error([
@@ -306,16 +306,6 @@ class ReaderController extends Controller
         $oDevice->setOnline();
 
         return responseCommon()->success([]);
-    }
-
-    /**
-     * @param Request $request
-     * @return array|null|string
-     */
-    private function getCookieDeviceId(Request $request)
-    {
-        return !is_null($request->cookie('device_id')) ?
-            $request->cookie('device_id') : $_COOKIE['device_id'] ?? null;
     }
 
     /**

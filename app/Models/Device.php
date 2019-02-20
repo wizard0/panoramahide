@@ -9,6 +9,7 @@ namespace App\Models;
 use App\Models\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class Device extends Model
@@ -22,6 +23,15 @@ class Device extends Model
     protected $fillable = [
         'owner_type', 'active', 'activate_date',
     ];
+
+    public static function getCookieDeviceId(Request $request)
+    {
+        $requestCookie = $request->cookie('device_id');
+        if (!is_null($requestCookie)) {
+            return $requestCookie;
+        }
+        return $_COOKIE['device_id'] ?? null;
+    }
 
     // Проверить, не устарело ли подтверждение устройства
     public function checkActivation()
