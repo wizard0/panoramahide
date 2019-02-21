@@ -107,6 +107,7 @@ trait EditCreatePageTrait
             if ($request->has($attribute)) {
                 $value = $request->get($attribute);
                 if ($type == self::TYPE_REL_BELONGS_TO_MANY) {
+                    $this->model->save();
                     $this->model->$attribute()->sync($value);
                     continue;
                 }
