@@ -18,6 +18,7 @@ composer.lock
 package-lock.json
 mix-manifest.json
 public/js/app.js
+public/css/app.css
 .DS_Store
 *.sublime-workspace
 test-coverage
