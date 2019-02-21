@@ -63,7 +63,7 @@
   }
   .bookmarks-list-item {
     display: flex;
-    align-items: end;
+    align-items: flex-start;
     justify-content: space-between;
     border: none !important;
     .bookmark-remove {
@@ -77,7 +77,7 @@
     }
     .bookmark-flag {
       height: 32px;
-      width: 32px;
+      width: 36px;
       background: url(../img/flag.png) left center no-repeat;
       color: #fff;
       font-size: 9pt;
@@ -87,7 +87,7 @@
       display: block;
       text-align: center;
       width: 24px;
-      padding-top: 6px;
+      padding-top: 3px;
     }
     .bookmark-cont {
       float: left;

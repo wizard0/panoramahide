@@ -162,6 +162,17 @@ class ReaderController extends Controller
     }
 
     /**
+     * @param Request $request
+     * @return array
+     */
+    public function bookmarksCreate(Request $request)
+    {
+        $oService = (new ReaderService())->bookmarkCreate($request->all());
+
+        return responseCommon()->success([]);
+    }
+
+    /**
      * @param $type
      * @param $oDevice
      * @param $oUser

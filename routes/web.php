@@ -111,6 +111,7 @@ Route::group(['prefix' => 'reader'], function () {
     Route::group(['prefix' => 'bookmarks'], function () {
         Route::any('/', 'ReaderController@bookmarks')->name('reader.bookmarks');
         Route::post('/{id}/destroy', 'ReaderController@bookmarksDestroy')->name('reader.bookmarks.destroy');
+        Route::post('/create', 'ReaderController@bookmarksCreate')->name('reader.bookmarks.create');
     });
 });
 

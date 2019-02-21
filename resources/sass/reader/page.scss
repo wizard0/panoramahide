@@ -138,15 +138,29 @@
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
+    .bookmarks-holder .bookmark-item {
+      width: 960px;
+      margin-left: -120px;
+    }
     @media (max-width: 930px) {
       width: 90%;
+      .bookmarks-holder .bookmark-item {
+        width: 90%;
+      }
     }
     @media (max-width: 730px) {
       padding: 40px 40px;
       width: inherit;
+      .bookmarks-holder .bookmark-item {
+        width: inherit;
+        //margin-left: -40px;
+      }
     }
     @media (max-width: 530px) {
       padding: 40px 20px;
+      .bookmarks-holder .bookmark-item {
+        //margin-left: -20px;
+      }
     }
   }
 

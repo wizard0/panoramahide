@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Article;
 use App\Journal;
+use App\Models\Bookmark;
 use App\Release;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -80,7 +81,7 @@ class ReaderService
 
         $oBookmarks = $oUser->bookmarks()
             ->where('release_id', $this->oRelease->id)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->get();
         return $oBookmarks;
     }
@@ -153,6 +154,26 @@ class ReaderService
         if (!is_null($oBookmark)) {
             $oBookmark->delete();
         }
+
+        return true;
+    }
+
+    /**
+     * Создание закладки для пользователя
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function bookmarkCreate(array $data)
+    {
+        $oUser = Auth::user();
+
+        $oUser->createBookmark([
+            'release_id' => $data['release_id'],
+            'article_id' => (int)$data['article_id'],
+            'title' => $data['title'],
+            'scroll' => $data['scroll'],
+        ]);
 
         return true;
     }

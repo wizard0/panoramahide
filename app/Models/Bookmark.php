@@ -14,7 +14,7 @@ class Bookmark extends Model
      * @var array
      */
     protected $fillable = [
-        'owner_type', 'release_id', 'article_id', 'title', 'html_mark',
+        'owner_type', 'release_id', 'article_id', 'title', 'scroll',
     ];
 
     /**

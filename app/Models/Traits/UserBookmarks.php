@@ -23,4 +23,20 @@ trait UserBookmarks
             // Для пользователей панорамы, определяем отношения через таблицу bookmark_user
             return $this->belongsToMany(Bookmark::class, 'bookmark_user', 'user_id', 'bookmark_id');
     }
+
+    /**
+     * Создание закладки для пользоватея
+     *
+     * @param $data
+     * @return mixed
+     */
+    public function createBookmark($data)
+    {
+        $data = array_merge([
+            'owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')
+        ], $data);
+        $oBookmark = Bookmark::create($data);
+        $this->bookmarks()->save($oBookmark);
+        return $oBookmark;
+    }
 }
