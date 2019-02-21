@@ -34,20 +34,19 @@ class ReaderApiController extends Controller
         // Проверяем ключ партнёра, пользователя и ID квоты
         self::checkPermission($partner, $user, $quota);
         // Проверяем, что выпуск доступен по квоте
-        if ($release = self::errorMessage($quota->getReleases()->find($relese), 'Нет доступа к этому выпуску')) {
-            $user = PartnerUser::whereUserId($user)->first();
-            // Проверяем, получал ли пользователь доступ к этому выпуску раньше
-            if (!$user->releases()->find($release->id)) {
-                // Если не получал, то используем квоту
-                self::errorMessage($user->useQuota($quota->id), 'Невозможно использовать квоту');
-                // Устанавливаем отношение пользователь->выпуск
-                $user->releases()->save($release);
-            }
-            Cookie::queue(PartnerUser::COOKIE_NAME, $user->partner->id.PartnerUser::COOKIE_NAME_SEPORATOR.$user->user_id);
-
-            // Отправляем пользователя на читалку
-            return redirect(route('reader.index', ['release_id' => $release->id]));
+        $release = self::errorMessage($quota->getReleases()->find($relese), 'Нет доступа к этому выпуску');
+        $user = PartnerUser::whereUserId($user)->first();
+        // Проверяем, получал ли пользователь доступ к этому выпуску раньше
+        if (!$user->releases()->find($release->id)) {
+            // Если не получал, то используем квоту
+            self::errorMessage($user->useQuota($quota->id), 'Невозможно использовать квоту');
+            // Устанавливаем отношение пользователь->выпуск
+            $user->releases()->save($release);
         }
+        Cookie::queue(PartnerUser::COOKIE_NAME, $user->partner->id.PartnerUser::COOKIE_NAME_SEPORATOR.$user->user_id);
+
+        // Отправляем пользователя на читалку
+        return redirect(route('reader.index', ['release_id' => $release->id]));
     }
 }
 
