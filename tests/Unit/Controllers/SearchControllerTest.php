@@ -124,11 +124,8 @@ class SearchControllerTest extends TestCase
     public function testWithNoParams()
     {
         $request = new Request();
-
         $oSearchController = new SearchController();
-
         $response = $oSearchController->__invoke($request);
-
         $this->assertNotNull($response);
     }
 
