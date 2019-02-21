@@ -3,6 +3,7 @@ namespace Tests\Unit\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\ReaderApiController;
+use App\Http\Controllers\ReaderController;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -63,6 +64,7 @@ class ReaderApiControllerTest extends TestCase
         // Проверяем, что вывелась нужная страница
         $response->assertSee('Выберите выпуск для чтения');
     }
+
     public function testGetRelease()
     {
         // Получаем ссылку на релиз
@@ -71,8 +73,29 @@ class ReaderApiControllerTest extends TestCase
         // Проверяем, что происходит редирект на читалку
         $response->assertStatus(302);
         // Проверяем ссылку для перехода к читалке
-        $response->assertRedirect(route('reader.index', ['release_id' => $this->release_id]));
+        $readerUrl = route('reader.index', ['release_id' => $this->release_id]);
+        $response->assertRedirect($readerUrl);
         // Проверяем куку пользователя партнёра
         $response->assertCookie('PartnerUser', $this->partner->id.'|@|@|'.$this->user->user_id);
+    }
+
+    public function testReaderByPartnerUser()
+    {
+        $readerUrl = route('reader.index', ['release_id' => $this->release_id]);
+        // Переходим на читалку с неверной кукой
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'||'.$this->user->user_id)]);
+        $response->assertStatus(200)
+                 ->assertSee('partner:        0,');
+        // Переходим на читалку с кукой юзера
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response->assertStatus(200)
+                 ->assertSee('partner:        1,');
+
+        $url = route('reader.release', [], false);
+        $response = $this->call('POST', $url, ['id' => $this->release_id], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response->assertStatus(200)
+                 ->assertJson([
+                    'success' => false,
+                ]);
     }
 }

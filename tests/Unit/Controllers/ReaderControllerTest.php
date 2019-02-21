@@ -349,7 +349,7 @@ class ReaderControllerTest extends TestCase
 
             $request = new Request();
             $request->merge([
-
+                'release_id' => 1,
             ]);
 
             $_COOKIE['device_id'] = $oDevice->id;
