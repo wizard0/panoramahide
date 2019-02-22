@@ -260,6 +260,10 @@ class ReaderController extends Controller
     }
     public function email(Request $request)
     {
+        $validator = responseCommon()->validation($request->all(), ['email' => 'required|email']);
+        if ($validator->fails())
+            return responseCommon()->validationMessages(null, ['email' => 'Неверный формат email']);
+
         $oUser = self::getUser($request);
         $oUser->email = $request->get('email');
         $oUser->save();
