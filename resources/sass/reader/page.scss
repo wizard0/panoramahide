@@ -138,23 +138,27 @@
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
+    position: relative;
     .bookmarks-holder .bookmark-item {
-      width: 960px;
-      margin-left: -120px;
+      width: 100%;
+      //width: 960px;
+      //margin-left: -120px;
     }
     @media (max-width: 930px) {
-      width: 90%;
-      .bookmarks-holder .bookmark-item {
-        width: 90%;
-      }
-    }
-    @media (max-width: 730px) {
       padding: 40px 40px;
       width: inherit;
       .bookmarks-holder .bookmark-item {
-        width: inherit;
+        width: 100%;
         //margin-left: -40px;
+        background-position: 20px 100%;
+        //margin-left: -40px;
+        span {
+          margin-left: 20px;
+        }
       }
+    }
+    @media (max-width: 730px) {
+
     }
     @media (max-width: 530px) {
       padding: 40px 20px;
@@ -162,6 +166,14 @@
         //margin-left: -20px;
       }
     }
+  }
+
+  #reader-panel-bookmarks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
   }
 
   .author {
