@@ -216,8 +216,6 @@ class ReaderController extends Controller
                 session()->flash('modal', 'reader-confirm-online-modal');
 
                 break;
-            default:
-                break;
         }
     }
 
