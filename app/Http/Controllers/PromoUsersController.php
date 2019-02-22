@@ -1,9 +1,13 @@
 <?php
+/**
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
 
 namespace App\Http\Controllers;
 
-use App\Models\PromoUser;
 use App\Models\Promocode;
+use App\Models\PromoUser;
 use App\Release;
 use App\Services\PromoUserService;
 use Illuminate\Http\Request;
@@ -13,29 +17,9 @@ use Illuminate\Validation\Rule;
 class PromoUsersController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function store(Request $request)
@@ -55,37 +39,16 @@ class PromoUsersController extends Controller
                 'user_id' => $data['user_id'],
                 'phone' => $data['phone'],
             ]);
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function update(Request $request, $id)
@@ -104,6 +67,7 @@ class PromoUsersController extends Controller
                 'name' => $data['name'],
                 'phone' => $data['phone'],
             ]);
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
@@ -111,8 +75,8 @@ class PromoUsersController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \Illuminate\Http\Request $request
+     * @param  int $id
      * @return \Illuminate\Http\JsonResponse
      */
     public function destroy(Request $request, $id)
@@ -120,6 +84,7 @@ class PromoUsersController extends Controller
         if ($request->ajax()) {
             $oPromoUser = PromoUser::find($id);
             $oPromoUser->delete();
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
@@ -162,6 +127,7 @@ class PromoUsersController extends Controller
             if (!$service->activatePromocode($oPromoCode)) {
                 return responseCommon()->validationMessages(null, [$service->getMessage()]);
             }
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
@@ -195,6 +161,7 @@ class PromoUsersController extends Controller
     {
         if ($request->ajax()) {
             $oPromoUser = PromoUser::find($id);
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
@@ -228,10 +195,8 @@ class PromoUsersController extends Controller
     {
         if ($request->ajax()) {
             $oPromoUser = PromoUser::find($id);
+            return responseCommon()->success();
         };
         return responseCommon()->mustBeAjax();
     }
-
-
-
 }
