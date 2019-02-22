@@ -21,6 +21,29 @@
     @endslot
 @endcomponent
 
+@component('components.modal', ['id' => 'reader-email-modal', 'title' => 'Укажите ваш Email', 'backdop' => false, 'closeHeader' => false])
+    @slot('body')
+        <form action="{{ route('reader.email') }}" class="ajax-form"
+              data-callback="callbackReaderAccess"
+        >
+            <span style="font-size: 12px;">
+                Необходимо подтвердить устройство. Укажите Ваш Email и мы отправим вам код для подтверждения.
+            </span>
+            <div class="form-group">
+                <label>Ваш Email</label>
+                <input type="text" name="email" value="" required
+                       {{--data-role="js-mask-int" data-length="6"--}}
+                >
+            </div>
+            <div class="form-group m-0 text-right">
+                <button type="submit" class="btn inner-form-submit">
+                    <span>Сохранить</span>
+                </button>
+            </div>
+        </form>
+    @endslot
+@endcomponent
+
 @component('components.modal', ['id' => 'reader-confirm-online-modal', 'title' => 'Подтвердите устройство', 'header' => false, 'backdop' => false, 'closeHeader' => false])
     @slot('body')
         <form class="ajax-form" action="{{ route('reader.online', ['online' => 1]) }}"

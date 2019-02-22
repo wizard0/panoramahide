@@ -18,7 +18,9 @@ class ReaderApiController extends Controller
         // Проверяем что ключ партнёра указан верно
         self::errorMessage($quota->partner->secret_key === $partner, 'Неверный secret_key пртнёра');
         // Проверяем что такой пользователь есть у партнёра
-        self::errorMessage($quota->partner->users()->whereUserId($user)->first(), 'Неверный user_id');
+        $pUser = $quota->partner->users()->whereUserId($user)->first();
+        if (!$pUser)
+            $quota->partner->users()->save(PartnerUser::create(['user_id' => $user, 'partner_id' => $quota->partner->id]));
     }
     public function list($partner, $user, $quota)
     {

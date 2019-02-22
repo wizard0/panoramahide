@@ -56,6 +56,11 @@ class ReaderController extends Controller
             return view('reader.index', []);
         }
 
+        if (empty($oUser->email)) {
+            $this->sessionModalError('show-email-modal', null, null);
+            return view('reader.index', []);
+        }
+
         if (session()->exists('reset-wrong')) {
 
             $this->sessionModalError('reset-wrong-modal', null, null);
@@ -114,7 +119,7 @@ class ReaderController extends Controller
     {
         $User = self::getUser($request);
         $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
-        if ($User && !$oRelease->userHasPermission($User)) {
+        if (!$User || !$oRelease->userHasPermission($User)) {
             return responseCommon()->error([], 'У вас нет доступа к данному выпуску');
         }
 
@@ -200,6 +205,9 @@ class ReaderController extends Controller
                 session()->put('reset-success', 'reader-max-devices-modal');
 
                 break;
+            case 'show-email-modal':
+                session()->flash('modal', 'reader-email-modal');
+                break;
             case 'activation':
 
                 $oDevice->sendCodeToUser();
@@ -249,6 +257,21 @@ class ReaderController extends Controller
             'result' => 3,
             'redirect' => redirect()->back()->getTargetUrl(),
         ], 'Код успешно подтвержден');
+    }
+    public function email(Request $request)
+    {
+        $validator = responseCommon()->validation($request->all(), ['email' => 'required|email']);
+        if ($validator->fails())
+            return responseCommon()->validationMessages(null, ['email' => 'Неверный формат email']);
+
+        $oUser = self::getUser($request);
+        $oUser->email = $request->get('email');
+        $oUser->save();
+
+        return responseCommon()->success([
+            'result' => 3,
+            'redirect' => redirect()->back()->getTargetUrl(),
+        ], 'Email сохранён');
     }
 
     /**

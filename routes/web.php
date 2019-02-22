@@ -100,6 +100,7 @@ Route::group(['prefix' => 'deskbooks'], function () {
 Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
     Route::post('/code', 'ReaderController@code')->name('reader.code');
+    Route::post('/email', 'ReaderController@email')->name('reader.email');
     Route::get('/reset/{code}', 'ReaderController@reset')->name('reader.reset');
     Route::any('/online', 'ReaderController@online')->name('reader.online');
     Route::any('/release', 'ReaderController@release')->name('reader.release');

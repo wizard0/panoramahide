@@ -57,7 +57,7 @@ class ReaderApiControllerTest extends TestCase
     public function testGetReleasesList()
     {
         // Получаем ссылку на страницу с релизами по квоте
-        $url = route('api.releases', [$this->partner->secret_key, $this->user->user_id, $this->quota->id], false);
+        $url = route('api.releases', [$this->partner->secret_key, md5($this->user->user_id), $this->quota->id], false);
         $response = $this->get($url);
         // Проверяем статус
         $response->assertStatus(200);
@@ -90,12 +90,19 @@ class ReaderApiControllerTest extends TestCase
         $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertSee('partner:        1,');
-
+        // Переходим на читалку с кукой юзера но без email
+        $this->user->email = null;
+        $this->user->save();
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response->assertStatus(200)
+                 ->assertSee('partner:        1,');
+        /*
         $url = route('reader.release', [], false);
         $response = $this->call('POST', $url, ['id' => $this->release_id], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => false,
                 ]);
+        */
     }
 }
