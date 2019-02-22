@@ -133,10 +133,21 @@
   }
 
   .container {
+    overflow: hidden;
     width: 960px;
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
+    @media (max-width: 930px) {
+      width: 90%;
+    }
+    @media (max-width: 730px) {
+      padding: 40px 40px;
+      width: inherit;
+    }
+    @media (max-width: 530px) {
+      padding: 40px 20px;
+    }
   }
 
   .author {

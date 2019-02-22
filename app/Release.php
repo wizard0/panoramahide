@@ -48,6 +48,16 @@ class Release extends Model
             : $this->orderBy('active_date', 'desc')->withTranslation();
     }
 
+    public function userHasPermission($User)
+    {
+        if (preg_match('#.*\\\\(PartnerUser)$#', get_class($User))) {
+            // Пользователь партнёра
+            return ($User->releases()->find($this->id) != null ? true : false);
+        } else {
+            // Пользователь партала
+            return true;
+        }
+    }
     public function getLink()
     {
         return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);

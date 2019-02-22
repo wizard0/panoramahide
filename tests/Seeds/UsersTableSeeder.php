@@ -24,11 +24,17 @@ class UsersTableSeeder extends Seeder
             'password' => testData()->user['password'],
         ]);
 
-        UserDevice::create([
-            'user_id' => $oUser->id,
-            'code' => testData()->userDevice['code'],
-            'name' => testData()->userDevice['name'],
-            'status' => 1,
-        ]);
+//        UserDevice::create([
+//            'user_id' => $oUser->id,
+//            'code' => testData()->userDevice['code'],
+//            'name' => testData()->userDevice['name'],
+//            'status' => 1,
+//        ]);
+//        UserDevice::create([
+//            'user_id' => $oUser->id,
+//            'code' => testData()->userDevice['code'],
+//            'name' => testData()->userDevice['name'].'2',
+//            'status' => 1,
+//        ]);
     }
 }
