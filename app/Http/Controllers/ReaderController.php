@@ -181,8 +181,8 @@ class ReaderController extends Controller
                 break;
             case 'reset-wrong-modal':
 
-                if (session()->has('wrong-reset')) {
-                    session()->forget('wrong-reset');
+                if (session()->has('reset-wrong')) {
+                    session()->forget('reset-wrong');
                 }
 
                 (new Toastr('Неверный код сброса устройств'))->error(false);
