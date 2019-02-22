@@ -3,14 +3,10 @@
 namespace Tests\Unit\Controllers;
 
 
-use App\Http\Controllers\PromoController;
 use App\Http\Controllers\ReaderController;
 use App\Models\Device;
-use App\Models\Promocode;
-use App\Services\DeviceService;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
