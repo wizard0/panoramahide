@@ -25,7 +25,9 @@ class CommonTestData
         'name' => 'Тестовый',
         'email' => 'test@test.com',
         'password' => '$2y$10$pf83r3UTfcTuGMCfU0M0neords7hON3fEMAThuxvlwwbDpndd1W72', // testtest
+        'password_string' => 'testtest', // testtest
         'phone' => '79998887766',
+        'phone_second' => '79998887755', // второй телефон, чтобы не повторялся
     ];
 
     public $userDevice = [
