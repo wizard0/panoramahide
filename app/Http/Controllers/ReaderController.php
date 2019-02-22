@@ -56,6 +56,11 @@ class ReaderController extends Controller
             return view('reader.index', []);
         }
 
+        if (empty($oUser->email)) {
+            $this->sessionModalError('show-email-modal', null, null);
+            return view('reader.index', []);
+        }
+
         if (session()->exists('reset-wrong')) {
 
             $this->sessionModalError('reset-wrong-modal', null, null);
@@ -200,6 +205,9 @@ class ReaderController extends Controller
                 session()->put('reset-success', 'reader-max-devices-modal');
 
                 break;
+            case 'show-email-modal':
+                session()->flash('modal', 'reader-email-modal');
+                break;
             case 'activation':
 
                 $oDevice->sendCodeToUser();
@@ -251,6 +259,17 @@ class ReaderController extends Controller
             'result' => 3,
             'redirect' => redirect()->back()->getTargetUrl(),
         ], 'Код успешно подтвержден');
+    }
+    public function email(Request $request)
+    {
+        $oUser = self::getUser($request);
+        $oUser->email = $request->get('email');
+        $oUser->save();
+
+        return responseCommon()->success([
+            'result' => 3,
+            'redirect' => redirect()->back()->getTargetUrl(),
+        ], 'Email сохранён');
     }
 
     /**
