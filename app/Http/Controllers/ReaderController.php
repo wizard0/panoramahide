@@ -119,7 +119,7 @@ class ReaderController extends Controller
     {
         $User = self::getUser($request);
         $oRelease = !$request->exists('id') ? Release::first() : Release::where('id', $request->get('id'))->first();
-        if ($User && !$oRelease->userHasPermission($User)) {
+        if (!$User || !$oRelease->userHasPermission($User)) {
             return responseCommon()->error([], 'У вас нет доступа к данному выпуску');
         }
 
