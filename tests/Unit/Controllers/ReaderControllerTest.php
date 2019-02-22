@@ -369,8 +369,8 @@ class ReaderControllerTest extends TestCase
      */
     public function testRelease()
     {
+        $this->actingAs($this->user);
         $oController = (new ReaderController());
-
         $request = new Request();
         $request->merge([
 
@@ -379,6 +379,21 @@ class ReaderControllerTest extends TestCase
         $result = $oController->release($request);
 
         $this->assertTrue(!empty($result['data']));
+    }
+
+    /**
+     * Выпуск
+     */
+    public function testReleaseFail()
+    {
+        $oController = (new ReaderController());
+        $request = new Request();
+        $request->merge([
+
+        ]);
+
+        $result = $oController->release($request);
+        $this->assertFalse($result['success']);
     }
 
     /**
@@ -497,6 +512,47 @@ class ReaderControllerTest extends TestCase
             $result = $oController->code($request);
 
             $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
+    }
+
+    /**
+     * Email для кода подтверждения устройства: успешный
+     */
+    public function testEmailSuccess()
+    {
+        $this->actingAs($this->user);
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+            $request = new Request();
+            $request->merge([
+                'email' => 'ewfweqfe@mail.ru',
+            ]);
+
+            $result = $oController->email($request);
+            $this->assertTrue($result['success']);
+
+            DB::rollBack();
+        });
+    }
+    /**
+     * Email для кода подтверждения устройства: успешный
+     */
+    public function testEmailWrong()
+    {
+        $this->actingAs($this->user);
+        $oController = (new ReaderController());
+
+        DB::transaction(function () use ($oController) {
+            $request = new Request();
+            $request->merge([
+                'email' => 'ewfweqfemail',
+            ]);
+
+            $result = $oController->email($request);
+            $this->assertFalse($result->getData()->success);
 
             DB::rollBack();
         });
