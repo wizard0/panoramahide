@@ -67,6 +67,7 @@ class PromoUserService
             }
             return true;
         }
+        $this->setMessage('Промокод не был активирован.');
         return false;
     }
 
