@@ -31,7 +31,7 @@ class CRUDControllerMock extends CRUDController
     {
         $this->modelName = 'Journal';
         $this->model = null;
-        $this->getModel(100500);
+        $this->getModel(-1);
     }
 }
 

@@ -44,21 +44,34 @@ trait IndexPageTrait
         return $result;
     }
 
+    // private function prepareTableData()
+    // {
+    //     try {
+    //         $this->getModelCollection()
+    //             ->prepareTableBodyData();
+    //     } catch (\Exception $e) {
+
+    //         return false;
+    //     }
+
+    //     return $this;
+    // }
+
     private function prepareTableData()
     {
-        try {
-            $this->getModelCollection()
-                ->prepareTableBodyData();
-        } catch (\Exception $e) {
-
-            return false;
+        $result = false;
+        $models = $this->getModelCollection();
+        if (is_object($models)) {
+            $models->prepareTableBodyData();
+            $result = true;
         }
-
-        return $this;
+        return $result;
     }
 
     private function getModelCollection()
     {
+        $result = false;
+
         if (isset($this->modelName)) {
             $modelName = $this->modelName;
 
@@ -68,10 +81,10 @@ trait IndexPageTrait
                 $this->collection = $modelName::all();
             }
 
-            return $this;
+            $result = $this;
         }
 
-        return false;
+        return $result;
     }
 
     private function prepareTableBodyData()
