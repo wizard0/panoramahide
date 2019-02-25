@@ -2,14 +2,38 @@
 
 namespace Tests\Unit\Controllers\Admin;
 
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App;
+use App\Http\Controllers\Admin\CRUDController;
+
+class CRUDControllerMock extends CRUDController
+{
+    protected $modelName = null;
+    // protected $model = 'MockModel';
+
+    public function __construct(Request $request = null)
+    {
+        parent::__construct($request);
+    }
+
+    public function assertNotTranslatable()
+    {
+        return $this->isTranslatable();
+    }
+
+    public function assertCreateModel()
+    {
+        $this->modelName = 'Journal';
+        $this->model = null;
+        $this->getModel(100500);
+    }
+}
 
 class CRUDControllerTest extends TestCase
 {
@@ -98,5 +122,28 @@ class CRUDControllerTest extends TestCase
         $oCRUDController->update($request, $journal->id);
 
         $this->assertTrue(App\Journal::find($journal->id)->image !== '');
+    }
+
+    public function testDefineLocale()
+    {
+        $request = new Request();
+        $this->assertNotNull($request);
+        $request->merge([
+            CRUDController::LOCALE_VAR => 'ru'
+        ]);
+        $crud = new CRUDController($request);
+        $this->assertNotNull($crud);
+    }
+
+    public function testIsTranslatable()
+    {
+        $crudMock = new CRUDControllerMock();
+        $this->assertFalse($crudMock->assertNotTranslatable());
+    }
+
+    public function testGetModel()
+    {
+        $crudMock = new CRUDControllerMock();
+        $this->assertNull($crudMock->assertCreateModel());
     }
 }

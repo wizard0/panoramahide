@@ -53,11 +53,8 @@ class CRUDController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->getModel($id)->deleteModel()) {
-            return redirect()->back();
-        } else {
-            return redirect()->back();
-        }
+        $this->getModel($id)->deleteModel();
+        return redirect()->back();
     }
 
     /**
@@ -90,23 +87,32 @@ class CRUDController extends Controller
         return $this;
     }
 
-    private function isTranslatable($modelName = null)
+    // private function isTranslatable($modelName = null)
+    // {
+    //     if (!$modelName) {
+
+    //         if (!isset($this->modelName)) {
+    //             return false;
+    //         }
+    //         $modelName = $this->modelName;
+
+    //     }
+
+    //     return in_array('Dimsav\Translatable\Translatable', class_uses($modelName));
+    // }
+
+    protected function isTranslatable($modelName = null)
     {
-        if (!$modelName) {
-
-            if (!isset($this->modelName)) {
-                return false;
-            }
-            $modelName = $this->modelName;
-
+        $_modelName = $modelName ? $modelName : $this->modelName;
+        if (is_null($_modelName)) {
+            return false;
         }
-
-        return in_array('Dimsav\Translatable\Translatable', class_uses($modelName));
+        return in_array('Dimsav\Translatable\Translatable', class_uses($_modelName));
     }
 
-    private function getModel($id)
+    protected function getModel($id)
     {
-        if (!isset($this->model)) {
+        if (is_null($this->model)) {
             $this->model = $this->modelName::find($id);
             if (!$this->model) {
                 $this->createModel();

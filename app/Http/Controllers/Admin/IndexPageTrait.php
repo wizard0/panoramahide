@@ -32,14 +32,16 @@ trait IndexPageTrait
 
     protected function getTableData($sort = null)
     {
+        $result = false;
+
         if ($this->prepareTableData()) {
-            return [
+            $result = [
                 'head' => $this->displayAttributes,
                 'body' => $this->tableBody
             ];
-        } else {
-            return false;
         }
+
+        return $result;
     }
 
     private function prepareTableData()
