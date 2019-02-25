@@ -87,15 +87,20 @@ class ReaderController extends Controller
                 $oDevice = $oUser->createDevice();
         }
 
-        $oActivationDevices = $oUser->getActivationDevices($oDevice);
-        if (count($oActivationDevices) >= 2) {
-            $this->sessionModalError('max', $oDevice, $oUser);
-            return view('reader.index', []);
-        }
-
         if (!$oDevice->checkActivation()) {
-            $this->sessionModalError('activation', $oDevice, $oUser);
-            return view('reader.index', []);
+            if ($oUser->getActivationDevices()->count() >= 2) {
+                switch($oDevice->owner_type) {
+                    case 'partner_user':
+                        $this->sessionModalError('max-for-partner-user', $oDevice, $oUser);
+                        break;
+                    default:
+                    $this->sessionModalError('max', $oDevice, $oUser);
+                }
+                return view('reader.index', []);
+            } else {
+                $this->sessionModalError('activation', $oDevice, $oUser);
+                return view('reader.index', []);
+            }
         }
 
         if ($oUser->hasOnlineDevices($oDevice)) {
@@ -173,56 +178,39 @@ class ReaderController extends Controller
     {
         switch ($type) {
             case 'login':
-
                 (new Toastr('Необходимо авторизоваться'))->info(false);
-
                 session()->flash('modal', 'login-modal');
-
                 break;
             case 'max':
-
                 session()->flash('modal', 'reader-max-devices-modal');
-
+                break;
+            case 'max-for-partner-user':
+                session()->flash('modal', 'reader-max-pu-devices-modal');
                 break;
             case 'reset-wrong-modal':
-
                 if (session()->has('reset-wrong')) {
                     session()->forget('reset-wrong');
                 }
-
                 (new Toastr('Неверный код сброса устройств'))->error(false);
-
                 session()->flash('modal', 'reader-max-devices-modal');
-
                 break;
             case 'reset-wrong':
-
                 session()->put('reset-wrong', 'reader-max-devices-modal');
-
                 break;
             case 'reset-success':
-
                 session()->put('reset-success', 'reader-max-devices-modal');
-
                 break;
             case 'show-email-modal':
                 session()->flash('modal', 'reader-email-modal');
                 break;
             case 'activation':
-
                 $oDevice->sendCodeToUser();
-
                 (new Toastr('На email ' . $oUser->email . ' был отправлен код подтверждения устройства.'))->info(false);
-
                 session()->flash('modal', 'reader-code-modal');
-
                 break;
             case 'online':
-
                 (new Toastr('Читалка уже открыта на другом устройстве'))->info(false);
-
                 session()->flash('modal', 'reader-confirm-online-modal');
-
                 break;
         }
     }
