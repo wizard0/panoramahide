@@ -134,19 +134,26 @@
 
   .container {
     overflow: hidden;
-    width: 960px;
+    max-width: 960px !important;
+    width: 960px !important;
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
     position: relative;
+    #reader-panel-bookmarks {
+      width: 120px !important;
+      .bookmarks-holder .bookmark-item {
+        width: 960px !important;
+      }
+    }
     .bookmarks-holder .bookmark-item {
       width: 100%;
       //width: 960px;
       //margin-left: -120px;
     }
     @media (max-width: 930px) {
-      padding: 40px 40px;
-      width: inherit;
+      //padding: 40px 40px;
+      //width: inherit;
       .bookmarks-holder .bookmark-item {
         width: 100%;
         //margin-left: -40px;
@@ -161,7 +168,7 @@
 
     }
     @media (max-width: 530px) {
-      padding: 40px 20px;
+      //padding: 40px 20px;
       .bookmarks-holder .bookmark-item {
         //margin-left: -20px;
       }
