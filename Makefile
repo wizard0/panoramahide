@@ -32,3 +32,6 @@ admin: ## Создать пользователя admin (user: admin; pass: admi
 
 test: seed ## Тестировать проект
 	phpunit --testdox --coverage-html ./test-coverage
+
+analize: ## Статический анализ кода (стандарт PSR2)
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ./app/* --report-full --colors --standard=PSR2
