@@ -1,9 +1,14 @@
 #reader {
-  .panel-cover {
-    width: 60%;
-    margin-left: 20%;
-    margin-bottom: 10px;
+  .panel-cover img {
+    //width: 60%;
+    //margin-left: 20%;
+    padding-bottom: 10px;
     padding-top: 10px;
+    text-align: center;
+    height: 600px;
+    @media (max-width: 930px) {
+      height: 400px;
+    }
   }
 
   table {
@@ -134,13 +139,13 @@
 
   .container {
     overflow: hidden;
-    max-width: 960px !important;
-    width: 960px !important;
+    width: 960px;
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
     position: relative;
     #reader-panel-bookmarks {
+      // чтобы было пространство для клика по якорю
       width: 120px !important;
       .bookmarks-holder .bookmark-item {
         width: 960px !important;
@@ -148,29 +153,25 @@
     }
     .bookmarks-holder .bookmark-item {
       width: 100%;
-      //width: 960px;
-      //margin-left: -120px;
+    }
+    nav {
+      @media (max-width: 930px) {
+        padding: 40px 40px;
+      }
     }
     @media (max-width: 930px) {
-      //padding: 40px 40px;
-      //width: inherit;
+      // чтобы было пространство для клика по якорю
+      #reader-panel-bookmarks {
+        width: 40px !important;
+      }
+      padding: 0;
+      width: inherit;
       .bookmarks-holder .bookmark-item {
         width: 100%;
-        //margin-left: -40px;
         background-position: 20px 100%;
-        //margin-left: -40px;
         span {
           margin-left: 20px;
         }
-      }
-    }
-    @media (max-width: 730px) {
-
-    }
-    @media (max-width: 530px) {
-      //padding: 40px 20px;
-      .bookmarks-holder .bookmark-item {
-        //margin-left: -20px;
       }
     }
   }

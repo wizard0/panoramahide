@@ -197,7 +197,7 @@
                             </div>
                         </div>
                     </nav>
-                    <div v-for="article in articles.data">
+                    <div class="article-html" v-for="article in articles.data">
                         <div v-html="article.html"></div>
                     </div>
                     <div id="reader-panel-bookmarks">
@@ -495,7 +495,17 @@
                         self.footerSet(null, null);
                         self.bookmark.article_id = 0;
                     }
+                    //let element = self.point();
+                    //console.log(self.bookmark.scroll);
+                    //console.log($(element).closest('.article-html'));
                 });
+            },
+
+            /**
+             * Top: -980px для контейнера с закладками
+             */
+            bookmarkGetOffsetTop() {
+                return $('.panel-cover').height() + 10 + 10; // margin top и padding top
             },
 
             /**
@@ -739,6 +749,9 @@
                 self.getRelease();
                 self.intervalDeviceCheckOnline();
             }
+            $(window).resize(function() {
+                $('#reader-panel-bookmarks').css('top', '-' + self.bookmarkGetOffsetTop() + 'px')
+            });
         },
     }
 </script>
