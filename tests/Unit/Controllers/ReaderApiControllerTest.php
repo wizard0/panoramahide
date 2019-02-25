@@ -105,4 +105,18 @@ class ReaderApiControllerTest extends TestCase
                 ]);
         */
     }
+
+    public function testManyDevices()
+    {
+        $readerUrl = route('reader.index', ['release_id' => $this->release_id]);
+        $device = $this->user->createDevice();
+        $device->activateDevice();
+        $device = $this->user->createDevice();
+        $device->activateDevice();
+        $device = $this->user->createDevice();
+        $device->activateDevice(false);
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response->assertStatus(200)
+                 ->assertSee('reader-max-pu-devices-modal');
+    }
 }
