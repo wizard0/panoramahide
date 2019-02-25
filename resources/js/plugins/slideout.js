@@ -10,6 +10,7 @@ window.slideout = new Slideout({
     'panel': document.getElementById('reader'),
     'menu': document.getElementById('reader-menu'),
     'padding': 300,
+    'touch': false,
     'tolerance': 70
 });
 $('.toggle-button').click(function () {

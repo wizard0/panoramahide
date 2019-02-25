@@ -173,7 +173,7 @@
             </div>
             <div id="reader-panel" :class="{'is-loading': articles.data === null}">
                 <div class="panel-cover" v-if="release.data !== null">
-                    <img class="panel-cover" :src="release.data.image">
+                    <img :src="release.data.image">
                 </div>
                 <div class="container" v-if="articles.data !== null">
                     <div class="bookmarks-holder"></div>
