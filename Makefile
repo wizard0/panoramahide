@@ -31,4 +31,4 @@ admin: ## Создать пользователя admin (user: admin; pass: admi
 	artisan admin:create
 
 test: seed ## Тестировать проект
-	phpunit --coverage-html ./test-coverage
+	phpunit --testdox --coverage-html ./test-coverage

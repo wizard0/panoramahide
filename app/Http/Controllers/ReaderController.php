@@ -1,4 +1,13 @@
 <?php
+/**
+ * ReadController
+ * PHP version 7.x
+ *
+ * @category App\Http\Cpontrollers\
+ * @package  App\Http\Cpontrollers\ReaderController
+ * @author   Илья Картунин (ikartunin@gmail.com)
+ * @license  Proprietary http://gl.panor.ru/LICENSE
+ */
 
 namespace App\Http\Controllers;
 
@@ -14,13 +23,19 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use View;
 
+/**
+ * Controls the data flow into a reader object and updates the view
+ * whenever data changes. *
+ */
 class ReaderController extends Controller
 {
     /**
-     * @param Request $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * Gets the user.
+     *
+     * @param \Illuminate\Http\Request $request The request
+     *
+     * @return <type> The user.
      */
-
     public static function getUser(Request $request)
     {
         $isAjax = $request->ajax();
@@ -35,17 +50,27 @@ class ReaderController extends Controller
         $User = Auth::guest() ? null : Auth::user();
 
         // Если юзер портала, то вид читалки - расширенный
-        if ($User && !$isAjax)
+        if ($User && !$isAjax) {
             View::share('simpleReader', false);
+        }
 
         // Получаем пользователя партнёра по куке
         if (PartnerUser::getUserByCookie($User)) {
             // Если юзер партнёра, то вид читалки - простой
-            if (!$isAjax)
+            if (!$isAjax) {
                 View::share('isPartnerUser', true);
+            }
         }
         return $User;
     }
+
+    /**
+     * Index function
+     *
+     * @param \Illuminate\Http\Request $request The request
+     *
+     * @return <type> ( description_of_the_return_value )
+     */
     public function index(Request $request)
     {
         $oUser = self::getUser($request);
@@ -62,16 +87,12 @@ class ReaderController extends Controller
         }
 
         if (session()->exists('reset-wrong')) {
-
             $this->sessionModalError('reset-wrong-modal', null, null);
-
             return view('reader.index', []);
         }
 
         if (session()->exists('reset-success')) {
-
             session()->forget('reset-success');
-
             (new Toastr('Устройства успешно сброшены'))->success(false);
         }
 
@@ -82,19 +103,21 @@ class ReaderController extends Controller
             $oDevice = $oUser->createDevice();
         } else {
             $oDevice = $oUser->devices()->find($oDevice);
-            // В жизни врятли повторится, но при тестировании возникло. Если с одного устройства заходят разные пользователи
-            if (!$oDevice)
+            // В жизни врятли повторится, но при тестировании возникло.
+            // Если с одного устройства заходят разные пользователи
+            if (!$oDevice) {
                 $oDevice = $oUser->createDevice();
+            }
         }
 
         if (!$oDevice->checkActivation()) {
             if ($oUser->getActivationDevices()->count() >= 2) {
-                switch($oDevice->owner_type) {
+                switch ($oDevice->owner_type) {
                     case 'partner_user':
                         $this->sessionModalError('max-for-partner-user', $oDevice, $oUser);
                         break;
                     default:
-                    $this->sessionModalError('max', $oDevice, $oUser);
+                        $this->sessionModalError('max', $oDevice, $oUser);
                 }
                 return view('reader.index', []);
             } else {
@@ -110,15 +133,19 @@ class ReaderController extends Controller
 
         $oDevice->setOnline();
 
-        if ($request->has('release_id'))
+        if ($request->has('release_id')) {
             View::share('release_id', $request->get('release_id'));
+        }
 
         return view('reader.index', []);
     }
 
     /**
-     * @param Request $request
-     * @return array
+     * Release method
+     *
+     * @param \Illuminate\Http\Request $request The request
+     *
+     * @return <type> ( description_of_the_return_value )
      */
     public function release(Request $request)
     {
@@ -130,14 +157,19 @@ class ReaderController extends Controller
 
         $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
 
-        return responseCommon()->success([
-            'data' => $oRelease->toArray(),
-        ]);
+        return responseCommon()->success(
+            [
+                'data' => $oRelease->toArray(),
+            ]
+        );
     }
 
     /**
-     * @param Request $request
-     * @return array
+     * Releases method
+     *
+     * @param \Illuminate\Http\Request $request The request
+     *
+     * @return <type> ( description_of_the_return_value )
      */
     public function releases(Request $request)
     {
@@ -147,9 +179,11 @@ class ReaderController extends Controller
 
         $oReleases = $oService->getReleases();
 
-        return responseCommon()->success([
-            'data' => $oReleases->toArray(),
-        ]);
+        return responseCommon()->success(
+            [
+                'data' => $oReleases->toArray(),
+            ]
+        );
     }
 
     /**
@@ -158,7 +192,9 @@ class ReaderController extends Controller
      */
     public function articles(Request $request)
     {
-        $oRelease = !$request->exists('release_id') ? Release::first() : Release::where('id', $request->get('release_id'))->first();
+        $oRelease = !$request->exists('release_id')
+            ? Release::first()
+            : Release::where('id', $request->get('release_id'))->first();
 
         $oService = (new ReaderService())->byRelease($oRelease);
 
@@ -249,8 +285,9 @@ class ReaderController extends Controller
     public function email(Request $request)
     {
         $validator = responseCommon()->validation($request->all(), ['email' => 'required|email']);
-        if ($validator->fails())
+        if ($validator->fails()) {
             return responseCommon()->validationMessages(null, ['email' => 'Неверный формат email']);
+        }
 
         $oUser = self::getUser($request);
         $oUser->email = $request->get('email');
@@ -281,7 +318,6 @@ class ReaderController extends Controller
         $oUser = $oDevice->user;
 
         if ($request->exists('online') && (int)$request->get('online') === 1) {
-
             $oDevices = $oUser->devices;
 
             foreach ($oDevices as $device) {
@@ -297,7 +333,6 @@ class ReaderController extends Controller
         }
 
         if ($request->exists('reset') && (int)$request->get('reset') === 1) {
-
             $oUser->sendResetCodeToUser();
 
             return responseCommon()->success([
@@ -306,10 +341,7 @@ class ReaderController extends Controller
         }
 
         if (!$oDevice->isOnline()) {
-
-            return responseCommon()->error([
-
-            ], 'Читалка уже открыта на другом устройстве');
+            return responseCommon()->error([], 'Читалка уже открыта на другом устройстве');
         }
 
         $oDevice->setOnline();
@@ -318,25 +350,24 @@ class ReaderController extends Controller
     }
 
     /**
-     * @param Request $request
-     * @param $code
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
+     * Reset function
+     *
+     * @param      \Illuminate\Http\Request  $request  The request
+     * @param      <type>                    $code     The code
+     *
+     * @return     <type>                    ( description_of_the_return_value )
      */
     public function reset(Request $request, $code)
     {
         if (Auth::guest()) {
-
             $this->sessionModalError('login', null, null);
-
             return view('reader.index', []);
         }
 
         $oUser = Auth::user();
 
         if (!$oUser->checkResetCode($code)) {
-
             $this->sessionModalError('reset-wrong', null, null);
-
             return redirect()->to('/reader');
         }
 
@@ -346,6 +377,4 @@ class ReaderController extends Controller
 
         return redirect()->to('/reader');
     }
-
-
 }
