@@ -20,6 +20,7 @@ class CreateBookmarksTable extends Migration
             $table->integer('article_id')->unsigned()->nullable()->default(null);
             $table->string('title')->nullable()->default(null);
             $table->integer('scroll')->unsigned()->default(0);
+            $table->integer('tag_number')->unsigned()->nullable()->default(null);
             $table->timestamps();
         });
 

@@ -173,6 +173,7 @@ class ReaderService
             'article_id' => (int)$data['article_id'],
             'title' => $data['title'],
             'scroll' => $data['scroll'],
+            'tag_number' => $data['tag_number'],
         ]);
 
         return true;

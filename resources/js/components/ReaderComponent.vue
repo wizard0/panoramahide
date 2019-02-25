@@ -197,12 +197,15 @@
                             </div>
                         </div>
                     </nav>
-                    <div class="article-html" v-for="article in articles.data">
+                    <div class="article-html" v-for="article in articles.data" :data-id="article.id">
                         <div v-html="article.html"></div>
                     </div>
                     <div id="reader-panel-bookmarks">
                         <div class="bookmarks-holder">
-                            <div :id="'bookmark_' + bookmark.id" class="bookmark-item" v-for="(bookmark, key) in bookmarks.data" :style="[{'top': bookmark.scroll + 'px'}]">
+                            <div class="bookmark-item" :style="[{'top': bookmark.scroll + 'px'}, {'display': 'none'}]">
+                                <span>0</span>
+                            </div>
+                            <div :id="'bookmark_' + bookmark.id" class="bookmark-item" v-for="(bookmark, key) in bookmarks.data">
                                 <span>{{ key + 1}}</span>
                             </div>
                         </div>
@@ -339,6 +342,7 @@
                     title: '',
                     article_id: 0,
                     scroll: 0,
+                    tag_number: 0,
                 },
 
                 /**
@@ -445,8 +449,54 @@
                     .then(response => {
                         self.bookmarks.data = response.data.data;
                         self.tab.bookmarks.loading = false;
+                        self.bookmarksAfterAdd();
                     })
                     .catch();
+            },
+
+            /**
+             * Добавить сетку на статью
+             * - все теги покрыть data-article_id = id
+             * - все теги покрыть data-number = key
+             * - всем тегах добавить класс .--bookmark-grid
+             * - добавить top
+             */
+            bookmarksAfterAdd() {
+                const self = this;
+                $('article').each(function () {
+                    let $article = $(this);
+                    let id = $article.closest('.article-html').data('id');
+                    $article.find('*').each(function (key) {
+                        $(this).addClass('--bookmark-grid');
+                        $(this).attr('data-article_id', id);
+                        $(this).attr('data-number', key);
+                    });
+                });
+                window.Vue.nextTick(function () {
+                    self.bookmarksUpdate();
+                });
+            },
+
+            /**
+             * Добавить top всем закладкам
+             */
+            bookmarksUpdate() {
+                const self = this;
+                _.each(self.bookmarks.data, function (bookmark) {
+                    if (bookmark.tag_number !== null) {
+                        let top = self.bookmarkTop($('[data-article_id="' + bookmark.article_id + '"][data-number="' + bookmark.tag_number + '"]'));
+                        $('#bookmark_' + bookmark.id).css({'top': top + 'px'});
+                    } else {
+                        $('#bookmark_' + bookmark.id).css({'top': bookmark.scroll + 'px'});
+                    }
+                });
+            },
+
+            /**
+             * Генерация top
+             */
+            bookmarkTop($element) {
+                return $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - 60;
             },
 
             /**
@@ -481,7 +531,6 @@
                 const self = this;
                 $('#reader-panel').on('scroll', function () {
                     let beSet = false;
-                    self.bookmark.scroll = $(this).scrollTop();
                     $('#reader-panel article').each(function () {
                         let ThisOffset = $(this).offset();
                         if (ThisOffset.top < 220) {
@@ -495,9 +544,11 @@
                         self.footerSet(null, null);
                         self.bookmark.article_id = 0;
                     }
-                    //let element = self.point();
-                    //console.log(self.bookmark.scroll);
-                    //console.log($(element).closest('.article-html'));
+                    let $closestElement = $(self.point()).closest('.--bookmark-grid');
+                    if ($closestElement.length) {
+                        self.bookmark.scroll = self.bookmarkTop($closestElement);
+                        self.bookmark.tag_number = $closestElement.data('number');
+                    }
                 });
             },
 
@@ -678,6 +729,7 @@
                 data.release_id = self.release.data.id;
                 data.title = self.bookmark.title;
                 data.scroll = self.bookmark.scroll;
+                data.tag_number = self.bookmark.tag_number;
                 axios.post(self.url.bookmarks + '/create', data)
                     .then(response => {
                         self.bookmarks.data = null;
@@ -750,7 +802,7 @@
                 self.intervalDeviceCheckOnline();
             }
             $(window).resize(function() {
-                $('#reader-panel-bookmarks').css('top', '-' + self.bookmarkGetOffsetTop() + 'px')
+                self.bookmarksUpdate();
             });
         },
     }
