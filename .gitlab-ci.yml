@@ -39,7 +39,7 @@ dbseed:
     script:
         - echo $MYSQL_PASS
         - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
-        - php72 ./artisan migrate -vvv
+        - php72 ./artisan migrate:fresh -vvv
         - php72 ./artisan db:seed --class=TestSeeder -vvv
     dependencies:
         - build

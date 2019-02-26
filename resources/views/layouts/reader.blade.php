@@ -52,8 +52,13 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/vue.css') }}" rel="stylesheet">
     <script>
+        @if(isset($release_id))
+            window.release_id = {{ $release_id }};
+        @endif
         window.user = {
-            guest: {{ Auth::guest() ? 1: 0 }},
+            guest:          {{ Auth::guest()  ? 1: 0 }},
+            partner:        {{ $isPartnerUser ? 1: 0 }},
+            simpleReader:   {{ $simpleReader  ? 1: 0 }},
         };
         window.modal = {
             active: '{{ Session::has('modal') ? Session::get('modal') : null }}'

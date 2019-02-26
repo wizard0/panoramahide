@@ -4,6 +4,9 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class for application service provider.
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -20,7 +23,6 @@ class AppServiceProvider extends ServiceProvider
             info($query->time);
         });
         */
-
     }
 
     /**

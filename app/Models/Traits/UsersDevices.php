@@ -8,8 +8,10 @@ namespace App\Models\Traits;
 
 use App\Models\Device;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Carbon\Carbon;
 
 trait UsersDevices
 {
@@ -18,6 +20,7 @@ trait UsersDevices
     {
         $oDevice = Device::create(['owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')]);
         $this->devices()->save($oDevice);
+        Cookie::queue('device_id', $oDevice->id, Device::ACTIVE_DAYS * 1440);
         return $oDevice;
     }
 
@@ -55,15 +58,11 @@ trait UsersDevices
      * @param Device|null $oSelectedDevice
      * @return mixed
      */
-    public function getActivationDevices(?Device $oSelectedDevice = null): Collection
+    public function getActivationDevices(): Collection
     {
-        $query = $this->devices();
-
-        if (!is_null($oSelectedDevice)) {
-            $query = $query->where('id', '<>', $oSelectedDevice->id);
-        }
-
-        return $query->whereActive(true)->get();
+        return $this->devices()
+                    ->where('activate_date', '>=', Carbon::now()->subDays(Device::ACTIVE_DAYS))
+                    ->get();
     }
 
     /**

@@ -18,7 +18,7 @@ class PromoUsersTableSeeder extends Seeder
         PromoUser::create([
             'user_id' => testData()->user()->id,
             'name' => testData()->user['name'],
-            'phone' => testData()->user['email'],
+            'phone' => testData()->user['phone'],
         ]);
     }
 }

@@ -100,6 +100,7 @@ Route::group(['prefix' => 'deskbooks'], function () {
 Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
     Route::post('/code', 'ReaderController@code')->name('reader.code');
+    Route::post('/email', 'ReaderController@email')->name('reader.email');
     Route::get('/reset/{code}', 'ReaderController@reset')->name('reader.reset');
     Route::any('/online', 'ReaderController@online')->name('reader.online');
     Route::any('/release', 'ReaderController@release')->name('reader.release');
@@ -132,5 +133,12 @@ Route::group(['prefix' => 'promo_users'], function () {
     Route::any('/{id}/promocode/{item_id}/activate', ['uses' => 'PromoUsersController@activatePromocode', 'as' => 'promo_users.promocode.activate']);
     Route::any('/{id}/publishing/{item_id}/activate', ['uses' => 'PromoUsersController@activatePublishing', 'as' => 'promo_users.publishing.activate']);
     Route::any('/{id}/release/{item_id}/activate', ['uses' => 'PromoUsersController@activateRelease', 'as' => 'promo_users.release.activate']);
+});
+/**
+ * API
+ */
+Route::group(['prefix' => 'reader/api'], function () {
+    Route::get('/{partner}/{user}/{quota}/releases', 'ReaderApiController@list')->name('api.releases');
+    Route::get('/{partner}/{user}/{quota}/release/{release}.html', 'ReaderApiController@release')->name('api.release');
 });
 

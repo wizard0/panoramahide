@@ -92,12 +92,12 @@
                     <div class="" style="padding: 0 15px">
                         <div class="row flex-nowrap justify-content-between align-items-center">
                             <div class="col-2 col-lg-4">
-                                <div class="show-less-xl hide-more-xl" v-if="!user.guest">
+                                <div class="show-less-xl hide-more-xl" v-if="!user.simpleReader">
                                     <div class="menu-wrapper toggle-button" data-name="#tab-reader-contents">
                                         <div class="hamburger-menu"></div>
                                     </div>
                                 </div>
-                                <div class="hide-less-xl show-more-xl" v-if="!user.guest">
+                                <div class="hide-less-xl show-more-xl" v-if="!user.simpleReader">
                                     <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
                                        data-name="#tab-reader-contents"
                                        @click="tabContent()"
@@ -124,7 +124,7 @@
                                     </a>
                                 </div>
                             </div>
-                            <div class="col-8 col-lg-4 text-center" :class="{'is-disabled' : user.guest}">
+                            <div class="col-8 col-lg-4 text-center" :class="{'is-disabled' : !user.simpleReader}">
                                 <div class="search mx-3" style="position: relative">
                                     <input type="text" class="form-control search-input" placeholder="Поиск по тексту">
                                     <div class="search-icon" style="position: absolute; top: 10px; right: 10px;">
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="col-2 col-lg-4 d-flex justify-content-end align-items-center">
-                                <a class="text-muted" href="#" style="margin-right: 10px;" v-if="!user.guest" @click="$root.modalShow($root.options.modal.readerBookmark)">
+                                <a class="text-muted" href="#" style="margin-right: 10px;" v-if="!user.simpleReader" @click="$root.modalShow($root.options.modal.readerBookmark)">
                                     <span class="setbookmark">
                                         <i class="hide-less-lg">В ЗАКЛАДКИ</i>
                                     </span>
@@ -408,9 +408,15 @@
                 }
                 axios.post(self.url.release, data)
                     .then(response => {
-                        self.release.data = response.data.data;
-                        self.getArticles();
-                        console.log(self.release);
+                        if (response.data.success) {
+                            self.release.data = response.data.data;
+                            self.getArticles();
+                        } else {
+                            window.toastr.error(response.data.toastr.text, response.data.toastr.title, {
+                                closeButton: true,
+                                closeDuration: 10,
+                            });
+                        }
                     })
                     .catch();
             },
@@ -812,13 +818,13 @@
             const self = this;
             self.tabOnOpen();
             self.user = window.user;
-            if (self.user.guest) {
+            if (self.user.guest && !self.user.partner) {
                 self.modalShowBootstrap(self.modal.login);
             }
             if (window.modal.active !== '') {
                 self.modalShowBootstrap('#' + window.modal.active);
             } else {
-                self.getRelease();
+                self.getRelease(window.release_id);
                 self.intervalDeviceCheckOnline();
             }
             $(window).resize(function() {

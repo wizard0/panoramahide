@@ -5,14 +5,15 @@ namespace App\Services\ResponseCommon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
+/**
+ * Class for response common helpers.
+ */
 class ResponseCommonHelpers
 {
     /**
      * Ajax return success with default properties
      *
-     * return $this->success([
-     *
-     * ], 'Message')
+     * return $this->success([], 'Message')
      *
      * @param array $aData
      * @param null $message
@@ -64,8 +65,6 @@ class ResponseCommonHelpers
         return response()->json($aData, 422);
     }
 
-
-
     /**
      * Log info with CPU value
      *
@@ -74,7 +73,7 @@ class ResponseCommonHelpers
     public function cpuLog($message = '')
     {
         $load = sys_getloadavg();
-        info(json_encode($load).' - '.$message);
+        info(json_encode($load) . ' - ' . $message);
     }
 
     /**
@@ -85,9 +84,8 @@ class ResponseCommonHelpers
     public function memoryUsageLog($message = '')
     {
         $load = memory_get_usage();
-        info(json_encode($load).' - '.$message);
+        info(json_encode($load) . ' - ' . $message);
     }
-
 
     /**
      * Обертка для валидатора
@@ -145,5 +143,4 @@ class ResponseCommonHelpers
             'message' => 'The request must be AJAX'
         ]);
     }
-
 }
