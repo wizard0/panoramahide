@@ -24,19 +24,20 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 
-Route::post('/add-to-cart', 'ProductController@addToCart');
-Route::post('/delete-from-cart', 'ProductController@deleteFromCart');
+Route::post('/add-to-cart', 'ProductController@addToCart')->name('cart.add');
+Route::post('/delete-from-cart', 'ProductController@deleteFromCart')->name('cart.del');
 
 Route::group(['prefix' => 'personal'], function () {
     Route::get('/', 'PersonalController@index')->name('personal');
+    Route::get('orders', 'PersonalController@orders')->name('personal.orders');
+    Route::get('cart', 'PersonalController@cart')->name('personal.cart');
+    Route::get('subscriptions', 'PersonalController@subscriptions')->name('personal.subscriptions');
+    Route::any('profile', 'PersonalController@profile')->name('personal.profile');
+    Route::get('magazines', 'PersonalController@magazines')->name('personal.magazines');
 
-    Route::get('cart', 'PersonalController@cart')
-        ->name('cart');
-    Route::get('order/make', 'PersonalController@orderMake')
-        ->name('order.make');
+    Route::get('order/make', 'PersonalController@orderMake')->name('order.make');
     Route::post('order/make', 'PersonalController@processOrder');
-    Route::get('order/complete/{id}', 'PersonalController@completeOrder')
-        ->name('order.complete');
+    Route::get('order/complete/{id}', 'PersonalController@completeOrder')->name('order.complete');
 
     Route::group(['prefix' => 'robokassa'], function () {
         Route::get('result_receiver', 'PaymentController@robokassaResult');

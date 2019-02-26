@@ -5,7 +5,6 @@ namespace App;
 use App\Models\PromoUser;
 
 use App\Models\Traits\UsersDevices;
-//use App\Models\UserDevice;
 
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,7 +21,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'private', 'name', 'last_name', 'email', 'phone', 'password',
+        'private', 'name', 'last_name', 'second_name', 'email', 'phone', 'password', 'gender', 'version', 'agree', 'birthday', 'notes', 'country', 'title'
     ];
 
     /**

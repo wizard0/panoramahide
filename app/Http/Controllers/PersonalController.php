@@ -18,16 +18,6 @@ use Redirect;
 
 class PersonalController extends Controller
 {
-    public function cart()
-    {
-        if (Session::has('cart')) {
-            $cart = Session::get('cart');
-        } else {
-            $cart = null;
-        }
-        return view('personal.cart', compact('cart'));
-    }
-
     public function orderMake()
     {
         if (Session::has('cart') && Session::get('cart')->totalQty > 0) {
@@ -81,6 +71,48 @@ class PersonalController extends Controller
 
     public function index(Request $request)
     {
-        echo "hello wizard its personal main page";
+        self::getRouteNameToView();
+        return view('personal.lk.'.__FUNCTION__);
     }
+
+    public function orders(Request $request)
+    {
+        self::getRouteNameToView();
+        return view('personal.lk.'.__FUNCTION__);
+    }
+
+    public function cart(Request $request)
+    {
+        self::getRouteNameToView();
+        $displayCheckout = true;
+        $cart = Session::get('cart', null);
+        return view('personal.lk.'.__FUNCTION__, compact('cart', 'displayCheckout'));
+    }
+
+    public function subscriptions(Request $request)
+    {
+        self::getRouteNameToView();
+        return view('personal.lk.'.__FUNCTION__);
+    }
+
+    public function profile(Request $request)
+    {
+        $user = Auth::user();
+        if ($request->isMethod('post')) {
+            $user->update($request->all());
+            return response()->json([
+                    'success' => true,
+                    'error' => false,
+                ]);
+        }
+        self::getRouteNameToView();
+        return view('personal.lk.'.__FUNCTION__, ['user' => $user]);
+    }
+
+    public function magazines(Request $request)
+    {
+        self::getRouteNameToView();
+        return view('personal.lk.'.__FUNCTION__);
+    }
+
 }

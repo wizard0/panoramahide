@@ -70,7 +70,7 @@ $categories = \App\Category::has('journals')->where('active', 1)->withTranslatio
                 </div>
             </div>
             <div class="d-flex col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 order-sm-3 order-3 order-xl-5 order-lg-5 order-md-3 offset-sm-1 offset-xl-0 offset-lg-0 offset-md-2 justify-content-xl-center justify-content-lg-center justify-content-end">
-                @include('personal.header_cart', ['cart' => Session::has('cart') ? Session::get('cart') : null])
+                @include('personal.lk.cart.header', ['cart' => Session::has('cart') ? Session::get('cart') : null])
             </div>
         </div>
     </div>

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Route;
+use View;
 
 class Controller extends BaseController
 {
@@ -20,5 +22,10 @@ class Controller extends BaseController
         else
             // При получении экземпляра удобно его сразу вернуть
             return $condition;
+    }
+    // Добавление в представление переменной с именем маршрута
+    public static function getRouteNameToView()
+    {
+        View::share('route_name', Route::currentRouteName());
     }
 }
