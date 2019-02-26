@@ -44,14 +44,6 @@ trait UsersDevices
         }
     }
 
-    public function getOnlineDevices()
-    {
-        return $this->devices->reject(function ($oDevice) {
-            return !$oDevice->isOnline();
-        });
-    }
-
-
     /**
      * Активированные устройства с исключением текущего
      *
