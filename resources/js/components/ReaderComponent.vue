@@ -475,6 +475,9 @@
                 window.Vue.nextTick(function () {
                     self.bookmarksUpdate();
                 });
+                setTimeout(function () {
+                    $(window).resize();
+                }, 100);
             },
 
             /**
@@ -482,6 +485,9 @@
              */
             bookmarksUpdate() {
                 const self = this;
+                if (self.bookmarks.data === null) {
+                    return;
+                }
                 _.each(self.bookmarks.data, function (bookmark) {
                     if (bookmark.tag_number !== null) {
                         let top = self.bookmarkTop($('[data-article_id="' + bookmark.article_id + '"][data-number="' + bookmark.tag_number + '"]'));
@@ -494,9 +500,22 @@
 
             /**
              * Генерация top
+             * скрол панели
+             * + топ элемента от топ
+             * - обложка
+             * - хедер
              */
             bookmarkTop($element) {
-                return $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - 60;
+                /*
+                console.log(
+                    $('#reader-panel').scrollTop(),
+                    $element.offset().top,
+                    $('.panel-cover').height(),
+                    $('#reader-header').height(),
+                    $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - $('#reader-header').height(),
+                );
+                */
+                return $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - $('#reader-header').height();
             },
 
             /**
@@ -544,6 +563,7 @@
                         self.footerSet(null, null);
                         self.bookmark.article_id = 0;
                     }
+                    // нулевая закладка
                     let $closestElement = $(self.point()).closest('.--bookmark-grid');
                     if ($closestElement.length) {
                         self.bookmark.scroll = self.bookmarkTop($closestElement);
