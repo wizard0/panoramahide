@@ -3,23 +3,34 @@
 namespace Tests\Unit\Controllers;
 
 
-use App\Http\Controllers\PromoController;
+use App\Article;
 use App\Http\Controllers\ReaderController;
 use App\Models\Device;
-use App\Models\Promocode;
-use App\Services\DeviceService;
+use App\Release;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class ReaderControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+
     /**
      * @var User
      */
     private $user;
+
+    /**
+     * @var Release
+     */
+    private $release;
+
+    /**
+     * @var Article
+     */
+    private $article;
 
     /**
      *
@@ -28,6 +39,11 @@ class ReaderControllerTest extends TestCase
     {
         parent::setUp();
         $this->setUserAndDevice();
+
+        $this->release = factory(Release::class)->create([
+            'journal_id' => 1
+        ]);
+        $this->article = factory(Article::class)->create();
     }
 
     /**
@@ -356,7 +372,7 @@ class ReaderControllerTest extends TestCase
 
             $result = $oController->index($request);
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->isOnline());
 
@@ -554,7 +570,7 @@ class ReaderControllerTest extends TestCase
 
             $result = $oController->online($request);
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->isOnline());
 
@@ -701,7 +717,7 @@ class ReaderControllerTest extends TestCase
 
             $this->assertTrue(session()->has('reset-wrong'));
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->active === 1);
 
@@ -734,12 +750,129 @@ class ReaderControllerTest extends TestCase
 
             $this->assertTrue(session()->has('reset-success'));
 
-            $oDevice = $this->user->devices()->first();
+            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
 
             $this->assertTrue($oDevice->active === 0);
 
             DB::rollBack();
         });
+    }
+
+    /**
+     * Тест закладок выбор
+     */
+    public function testBookmarks()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        $request = new Request();
+        $request->merge([
+
+        ]);
+
+        $result = $oController->bookmarks($request);
+
+        $this->assertTrue($result['success']);
+    }
+
+    /**
+     * Тест закладок создание
+     */
+    public function testBookmarksCreate()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarks($request);
+
+        $this->assertTrue(empty($result['data']));
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+            'article_id' => $this->article->id,
+            'title' => 'Название закладки',
+            'scroll' => 0,
+            'tag_number' => 1,
+        ]);
+
+        $result = $oController->bookmarksCreate($request);
+
+        $this->assertTrue($result['success']);
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarks($request);
+
+        $this->assertTrue(!empty($result['data']));
+    }
+
+    /**
+     * Тест закладок удаление
+     */
+    public function testBookmarksDestroy()
+    {
+        $this->actingAs($this->user);
+
+        $oController = (new ReaderController());
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarks($request);
+        $this->assertTrue(empty($result['data']));
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+            'article_id' => $this->article->id,
+            'title' => 'Название закладки',
+            'scroll' => 0,
+            'tag_number' => 1,
+        ]);
+
+        $result = $oController->bookmarksCreate($request);
+
+        $this->assertTrue($result['success']);
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarks($request);
+        $this->assertTrue(!empty($result['data']));
+
+        $bookmark = $result['data'][0];
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarksDestroy($request, $bookmark['id']);
+        $this->assertTrue($result['success']);
+
+        $request = new Request();
+        $request->merge([
+            'release_id' => $this->release->id,
+        ]);
+
+        $result = $oController->bookmarks($request);
+        $this->assertTrue(empty($result['data']));
     }
 
 
