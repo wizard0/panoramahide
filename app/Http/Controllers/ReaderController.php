@@ -11,17 +11,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\PartnerUser;
 use App\Models\Device;
+use App\Models\PartnerUser;
 use App\Release;
-use App\Services\DeviceService;
 use App\Services\ReaderService;
 use App\Services\Toastr\Toastr;
-use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use View;
+use Illuminate\Support\Facades\View;
 
 /**
  * Controls the data flow into a reader object and updates the view
@@ -157,11 +154,9 @@ class ReaderController extends Controller
 
         $oRelease->image = asset('img/covers/befc001381c5d89ccf4e3d3cd6c95cf0.png');
 
-        return responseCommon()->success(
-            [
-                'data' => $oRelease->toArray(),
-            ]
-        );
+        return responseCommon()->success([
+            'data' => $oRelease->toArray(),
+        ]);
     }
 
     /**
@@ -179,11 +174,9 @@ class ReaderController extends Controller
 
         $oReleases = $oService->getReleases();
 
-        return responseCommon()->success(
-            [
-                'data' => $oReleases->toArray(),
-            ]
-        );
+        return responseCommon()->success([
+            'data' => $oReleases->toArray(),
+        ]);
     }
 
     /**
@@ -322,6 +315,7 @@ class ReaderController extends Controller
             'redirect' => redirect()->back()->getTargetUrl(),
         ], 'Код успешно подтвержден');
     }
+
     public function email(Request $request)
     {
         $validator = responseCommon()->validation($request->all(), ['email' => 'required|email']);
@@ -392,10 +386,9 @@ class ReaderController extends Controller
     /**
      * Reset function
      *
-     * @param      \Illuminate\Http\Request  $request  The request
-     * @param      <type>                    $code     The code
-     *
-     * @return     <type>                    ( description_of_the_return_value )
+     * @param Request $request
+     * @param $code
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function reset(Request $request, $code)
     {
