@@ -47,15 +47,8 @@
     window.JSCartManager.prototype.deleteFromCart = function (event) {
         event.preventDefault();
         var item = $(event.target).parents('.cartItem'),
-            type = item.data('type'),
             id = item.data('id');
-
-        $.proxy(
-            this.sendRequest('/delete-from-cart', {
-                'type': type,
-                'id': id
-            }, 'Товар типа ' + type + ' id ' + id + ' успешно удален из корзины'),
-            this);
+        $.proxy(this.sendRequest('/delete-from-cart', {'id': id }, 'Товар успешно удален из корзины'),this);
     };
 
     window.JSCartManager.prototype.sendRequest = function (url, data, message) {
@@ -66,9 +59,11 @@
             method: 'POST',
             url: url,
             data: data,
+            dataType: 'json',
             success: function (res) {
-                var newCart = $(res);
-                $('#cart-in-header').replaceWith(newCart);
+                $('#cart-in-header').replaceWith(res.header);
+                if (res.cart && $('#personal-cart-content').length)
+                    $('#personal-cart-content').replaceWith(res.cart);
                 alert(message);
             }
         });

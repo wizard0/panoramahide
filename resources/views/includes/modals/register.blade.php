@@ -33,6 +33,7 @@
 @component('components.modal', ['id' => 'registration-modal', 'title' => 'Зарегистрироваться'])
     @slot('body')
         <form method="post" action="{{ route('register') }}" name="regform" class="ajax-form" enctype="multipart/form-data">
+            @csrf
             <input type="text" name="captcha_check" style="display:none;">
             <input type="hidden" name="register_submit_button" value="Y">
             <div class="form-group">

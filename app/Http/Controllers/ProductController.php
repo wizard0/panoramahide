@@ -24,7 +24,6 @@ class ProductController extends Controller
             } else {
                 $product = $this->getModel($type, $id);
             }
-
             $cart = $this->getCart();
             if (!$cart->add($product, $version, $quantity))
                 return response()->json([
@@ -32,7 +31,10 @@ class ProductController extends Controller
                     'error' => 'true',
                     'message' => 'No price'
                 ]);
-            return $this->updateCart($cart);
+            return response()->json([
+                'success' => true,
+                'header' => $this->updateCart($cart),
+            ]);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
@@ -40,13 +42,13 @@ class ProductController extends Controller
     public function deleteFromCart(Request $request)
     {
         if ($request->ajax()) {
-            $type = $request->get('type');
-            $id = $request->get('id');
-
             $cart = $this->getCart();
-            $product = $this->getModel($type, $id);
-            $cart->delete($product, $type);
-            return $this->updateCart($cart);
+            $cart->delete($request->get('id'));
+            return response()->json([
+                'success' => true,
+                'header' => $this->updateCart($cart),
+                'cart' => view('personal.lk.cart.content', ['cart' => Session::get('cart'), 'displayCheckout' => true])->render(),
+            ]);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
@@ -54,7 +56,7 @@ class ProductController extends Controller
     public function getHeaderCart()
     {
         $cart = Session::get('cart');
-        return view('personal.header_cart', compact('cart'));
+        return view('personal.lk.cart.header', compact('cart'))->render();
     }
 
     private function getModel($type, $id, $additionalData = null)
@@ -78,7 +80,12 @@ class ProductController extends Controller
 
     private function updateCart($cart)
     {
-        Session::put('cart', $cart);
+        if (empty($cart->items)) {
+            Session::forget('cart');
+        } else {
+            Session::put('cart', $cart);
+        }
+
         return $this->getHeaderCart();
     }
 }
