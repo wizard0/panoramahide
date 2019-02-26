@@ -101,10 +101,10 @@
         </div>
 
         <div class="form-buttons-holder">
-            <button type="submit" class="btn inner-form-submit">
-                <span>Зарегистрироваться</span>
+            <button type="submit" class="btn inner-form-submit" style="width:120px">
+                <span>Сохранить</span>
             </button>
-            <button class="btn btn-primary greybtn" onClick="window.location.reload()">
+            <button class="btn btn-primary greybtn" onClick="window.location.reload()" style="width:120px">
                 <span>Отменить</span>
             </button>
         </div>
