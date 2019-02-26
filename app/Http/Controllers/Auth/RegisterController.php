@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/personal';
 
     /**
      * Create a new controller instance.
@@ -58,7 +58,7 @@ class RegisterController extends Controller
         $validateResister = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'phone' => ['required', 'string', Rule::unique('users', 'phone')],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'string', 'min:6'],
@@ -104,7 +104,7 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-
+        /*
         $code = $request->get('g-recaptcha-response');
         if ($code !== config('googlerecaptchav3.except_value')) {
             $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
@@ -117,7 +117,7 @@ class RegisterController extends Controller
                 ], 422);
             }
         }
-
+        */
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
