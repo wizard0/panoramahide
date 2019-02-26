@@ -7,6 +7,9 @@ use App\Journal;
 use App\Release;
 use Illuminate\Support\Facades\File;
 
+/**
+ * Class for reader service.
+ */
 class ReaderService
 {
     /**
@@ -26,7 +29,6 @@ class ReaderService
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -109,14 +111,10 @@ class ReaderService
     private function getArticleHtml(Article $oArticle): string
     {
         $path = base_path($this->pathToHtml);
-
-        $name = 'article_00'.sprintf("%02d", $oArticle->id);
-
-        $html = $name.'.html';
-
-        $file = $path.$html;
+        $name = 'article_00' . sprintf("%02d", $oArticle->id);
+        $html = $name . '.html';
+        $file = $path . $html;
 
         return File::exists($file) ? trim(file_get_contents($file)) : null;
     }
-
 }
