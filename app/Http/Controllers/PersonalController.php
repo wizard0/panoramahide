@@ -18,10 +18,15 @@ use Redirect;
 
 class PersonalController extends Controller
 {
+    public function __construct()
+    {
+        self::getRouteNameToView();
+    }
+
     public function orderMake()
     {
         if (Session::has('cart') && Session::get('cart')->totalQty > 0) {
-            return view('personal.order_make');
+            return view('personal.orders.make');
         }
         return Redirect::back();
     }
@@ -36,17 +41,15 @@ class PersonalController extends Controller
         Session::forget('cart');
         return redirect()->route('order.complete', [
             'id' => $order->id,
-            'paysystem' => $order->paysystem
         ]);
     }
 
     public function completeOrder($id)
     {
         $order = Order::where('id', $id)->first();
-
         $payData = $order->collectPayData();
 
-        return view('personal.order_complete', compact(
+        return view('personal.orders.complete', compact(
             'order',
             'payData'
         ));
@@ -71,28 +74,24 @@ class PersonalController extends Controller
 
     public function index(Request $request)
     {
-        self::getRouteNameToView();
-        return view('personal.lk.'.__FUNCTION__);
+        return view('personal.'.__FUNCTION__);
     }
 
     public function orders(Request $request)
     {
-        self::getRouteNameToView();
-        return view('personal.lk.'.__FUNCTION__);
+        return view('personal.'.__FUNCTION__);
     }
 
     public function cart(Request $request)
     {
-        self::getRouteNameToView();
         $displayCheckout = true;
         $cart = Session::get('cart', null);
-        return view('personal.lk.'.__FUNCTION__, compact('cart', 'displayCheckout'));
+        return view('personal.'.__FUNCTION__, compact('cart', 'displayCheckout'));
     }
 
     public function subscriptions(Request $request)
     {
-        self::getRouteNameToView();
-        return view('personal.lk.'.__FUNCTION__);
+        return view('personal.'.__FUNCTION__);
     }
 
     public function profile(Request $request)
@@ -105,14 +104,12 @@ class PersonalController extends Controller
                     'error' => false,
                 ]);
         }
-        self::getRouteNameToView();
-        return view('personal.lk.'.__FUNCTION__, ['user' => $user]);
+        return view('personal.'.__FUNCTION__, ['user' => $user]);
     }
 
     public function magazines(Request $request)
     {
-        self::getRouteNameToView();
-        return view('personal.lk.'.__FUNCTION__);
+        return view('personal.'.__FUNCTION__);
     }
 
 }
