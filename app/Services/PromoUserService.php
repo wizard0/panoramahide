@@ -58,15 +58,12 @@ class PromoUserService
      * @param Promocode $promocode
      * @return bool
      */
-    public function activatePromocode(Promocode $promocode) : bool
+    public function activatePromocode(Promocode $promocode): bool
     {
         $oPromocodeServices = new PromocodeService();
 
         if ($this->checkPromocodeBeforeActivate($promocode) && $oPromocodeServices->checkPromocodeBeforeActivate($promocode)) {
-            if (!$oPromocodeServices->activatePromocode($promocode, $this->promoUser)) {
-                $this->setMessage('Промокод не был активирован.');
-                return false;
-            }
+            $oPromocodeServices->activatePromocode($promocode, $this->promoUser);
             return true;
         }
         $this->setMessage('Промокод не был активирован.');
@@ -79,16 +76,13 @@ class PromoUserService
      * @param Promocode $promocode
      * @return bool
      */
-    public function deactivatePromocode(Promocode $promocode) : bool
+    public function deactivatePromocode(Promocode $promocode): bool
     {
         $oPromocodeServices = new PromocodeService();
 
         $exists = $this->promoUserPromocodes->where('id', $promocode->id)->first();
         if (!is_null($exists)) {
-            if (!$oPromocodeServices->deactivatePromocode($promocode, $this->promoUser)) {
-                $this->setMessage('Промокод не был деактивирован.');
-                return false;
-            }
+            $oPromocodeServices->deactivatePromocode($promocode, $this->promoUser);
             return true;
         }
         return false;
@@ -100,16 +94,8 @@ class PromoUserService
      * @param Promocode $promocode
      * @return bool
      */
-    public function checkPromocodeBeforeActivate(Promocode $promocode) : bool
+    public function checkPromocodeBeforeActivate(Promocode $promocode): bool
     {
-//        if ($this->now > $promocode->release_end) {
-//            $this->setMessage('Промокод не действителен.');
-//            return false;
-//        }
-//        if ($promocode->used === $promocode->limit) {
-//            $this->setMessage('Промокод невозможно выбрать. Количество ограничено.');
-//            return false;
-//        }
         if (!is_null($this->promoUserPromocodes)) {
             $exists = $this->promoUserPromocodes->where('id', $promocode->id);
             if (count($exists) !== 0 && $promocode->release_limit <= count($exists)) {
@@ -123,7 +109,7 @@ class PromoUserService
     /**
      * @param $message
      */
-    private function setMessage(string $message) : void
+    private function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -131,7 +117,7 @@ class PromoUserService
     /**
      * @return string
      */
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -142,7 +128,7 @@ class PromoUserService
      * @param array $data
      * @return PromoUser
      */
-    public function create(array $data) : PromoUser
+    public function create(array $data): PromoUser
     {
         $oPromoUser = PromoUser::create([
             'name' => $data['name'],
@@ -159,7 +145,7 @@ class PromoUserService
      * @param array $data
      * @return PromoUser
      */
-    public function update($id, array $data) : PromoUser
+    public function update($id, array $data): PromoUser
     {
         $oPromoUser = PromoUser::find($id);
         $oPromoUser->update([
@@ -184,7 +170,7 @@ class PromoUserService
      * @param int $phone
      * @return int
      */
-    public function codeGenerateByPhone(int $phone) : int
+    public function codeGenerateByPhone(int $phone): int
     {
         $existsCodes = Activations::where('phone', $phone)
             ->where('completed', 0)
@@ -211,7 +197,7 @@ class PromoUserService
      * @param $code
      * @return bool
      */
-    public function codeCheckByPhone(int $phone, int $code) : bool
+    public function codeCheckByPhone(int $phone, int $code): bool
     {
         $oActivation = Activations::where('code', $code)
             ->where('phone', $phone)
@@ -221,7 +207,7 @@ class PromoUserService
             return false;
         }
         $oActivation->update([
-            'completed' => 1
+            'completed' => 1,
         ]);
         return true;
     }

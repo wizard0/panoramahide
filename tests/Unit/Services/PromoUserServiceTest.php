@@ -6,26 +6,78 @@ namespace Tests\Unit\Services;
 use App\Models\PromoUser;
 use App\Models\Promocode;
 use App\Services\PromoUserService;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class PromoUserServiceTest extends TestCase
 {
-    /**
-     * Пример использования
-     */
-    public function example()
-    {
-        $oPromoUser = PromoUser::first();
-        $oPromoCode = Promocode::first();
-        $service = (new PromoUserService($oPromoUser));
-        if (!$service->activatePromocode($oPromoCode)) {
-            // не удалось активировать, вызвать сообщение $service->getMessage()
-        }
+    use DatabaseTransactions;
 
-        if (!$service->deactivatePromocode($oPromoCode)) {
-            // не удалось деактивировать, вызвать сообщение $service->getMessage()
-        }
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var PromoUser
+     */
+    private $promoUser;
+
+    /**
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->user = $this->createUser();
+
+        $this->promoUser = factory(PromoUser::class)->create([
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    /**
+     * @return PromoUserService
+     */
+    private function service(): PromoUserService
+    {
+        return new PromoUserService($this->promoUser());
+    }
+
+    /**
+     * @return PromoUser
+     */
+    private function promoUser(): PromoUser
+    {
+        return PromoUser::find($this->promoUser->id);
+    }
+
+    /**
+     * Создание промо-пользователя
+     */
+    public function testCreate()
+    {
+        $oPromoUser = $this->service()->create([
+            'name' => 'Промо пользовтаель',
+            'user_id' => $this->user->id,
+            'phone' => testData()->user['phone'],
+        ]);
+        $this->assertNotNull($oPromoUser);
+    }
+
+    /**
+     * Обновление промо пользователя
+     */
+    public function testUpdate()
+    {
+        $oPromoUser = $this->service()->update($this->promoUser()->id, [
+            'name' => 'Промо пользовтаель',
+            'phone' => testData()->user['phone'],
+        ]);
+        $this->assertTrue($oPromoUser->name === 'Промо пользовтаель');
     }
 
     /**
@@ -33,18 +85,16 @@ class PromoUserServiceTest extends TestCase
      */
     public function testCheckExceptionsReleaseEnd()
     {
-        $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
+        $oPromoCode = factory(Promocode::class)->create([
+            'release_end' => now()->subDay(),
+            'limit' => 10,
+            'used' => 1,
+        ]);
 
-        $oPromoCode = Promocode::where('release_end', '<', now())->first();
-        $this->assertNotNull($oPromoCode);
-
-        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-            $service = (new PromoUserService($oPromoUser));
-            $result = $service->activatePromocode($oPromoCode);
-            $this->assertFalse($result, $this->textRed('Не прошла проверка просроченности промокода'));
-            DB::rollBack();
-        });
+        $service = $this->service();
+        $result = $service->activatePromocode($oPromoCode);
+        $this->assertFalse($result);
+        $this->assertTrue($service->getMessage() !== null);
     }
 
     /**
@@ -52,21 +102,24 @@ class PromoUserServiceTest extends TestCase
      */
     public function testCheckExceptionsActivateExists()
     {
-        $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
+        $oPromoCode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+            'release_limit' => 1,
+        ]);
 
-        $oPromocodes = $oPromoUser->promocodes;
-        $this->assertNotEmpty($oPromocodes);
+        $this->assertTrue(count($this->promoUser()->promocodes) === 0);
 
-        $oPromoCode = Promocode::whereIn('id', $oPromocodes->pluck('id'))->first();
-        $this->assertNotNull($oPromoCode);
+        $result = $this->service()->activatePromocode($oPromoCode);
 
-        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-            $service = (new PromoUserService($oPromoUser));
-            $result = $service->activatePromocode($oPromoCode);
-            $this->assertFalse($result, $this->textRed('Не прошла проверка активации существующего промокода'));
-            DB::rollBack();
-        });
+        $this->assertTrue($result);
+
+        $this->assertTrue(count($this->promoUser()->promocodes) !== 0);
+
+        $result = $this->service()->activatePromocode($oPromoCode);
+        $this->assertFalse($result);
     }
 
     /**
@@ -74,20 +127,103 @@ class PromoUserServiceTest extends TestCase
      */
     public function testCheckExceptionsDeactivateNotExists()
     {
-        $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser, $this->textRed('Таблица promo_users пуста'));
+        $oPromoCode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+        ]);
 
-        $oPromocodes = $oPromoUser->promocodes;
-        $this->assertNotEmpty($oPromocodes);
+        $result = $this->service()->activatePromocode($oPromoCode);
+        $this->assertTrue($result);
 
-        $oPromoCode = Promocode::whereNotIn('id', $oPromocodes->pluck('id'))->first();
+        $this->assertNotEmpty($this->promoUser()->promocodes);
+
+        $oPromoCode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+        ]);
         $this->assertNotNull($oPromoCode);
 
-        DB::transaction(function () use ($oPromoUser, $oPromoCode) {
-            $service = (new PromoUserService($oPromoUser));
-            $result = $service->deactivatePromocode($oPromoCode);
-            $this->assertFalse($result, $this->textRed('Не прошла проверка деактивации несуществующего промокода'));
-            DB::rollBack();
-        });
+        $result = $this->service()->deactivatePromocode($oPromoCode);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Активирование активированного промокода
+     */
+    public function testActivateActivePromocode()
+    {
+        $oPromoCode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 9,
+            'release_limit' => 1,
+        ]);
+
+        $result = $this->service()->activatePromocode($oPromoCode);
+        $this->assertTrue($result);
+
+        $result = $this->service()->activatePromocode($oPromoCode);
+        $this->assertFalse($result);
+    }
+
+    /**
+     * Деактивация не существовующего промокода
+     */
+    public function testDeactivatePromocode()
+    {
+        $oPromoCode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+        ]);
+
+        $result = $this->service()->activatePromocode($oPromoCode);
+        $this->assertTrue($result);
+
+        $this->assertNotEmpty($this->promoUser()->promocodes);
+
+        $result = $this->service()->deactivatePromocode($oPromoCode);
+        $this->assertTrue($result);
+    }
+
+    /**
+     * @covers \App\Services\PromoUserService::codeGenerateByPhone()
+     */
+    public function testCodeGenerateByPhone()
+    {
+        // когда кода нет в активации
+        $code = $this->service()->codeGenerateByPhone($this->user->phone);
+        $this->assertIsInt($code);
+
+        // когда код есть в активации, с последующим удалением всех остальных
+        $code = $this->service()->codeGenerateByPhone($this->user->phone);
+        $this->assertIsInt($code);
+    }
+
+    /**
+     * @covers \App\Services\PromoUserService::codeCheckByPhone()
+     */
+    public function testCodeCheckByPhone()
+    {
+        // когда кода нет в активации
+        $code = $this->service()->codeGenerateByPhone($this->user->phone);
+        $this->assertIsInt($code);
+
+        // изменение кода и сохранение int
+        $wrongCode = $code + 1;
+
+        // неверный код
+        $result = $this->service()->codeCheckByPhone($this->user->phone, $wrongCode);
+        $this->assertFalse($result);
+
+        // успешная активаци
+        $result = $this->service()->codeCheckByPhone($this->user->phone, $code);
+        $this->assertTrue($result);
     }
 }

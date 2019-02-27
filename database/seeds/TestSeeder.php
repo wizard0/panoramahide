@@ -21,8 +21,6 @@ class TestSeeder extends Seeder
     {
         $this->clear();
 
-        $this->call(UsersTableSeeder::class);
-        $this->call(PromoUsersTableSeeder::class);
         $this->call(PromocodesTableSeeder::class);
         $this->call(JournalsTableSeeder::class);
 

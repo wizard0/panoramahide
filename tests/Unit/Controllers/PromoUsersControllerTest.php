@@ -7,6 +7,7 @@
 namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\PromoUsersController;
+use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -154,21 +155,35 @@ class PromoUsersControllerTest extends TestCase
     public function testActivatePromocode()
     {
         $id = $this->promoUser()->id;
-        $item_id = testData()->activePromocode()->id;
+        $oActivePromocode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+            'release_limit' => 1,
+        ]);
+
+        $oNotActivePromocode = factory(Promocode::class)->create([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 10,
+            'release_limit' => 1,
+        ]);
 
         // Ajax запрос
         $request = $this->request([]);
-        $result = $this->controller()->activatePromocode($request, $id, $item_id);
+        $result = $this->controller()->activatePromocode($request, $id, $oActivePromocode->id);
         $this->assertFalse($result->getData()->success);
 
         // активация не активного
         $request = $this->request([], true);
-        $result = $this->controller()->activatePromocode($request, $id, testData()->notActivePromocode()->id);
+        $result = $this->controller()->activatePromocode($request, $id, $oNotActivePromocode->id);
         $this->assertEquals($result->getStatusCode(), 422);
 
         // активация
         $request = $this->request([], true);
-        $result = $this->controller()->activatePromocode($request, $id, $item_id);
+        $result = $this->controller()->activatePromocode($request, $id, $oActivePromocode->id);
         $this->assertTrue($result['success']);
     }
 

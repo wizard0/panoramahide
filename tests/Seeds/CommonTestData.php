@@ -43,7 +43,17 @@ class CommonTestData
      */
     public function user()
     {
-        return User::where('email', testData()->user['email'])->first();
+        $oUser = User::where('email', testData()->user['email'])->first();
+        if (is_null($oUser)) {
+            $oUser = User::create([
+                'name' => testData()->user['name'],
+                'last_name' => testData()->user['name'],
+                'email' => testData()->user['email'],
+                'phone' => testData()->user['phone'],
+                'password' => testData()->user['password'],
+            ]);
+        }
+        return $oUser;
     }
 
     /**

@@ -7,6 +7,7 @@
 namespace Tests\Unit\Controllers\Auth;
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,20 @@ use Tests\TestCase;
 class RegisterControllerTest extends TestCase
 {
     use DatabaseTransactions;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * Создание сущностей
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->user = testData()->user();
+    }
 
     /**
      * Провал валидации на уникальный телефон

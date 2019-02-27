@@ -77,7 +77,6 @@ class LoginControllerTest extends TestCase
             $this->assertTrue($result['success']);
 
         } catch (\Throwable $e) {
-            dd($e);
             $this->assertTrue(false);
         }
     }
