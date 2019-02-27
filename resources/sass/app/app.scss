@@ -1,0 +1,56 @@
+/*!
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+// Variables
+/* ---------------------------------------------- */
+@import '../_variables';
+$brand-primary: $blue;
+$brand-success: $green;
+$brand-danger: $red;
+$brand-warning: $yellow;
+$brand-info: $blue;
+
+/* ---------------------------------------------- */
+// Bootstrap
+//@import '~bootstrap/scss/bootstrap';
+/* ---------------------------------------------- */
+// Toast
+@import '~toastr/build/toastr.min.css';
+@import '~simplebar/dist/simplebar.css';
+@import '~tippy.js/dist/tippy.css';
+
+// Frontend
+@import '../frontent/main';
+@import '../frontent/responsive';
+@import '../frontent/style';
+@import '../frontent/bootstrap-datetimepicker.min.css';
+
+
+// Icons
+@import '../glyphicon';
+
+// Helpers
+@import '../helpers/spacing-helpers';
+
+// Components
+@import '../components/common';
+@import '../components/button';
+@import '../components/loader';
+@import '../components/toastr';
+@import '../components/tippy';
+@import '../components/modal';
+@import '../components/breadcrumbs';
+@import '../components/input';
+@import '../components/navigation';
+
+// Promo
+@import '../promo';
+@import '../promocodes';
+
+// Reader
+@import '../reader/reader';
+
+// Personal
+@import '../personal/personal';

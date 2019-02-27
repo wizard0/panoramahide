@@ -9,6 +9,7 @@ use App\OrderPhysUser;
 use App\Paysystem;
 use App\User;
 use Chelout\Robokassa\Robokassa;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -21,6 +22,7 @@ class PersonalController extends Controller
     public function __construct()
     {
         self::getRouteNameToView();
+        View::share('bodyClass', 'body-personal');
     }
 
     public function orderMake()
@@ -97,12 +99,10 @@ class PersonalController extends Controller
     public function profile(Request $request)
     {
         $user = Auth::user();
-        if ($request->isMethod('post')) {
+        if ($request->ajax()) {
             $user->update($request->all());
-            return response()->json([
-                    'success' => true,
-                    'error' => false,
-                ]);
+
+            return responseCommon()->success([], 'Данные успешно обновлены.');
         }
         return view('personal.'.__FUNCTION__, ['user' => $user]);
     }

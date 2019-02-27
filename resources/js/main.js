@@ -1,5 +1,16 @@
 $(document).ready(function() {
     deskbooksForm.initEvents();
+
+
+
+    $('.datetimepicker[data-format="date"]').datetimepicker({
+        format: 'L',
+        locale: 'ru',
+    });
+    $('.datetimepicker[data-format="datetime"]').datetimepicker({
+        format: 'LT',
+        locale: 'ru',
+    });
 });
 
 /**

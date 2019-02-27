@@ -72,6 +72,29 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Background Badge Style
+    |--------------------------------------------------------------------------
+    | Type: boolean
+    | Support:
+    |  -  true: the background badge will be displayed at the bottom right of page
+    |  -  false: the background badge will be invisible
+    |
+    */
+    'background_badge_display' => true,
+    /*
+    |--------------------------------------------------------------------------
+    | Background Badge Style
+    |--------------------------------------------------------------------------
+    | Type: boolean
+    | Support:
+    |  -  true: the script will run on every page if you put init() on the global page
+    |  -  false: the script will only be running if there is action defined
+    |
+    */
+    'background_mode' => false,
+
+    /*
+    |--------------------------------------------------------------------------
     | Score Comparision
     |--------------------------------------------------------------------------
     | Type: bool
@@ -91,12 +114,22 @@ return [
     */
     'setting' => [
         [
-            'action' => 'auth/register',
-            'threshold' => 0.2,
+            'action' => 'contact_us',
+            'threshold' => 0,
             'score_comparision' => false,
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Setting
+    |--------------------------------------------------------------------------
+    | Type: array
+    | Define a list of ip that you want to skip
+    */
+    'skip_ips' => [
+
+    ],
     /*
     |--------------------------------------------------------------------------
     | Options

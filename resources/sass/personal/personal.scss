@@ -1,0 +1,23 @@
+/*!
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+.body-personal {
+  .content {
+    margin: 20px 0;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .__paper {
+    box-shadow: 0 0 1px 0px #eee;
+    padding: 20px 20px 40px 20px;
+  }
+  input[type="text"], input[type="password"], input[type="email"] {
+    border: 1px solid #ced4da;
+  }
+
+  .form-holder {
+    padding-top: 6px;
+  }
+}

@@ -41,7 +41,7 @@ $categories = \App\Category::has('journals')->where('active', 1)->withTranslatio
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
-                <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
+                <nav class=" {{-- @todo подозрения, что на js эти классы удаляются, тогда скачет навигация, что недопустимо - navmenu navmenu-fixed-left offcanvas --}}" role="navigation">
                     <ul class="topmenu">
                         <li><a href="{{ route('journals', ['sort_by' => 'name']) }}">{{ __('Журналы по алфавиту') }}</a></li>
                         <li class="dropdown">

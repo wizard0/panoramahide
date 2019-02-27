@@ -16,7 +16,7 @@ if (!mix.inProduction()) {
     mix.webpackConfig({
         devtool: "inline-source-map"
     });
-    mix.sass('resources/sass/app.scss', 'public/css').options({
+    mix.sass('resources/sass/app/app.scss', 'public/css').options({
         autoprefixer: {
             options: {
                 browsers: [
@@ -37,7 +37,7 @@ if (!mix.inProduction()) {
 }
 
 if (mix.inProduction()) {
-    mix.sass('resources/sass/app.scss', 'public/css').options({
+    mix.sass('resources/sass/app/app.scss', 'public/css').options({
         autoprefixer: {
             options: {
                 browsers: [

@@ -35,7 +35,7 @@
     <!-- Styles -->
 
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
+    {{--<link href="{{ asset('css/main.css') }}" rel="stylesheet">--}}
     {{--<link href="{{ asset('css/responsive.css') }}" rel="stylesheet">--}}
     {{--<link href="{{ asset('css/style.css') }}" rel="stylesheet">--}}
     {{--<link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">--}}

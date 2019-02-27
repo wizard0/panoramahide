@@ -68,7 +68,7 @@
                 <input type="password" name="password_confirmation" value="" autocomplete="new_password">
             </div>
             <div class="form-group">
-                <div id="auth_register_id"></div>
+                {!!  GoogleReCaptchaV3::renderField('auth_register_id', 'auth/register', '') !!}
             </div>
             {{--<div class="form-group p-t-5">--}}
                 {{--<div class="d-flex justify-content-end">--}}

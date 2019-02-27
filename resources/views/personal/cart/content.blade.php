@@ -1,5 +1,5 @@
     @if (empty($cart))
-        <p class="cart_empty">
+        <p class="cart_empty text-center">
         В вашей корзине ещё нет товаров.
         </p>
     @else
