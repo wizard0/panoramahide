@@ -27,8 +27,7 @@ class PaymentController extends Controller
     {
         $orderId = $request->get('ORDER_ID');
         $order = Order::where('id', $orderId)->first();
-        //dd($order->paysystem->getData());
 
-        return view('personal.payment.sberbank', compact('order'));
+        return view('personal.orders.payment.sberbank', compact('order'));
     }
 }

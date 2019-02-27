@@ -18,7 +18,7 @@ class ProductController extends Controller
             $type = $request->get('type');
             $id = $request->get('id');
             $version = $request->get('version');
-            $quantity = $request->get('quantity');
+            $quantity = $request->has('quantity') ? $request->get('quantity') : 1;
             if ($request->has('additionalData')) {
                 $product = $this->getModel($type, $id, $request->get('additionalData'));
             } else {
@@ -47,7 +47,7 @@ class ProductController extends Controller
             return response()->json([
                 'success' => true,
                 'header' => $this->updateCart($cart),
-                'cart' => view('personal.lk.cart.content', ['cart' => Session::get('cart'), 'displayCheckout' => true])->render(),
+                'cart' => view('personal.cart.content', ['cart' => Session::get('cart'), 'displayCheckout' => true])->render(),
             ]);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
@@ -56,7 +56,7 @@ class ProductController extends Controller
     public function getHeaderCart()
     {
         $cart = Session::get('cart');
-        return view('personal.lk.cart.header', compact('cart'))->render();
+        return view('personal.cart.header', compact('cart'))->render();
     }
 
     private function getModel($type, $id, $additionalData = null)

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Auth;
 use Session;
+use Chelout\Robokassa\Robokassa;
+use Lexty\Robokassa\Payment;
 
 
 class Order extends Model
@@ -72,7 +74,6 @@ class Order extends Model
                 $robo->setCulture(Payment::CULTURE_RU);
                 $robo->setPaymentMethod('RUR');
                 $robo->setDescription('test');
-                dd();
 
                 return (object)[
 //                        'type' => $this->paysystem->code,
