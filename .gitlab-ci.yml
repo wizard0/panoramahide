@@ -52,7 +52,8 @@ dbseed:
         - php72 ./artisan migrate:fresh -vvv
         - php72 ./artisan db:seed --class=TestSeeder -vvv
     dependencies:
-        - build
+        - build-php
+        - build-npm
 
 test:
     stage: test
@@ -62,7 +63,8 @@ test:
         # - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
         - php72 ./vendor/brianium/paratest/bin/paratest -p4 --coverage-text tests
     dependencies:
-        - build
+        - build-php
+        - build-npm
         - dbseed
 
 deploy:
@@ -74,7 +76,8 @@ deploy:
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder'
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && chmod 774 ./deploy && ./deploy'
     dependencies:
-        - build
+        - build-php
+        - build-npm
         - dbseed
         - test
 
