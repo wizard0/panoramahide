@@ -7,7 +7,7 @@
                        aria-controls="nav-home" aria-selected="true">
                         <span class="text-uppercase">Содержание</span>
                     </a>
-                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-bookmark" role="tab"
+                    <a class="nav-item nav-link" data-toggle="tab" href="#tab-reader-bookmarks" role="tab"
                        aria-controls="nav-profile" aria-selected="false">
                         <span class="text-uppercase">Закладки</span>
                     </a>
@@ -26,7 +26,7 @@
                                 <li class="reader-sidebar-chapter" v-for="article in articles.data">
                                     <span>
                                         <a href="#" role="button"
-                                           v-scroll-to="scrollOptions('#article0' + article.id)"
+                                           v-scroll-to="scrollOptions(articleIdToHref(article.id))"
                                         >{{ article.name }}</a>
                                         <p v-if="article.description">{{ article.description }}</p>
                                     </span>
@@ -35,12 +35,30 @@
                         </div>
                     </div>
                 </div>
-                <div class="tab-pane fade" id="tab-reader-bookmark" role="tabpanel">
+                <div class="tab-pane fade" id="tab-reader-bookmarks" role="tabpanel">
                     <h3 class="text-uppercase text-center m-t-15 m-b-15">Закладки</h3>
                     <div class="tab-content-item" data-simplebar>
-                        <div :class="{'is-loading': tab.bookmark.loading}">
-                            <ul class="content contents-nav">
-
+                        <div :class="{'is-loading': tab.bookmarks.loading}">
+                            <ul class="content contents-nav" v-if="bookmarks.data !== null">
+                                <li class="bookmarks-list-item" v-for="(bookmark, key) in bookmarks.data">
+                                    <div class="bookmark-flag">
+                                        <span>{{ key + 1 }}</span>
+                                    </div>
+                                    <div class="bookmark-cont">
+                                        <span>
+                                            <a href="#" role="button"
+                                               v-scroll-to="scrollOptions('#bookmark_' + bookmark.id, 0)"
+                                            >
+                                                {{ bookmark.title }}
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <div class="bookmark-remove">
+                                        <a href="#" title="Удалить закладку" @click="bookmarkRemove(bookmark.id, $event)">
+                                            <span class="glyphicon glyphicon-remove"></span>
+                                        </a>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -89,8 +107,8 @@
                                         </span>
                                     </a>
                                     <a class="text-muted toggle-button" href="#" style="margin-right: 6px;"
-                                       data-name="#tab-reader-bookmark"
-                                       @click="tabBookmark()"
+                                       data-name="#tab-reader-bookmarks"
+                                       @click="tabBookmarks()"
                                     >
                                         <span class="text-uppercase bookmark">
                                             Закладки
@@ -126,7 +144,7 @@
                                 </div>
                             </div>
                             <div class="col-2 col-lg-4 d-flex justify-content-end align-items-center">
-                                <a class="text-muted" href="#" style="margin-right: 10px;" v-if="!user.simpleReader">
+                                <a class="text-muted" href="#" style="margin-right: 10px;" v-if="!user.simpleReader" @click="$root.modalShow($root.options.modal.readerBookmark)">
                                     <span class="setbookmark">
                                         <i class="hide-less-lg">В ЗАКЛАДКИ</i>
                                     </span>
@@ -155,7 +173,7 @@
             </div>
             <div id="reader-panel" :class="{'is-loading': articles.data === null}">
                 <div class="panel-cover" v-if="release.data !== null">
-                    <img class="panel-cover" :src="release.data.image">
+                    <img :src="release.data.image">
                 </div>
                 <div class="container" v-if="articles.data !== null">
                     <div class="bookmarks-holder"></div>
@@ -179,8 +197,18 @@
                             </div>
                         </div>
                     </nav>
-                    <div v-for="article in articles.data">
+                    <div class="article-html" v-for="article in articles.data" :data-id="article.id">
                         <div v-html="article.html"></div>
+                    </div>
+                    <div id="reader-panel-bookmarks">
+                        <div class="bookmarks-holder">
+                            <div class="bookmark-item" :style="[{'top': bookmark.scroll + 'px'}, {'display': 'none'}]">
+                                <span>0</span>
+                            </div>
+                            <div :id="'bookmark_' + bookmark.id" class="bookmark-item" v-for="(bookmark, key) in bookmarks.data">
+                                <span>{{ key + 1}}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -222,6 +250,21 @@
                 </div>
             </div>
         </div>
+        <vue-modal title="Добавить закладку" :name="$root.options.modal.readerBookmark" :width="356">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Заголовок</label>
+                        <input type="text" name="bookmark" placeholder="Заголовок" v-model="bookmark.title">
+                    </div>
+                </div>
+                <div class="col-sm-12 text-right">
+                    <a class="btn btn-danger" @click="bookmarkAdd($event)">
+                        Добавить
+                    </a>
+                </div>
+            </div>
+        </vue-modal>
     </div>
 
 </template>
@@ -257,6 +300,7 @@
                     release: '/reader/release',
                     releases: '/reader/releases',
                     articles: '/reader/articles',
+                    bookmarks: '/reader/bookmarks',
                 },
 
                 /**
@@ -288,11 +332,17 @@
                 releases: {
                     data: null,
                 },
-                favorites: {
+                bookmarks: {
                     data: null,
                 },
                 articles: {
                     data: null,
+                },
+                bookmark: {
+                    title: '',
+                    article_id: 0,
+                    scroll: 0,
+                    tag_number: 0,
                 },
 
                 /**
@@ -309,10 +359,7 @@
                     content: {
                         loading: false,
                     },
-                    favorites: {
-                        loading: false,
-                    },
-                    bookmark: {
+                    bookmarks: {
                         loading: false,
                     },
                     library: {
@@ -396,16 +443,85 @@
             /**
              * Все избранные
              */
-            getFavorites() {
+            getBookmarks() {
                 const self = this;
-                self.favorites = favorites;
+                let data = {};
+                data.release_id = self.release.data.id;
+                if (self.bookmarks.data !== null) {
+                    return;
+                }
+                self.tab.bookmarks.loading = true;
+                axios.post(self.url.bookmarks, data)
+                    .then(response => {
+                        self.bookmarks.data = response.data.data;
+                        self.tab.bookmarks.loading = false;
+                        self.bookmarksAfterAdd();
+                    })
+                    .catch();
             },
 
             /**
-             * Все заметки
+             * Добавить сетку на статью
+             * - все теги покрыть data-article_id = id
+             * - все теги покрыть data-number = key
+             * - всем тегах добавить класс .--bookmark-grid
+             * - добавить top
              */
-            getBookmark() {
+            bookmarksAfterAdd() {
                 const self = this;
+                $('article').each(function () {
+                    let $article = $(this);
+                    let id = $article.closest('.article-html').data('id');
+                    $article.find('*').each(function (key) {
+                        $(this).addClass('--bookmark-grid');
+                        $(this).attr('data-article_id', id);
+                        $(this).attr('data-number', key);
+                    });
+                });
+                window.Vue.nextTick(function () {
+                    self.bookmarksUpdate();
+                });
+                setTimeout(function () {
+                    $(window).resize();
+                }, 100);
+            },
+
+            /**
+             * Добавить top всем закладкам
+             */
+            bookmarksUpdate() {
+                const self = this;
+                if (self.bookmarks.data === null) {
+                    return;
+                }
+                _.each(self.bookmarks.data, function (bookmark) {
+                    if (bookmark.tag_number !== null) {
+                        let top = self.bookmarkTop($('[data-article_id="' + bookmark.article_id + '"][data-number="' + bookmark.tag_number + '"]'));
+                        $('#bookmark_' + bookmark.id).css({'top': top + 'px'});
+                    } else {
+                        $('#bookmark_' + bookmark.id).css({'top': bookmark.scroll + 'px'});
+                    }
+                });
+            },
+
+            /**
+             * Генерация top
+             * скрол панели
+             * + топ элемента от топ
+             * - обложка
+             * - хедер
+             */
+            bookmarkTop($element) {
+                /*
+                console.log(
+                    $('#reader-panel').scrollTop(),
+                    $element.offset().top,
+                    $('.panel-cover').height(),
+                    $('#reader-header').height(),
+                    $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - $('#reader-header').height(),
+                );
+                */
+                return $('#reader-panel').scrollTop() + $element.offset().top - $('.panel-cover').height() - $('#reader-header').height();
             },
 
             /**
@@ -428,7 +544,7 @@
                         window.Vue.nextTick(function () {
                             self.scrollToInit();
                         });
-
+                        self.getBookmarks();
                     })
                     .catch();
             },
@@ -445,13 +561,41 @@
                         if (ThisOffset.top < 220) {
                             let id = $(this).find('h2').attr('id');
                             self.footerSet($(this).closest('section').find('.heading').text(), '#' + id);
+                            self.bookmark.article_id = id;
                             beSet = true;
                         }
                     });
                     if (!beSet) {
                         self.footerSet(null, null);
+                        self.bookmark.article_id = 0;
+                    }
+                    // нулевая закладка
+                    let $closestElement = $(self.point()).closest('.--bookmark-grid');
+                    if ($closestElement.length) {
+                        self.bookmark.scroll = self.bookmarkTop($closestElement);
+                        self.bookmark.tag_number = $closestElement.data('number');
                     }
                 });
+            },
+
+            /**
+             * Top: -980px для контейнера с закладками
+             */
+            bookmarkGetOffsetTop() {
+                return $('.panel-cover').height() + 10 + 10; // margin top и padding top
+            },
+
+            /**
+             * Определение элемента
+             */
+            point(x, y) {
+                if (x === undefined) {
+                    x = document.documentElement.clientWidth / 2;
+                }
+                if (y === undefined) {
+                    y = $('#reader-header').height() + 100;
+                }
+                return document.elementFromPoint(x, y);
             },
 
             /**
@@ -472,7 +616,7 @@
                     .then(response => {
                         self.device.hasOnline = !response.data.success;
                         if (self.device.hasOnline) {
-                            self.modalShow(self.modal.online);
+                            self.modalShowBootstrap(self.modal.online);
                         }
                     })
                     .catch();
@@ -503,17 +647,9 @@
             /**
              * Вкладка Избранные в сайдбаре
              */
-            tabFavorites() {
+            tabBookmarks() {
                 const self = this;
-                self.getReleases();
-            },
-
-            /**
-             * Вкладка Закладки в сайдбаре
-             */
-            tabBookmark() {
-                const self = this;
-                self.getBookmark();
+                self.getBookmarks();
             },
 
             /**
@@ -527,13 +663,22 @@
             /**
              * Опции для переха со скролом
              */
-            scrollOptions(element) {
+            scrollOptions(element, offset) {
                 const self = this;
                 return {
                     el: element,
                     onStart: self.scrollOnStart,
                     onDone: self.scrollOnDone,
+                    offset: offset !== undefined ? offset : -100,
                 };
+            },
+
+            /**
+             * Принудительный скрол до элемента
+             */
+            scrollTo(element) {
+                const self = this;
+                self.$scrollTo(element, 500, window.reader.scrollToOptions);
             },
 
             /**
@@ -562,7 +707,7 @@
                         self.getArticles();
                     }
                     if (href === '#tab-reader-bookmark') {
-                        self.getBookmark();
+                        self.getBookmarks();
                     }
                     if (href === '#tab-reader-library') {
                         self.getReleases();
@@ -573,8 +718,97 @@
             /**
              * Открыть бутстрап модальное окно по селектору
              */
-            modalShow(id) {
+            modalShowBootstrap(id) {
                 $(id).modal('show');
+            },
+
+            /**
+             * Удаление заклаки в сайдбаре
+             */
+            bookmarkRemove(id, event) {
+                const self = this;
+                self.loading(event.target.closest('a'), true);
+                let data = {};
+                axios.post(self.url.bookmarks + '/' + id + '/destroy', data)
+                    .then(response => {
+                        self.bookmarks.data = null;
+                        self.getBookmarks();
+                    })
+                    .catch();
+            },
+
+            /**
+             * Добавление закладки в модальном окне
+             */
+            bookmarkAdd(event) {
+                const self = this;
+                if (self.bookmark.title === '') {
+                    window.toastr.error('Введите название закладки', 'Ошибка', {
+                        closeButton: true,
+                        timeOut: 3000,
+                    });
+                    return;
+                }
+                self.loading(event.target, true);
+                let data = {};
+                data.article_id = self.bookmark.article_id.slice(7);
+                data.release_id = self.release.data.id;
+                data.title = self.bookmark.title;
+                data.scroll = self.bookmark.scroll;
+                data.tag_number = self.bookmark.tag_number;
+                axios.post(self.url.bookmarks + '/create', data)
+                    .then(response => {
+                        self.bookmarks.data = null;
+                        self.getBookmarks();
+                        self.$root.modalHide(self.$root.options.modal.readerBookmark);
+                        self.loading(event.target, false);
+                        window.toastr.success('Закладка успешно добавлена', 'Успех', {
+                            closeButton: true,
+                            timeOut: 3000,
+                        });
+                    })
+                    .catch();
+            },
+
+            /**
+             * Прелоадер
+             */
+            loading(target, loading) {
+                if (loading) {
+                    target.classList.add('is-loading');
+                } else {
+                    target.classList.remove('is-loading');
+                }
+            },
+
+            /**
+             * Трансформер
+             * 1 = #article01
+             */
+            articleIdToHref(id) {
+                const self = this;
+                return '#article' + self.formatNumberLength(id, 2);
+            },
+
+            /**
+             * Трансформер
+             * #article01 = 1
+             */
+            articleHrefToId(href) {
+                let id = href.replace(/#article/g, '');
+                return parseInt(id);
+            },
+
+            /**
+             * Трансформер
+             * 1 = 01
+             */
+            formatNumberLength(num, length) {
+                let r = '' + num;
+                while (r.length < length) {
+                    r = '0' + r;
+                }
+                return r;
             }
         },
         /**
@@ -585,14 +819,17 @@
             self.tabOnOpen();
             self.user = window.user;
             if (self.user.guest && !self.user.partner) {
-                self.modalShow(self.modal.login);
+                self.modalShowBootstrap(self.modal.login);
             }
             if (window.modal.active !== '') {
-                self.modalShow('#' + window.modal.active);
+                self.modalShowBootstrap('#' + window.modal.active);
             } else {
                 self.getRelease(window.release_id);
                 self.intervalDeviceCheckOnline();
             }
+            $(window).resize(function() {
+                self.bookmarksUpdate();
+            });
         },
     }
 </script>
