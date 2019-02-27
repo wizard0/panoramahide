@@ -91,7 +91,7 @@ class RegisterControllerTest extends TestCase
             $this->assertTrue($result->getStatusCode() === 422);
 
         } catch (\Throwable $e) {
-            $this->assertTrue(false);
+            $this->assertTrue(false, $this->textRed('Проверьте настройки reCAPTCHA и метод RegisterController::register()'));
         }
     }
 

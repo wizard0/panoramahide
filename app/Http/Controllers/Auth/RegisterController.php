@@ -104,7 +104,6 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-        /*
         $code = $request->get('g-recaptcha-response');
         if ($code !== config('googlerecaptchav3.except_value')) {
             $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
@@ -117,7 +116,6 @@ class RegisterController extends Controller
                 ], 422);
             }
         }
-        */
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
