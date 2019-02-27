@@ -10,27 +10,27 @@
             <div class="form-wrapper">
                 <div class="form-row">
                     <div class="form-label">Обращение:</div>
-                    <div class="form-holder"><input type="text" class="form-field" name="title" value="{{ $user->title }}" placeholder="Как к вам обращаться?"></div>
+                    <div class="form-holder"><input type="text" class="form-control" name="title" value="{{ $user->title }}" placeholder="Как к вам обращаться?"></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label">Имя:</div>
-                    <div class="form-holder"><input type="text" class="form-field" name="name" value="{{ $user->name }}" placeholder="Ваше имя"></div>
+                    <div class="form-holder"><input type="text" class="form-control" name="name" value="{{ $user->name }}" placeholder="Ваше имя"></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label">Фамилия:</div>
-                    <div class="form-holder"><input type="text" class="form-field" name="last_name" placeholder="Фамилия" value="{{ $user->last_name }}"></div>
+                    <div class="form-holder"><input type="text" class="form-control" name="last_name" placeholder="Фамилия" value="{{ $user->last_name }}"></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label">Отчество:</div>
-                    <div class="form-holder"><input type="text" class="form-field" name="second_name" value="{{ $user->second_name }}" placeholder="Отчество"></div>
+                    <div class="form-holder"><input type="text" class="form-control" name="second_name" value="{{ $user->second_name }}" placeholder="Отчество"></div>
                 </div>
 
                 <div class="form-row">
                     <div class="form-label">Email:</div>
-                    <div class="form-holder"><input type="email" class="form-field" readonly value="{{ $user->email }}" placeholder="Email"></div>
+                    <div class="form-holder"><input type="email" class="form-control" readonly value="{{ $user->email }}" placeholder="Email"></div>
                 </div>
 
 
@@ -53,11 +53,8 @@
                 <div class="form-row">
                     <div class="form-label">Дата рождения</div>
                     <div class="form-holder">
-                        <div class="input-group date" id="datetimepicker">
-                            <input type="text" name="birthday" class="form-control" value="">
-                            <span class="input-group-addon">
-                                <span class="glyphicon-calendar glyphicon"></span>
-                            </span>
+                        <div class="input-group date">
+                            <input type="text" name="birthday" class="form-control datetimepicker" data-format="date" value="">
                        </div>
                     </div>
                 </div>
@@ -87,7 +84,7 @@
 
 
                 <div class="form-row">
-                    <div class="form-label">Предпочитаемые версии журнала:</div>
+                    <div class="form-label wrap">Предпочитаемые версии журнала:</div>
                     <div class="form-holder">
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-outline-secondary @if( $user->version === Cart::VERSION_PRINTED) active @endif">
@@ -100,18 +97,13 @@
             </div>
         </div>
 
-        <div class="form-buttons-holder">
-            <button type="submit" class="btn inner-form-submit" style="width:120px">
+        <div class="form-buttons-holder text-center">
+            <button type="submit" class="btn btn-primary inner-form-submit" style="width:120px">
                 <span>Сохранить</span>
             </button>
-            <button class="btn btn-primary greybtn" onClick="window.location.reload()" style="width:120px">
+            <button class="btn greybtn" onClick="window.location.reload()" style="width:120px">
                 <span>Отменить</span>
             </button>
         </div>
     </form>
-    <script type="text/javascript">
-        $(function () {
-            $('#datetimepicker').datetimepicker();
-        });
-    </script>
 @endsection

@@ -53,6 +53,10 @@ $brand-info: $blue;
 }
 @import './loader';
 @import './spacing-helpers';
+@import './components/breadcrumbs';
+@import './components/input';
+@import './glyphicon';
+@import './components/navigation';
 
 .modal-body input.is-danger {
   border: solid 1px #dc3545 !important;
@@ -120,6 +124,10 @@ p, a, h1, h2, h3, h4 {
   padding: 0;
 }
 @import 'reader/reader';
+
+
+// Personal
+@import 'personal/personal';
 
 
 .is-disabled {

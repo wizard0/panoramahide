@@ -1,0 +1,19 @@
+/*!
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+.breadcrumbs {
+  li {
+    font-size: 14px;
+    a {
+      font-size: 14px !important;
+      &:hover {
+        color: #212529;
+      }
+    }
+    &:after {
+      margin-right: 6px;
+    }
+  }
+}
