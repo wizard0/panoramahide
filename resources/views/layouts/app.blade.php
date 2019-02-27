@@ -57,7 +57,7 @@
 
     @include('includes.footer')
 
-    @yield('javascript');
+    @yield('javascript')
 
     <script src="{{ asset('js/app.js') }}"></script>
 
