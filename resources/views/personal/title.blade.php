@@ -14,6 +14,12 @@
     @case('personal.magazines')
         Мои журналы
         @break
+    @case('order.make')
+        Оформление заказа
+        @break
+    @case('order.complete')
+        Заказ сформирован
+        @break
     @default
         Личный кабинет
 @endswitch

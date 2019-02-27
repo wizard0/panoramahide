@@ -38,7 +38,6 @@
 
                     <div class="acc-table-item">
                         <div class="incart-quantity-number">
-                            <span class="subs-legend">Количество:&nbsp;</span>
                             <input type="hidden" id="QUANTITY_{{ $item->id }}"
                                    name="QUANTITY_{{ $item->id }}" value="{{ $item->qty }}"/>
                             <input
@@ -57,7 +56,6 @@
                     </div>
 
                     <div class="acc-table-item">
-                        <span class="subs-legend">Скидка:&nbsp;</span>
                         <span class="osbold">0</span>
                     </div>
 
@@ -83,8 +81,8 @@
             @if ($displayCheckout)
             <a class="btn btn-primary button-link checkout"
                title="checkout"
-               href="{{ route('order.make') }}" onclick=""
-               style="margin-bottom:20px">Оформить заказ<i class="fa fa-arrow-right"></i> </a>
+               href="{{ route('order.make') }}"
+               style="margin-bottom:20px">Оформить заказ<i class="fa fa-arrow-right"></i></a>
             @endif
         </div>
 

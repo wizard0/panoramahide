@@ -4,18 +4,18 @@
     <li>
         <a href="/">Главная</a>
     </li>
-    <li>
-        <a href="{{ route('personal') }}">Мой кабинет</a>
-    </li>
+    @if($route_name !== 'personal')
+        <li>
+            <a href="{{ route('personal') }}">Мой кабинет</a>
+        </li>
+    @endif
     <li class="active">
         @include('personal.title')
     </li>
 @endsection
 
 @section('content')
-
     @include('includes.breadcrumbs')
-
     <div class="container news-container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-4 col-lg-3 left-sidebar">
@@ -38,21 +38,17 @@
                         </li>
                     </ul>
                 </div>
-           </div>
-
+            </div>
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9">
-
-            <h3 class="text-center text-uppercase section-title">@include('personal.title')</h3>
-
-            <div id="{!! str_replace('.', '-', $route_name) !!}-content">
-                @yield('page-content')
+                <h3 class="text-center text-uppercase section-title" style="margin-bottom: 15px;">@include('personal.title')</h3>
+                <div id="{!! str_replace('.', '-', $route_name) !!}-content">
+                    @if($route_name !== 'personal')
+                        @yield('page-content')
+                    @else
+                        <p>В личном кабинете Вы можете проверить текущее состояние корзины, ход выполнения Ваших заказов, просмотреть или изменить личную информацию, а также подписаться на новости и другие информационные рассылки.</p>
+                    @endif
+                </div>
             </div>
-
-
-            </div>
-
         </div>
     </div>
-
-
 @endsection

@@ -1,5 +1,5 @@
 @extends('personal.index')
 
 @section('page-content')
-    @include('personal.lk.cart.content')
+    @include('personal.cart.content')
 @endsection
