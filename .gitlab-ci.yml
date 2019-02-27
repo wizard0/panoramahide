@@ -18,13 +18,12 @@ build-php:
         - php72 ./artisan cache:clear
         - php72 ./artisan config:cache
     artifacts:
-        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
+        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME_php"
         untracked: true
         paths:
             - .env
             - composer.lock
             - bootstrap/
-            - public/
             - vendor/
 
 build-npm:
@@ -36,10 +35,11 @@ build-npm:
         - npm install
         - npm run prod
     artifacts:
-        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
+        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME_npm"
         untracked: true
         paths:
             - package-lock.json
+            - public/
             - node_modules/
 
 dbseed:
