@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="19px" viewBox="0 0 18 19" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 8</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0.34 17.8681 0.34 17.8681 18.2369 0 18.2369"></polygon>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-8">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"></use>
+            </mask>
+            <g id="Clip-7"></g>
+            <path d="M16.2541,17.9639 L0.2841,1.9939 C-0.0949,1.6149 -0.0949,1.0019 0.2841,0.6229 C0.6621,0.2449 1.2751,0.2449 1.6531,0.6229 L17.5741,16.5449 C17.9661,16.9369 17.9661,17.5719 17.5741,17.9639 C17.2101,18.3279 16.6181,18.3279 16.2541,17.9639" id="Fill-6" fill="#7E8C9F" mask="url(#mask-2)"></path>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="19px" height="20px" viewBox="0 0 19 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Cart icon grey</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Mainpage" transform="translate(-1190.000000, -117.000000)" stroke="#7E8C9F">
+            <g id="header" transform="translate(114.000000, 28.000000)">
+                <g id="Корзина" transform="translate(1076.000000, 88.760376)">
+                    <g id="Icons-/-Cart-icon-grey" transform="translate(0.000000, 1.000000)">
+                        <g id="Cart-icon" transform="translate(0.372314, 0.760376)">
+                            <circle id="Oval-7" stroke-width="1.4" cx="6.44139099" cy="15.4363784" r="2"></circle>
+                            <circle id="Oval-7-Copy" stroke-width="1.4" cx="15.5290527" cy="15.4363784" r="2"></circle>
+                            <path d="M15.5290527,13.3513184 C15.0118001,12.5124715 14.2390544,12.1246134 13.2108154,12.1877441 C12.1825765,12.2508748 10.9356689,12.3260701 9.47009277,12.4133301 C8.51949056,12.4943848 7.89786784,12.3616536 7.60522461,12.0151367 C7.31258138,11.6686198 7.06176758,11.1436361 6.8527832,10.4401855 L4.3034668,1.75915527 C3.91463216,0.840128581 3.3684082,0.329793294 2.66479492,0.228149414 C1.96118164,0.126505534 1.28283691,0.0714518229 0.629760742,0.0629882812" id="Path-7" stroke-width="1.6" stroke-linecap="round"></path>
+                            <path d="M17.4915771,2.98779297 C17.1882731,4.45654297 16.9492594,5.67423503 16.7745361,6.64086914 C16.5124512,8.09082031 15.6009521,8.80322266 13.8857422,8.96887207 C12.7422689,9.07930501 10.3950195,9.34008789 6.84399414,9.7512207" id="Path-8" stroke-width="1.6" stroke-linecap="round"></path>
+                            <path d="M17.4898682,2.85037231 L5.16821289,4.21838379" id="Path-10" stroke-width="1.6" stroke-linecap="round"></path>
+                            <path d="M7.39282227,13.3806152 C7.60231527,12.8487549 8.49626668,12.5169474 10.0746765,12.3851929" id="Path-3" stroke-width="1.6" stroke-linecap="round"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

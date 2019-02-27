@@ -3,12 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="user_id" content="{{ Auth()->id() }}">
-
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
 
     <!-- Scripts -->
     <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -28,18 +26,12 @@
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
 
-    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
-
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
     @if (preg_match('/^\/personal\.*/', $_SERVER['REQUEST_URI']))
         <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
     @endif

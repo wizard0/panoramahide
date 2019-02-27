@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="23px" height="23px" viewBox="0 0 23 23" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Icons / Print icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Article" transform="translate(-1080.000000, -611.000000)" stroke="#7E8C9F">
+            <g id="Контент" transform="translate(140.000000, 407.000000)">
+                <g id="ACTIONS" transform="translate(930.179688, 34.000000)">
+                    <g id="item-05" transform="translate(0.500000, 163.000000)">
+                        <g id="icon-citate" transform="translate(9.000000, 7.000000)">
+                            <g id="Icons-/-Print-icon">
+                                <g id="Print-icon" transform="translate(0.514648, 0.919997)">
+                                    <path d="M4.57989891,4.64036996 C2.81258771,4.64036996 1.37989891,6.07305876 1.37989891,7.84036996 L1.37989891,13.5156562 C1.37989891,15.2829674 2.81258771,16.7156562 4.57989891,16.7156562 L18.5361416,16.7156562 C20.3034528,16.7156562 21.7361416,15.2829674 21.7361416,13.5156562 L21.7361416,7.84036996 C21.7361416,6.07305876 20.3034528,4.64036996 18.5361416,4.64036996 L4.57989891,4.64036996 Z" id="Rectangle" stroke-width="1.6"></path>
+                                    <path d="M5.32677363,16.8168991 L5.32677363,14.3835932 C5.32677363,13.8313085 5.77448888,13.3835932 6.32677363,13.3835932 L16.6489734,13.3835932 C17.2012581,13.3835932 17.6489734,13.8313085 17.6489734,14.3835932 L17.6489734,16.4834779" id="Path-2" stroke-width="1.6"></path>
+                                    <polyline id="Path-2" stroke-width="1.6" transform="translate(11.487873, 18.567788) scale(1, -1) translate(-11.487873, -18.567788) " points="5.32677363 20.2844407 5.32677363 16.8511347 17.6489734 16.8511347 17.6489734 19.9510195"></polyline>
+                                    <path d="M5.19740676,9.74396069 L17.7460937,9.74396069" id="Path-3" stroke-width="1.6" stroke-linecap="round"></path>
+                                    <path d="M5.44343066,4.36981344 L5.44343066,2.12383506 C5.45518327,0.834817307 6.07080078,0.190308431 7.2902832,0.190308431 C9.11950684,0.190308431 11.7259414,0.190308431 15.8066406,0.190308431 C17.1801758,0.190308431 17.9086073,0.834817307 17.9919352,2.12383506 L17.9919352,4.32312888" id="Path-7" stroke-width="1.6"></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="12px" height="12px" viewBox="0 0 12 12" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Cross</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" stroke-linecap="round">
+        <g id="Articles" transform="translate(-351.000000, -544.000000)" stroke="#545E6D" stroke-width="1.3">
+            <g id="header" transform="translate(-5.000000, 28.000000)">
+                <g id="ADVANCED-SEARCH" transform="translate(0.014648, 132.724609)">
+                    <g id="Filter-Search" transform="translate(0.000000, 0.679688)">
+                        <g id="Search-Form" transform="translate(152.000000, 132.000000)">
+                            <g id="Сбросить" transform="translate(203.539062, 247.320312)">
+                                <g id="Cross" transform="translate(0.780518, 4.000000)">
+                                    <path d="M0.889157485,0.679196547 L10.0815456,9.8715847" id="Line-6"></path>
+                                    <path d="M0.889157485,0.679196547 L10.0815456,9.8715847" id="Line-6" transform="translate(5.485352, 5.275391) scale(-1, 1) translate(-5.485352, -5.275391) "></path>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -59,7 +59,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8"><div class="latest-articles">
-                        <h2 class="text-uppercase text-center">Новые статьи</h2>
+                        <h2 class="text-uppercase text-center m-b-20 m-t-20">Новые статьи</h2>
                         <div class="article-item">
                             <h3>
                                 <a href="/articles/kalendar_delovykh_meropriyatiy_po_selskomu_khozyaystvu_na_dekabr_2018_goda_423398_article_0011.html.html" class="black-link">Календарь деловых мероприятий по сельскому хозяйству на декабрь 2018 года</a>
