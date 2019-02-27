@@ -37,7 +37,10 @@ admin: ## Создать пользователя admin (user: admin; pass: admi
 	artisan admin:create
 
 test: seed ## Тестировать проект
-	phpunit --testdox --coverage-html ./test-coverage
+	./vendor/phpunit/phpunit/phpunit --testdox --coverage-html ./test-coverage
+
+paratest: seed ## Тестировать проект (тесты запускаются параллельно)
+	./vendor/brianium/paratest/bin/paratest -p8 --coverage-html=./test-coverage
 
 analize: ## Статический анализ кода. По умолчанию SRC=./app/*
 	./vendor/squizlabs/php_codesniffer/bin/phpcs ${SRC} --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
