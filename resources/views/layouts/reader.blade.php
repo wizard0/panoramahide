@@ -25,9 +25,6 @@
     {{--<script src="{{ asset('js/panor/scripts.js') }}"></script>--}}
     {{--<script src="{{ asset('js/panor/panor.js') }}"></script>--}}
     {{--<script src="{{ asset('js/panor/search.js') }}"></script>--}}
-    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
-        {{--<script src="{{ asset('js/order_scripts.js') }}"></script>--}}
-    @endif
 
     <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
 
