@@ -49,7 +49,8 @@ test:
     only:
         - master
     script:
-        - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+        # - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+        - php72 ./vendor/brianium/paratest/bin/paratest -p4 --coverage-text tests
     dependencies:
         - build
         - dbseed
