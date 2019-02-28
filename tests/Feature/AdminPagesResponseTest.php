@@ -25,7 +25,7 @@ class AdminPagesResponseTest extends TestCase
             ->assignRole('admin');
 
         $this->actingAs($admin)
-            ->get(route('categories.index'))
+            ->get(route('categories.index', ['sort_by' => 'name']))
             ->assertOk();
 
         $this->actingAs($admin)
@@ -37,7 +37,7 @@ class AdminPagesResponseTest extends TestCase
             ->assertOk();
 
         $this->actingAs($admin)
-            ->get(route('journals.index'))
+            ->get(route('journals.index', ['sort_by' => 'name']))
             ->assertOk();
 
         $this->actingAs($admin)
@@ -46,6 +46,10 @@ class AdminPagesResponseTest extends TestCase
 
         $this->actingAs($admin)
             ->get(route('articles.index'))
+            ->assertOk();
+
+        $this->actingAs($admin)
+            ->get(route('paysystems.index'))
             ->assertOk();
     }
 
@@ -115,6 +119,10 @@ class AdminPagesResponseTest extends TestCase
         $this->actingAs($admin)
             ->get(route('articles.show', [Article::first()->id]))
             ->assertOk();
+
+        $this->actingAs($admin)
+            ->get(route('paysystems.show', [1]))
+            ->assertOk();
     }
 
     public function testAllCreatePagesResponse()
@@ -145,6 +153,10 @@ class AdminPagesResponseTest extends TestCase
 
         $this->actingAs($admin)
             ->get(route('articles.create'))
+            ->assertOk();
+
+        $this->actingAs($admin)
+            ->get(route('news.create'))
             ->assertOk();
     }
 }

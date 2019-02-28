@@ -24,7 +24,11 @@ trait IndexPageTrait
      */
     public function index(Request $request)
     {
-        $data = $this->getTableData($request->get('sort'));
+        if ($request && $request->has('sort_by')) {
+            $data = $this->getTableData($request->get('sort_by'));
+        } else {
+            $data = $this->getTableData();
+        }
         $slug = $this->getSlug();
 
         return view('admin.content.index', compact('data', 'slug'));
@@ -32,24 +36,18 @@ trait IndexPageTrait
 
     protected function getTableData($sort = null)
     {
-        if ($this->prepareTableData()) {
-            return [
-                'head' => $this->displayAttributes,
-                'body' => $this->tableBody
-            ];
-        } else {
-            return false;
-        }
+        $this->prepareTableData();
+
+        return [
+            'head' => $this->displayAttributes,
+            'body' => $this->tableBody
+        ];
     }
 
     private function prepareTableData()
     {
-        try {
-            $this->getModelCollection()
-                ->prepareTableBodyData();
-        } catch (\Exception $e) {
-
-            return false;
+        if ($this->getModelCollection()) {
+            $this->prepareTableBodyData();
         }
 
         return $this;
@@ -68,8 +66,6 @@ trait IndexPageTrait
 
             return $this;
         }
-
-        return false;
     }
 
     private function prepareTableBodyData()
@@ -86,7 +82,6 @@ trait IndexPageTrait
                     $html = false;
                 }
                 $row[] = (object)[
-//                    'id' => $model->id,
                     'html' => $html,
                     'value' => $value
                 ];

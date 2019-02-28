@@ -13,7 +13,6 @@ use App;
 
 class CRUDControllerTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     public function testEdit()
@@ -33,15 +32,33 @@ class CRUDControllerTest extends TestCase
 
         // Category editing
         $category = factory(App\Category::class)->create();
+//        $categoryControllerStub = $this->createMock(App\Http\Controllers\Admin\CategoryController::class);
+//        $categoryControllerStub->
+        $oCRUDController = new App\Http\Controllers\Admin\CategoryController(
+            (new Request())->merge([App\Http\Controllers\Admin\CRUDController::LOCALE_VAR => 'fr'])
+        );
 
-        $oCRUDController = new App\Http\Controllers\Admin\CategoryController();
         $oCRUDController->update((new Request())->merge([
-            'name' => 'new_category_test_name_no_more_such_names'
+            App\Http\Controllers\Admin\CRUDController::LOCALE_VAR => 'fr',
+            'name' => 'new_category_test_name_no_more_such_names_fr',
+            'code' => 'and_code_ofc_fr'
         ]), $category->id);
-
         $this->assertDatabaseHas('category_translations', [
             'category_id' => $category->id,
-            'name' => 'new_category_test_name_no_more_such_names'
+            'name' => 'new_category_test_name_no_more_such_names_fr',
+            'code' => 'and_code_ofc_fr',
+            'locale' => 'fr'
+        ]);
+
+        // Paysystem editing. The model has not translated attributes
+        $oCRUDController = new App\Http\Controllers\Admin\PaysystemController();
+        $oCRUDController->update((new Request())->merge([
+            'name' => 'new_paysystem_name'
+        ]), 1);
+
+        $this->assertDatabaseHas('paysystems', [
+            'id' => 1,
+            'name' => 'new_paysystem_name'
         ]);
     }
 
@@ -98,5 +115,39 @@ class CRUDControllerTest extends TestCase
         $oCRUDController->update($request, $journal->id);
 
         $this->assertTrue(App\Journal::find($journal->id)->image !== '');
+    }
+
+    public function testWithParentController()
+    {
+        // Journal editing
+        $journal = factory(App\Journal::class)->create();
+        $oCRUDController = new App\Http\Controllers\Admin\CRUDController();
+        try {
+            $oCRUDController->update((new Request())->merge([
+                'name' => 'new_journal_test_name_no_more_such_names'
+            ]), $journal->id);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
+        $this->assertDatabaseMissing('journal_translations', [
+            'journal_id' => $journal->id,
+            'name' => 'new_journal_test_name_no_more_such_names'
+        ]);
+
+        // index
+        $oCRUDController = new App\Http\Controllers\Admin\CRUDController();
+        try {
+            $oCRUDController->index(new Request());
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
+
+        // destroy
+        $oCRUDController = new App\Http\Controllers\Admin\CRUDController();
+        try {
+            $oCRUDController->destroy(148);
+        } catch (\Exception $e) {
+            $this->assertTrue(true);
+        }
     }
 }

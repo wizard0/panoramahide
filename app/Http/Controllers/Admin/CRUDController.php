@@ -53,11 +53,9 @@ class CRUDController extends Controller
      */
     public function destroy($id)
     {
-        if ($this->getModel($id)->deleteModel()) {
-            return redirect()->back();
-        } else {
-            return redirect()->back();
-        }
+        $this->getModel($id)->deleteModel();
+
+        return redirect()->back();
     }
 
     /**
@@ -71,9 +69,15 @@ class CRUDController extends Controller
         if (!isset($this->modelName)) {
             $className = get_class($this);
             if (preg_match('/\\\\([a-zA-Z]*)Controller$/', $className, $matches)) {
-                $this->modelName = '\\App\\' . $matches[1];
-                if (!isset($this->slug) || $this->slug == '') {
-                    $this->slug = str_plural(strtolower($matches[1]));
+                $modelName = '\\App\\' . $matches[1];
+                if (class_exists($modelName)) {
+                    $this->modelName = $modelName;
+                    if (!isset($this->slug) || $this->slug == '') {
+                        $this->slug = str_plural(strtolower($matches[1]));
+                    }
+                } else {
+                    $this->modelName = null;
+                    $this->slug = null;
                 }
             }
         }
@@ -92,13 +96,8 @@ class CRUDController extends Controller
 
     private function isTranslatable($modelName = null)
     {
-        if (!$modelName) {
-
-            if (!isset($this->modelName)) {
-                return false;
-            }
+        if (!$modelName && isset($this->modelName)) {
             $modelName = $this->modelName;
-
         }
 
         return in_array('Dimsav\Translatable\Translatable', class_uses($modelName));
@@ -106,11 +105,8 @@ class CRUDController extends Controller
 
     private function getModel($id)
     {
-        if (!isset($this->model)) {
+        if (!isset($this->model) && isset($this->modelName)) {
             $this->model = $this->modelName::find($id);
-            if (!$this->model) {
-                $this->createModel();
-            }
         }
 
         return $this;
@@ -118,7 +114,9 @@ class CRUDController extends Controller
 
     private function deleteModel()
     {
-        $this->model->delete();
+        if ($this->model) {
+            $this->model->delete();
+        }
 
         return $this;
     }

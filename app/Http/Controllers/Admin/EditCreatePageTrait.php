@@ -15,7 +15,7 @@ trait EditCreatePageTrait
     {
         $this->getModel($id)
              ->prepareEditData();
-//dd($this->formData);
+
         return view('admin.content.edit', [
             'data' => $this->formData,
             'slug' => $this->getSlug(),
@@ -55,11 +55,7 @@ trait EditCreatePageTrait
 
     private function prepareEditData()
     {
-        if (!isset($this->model)) {
-            return false;
-        }
-
-        if (!isset($this->formData)) {
+        if (!isset($this->formData) && isset($this->model)) {
             $model = $this->model;
             foreach ($this->attributeTypes as $attribute => $type) {
                 switch ($type) {
@@ -103,32 +99,33 @@ trait EditCreatePageTrait
 
     private function updateModel(Request $request)
     {
-        foreach ($this->attributeTypes as $attribute=>$type) {
-            if ($request->has($attribute)) {
-                $value = $request->get($attribute);
-                if ($type == self::TYPE_REL_BELONGS_TO_MANY) {
-                    $this->model->save();
-                    $this->model->$attribute()->sync($value);
-                    continue;
-                }
-                if ($type == self::TYPE_IMAGE) {
-                    $filePath = $this->slug . '/' . $this->model->id;
-                    $value = '/storage/' . Storage::disk('public')
-                        ->putFile($filePath, $request->file($attribute));
-                }
-                if ($this->isTranslatable() && in_array($attribute, $this->model->translatedAttributes)) {
-                    $this->model
-                        ->translateOrNew($this->locale)
-                        ->$attribute = $value;
-                } else {
-                    $this->model
-                        ->$attribute = $value;
-                }
+        if (isset($this->model)) {
+            foreach ($this->attributeTypes as $attribute => $type) {
+                if ($request->has($attribute)) {
+                    $value = $request->get($attribute);
+                    if ($type == self::TYPE_REL_BELONGS_TO_MANY) {
+                        $this->model->save();
+                        $this->model->$attribute()->sync($value);
+                        continue;
+                    }
+                    if ($type == self::TYPE_IMAGE) {
+                        $filePath = $this->slug . '/' . $this->model->id;
+                        $value = '/storage/' . Storage::disk('public')
+                                ->putFile($filePath, $request->file($attribute));
+                    }
+                    if ($this->isTranslatable() && in_array($attribute, $this->model->translatedAttributes)) {
+                        $this->model
+                            ->translateOrNew($this->locale)
+                            ->$attribute = $value;
+                    } else {
+                        $this->model
+                            ->$attribute = $value;
+                    }
 
+                }
             }
+            $this->model->save();
         }
-        $this->model->save();
-
         return $this;
     }
 
@@ -136,8 +133,6 @@ trait EditCreatePageTrait
     {
         if (array_key_exists($attribute, $this->select)) {
             return (object)$this->select[$attribute];
-        } else {
-            return false;
         }
     }
 
