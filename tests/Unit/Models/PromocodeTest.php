@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Дмитрий Поскачей (dposkachei@gmail.com)
  */
-
 namespace Tests\Unit\Models;
 
 use App\Journal;
@@ -18,6 +17,9 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\FactoryTrait;
 use Tests\TestCase;
 
+/**
+ * Class for promocode test.
+ */
 class PromocodeTest extends TestCase
 {
     use DatabaseTransactions;
@@ -54,15 +56,11 @@ class PromocodeTest extends TestCase
         $oPromocode = $this->factoryPromocode();
 
         $countBefore = $oPromocode->journals()->count();
-
         $oPromocode->journals()->attach($oJournal->id);
-
         $countAfter = $oPromocode->journals()->count();
-
         $this->assertTrue($countAfter > $countBefore);
 
         $oFirst = $oPromocode->journals()->first();
-
         $this->assertTrue($oFirst instanceof Journal);
     }
 
@@ -72,7 +70,6 @@ class PromocodeTest extends TestCase
     public function testJByPromo()
     {
         $oPromocode = $this->factoryPromocode();
-
         $countBefore = $oPromocode->jByPromo()->count();
 
         JbyPromo::create([
@@ -81,11 +78,9 @@ class PromocodeTest extends TestCase
         ]);
 
         $countAfter = $oPromocode->jByPromo()->count();
-
         $this->assertTrue($countAfter > $countBefore);
 
         $oFirst = $oPromocode->jByPromo()->first();
-
         $this->assertTrue($oFirst instanceof JbyPromo);
     }
 
@@ -111,15 +106,11 @@ class PromocodeTest extends TestCase
         $oPromocode = $this->factoryPromocode();
 
         $countBefore = $oPromocode->publishings()->count();
-
         $oPromocode->publishings()->attach($oPublishiing->id);
-
         $countAfter = $oPromocode->publishings()->count();
-
         $this->assertTrue($countAfter > $countBefore);
 
         $oFirst = $oPromocode->publishings()->first();
-
         $this->assertTrue($oFirst instanceof Publishing);
     }
 
@@ -132,15 +123,11 @@ class PromocodeTest extends TestCase
         $oPromocode = $this->factoryPromocode();
 
         $countBefore = $oPromocode->releases()->count();
-
         $oPromocode->releases()->attach($oRelease->id);
-
         $countAfter = $oPromocode->releases()->count();
-
         $this->assertTrue($countAfter > $countBefore);
 
         $oFirst = $oPromocode->releases()->first();
-
         $this->assertTrue($oFirst instanceof Release);
     }
 
@@ -150,7 +137,6 @@ class PromocodeTest extends TestCase
     public function testGroups()
     {
         $oPromocode = $this->factoryPromocode();
-
         $countBefore = $oPromocode->groups()->count();
 
         Group::create([
@@ -159,11 +145,9 @@ class PromocodeTest extends TestCase
         ]);
 
         $countAfter = $oPromocode->groups()->count();
-
         $this->assertTrue($countAfter > $countBefore);
 
         $oFirst = $oPromocode->groups()->first();
-
         $this->assertTrue($oFirst instanceof Group);
     }
 }

@@ -1,9 +1,8 @@
 <?php
 /**
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Дмитрий Поскачей (dposkachei@gmail.com)
  */
-
 namespace Tests\Unit\Models;
 
 use App\Journal;
@@ -16,6 +15,9 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
+/**
+ * Class for promo user test.
+ */
 class PromoUserTest extends TestCase
 {
     use DatabaseTransactions;
@@ -54,7 +56,6 @@ class PromoUserTest extends TestCase
         ]);
 
         $newPhone = $this->promoUser->phone;
-
         $this->assertTrue($oldPhone !== $newPhone);
     }
 
@@ -76,7 +77,6 @@ class PromoUserTest extends TestCase
         $this->promoUser->promocodes()->attach($oPromocode->id);
 
         $oPromocode = $this->promoUser->promocodes->first();
-
         $this->assertTrue($oPromocode instanceof Promocode);
     }
 
@@ -90,7 +90,6 @@ class PromoUserTest extends TestCase
         $this->promoUser->publishings()->attach($oPublishing->id);
 
         $oPromocode = $this->promoUser->publishings->first();
-
         $this->assertTrue($oPromocode instanceof Publishing);
     }
 
@@ -100,7 +99,6 @@ class PromoUserTest extends TestCase
     public function testReleases()
     {
         $oJournal = factory(Journal::class)->create();
-
         $oRelease = factory(Release::class)->create([
             'journal_id' => $oJournal->id,
         ]);
@@ -108,7 +106,6 @@ class PromoUserTest extends TestCase
         $this->promoUser->releases()->attach($oRelease->id);
 
         $oRelease = $this->promoUser->releases->first();
-
         $this->assertTrue($oRelease instanceof Release);
     }
 
@@ -118,7 +115,6 @@ class PromoUserTest extends TestCase
     public function testJByPromo()
     {
         $oPromocode = factory(Promocode::class)->create();
-
         $oJournal = factory(Journal::class)->create();
 
         $oJbyPromo = JbyPromo::create([
@@ -128,11 +124,9 @@ class PromoUserTest extends TestCase
         $oJbyPromo->journals()->attach($oJournal->id);
 
         $oJournal = $oJbyPromo->journals->first();
-
         $this->assertTrue($oJournal instanceof Journal);
 
         $oJbyPromo = $this->promoUser->jByPromo()->where('promocode_id', $oPromocode->id)->first();
-
         $this->assertTrue($oJbyPromo instanceof JbyPromo);
     }
 
@@ -146,7 +140,6 @@ class PromoUserTest extends TestCase
         $this->promoUser->jByPromocodes()->attach($oPromocode->id);
 
         $oPromocode = $this->promoUser->jByPromocodes->first();
-
         $this->assertTrue($oPromocode instanceof Promocode);
     }
 }
