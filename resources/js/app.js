@@ -20,12 +20,17 @@ require('./reader.js');
 
 /**
  * -------------------------------------------
- * Lodash
+ * Toastr
  * -------------------------------------------
  */
+
 window.toastr = require('toastr/build/toastr.min.js');
+require('./plugins/notification.js');
 if (window.toastrOptions !== undefined) {
     window.toastr.options = window.toastrOptions;
+}
+if (window.toastrNotification !== undefined) {
+    window.notification.send(window.toastrNotification);
 }
 
 require('./helpers.js');

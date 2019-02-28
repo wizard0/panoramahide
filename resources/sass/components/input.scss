@@ -33,6 +33,22 @@ input[type="checkbox"].is-danger + label::before {
 .form-field.is-danger {
   border-color: $red !important;
 }
+.form-control.__error.is-danger {
+  border-color: $red !important;
+}
+.form-control.is-danger {
+  border-color: $red !important;
+}
+.form-control:not(:placeholder-shown) {
+  //color: #212529;
+  //font-weight: bold;
+}
+.input-group.is-danger {
+  border-color: $red !important;
+}
+.form-control:placeholder-shown {
+
+}
 .form-wrapper {
   .form-holder {
     position: relative;

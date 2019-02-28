@@ -38,7 +38,9 @@ if ($(cleaveMasks.type.phone).is(':focus')) {
 }
 if ($(cleaveMasks.type.phone).length) {
     $(cleaveMasks.type.phone).each(function () {
-        cleaveMasks.phone($(this));
+        if ($(this).val() !== '') {
+            cleaveMasks.phone($(this));
+        }
     });
 }
 $('body').on('focus', cleaveMasks.type.phone, function () {
@@ -50,7 +52,9 @@ $('body').on('focus', cleaveMasks.type.phone, function () {
 });
 if ($(cleaveMasks.type.int).length) {
     $(cleaveMasks.type.int).each(function () {
-        cleaveMasks.integer($(this));
+        if ($(this).val() !== '') {
+            cleaveMasks.integer($(this));
+        }
     });
 }
 $('body').on('focus', cleaveMasks.type.int, function () {

@@ -65,20 +65,21 @@
 </head>
 <body>
 
-@yield('content')
+    @yield('content')
 
-<div id="modals">
-    @if(!Auth::check())
-        @include('includes.modals.register')
-    @endif
-    @include('includes.modals.reader')
-</div>
+    <div id="modals">
+        @if(!Auth::check())
+            @include('includes.modals.register')
+        @endif
+        @include('includes.modals.reader')
+    </div>
 
-<script src="{{ asset('js/app.js') }}"></script>
+    <div id="scripts">
+        @include('layouts.components.scripts.captcha')
+        @include('layouts.components.scripts.toastr')
 
-<div id="scripts">
-    @include('layouts.components.scripts.captcha')
-    @include('layouts.components.scripts.toastr')
-</div>
+        @routes
+    </div>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

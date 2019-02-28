@@ -47,7 +47,6 @@
         @include('layouts.components.scripts.captcha')
         @include('layouts.components.scripts.toastr')
 
-        {{-- https://github.com/tightenco/ziggy Роуты в js по route()--}}
         @routes
     </div>
     <script src="{{ asset('js/app.js') }}"></script>

@@ -17,3 +17,25 @@ h2 {
 .dropdown-toggle::after {
   display: none;
 }
+
+label {
+  font-size: 12px;
+  color: #7e8c9f;
+  margin-bottom: 4px;
+}
+
+.form-group {
+  position: relative;
+}
+.help.is-danger {
+  font-size: 12px;
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+.text-center {
+  .help.is-danger {
+    width: 100%;
+    text-align: center;
+  }
+}
