@@ -64,7 +64,10 @@
                 $('#cart-in-header').replaceWith(res.header);
                 if (res.cart && $('#personal-cart-content').length)
                     $('#personal-cart-content').replaceWith(res.cart);
-                alert(message);
+
+                toastr.success(message, 'Успех');
+
+                //alert(message);
             }
         });
     }

@@ -24,6 +24,9 @@ require('./reader.js');
  * -------------------------------------------
  */
 window.toastr = require('toastr/build/toastr.min.js');
+if (window.toastrOptions !== undefined) {
+    window.toastr.options = window.toastrOptions;
+}
 
 require('./helpers.js');
 require('./plugins/form.js');

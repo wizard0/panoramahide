@@ -66,7 +66,7 @@
                     <div class="acc-table-item">
                         <div class="del-fromcart">
                             <a href="#" data-id="{{ $item->id }}" data-type="{{ $item->type }}" title="Удалить" class="cartItem">
-                                <span class="cross deleteFromCart">X</span>
+                                <span class="glyphicon glyphicon-remove deleteFromCart"></span>
                             </a>
                         </div>
                         <div class="clear"></div>

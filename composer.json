@@ -20,6 +20,7 @@
         "laravel/tinker": "^1.0",
         "predis/predis": "^1.1",
         "squizlabs/php_codesniffer": "^3.4",
+        "tightenco/ziggy": "^0.6.9",
         "timehunter/laravel-google-recaptcha-v3": "^2.0"
     },
     "require-dev": {

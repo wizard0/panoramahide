@@ -1,15 +1,10 @@
-/*!
+<?php
+/**
  * Copyright (c) 2018-2019 "ИД Панорама"
  * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
  */
 
-
-p, a, h1, h2, h3, h4 {
-  margin: 0;
-  padding: 0;
-}
-
-h2 {
-  font-size: 24pt;
-  line-height: 1;
-}
+return [
+    // 'whitelist' => ['home', 'api.*'],
+    'blacklist' => ['debugbar.*', 'horizon.*', 'admin.*'],
+];
