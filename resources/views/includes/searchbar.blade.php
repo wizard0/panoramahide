@@ -10,7 +10,7 @@
 
 @endphp
 
-<div class="cover m-b-20" style="background-image: {{ $barBackground }};">
+<div class="cover" style="background-image: {{ $barBackground }};">
     @if ($isJournalPage)
         <div class="cover-back">
             @endif

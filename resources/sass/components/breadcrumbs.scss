@@ -4,7 +4,13 @@
  */
 
 .breadcrumbs {
+  margin: 15px 0;
+  ul {
+    margin: 0;
+    padding: 0;
+  }
   li {
+    display: inline;
     font-size: 14px;
     a {
       font-size: 14px !important;
@@ -14,6 +20,17 @@
     }
     &:after {
       margin-right: 6px;
+      content: "/";
+      font-size: 12px;
+      color: #7E8C9F;
+      margin-left: 6px;
     }
+    &:last-child:after {
+      content: "";
+    }
+  }
+  a:link, a:visited {
+    font-size: 12px;
+    color: #7E8C9F;
   }
 }

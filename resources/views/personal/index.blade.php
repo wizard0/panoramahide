@@ -6,7 +6,7 @@
     </li>
     @if($route_name !== 'personal')
         <li>
-            <a href="{{ route('personal') }}">Мой кабинет</a>
+            <a href="{{ route('personal') }}">Личный кабинет</a>
         </li>
     @endif
     <li class="active">
@@ -41,8 +41,8 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-8 col-lg-9 __paper">
-                    <h3 class="text-center text-uppercase section-title">@include('personal.title')</h3>
-                    <div id="{!! str_replace('.', '-', $route_name) !!}-content">
+                    <h3 class="text-center text-uppercase section-title personal-title">@include('personal.title')</h3>
+                    <div id="{!! str_replace('.', '-', $route_name) !!}-content" class="personal-content">
                         @if($route_name !== 'personal')
                             @yield('page-content')
                         @else

@@ -30,13 +30,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    @if (preg_match('/^\/personal\.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
-    @endif
-    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">
-    @endif
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="{{ isset($bodyClass) ? $bodyClass : '' }}">

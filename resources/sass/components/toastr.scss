@@ -31,3 +31,25 @@
     box-shadow: none;
   }
 }
+
+#toast-container {
+  .toast {
+    background-color: #030303
+  }
+
+  .toast-success {
+    background-color: #51A351
+  }
+
+  .toast-error {
+    background-color: #BD362F
+  }
+
+  .toast-info {
+    background-color: #2F96B4
+  }
+
+  .toast-warning {
+    background-color: #F89406
+  }
+}
