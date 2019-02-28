@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
+use Carbon\Carbon;
 
 trait UsersDevices
 {
@@ -44,29 +44,17 @@ trait UsersDevices
         }
     }
 
-    public function getOnlineDevices()
-    {
-        return $this->devices->reject(function ($oDevice) {
-            return !$oDevice->isOnline();
-        });
-    }
-
-
     /**
      * Активированные устройства с исключением текущего
      *
      * @param Device|null $oSelectedDevice
      * @return mixed
      */
-    public function getActivationDevices(?Device $oSelectedDevice = null): Collection
+    public function getActivationDevices(): Collection
     {
-        $query = $this->devices();
-
-        if (!is_null($oSelectedDevice)) {
-            $query = $query->where('id', '<>', $oSelectedDevice->id);
-        }
-
-        return $query->whereActive(true)->get();
+        return $this->devices()
+                    ->where('activate_date', '>=', Carbon::now()->subDays(Device::ACTIVE_DAYS))
+                    ->get();
     }
 
     /**

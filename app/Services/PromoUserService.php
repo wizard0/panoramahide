@@ -2,12 +2,14 @@
 
 namespace App\Services;
 
-
 use App\Models\Activations;
 use App\Models\PromoUser;
 use App\Models\Promocode;
 use Carbon\Carbon;
 
+/**
+ * Class for promo user service.
+ */
 class PromoUserService
 {
     /**

@@ -9,7 +9,9 @@ use Session;
 use Chelout\Robokassa\Robokassa;
 use Lexty\Robokassa\Payment;
 
-
+/**
+ * Class for order.
+ */
 class Order extends Model
 {
     protected $table = "orders";
@@ -93,7 +95,8 @@ class Order extends Model
         }
     }
 
-    public function saveOrder($data) {
+    public function saveOrder($data)
+    {
         switch ($data['PERSON_TYPE']) {
             case Order::PHYSICAL_USER:
                 $physUser = OrderPhysUser::create($data);
