@@ -1,7 +1,6 @@
 <form action="{{ route('order.make') }}"
       method="POST" id="p_order_form"
       data-toggle="validator" enctype="multipart/form-data"
-      class="ajax-form"
 >
     @csrf
     <input type="hidden" name="PERSON_TYPE" value="physical">
