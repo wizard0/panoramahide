@@ -4,7 +4,7 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\Promocode::class, function (Faker $faker) {
     return [
-        'promocode' => $faker->unique()->randomNumber(),
+        'promocode' => $faker->unique()->slug(8),
         'active' => $faker->randomElement([0, 1]),
         'type' => $faker->randomElement([
             'common',
