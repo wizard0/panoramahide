@@ -79,7 +79,7 @@ class PaysystemDataSeeder extends Seeder
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись генерального директора',
             'code' => 'CEO_signature',
-            'value' => '/storage/paysystem_invoice/ceo_sign.png',
+            'value' => 'paysystem_invoice/ceo_sign.png',
             'type' => \App\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
@@ -110,14 +110,14 @@ class PaysystemDataSeeder extends Seeder
         DB::table('paysystem_data')->insert([
             'name' => 'Печать',
             'code' => 'stamp',
-            'value' => '/storage/paysystem_invoice/stamp.png',
+            'value' => 'paysystem_invoice/stamp.png',
             'type' => \App\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись главного бухгалтера',
             'code' => 'chief_accountant_sign',
-            'value' => '/storage/paysystem_invoice/chief_accountant_sign.png',
+            'value' => 'paysystem_invoice/chief_accountant_sign.png',
             'type' => \App\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
@@ -189,10 +189,10 @@ class PaysystemDataSeeder extends Seeder
         ]);
 
         $robokassa = \App\Paysystem::getByCode(\App\Paysystem::ROBOKASSA);
-        $robokassa->logo = '/paysystem_logo/robokassa.jpg';
+        $robokassa->logo = 'paysystem_logo/robokassa.jpg';
         $robokassa->save();
         $sberbank = \App\Paysystem::getByCode(\App\Paysystem::SBERBANK);
-        $sberbank->logo = '/paysystem_logo/sberbank.jpg';
+        $sberbank->logo = 'paysystem_logo/sberbank.jpg';
         $sberbank->save();
         $invoice = \App\Paysystem::getByCode(\App\Paysystem::INVOICE);
         $invoice->logo = 'paysystem_logo/invoice.png';

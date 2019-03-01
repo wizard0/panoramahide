@@ -45,7 +45,7 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('fail', 'PaymentController@robokassaFail');
     });
 
-    Route::get('order/payment', 'PaymentController@payment')->name('personal.order.payment');
+    Route::get('order/payment/{id}', 'PaymentController@payment')->name('personal.order.payment');
 });
 
 Route::group(['prefix' => 'magazines'], function () {

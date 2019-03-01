@@ -30,21 +30,39 @@
 </div>
 
 <script type="text/javascript">
+    function validateEmail(email) {
+        var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return re.test(String(email).toLowerCase());
+    }
     $(document).ready(function() {
         $('input[name=person_type]').change(function() {
-            if ($(this).val() == 'physical') {
-                $('#phys_user_form').show();
-                $('#legal_user_form').hide();
-            } else {
-                $('#legal_user_form').show();
-                $('#phys_user_form').hide();
-            }
+            $('#phys_user_form').toggle();
+            $('#legal_user_form').toggle();
         });
+
         $('#order_confirm_button').click(function() {
+            $('.is-danger').removeClass('is-danger');
+            let result = true;
+            let form = 'l_order_form';
+            let fields = ['org_name', 'l_surname', 'l_name', 'l_patronymic', 'l_phone', 'l_email', 'l_personal_data_consent', 'l_contract_accept'];
             if ($('input[name=person_type]:checked').val() == 'physical') {
-                $('#p_order_form').submit();
-            } else {
-                $('#l_order_form').submit();
+                form = 'p_order_form';
+                fields = ['surname','name','patronymic','phone','email','personal_data_consent','contract_accept'];
+            }
+            $.each( fields, function( key, value ) {
+                let field = $('input[name=' + value + ']')
+                if (field.attr('type') == 'checkbox' && !field.is(':checked')) {
+                    field.addClass('is-danger');
+                    result = false;
+                } else if (((value == 'phone' || value == 'l_phone') && field.val().length != 18) ||
+                           ((value == 'email' || value == 'l_email') && !validateEmail(field.val())) || field.val() == '') {
+                    field.addClass('is-danger');
+                    result = false;
+                }
+
+            });
+            if (result) {
+                $('#' + form).submit();
             }
         });
     });

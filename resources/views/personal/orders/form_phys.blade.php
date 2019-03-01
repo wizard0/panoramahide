@@ -1,6 +1,4 @@
-<form action="{{ route('order.make') }}"
-      method="POST" id="p_order_form"
-      data-toggle="validator" enctype="multipart/form-data">
+<form action="{{ route('order.make') }}" method="POST" id="p_order_form" enctype="multipart/form-data">
 @csrf
 <input type="hidden" name="PERSON_TYPE" value="physical">
 <div class="form-container col-12">
@@ -63,7 +61,7 @@
                     <input type="checkbox" id="contract_accept" placeholder="contract_accept" value="Y" name="contract_accept" checked>
                     <label for="contract_accept">
                         <span>
-                            Я внимательно ознакомился с <a target="_blank" href="/oferta/">договором оферты</a> и принимаю все его положения:
+                            Я внимательно ознакомился с <a target="_blank" href="/oferta/">договором оферты</a><br> и принимаю все его положения:
                             <span class="asterisk">*</span>
                         </span>
                     </label>

@@ -63,8 +63,9 @@ class Cart
 
         if ($type == self::PRODUCT_TYPE_RELEASE) {
             $storedItems->title = $product->journal->name . ' №' . $product->number . '. ' . $product->year;
+        } else if ($type == self::PRODUCT_TYPE_SUBSCRIPTION) {
+            $storedItems->title = $product->journal->name . ' с ' . substr_replace($product->start_month, "/", 4, 0) . ' на ' . $product->term;
         }
-
 
         if ($this->items && array_key_exists($type . $product->id, $this->items)) {
             $storedItems = $this->items[$type . $product->id];
@@ -74,7 +75,7 @@ class Cart
         $storedItems->price = $price * $storedItems->qty;
         $this->items[$type . $product->id] = $storedItems;
         $this->totalQty = sizeof($this->items);
-        $this->totalPrice += $price;
+        $this->totalPrice += $storedItems->price;
 
         return true;
     }

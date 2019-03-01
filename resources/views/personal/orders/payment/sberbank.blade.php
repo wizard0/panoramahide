@@ -24,8 +24,8 @@
     <tr class="r1"><td class="c2"> </td><td class="c3 c1 c4" colspan="32"><div class="d1 d2"><div>Форма № ПД-4</div></div></td></tr>
     <tr class="r1">
         <td class="c5 c1 c6"><div class="d1 d3"><div>И з в е щ е н и е</div></div></td>
-        <td class="c7 c1 c8" colspan="25"><div class="d1 d4"><div>  {{ $order->paysystem->getData()->uname }}</div></div></td>
-        <td class="c9 c1 c4" colspan="7"><div class="d1 d5"><div>КПП: {{ $order->paysystem->getData()->KPP }}</div></div></td>
+        <td class="c7 c1 c8" colspan="25"><div class="d1 d4"><div>  {{ $data->uname }}</div></div></td>
+        <td class="c9 c1 c4" colspan="7"><div class="d1 d5"><div>КПП: {{ $data->KPP }}</div></div></td>
     </tr>
     <tr class="r1">
         <td class="c5"> </td><td class="c10 c1 c4"><div class="d1 d5"><div>(наименование получателя платежа)</div></div></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td class="c11"> </td>
@@ -33,7 +33,7 @@
     <tr class="r1"><td class="c5"> </td>
         @php
             $i=0;
-            $inn = str_split($order->paysystem->getData()->INN);
+            $inn = str_split($data->INN);
             $len = sizeof($inn);
         @endphp
         @foreach($inn as $c)
@@ -50,7 +50,7 @@
         <td class="c15"> </td><td></td>
         @php
             $i=0;
-            $invoice_num = str_split($order->paysystem->getData()->invoice_num);
+            $invoice_num = str_split($data->invoice_num);
             $len = sizeof($invoice_num);
         @endphp
         @foreach($invoice_num as $c)
@@ -70,12 +70,12 @@
         <td class="c18 c1 c4" colspan="20"><div class="d1 d9"><div>(номер счета получателя платежа)</div></div></td>
     </tr>
     <tr class="r1">
-        <td class="c5"> </td><td class="c10 c1 c13"><div class="d1 d10"><div>в </div></div></td><td class="c19 c1 c20" colspan="19"><div class="d1 d11"><div>{{ $order->paysystem->getData()->bank_name }}</div></div></td>
+        <td class="c5"> </td><td class="c10 c1 c13"><div class="d1 d10"><div>в </div></div></td><td class="c19 c1 c20" colspan="19"><div class="d1 d11"><div>{{ $data->bank_name }}</div></div></td>
         <td class="c21 c1 c14"><div class="d1 d12"><div>БИК</div></div></td>
         <td></td><td></td>
         @php
             $i=0;
-            $bic = str_split($order->paysystem->getData()->requisites);
+            $bic = str_split($data->requisites);
             $len = sizeof($bic);
         @endphp
         @foreach($bic as $c)
@@ -98,7 +98,7 @@
         <td class="c5"> </td><td class="c10 c1 c17" colspan="12"><div class="d1 d13"><div>Номер кор./сч. банка получателя</div></div></td>
         @php
             $i=0;
-            $invoice_bank_num = str_split($order->paysystem->getData()->invoice_bank_num);
+            $invoice_bank_num = str_split($data->invoice_bank_num);
             $len = sizeof($invoice_bank_num);
         @endphp
         @foreach($invoice_bank_num as $c)

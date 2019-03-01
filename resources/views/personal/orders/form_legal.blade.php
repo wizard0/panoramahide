@@ -1,6 +1,4 @@
-<form action="{{ route('order.make') }}"
-      method="POST" id="l_order_form"
-      data-toggle="validator" enctype="multipart/form-data">
+<form action="{{ route('order.make') }}" method="POST" id="l_order_form" enctype="multipart/form-data">
 @csrf
 <input type="hidden" name="PERSON_TYPE" value="legal">
 <div class="form-container col-12">
@@ -40,19 +38,19 @@
         <div class="form-row">
             <div class="form-label">Фамилия:</div>
             <div class="form-holder">
-                <input type="text" class="form-field" id="l_surname" placeholder="Фамилия" value="Фaмилия ответственного лица" name="l_surname">
+                <input type="text" class="form-field" id="l_surname" placeholder="Фaмилия ответственного лица" name="l_surname">
             </div>
         </div>
         <div class="form-row">
             <div class="form-label">Имя:</div>
             <div class="form-holder">
-                <input type="text" class="form-field" id="l_name" placeholder="Имя" value="Имя ответственного лица" name="l_name">
+                <input type="text" class="form-field" id="l_name" placeholder="Имя ответственного лица" name="l_name">
             </div>
         </div>
         <div class="form-row">
             <div class="form-label">Отчество:</div>
             <div class="form-holder">
-                <input type="text" class="form-field" id="l_patronymic" placeholder="Отчество" value="Отчество ответственного лица" name="l_patronymic">
+                <input type="text" class="form-field" id="l_patronymic" placeholder="Отчество ответственного лица" name="l_patronymic">
             </div>
         </div>
         <div class="form-row">
@@ -96,7 +94,7 @@
             </div>
             <div class="form-holder">
                 <input type="checkbox" id="l_contract_accept" placeholder="l_contract_accept" value="Y" name="l_contract_accept" checked>
-                Я внимательно ознакомился с <a target="_blank" href="/oferta/">договором оферты</a> и принимаю все его положения:<span class="asterisk">*</span>
+                Я внимательно ознакомился с <a target="_blank" href="/oferta/">договором оферты</a><br>и принимаю все его положения:<span class="asterisk">*</span>
             </div>
         </div>
         <div style="display:none;">

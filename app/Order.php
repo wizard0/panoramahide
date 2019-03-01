@@ -24,6 +24,32 @@ class Order extends Model
     const STATUS_CANCELLED = 'cancelled';
     const STATUS_COMPLETED = 'completed';
 
+    public static $translate = [
+        'type' => [
+            Cart::PRODUCT_TYPE_RELEASE => 'выпуск',
+            Cart::PRODUCT_TYPE_ARTICLE => 'статья',
+            Cart::PRODUCT_TYPE_SUBSCRIPTION => 'подписка',
+        ],
+        'version' => [
+            Subscription::TYPE_PRINTED => 'печатная',
+            Subscription::TYPE_ELECTRONIC => 'электронная',
+        ],
+    ];
+
+    public static function translate(&$item, $field)
+    {
+        $item->$field = self::$translate[$field][$item->$field];
+    }
+
+    public function getItems()
+    {
+        $items = json_decode($this->orderList);
+        foreach ($items as &$item) {
+            self::translate($item, 'type');
+            self::translate($item, 'version');
+        }
+        return $items;
+    }
     public function paysystem()
     {
         return $this->belongsTo(Paysystem::class);
@@ -108,7 +134,7 @@ class Order extends Model
                 break;
 
             case Order::LEGAL_USER:
-                $legalUser = OrderLegalUser::create(data);
+                $legalUser = OrderLegalUser::create($data);
 
                 $this->assocWithUser($legalUser, $data['l_name'], $data['l_email']);
 
