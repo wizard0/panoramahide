@@ -19,6 +19,11 @@ class Article extends Model
         'preview_image', 'preview_description', 'bibliography', 'price'
     ];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     public function release()
     {
         return $this->belongsTo(Release::class);

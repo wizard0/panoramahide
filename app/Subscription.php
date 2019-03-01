@@ -51,6 +51,10 @@ class Subscription extends Model
         self::PERIOD_ONCE_3_MONTH => 2,
     ];
 
+    public $rules = [
+        'name' => 'required|string'
+    ];
+
     public function journal()
     {
         return $this->belongsTo(Journal::class);

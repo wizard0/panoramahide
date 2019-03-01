@@ -14,6 +14,11 @@ class News extends Model
 
 //    protected $fillable = ['code'];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     /**
      * Publishing boards the news belongs to
      *

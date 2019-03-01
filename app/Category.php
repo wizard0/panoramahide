@@ -13,6 +13,11 @@ class Category extends Model
 
 //    protected $fillable = ['code'];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     public function journals()
     {
         return $this->belongsToMany(Journal::class, 'journal_category');

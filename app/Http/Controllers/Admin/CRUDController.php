@@ -112,6 +112,14 @@ class CRUDController extends Controller
         return $this;
     }
 
+
+    private function createModel()
+    {
+        $this->model = new $this->modelName;
+
+        return $this;
+    }
+
     private function deleteModel()
     {
         if ($this->model) {

@@ -22,7 +22,8 @@ class CRUDControllerTest extends TestCase
 
         $oCRUDController = new App\Http\Controllers\Admin\JournalController();
         $oCRUDController->update((new Request())->merge([
-            'name' => 'new_journal_test_name_no_more_such_names'
+            'name' => 'new_journal_test_name_no_more_such_names',
+            'code' => $journal->code
         ]), $journal->id);
 
         $this->assertDatabaseHas('journal_translations', [
@@ -91,6 +92,7 @@ class CRUDControllerTest extends TestCase
         $oCRUDController = new App\Http\Controllers\Admin\JournalController();
         $oCRUDController->update((new Request())->merge([
             'name' => 'new_journal_test_name_no_more_such_names2',
+            'code' => $journal->code,
             'categories' => [$category->id]
         ]), $journal->id);
 
@@ -109,6 +111,7 @@ class CRUDControllerTest extends TestCase
         $request = new Request();
         $request->merge([
             'name' => 'new_journal_test_name_no_more_such_names2',
+            'code' => $journal->code
         ]);
         $image = UploadedFile::fake()->image('journal.png');
         $request->files->set('image', $image);
@@ -124,7 +127,8 @@ class CRUDControllerTest extends TestCase
         $oCRUDController = new App\Http\Controllers\Admin\CRUDController();
         try {
             $oCRUDController->update((new Request())->merge([
-                'name' => 'new_journal_test_name_no_more_such_names'
+                'name' => 'new_journal_test_name_no_more_such_names',
+                'code' => $journal->code
             ]), $journal->id);
         } catch (\Exception $e) {
             $this->assertTrue(true);

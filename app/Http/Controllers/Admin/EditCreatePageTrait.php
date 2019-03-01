@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 trait EditCreatePageTrait
 {
@@ -41,16 +42,17 @@ trait EditCreatePageTrait
 
     public function update(Request $request, $id)
     {
-        $this->getModel($id)->updateModel($request);
+        $this->getModel($id);
+        $validator = $this->validateRequest($request);
+        if (isset($validator) && $validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $this->updateModel($request);
 
         return redirect()->route($this->slug . '.show', ['id' => $id]);
-    }
-
-    private function createModel()
-    {
-        $this->model = new $this->modelName;
-
-        return $this;
     }
 
     private function prepareEditData()
@@ -184,5 +186,12 @@ trait EditCreatePageTrait
         }
 
         return $available;
+    }
+
+    private function validateRequest(Request $request)
+    {
+        if (isset($this->model) && isset($this->model->rules)) {
+            return Validator::make($request->all(), $this->model->rules);
+        }
     }
 }

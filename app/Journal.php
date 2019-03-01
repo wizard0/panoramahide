@@ -53,6 +53,11 @@ class Journal extends Model
         'article_submission_rules', 'chief_editor', 'phone', 'email', 'site', 'about_editor', 'contacts'
     ];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     /**
      * Categories of the journal belongs to
      *

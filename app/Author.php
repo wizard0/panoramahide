@@ -13,6 +13,11 @@ class Author extends Model
 
 //    protected $fillable = ['code'];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     public function articles()
     {
         return $this->belongsToMany(Article::class);

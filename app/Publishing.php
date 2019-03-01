@@ -12,6 +12,11 @@ class Publishing extends Model
 
     public $translatedAttributes = ['name', 'code', 'image', 'description'];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     public function promocode()
     {
         return $this->belongsToMany(Promocode::class);
