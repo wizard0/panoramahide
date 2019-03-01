@@ -1,6 +1,5 @@
 <form action="{{ route('order.make') }}" class="ajax-form"
       data-outer-submit="#order_confirm_button"
-      {{--method="POST" --}}
       id="p_order_form"
       {{--data-toggle="validator" enctype="multipart/form-data"--}}
 >

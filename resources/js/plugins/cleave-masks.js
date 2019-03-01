@@ -35,9 +35,6 @@ let cleaveMasks = {
     birthday: function (target) {
         let self = this;
         let value = target.val();
-        if (value.length === 10 && value.charAt(0) === '7') {
-            target.val(window.HELPER.phoneFormat(value));
-        }
         self.cleave = new Cleave(target, {
             blocks: [2, 2, 4],
             delimiters: ['-', '-'],
