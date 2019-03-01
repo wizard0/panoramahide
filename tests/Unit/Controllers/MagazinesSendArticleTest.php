@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright
+ * @author
+ */
 namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\MagazinesController;
@@ -14,6 +17,9 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
+/**
+ * Class for magazines send article test.
+ */
 class MagazinesSendArticleTest extends TestCase
 {
     use DatabaseTransactions;
