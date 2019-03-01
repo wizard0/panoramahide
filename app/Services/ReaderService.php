@@ -177,5 +177,4 @@ class ReaderService
 
         return true;
     }
-
 }

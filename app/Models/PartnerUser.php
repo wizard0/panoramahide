@@ -1,7 +1,7 @@
 <?php
-/*
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Илья Картунин (ikartunin@gmail.com)
  */
 
 namespace App\Models;
@@ -11,6 +11,9 @@ use App\Models\Traits\UsersDevices;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cookie;
 
+/**
+ * Class for partner user.
+ */
 class PartnerUser extends Model
 {
     use ActiveField;
@@ -29,8 +32,9 @@ class PartnerUser extends Model
             // Заглушка для тестирования. Кука из тестов обростает лишними символами
             $cookie = (preg_match('#s:(\d+):"(.*)";#', Cookie::get(self::COOKIE_NAME), $match) ? $match[2] : Cookie::get(self::COOKIE_NAME));
             $cookie = explode(self::COOKIE_NAME_SEPORATOR, $cookie);
-            if (count($cookie) != 2)
+            if (count($cookie) != 2) {
                 return false;
+            }
 
             $partner_user = PartnerUser::whereUserId($cookie[1])->first();
             if ($partner_user && $partner_user->partner->id == $cookie[0]) {
@@ -43,11 +47,13 @@ class PartnerUser extends Model
     public function isAvailable()
     {
         // Проверяем, активен ли партнёр
-        if (!$this->partner->isActive())
+        if (!$this->partner->isActive()) {
             return false;
+        }
         // Проверяем, активен ли текущий пользователь
-        if (!$this->isActive())
+        if (!$this->isActive()) {
             return false;
+        }
         //
         return true;
     }
@@ -57,16 +63,19 @@ class PartnerUser extends Model
         // Если квота не назначена пользователю
         if (!$this->quotas()->find($quota_id)) {
             // Проверяем, можно ли дать квоту пользователю
-            if (!$this->isAvailable())
+            if (!$this->isAvailable()) {
                 return false;
+            }
             // Ищем запрошенную квоту у партнёра
             $quota = $this->partner->quotas()->find($quota_id);
             // Если квота не найдена - отказ
-            if (!$quota)
+            if (!$quota) {
                 return false;
+            }
             // Пытаемся использовать квоту
-            if (!$quota->use())
+            if (!$quota->use()) {
                 return false;
+            }
             // Если удалось использовать - устанавливаем отношение пользователя с квотой
             $this->quotas()->save($quota);
         }
@@ -87,5 +96,4 @@ class PartnerUser extends Model
     {
         return $this->belongsToMany(Quota::class, 'partner_user_quota', 'p_user_id', 'quota_id');
     }
-
 }

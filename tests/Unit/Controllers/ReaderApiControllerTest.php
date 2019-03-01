@@ -77,6 +77,9 @@ class ReaderApiControllerTest extends TestCase
         $response->assertStatus(200);
         // Проверяем, что вывелась нужная страница
         $response->assertSee('Выберите выпуск для чтения');
+
+        $response = $this->get('get-error-page');
+        $this->assertIsObject($response);
     }
 
     public function testGetRelease()

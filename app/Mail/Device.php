@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright
+ * @author
+ */
 namespace App\Mail;
 
 use App\Models\Device as ModelDevice;
@@ -9,6 +12,9 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * Class for device.
+ */
 class Device extends Mailable
 {
     use Queueable, SerializesModels;
@@ -52,7 +58,7 @@ class Device extends Mailable
 
         switch ($this->type) {
             case 'confirm':
-                $title = config('app.name').' - Подтвердите устройство';
+                $title = config('app.name') . ' - Подтвердите устройство';
                 return $this->view('email.device.confirm')->with([
                     'title' => $title,
                     'code' => $this->data['code'],
@@ -60,7 +66,7 @@ class Device extends Mailable
                 ])->subject($title);
                 break;
             case 'reset':
-                $title = config('app.name').' - Сброс устройств';
+                $title = config('app.name') . ' - Сброс устройств';
                 return $this->view('email.device.reset')->with([
                     'title' => $title,
                     'link' => $this->data['link'],//url('/'),
