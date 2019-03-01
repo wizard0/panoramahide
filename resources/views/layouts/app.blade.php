@@ -22,6 +22,7 @@
     <script src="{{ asset('js/panor/scripts.js') }}"></script>
     <script src="{{ asset('js/panor/panor.js') }}"></script>
     <script src="{{ asset('js/panor/search.js') }}"></script>
+    <script src="{{ asset('js/SubscribeManager.js') }}"></script>
 
     <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
 

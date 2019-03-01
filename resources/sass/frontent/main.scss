@@ -784,6 +784,7 @@ input[type="checkbox"]:checked + label span {
   display: block;
   height: 100%;
   padding: 14px 12px 12px 12px;
+  border: solid 1px transparent;
 }
 
 .subscribe-form .request a:hover {
@@ -2042,7 +2043,7 @@ button {
 .input-stepper button {
   padding: 0;
   height: 24px;
-  width: 24px;
+  min-width: 24px;
   background: #fff;
   color: #7e8c9f;
   border: 1px solid #cbd4e0;

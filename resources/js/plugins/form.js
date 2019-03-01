@@ -151,6 +151,9 @@ let ajaxForm = {
                 $(self.form.data('loading-container')).removeClass(self.loading.container[key])
             }
         }
+        if (self.form.data('outer-submit')) {
+            $(self.form.data('outer-submit')).removeClass(self.options.loadingClass);
+        }
     },
 
     startLoading() {
@@ -164,6 +167,9 @@ let ajaxForm = {
         }
         if (self.form.data('loading')) {
             self.form.addClass(self.options.loadingClass);
+        }
+        if (self.form.data('outer-submit')) {
+            $(self.form.data('outer-submit')).addClass(self.options.loadingClass);
         }
     },
 

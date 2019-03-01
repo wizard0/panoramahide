@@ -44,8 +44,8 @@ class ProductController extends Controller
         if ($request->ajax()) {
             $cart = $this->getCart();
             $cart->delete($request->get('id'));
-            return response()->json([
-                'success' => true,
+
+            return responseCommon()->success([
                 'header' => $this->updateCart($cart),
                 'cart' => view('personal.cart.content', ['cart' => Session::get('cart'), 'displayCheckout' => true])->render(),
             ]);

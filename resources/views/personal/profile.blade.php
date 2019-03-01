@@ -40,7 +40,11 @@
                 <div class="form-group">
                     <label>Дата рождения</label>
                     <div class="input-group date">
-                        <input type="text" name="birthday" class="form-control datetimepicker" data-format="date" value="" required>
+                        <input type="text" name="birthday" data-role="js-mask-birthday" class="form-control datetimepicker" data-format="date"
+                               value="{{ !is_null($user->birthday) ? $user->birthday->format('d-m-Y') : '' }}"
+                               placeholder="XX-XX-XXXX"
+                               required
+                        >
                     </div>
                 </div>
                 <div class="form-group text-center">
@@ -65,9 +69,9 @@
                     <div>
                         <div class="btn-group btn-group-toggle" data-toggle="buttons">
                             <label class="btn btn-outline-secondary @if( $user->version === Cart::VERSION_PRINTED) active @endif">
-                                <input type="radio" name="version" value="{{ Cart::VERSION_PRINTED }}" autocomplete="off" @if( $user->version == Cart::VERSION_PRINTED) checked @endif>Печатный</label>
+                                <input type="radio" name="version" value="{{ Cart::VERSION_PRINTED }}" @if( $user->version == Cart::VERSION_PRINTED) checked @endif autocomplete="off" required>Печатный</label>
                             <label class="btn btn-outline-secondary @if( $user->version === Cart::VERSION_ELECTRONIC) active @endif">
-                                <input type="radio" name="version" value="{{ Cart::VERSION_ELECTRONIC }}" autocomplete="off" @if( $user->version == Cart::VERSION_PRINTED) checked @endif>Электронный</label>
+                                <input type="radio" name="version" value="{{ Cart::VERSION_ELECTRONIC }}" @if( $user->version == Cart::VERSION_ELECTRONIC) checked @endif autocomplete="off" required>Электронный</label>
                         </div>
                     </div>
                 </div>

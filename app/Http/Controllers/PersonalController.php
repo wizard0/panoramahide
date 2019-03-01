@@ -43,9 +43,11 @@ class PersonalController extends Controller
 
         // cart clean up
         Session::forget('cart');
-        return redirect()->route('order.complete', [
-            'id' => $order->id,
-        ]);
+        return responseCommon()->success([
+            'redirect' => route('order.complete', [
+                'id' => $order->id,
+            ]),
+        ], 'Заказ успешно оформлен.');
     }
 
     public function completeOrder($id)
