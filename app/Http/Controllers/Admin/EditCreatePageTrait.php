@@ -28,8 +28,12 @@ trait EditCreatePageTrait
 
     public function create()
     {
-        $this->createModel()
-             ->prepareEditData();
+        $this->createModel();
+        if (!$this->model) {
+            return response()->json(['error' => 'Cant get model'], 403);
+        }
+
+        $this->prepareEditData();
 
         return view('admin.content.edit', [
             'data' => $this->formData,
@@ -175,16 +179,17 @@ trait EditCreatePageTrait
     private function getAvailableRelationData($relation)
     {
         $available = [];
-        $relatedCollection = ($this->isTranslatable($this->relatedModelName[$relation]))
-            ? $this->relatedModelName[$relation]::withPresetTranslation($this->locale)->get()
-            : $this->relatedModelName[$relation]::all();
-        foreach ($relatedCollection as $r) {
-            $available[] = [
-                'name' => $r->name,
-                'id' => $r->id
-            ];
+        if (array_key_exists($relation, $this->relatedModelName)) {
+            $relatedCollection = ($this->isTranslatable($this->relatedModelName[$relation]))
+                ? $this->relatedModelName[$relation]::withPresetTranslation($this->locale)->get()
+                : $this->relatedModelName[$relation]::all();
+            foreach ($relatedCollection as $r) {
+                $available[] = [
+                    'name' => $r->name,
+                    'id' => $r->id
+                ];
+            }
         }
-
         return $available;
     }
 

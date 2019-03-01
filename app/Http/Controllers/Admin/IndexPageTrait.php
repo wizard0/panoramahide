@@ -36,25 +36,33 @@ trait IndexPageTrait
 
     protected function getTableData($sort = null)
     {
-        $this->prepareTableData();
+        $result = false;
 
-        return [
-            'head' => $this->displayAttributes,
-            'body' => $this->tableBody
-        ];
+        if ($this->prepareTableData()) {
+            $result = [
+                'head' => $this->displayAttributes,
+                'body' => $this->tableBody
+            ];
+        }
+
+        return $result;
     }
 
     private function prepareTableData()
     {
-        if ($this->getModelCollection()) {
-            $this->prepareTableBodyData();
+        $result = false;
+        $models = $this->getModelCollection();
+        if (is_object($models)) {
+            $models->prepareTableBodyData();
+            $result = true;
         }
-
-        return $this;
+        return $result;
     }
 
     private function getModelCollection()
     {
+        $result = false;
+
         if (isset($this->modelName)) {
             $modelName = $this->modelName;
 
@@ -64,8 +72,10 @@ trait IndexPageTrait
                 $this->collection = $modelName::all();
             }
 
-            return $this;
+            $result = $this;
         }
+
+        return $result;
     }
 
     private function prepareTableBodyData()

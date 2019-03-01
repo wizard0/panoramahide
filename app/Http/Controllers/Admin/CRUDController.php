@@ -100,12 +100,15 @@ class CRUDController extends Controller
             $modelName = $this->modelName;
         }
 
-        return in_array('Dimsav\Translatable\Translatable', class_uses($modelName));
+        $_modelName = $modelName ? $modelName : $this->modelName;
+        if (!is_null($_modelName) && class_exists($_modelName)) {
+            return in_array('Dimsav\Translatable\Translatable', class_uses($_modelName));
+        }
     }
 
-    private function getModel($id)
+    protected function getModel($id)
     {
-        if (!isset($this->model) && isset($this->modelName)) {
+        if (!isset($this->model) && isset($this->modelName) && class_exists($this->modelName)) {
             $this->model = $this->modelName::find($id);
         }
 
@@ -115,7 +118,9 @@ class CRUDController extends Controller
 
     private function createModel()
     {
-        $this->model = new $this->modelName;
+        if ($this->modelName && class_exists($this->modelName)) {
+            $this->model = new $this->modelName;
+        }
 
         return $this;
     }

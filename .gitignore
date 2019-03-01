@@ -21,3 +21,5 @@ public/js/app.js
 .DS_Store
 *.sublime-workspace
 test-coverage
+*.sublime-project
+vue.css
