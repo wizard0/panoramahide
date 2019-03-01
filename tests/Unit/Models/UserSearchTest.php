@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright
+ * @author
+ */
 namespace Tests\Unit\Models;
 
 use App\User;
@@ -9,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
+/**
+ * Class for user search model test.
+ */
 class UserSearchModelTest extends TestCase
 {
     public function testRetrieveGuest()
@@ -17,18 +23,18 @@ class UserSearchModelTest extends TestCase
         $this->assertEmpty($res);
     }
 
-	public function testRetrieve()
-	{
+    public function testRetrieve()
+    {
         // авторизация
         $user = $this->user();
         $this->actingAs($user);
         $this->assertAuthenticated();
         $res = UserSearch::retrieve();
-		$this->assertNotEmpty($res, $this->textRed(' Таблица user_search пуста '));
-	}
+        $this->assertNotEmpty($res, $this->textRed(' Таблица user_search пуста '));
+    }
 
-	public function testSearch()
-	{
+    public function testSearch()
+    {
         // авторизация
         $user = $this->user();
         $this->actingAs($user);
@@ -54,9 +60,10 @@ class UserSearchModelTest extends TestCase
             $res = UserSearch::search($requestParams);
             $this->assertNotEmpty($res);
         }
-	}
+    }
 
-    public function testSearchWithoutParams() {
+    public function testSearchWithoutParams()
+    {
         // авторизация
         $user = $this->user();
         $this->actingAs($user);
@@ -75,5 +82,4 @@ class UserSearchModelTest extends TestCase
     {
         return testData()->user();
     }
-
 }

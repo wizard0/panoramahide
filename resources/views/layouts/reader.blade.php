@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{--<meta name="viewport" content="width=1024, initial-scale=1">--}}
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -49,10 +50,20 @@
         {{--<link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">--}}
     @endif
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/vue.css') }}" rel="stylesheet">
     <script>
+        @if(isset($release_id))
+            window.release_id = {{ $release_id }};
+        @endif
+        window.user = {
+            guest:          {{ Auth::guest()  ? 1: 0 }},
+            partner:        {{ $isPartnerUser ? 1: 0 }},
+            simpleReader:   {{ $simpleReader  ? 1: 0 }},
+        };
         window.modal = {
             active: '{{ Session::has('modal') ? Session::get('modal') : null }}'
         };
+
     </script>
 </head>
 <body>

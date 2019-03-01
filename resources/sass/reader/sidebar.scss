@@ -52,12 +52,65 @@
   }
 
   .simplebar-track.simplebar-vertical {
-    right: -10px;
+    //right: -10px;
   }
 
   .reader-sidebar-chapter {
     span p {
       margin-bottom: 8px;
+      line-height: 1.3;
+    }
+  }
+  .bookmarks-list-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    border: none !important;
+    .bookmark-remove {
+      a {
+        color: #212529;
+        &:hover {
+          color: #e63201;
+        }
+      }
+      margin-right: 4px;
+    }
+    .bookmark-flag {
+      height: 32px;
+      width: 36px;
+      background: url(../img/flag.png) left center no-repeat;
+      color: #fff;
+      font-size: 9pt;
+      font-family: 'OpenSans-Semibold';
+    }
+    .bookmark-flag span {
+      display: block;
+      text-align: center;
+      width: 24px;
+      padding-top: 3px;
+    }
+    .bookmark-cont {
+      float: left;
+      width: 100%;
+    }
+  }
+  .simplebar-wrapper {
+    margin-right: -10px;
+  }
+  .simplebar-vertical {
+    right: -10px;
+  }
+  a.is-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+    z-index: 200;
+    &:after {
+      @include loader;
+      @include center(16px);
+      position: absolute;
+      border-right-color: $brand-primary;
+      border-top-color: $brand-primary;
     }
   }
 }

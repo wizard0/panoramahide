@@ -158,7 +158,24 @@
   overflow: auto;
   height: calc(100vh - 120px);
   @media (max-width: 960px) {
-    height: calc(100vh - 104px);
+    height: calc(100vh - 114px);
     margin-top: 54px !important;
+  }
+  position: relative;
+  .bookmarks-holder .bookmark-item {
+    position: absolute;
+    border-top: #e63201 solid 2px;
+    height: 32px;
+    overflow: hidden;
+    background: url(../img/flag.png) left center no-repeat;
+    background-position: 40px 100%;
+    //left: 0;
+  }
+  .bookmark-item span {
+    display: block;
+    text-align: center;
+    width: 24px;
+    color: #fff;
+    margin-left: 40px;
   }
 }

@@ -43,7 +43,7 @@ class Subscription extends Model
     const PERIOD_ONCE_3_MONTH = 'once_at_3_months';
     const PERIOD_ONCE_HALFYEAR = 'once_at_half_year';
 
-    static $periods = [
+    public static $periods = [
         self::PERIOD_ONCE_HALFYEAR => 1,
         self::PERIOD_ONCE_MONTH => 6,
         self::PERIOD_TWICE_MONTH => 12,

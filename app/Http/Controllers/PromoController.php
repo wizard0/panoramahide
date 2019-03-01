@@ -18,6 +18,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PromoController extends Controller
@@ -104,14 +105,10 @@ class PromoController extends Controller
             $oJournals = Journal::find($journals);
             $result = $oService->setPromocode($oPromocode)->syncJournal($oJournals);
             if (!$result) {
-                return responseCommon()->error([
-
-                ], $oService->getMessage());
+                return responseCommon()->error([], $oService->getMessage());
             }
         }
-        return responseCommon()->success([
-
-        ], 'Журналы успешно сохранены');
+        return responseCommon()->success([], 'Журналы успешно сохранены');
     }
 
     /**
@@ -140,11 +137,6 @@ class PromoController extends Controller
         // Проверка промокода
         if (!$oPromocodeService->checkPromocodeBeforeActivate($oPromocode)) {
             return responseCommon()->error([], $oPromocodeService->getMessage());
-        }
-
-        // Проверка промокода
-        if (!$oPromoUserService->checkPromocodeBeforeActivate($oPromocode)) {
-            return responseCommon()->error([], $oPromoUserService->getMessage());
         }
 
         $phone = preg_replace('/[^0-9]/', '', $request->get('phone'));
@@ -199,7 +191,7 @@ class PromoController extends Controller
 
         $phone = preg_replace('/[^0-9]/', '', $request->get('phone'));
 
-        $checkCode = $oPromoUserService->codeCheckByPhone($phone, $request->get('code'));
+        $checkCode = $oPromoUserService->codeCheckByPhone((int) $phone, (int) $request->get('code'));
         if (!$checkCode) {
             return responseCommon()->validationMessages(null, [
                 'code' => 'Неверный код подтверждения',
@@ -214,6 +206,10 @@ class PromoController extends Controller
             $oUser = User::where('email', $request->get('email'))->first();
             if (is_null($oUser)) {
                 $data = $request->all();
+
+                /**
+                 * @todo Сделать отправку email со сгенерованным паролем
+                 */
                 $request->merge([
                     'name' => $data['name'] ?? 'Имя',
                     'last_name' => $data['surname'] ?? 'Фамилия',

@@ -35,6 +35,11 @@ class TestSeeder extends Seeder
         $this->call(CreateSubscriptions::class);
         $this->call(RolesAndPermissionsBaseSeeder::class);
         $this->call(UserSearchTableSeeder::class);
+
+        $this->call(PartnersTableSeeder::class);
+        $this->call(PartnerUsersTableSeeder::class);
+        $this->call(QuotasTableSeeder::class);
+        $this->call(DevicesTableSeeder::class);
     }
 
     private function clear()

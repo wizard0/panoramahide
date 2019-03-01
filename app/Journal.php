@@ -88,7 +88,7 @@ class Journal extends Model
         return $this->hasMany(Subscription::class);
     }
 
-    public function getLastRelease(Array $select = [])
+    public function getLastRelease(array $select = [])
     {
         if (is_array($select) && !empty($select)) {
             $last = $this->releases()->select($select)
@@ -235,10 +235,15 @@ class Journal extends Model
             $subs = $subscribe['info'];
 
             for ($length = 1; $length <= 12; $length++) {
-                if ($length > 6 && $length < 12) continue;
+                if ($length > 6 && $length < 12) {
+                    continue;
+                }
                 // если длина кратна периодичности | if the length is a multiple of the periodicity
-                if (array_key_exists(halfyear($start_month), $subs[$type][$start_year]))
-                    if (($length * Subscription::$periods[$subs[$type][$start_year][halfyear($start_month)]->period]) % 6 != 0) continue;
+                if (array_key_exists(halfyear($start_month), $subs[$type][$start_year])) {
+                    if (($length * Subscription::$periods[$subs[$type][$start_year][halfyear($start_month)]->period]) % 6 != 0) {
+                        continue;
+                    }
+                }
                 // с текущего месяца в течение года | from the current month during the year
                 $arFirstMonth = array();
                 // для электронной версии добавить подписку с января
@@ -264,24 +269,25 @@ class Journal extends Model
                         $end_year++;
                     }
 
-                    if (!array_key_exists($_year, $subs[$type])) continue;
-                    if (!array_key_exists(halfyear($_month), $subs[$type][$_year])) continue;
+                    if (!array_key_exists($_year, $subs[$type])) {
+                        continue;
+                    }
+                    if (!array_key_exists(halfyear($_month), $subs[$type][$_year])) {
+                        continue;
+                    }
                     $subscribeObject = $subs[$type][$_year][halfyear($_month)];
 
                     $price = 0;
-                    if ( // длина == 12 месяц | length == 12 month
-                        $length == 12
-                        && !empty($price_year = $subscribeObject->price_for_year)
-                    ) {
+                    // длина == 12 месяц | length == 12 month
+                    if ($length == 12 && !empty($price_year = $subscribeObject->price_for_year)) {
                         $price = $price_year;
-                    } elseif (
-                        $length == 6
+                    } elseif ($length == 6
                         && $type == Subscription::TYPE_ELECTRONIC
                         && $_month == 6
                         && !empty($subscribeObject->price_for_half_year)
                     ) {
                         $price = $subscribeObject->price_for_half_year;
-                    } elseif ( // в одном полугодии | in one halfyear
+                    } elseif (// в одном полугодии | in one halfyear
                         (   // начало в этом полугодии | start in this halfyear
                             halfyear($start_month) == halfyear($_month)
                             && halfyear($start_month) == halfyear($end_month)
@@ -300,9 +306,11 @@ class Journal extends Model
                             )
                         )
                     ) {
-                        if (($length * Subscription::$periods[$subscribeObject->period]) % 6) continue;
+                        if (($length * Subscription::$periods[$subscribeObject->period]) % 6) {
+                            continue;
+                        }
                         $price = $subscribeObject->price_for_release * Subscription::$periods[$subscribeObject->period] * $length / 6;
-                    } elseif ( // в 2 или 3 разных полугодиях и начало в этому полугодии | in 2 or 3 differents halfyears and start in this halfyear
+                    } elseif (// в 2 или 3 разных полугодиях и начало в этому полугодии | in 2 or 3 differents halfyears and start in this halfyear
                         halfyear($start_month) == halfyear($_month)
                         && $_year == $start_year
                         && (
@@ -360,7 +368,6 @@ class Journal extends Model
                             } else {
                                 $price3 = $subscribeEnd2->price_for_release * Subscription::$periods[$subscribeEnd2->period] * $count_month3 / 6;
                             }
-
                         }
                         if ($price1/* && $price2*/) {
                             $price = $price1 + $price2 + $price3;
@@ -397,5 +404,4 @@ class Journal extends Model
     {
         return $this->belongsToMany(Journal::class, 'group_journal');
     }
-
 }

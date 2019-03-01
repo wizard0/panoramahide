@@ -4,7 +4,11 @@ namespace App;
 
 use App\Models\PromoUser;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use App\Models\UserDevice;
+//use App\Models\UserDevice;
+
+use App\Models\Traits\UserBookmarks;
+use App\Models\Traits\UsersDevices;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -19,6 +23,8 @@ class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    use UsersDevices;
+    use UserBookmarks;
 
     const PERMISSION_ADMIN = 'web admin';
     const ROLE_ADMIN = 'admin';
@@ -67,8 +73,9 @@ class User extends Authenticatable
         return $this->name . ' ' . $this->last_name;
     }
 
-    public function devices()
+/*  public function devices()
     {
         return $this->hasMany(UserDevice::class);
     }
+*/
 }
