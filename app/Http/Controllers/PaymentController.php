@@ -26,7 +26,7 @@ class PaymentController extends Controller
     public function payment(Request $request, $id)
     {
         $order = Order::find($id);
-        $order->date = date('d.m.Y', strtotime($order->created_at));
+
         $order->totalPrice = [
             'sum'    => $order->totalPrice * 0.9,
             'tax'    => $order->totalPrice * 0.1,

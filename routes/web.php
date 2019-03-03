@@ -30,6 +30,7 @@ Route::post('/delete-from-cart', 'ProductController@deleteFromCart')->name('cart
 Route::group(['prefix' => 'personal'], function () {
     Route::get('/', 'PersonalController@index')->name('personal');
     Route::get('orders', 'PersonalController@orders')->name('personal.orders');
+    Route::get('order/{id}', 'PersonalController@orders')->where('id', '[0-9]+')->name('personal.order');
     Route::get('cart', 'PersonalController@cart')->name('personal.cart');
     Route::get('subscriptions', 'PersonalController@subscriptions')->name('personal.subscriptions');
     Route::any('profile', 'PersonalController@profile')->name('personal.profile');
@@ -38,6 +39,7 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/make', 'PersonalController@orderMake')->name('order.make');
     Route::post('order/make', 'PersonalController@processOrder');
     Route::get('order/complete/{id}', 'PersonalController@completeOrder')->name('order.complete');
+    Route::get('order/cancel/{id}', 'PersonalController@cancelOrder')->name('order.cancel');
 
     Route::group(['prefix' => 'robokassa'], function () {
         Route::get('result_receiver', 'PaymentController@robokassaResult');

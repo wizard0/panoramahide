@@ -302,7 +302,7 @@
             </TD>
             <TD STYLE="border-top: 1px solid #000000; border-left: 1px solid #000000" COLSPAN=18 ALIGN=LEFT VALIGN=TOP>
                 {{ $item->title }}</br>
-                {{ $item->version }} {{ $item->type }}
+                {{ $item->typeVers }}
             </TD>
             <TD STYLE="border-top: 1px solid #000000; border-left: 1px solid #000000" COLSPAN=3 ALIGN=RIGHT VALIGN=TOP>
                 {{ $item->qty }}

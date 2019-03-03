@@ -25,6 +25,12 @@ class PersonalController extends Controller
         View::share('bodyClass', 'body-personal');
     }
 
+    public function orders(Request $request, $id = null)
+    {
+        $orders = Auth::user()->getOrders($id);
+        return view('personal.'.__FUNCTION__, compact('orders', 'id'));
+    }
+
     public function orderMake()
     {
         if (Session::has('cart') && Session::get('cart')->totalQty > 0) {
@@ -44,6 +50,13 @@ class PersonalController extends Controller
         return redirect()->route('order.complete', [
             'id' => $order->id,
         ]);
+    }
+
+    public function cancelOrder($id)
+    {
+        Order::find($id)->update(['status' => Order::STATUS_CANCELLED]);
+
+        return redirect()->back();
     }
 
     public function completeOrder($id)
@@ -75,11 +88,6 @@ class PersonalController extends Controller
     }
 
     public function index(Request $request)
-    {
-        return view('personal.'.__FUNCTION__);
-    }
-
-    public function orders(Request $request)
     {
         return view('personal.'.__FUNCTION__);
     }

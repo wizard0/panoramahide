@@ -2,6 +2,9 @@
     @case('personal.orders')
         Статус заказов
         @break
+    @case('personal.order')
+        Заказ №{{ $id }}
+        @break
     @case('personal.cart')
         Моя корзина
         @break

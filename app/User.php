@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Models\PromoUser;
+use App\Order;
 
 use App\Models\Traits\UserBookmarks;
 use App\Models\Traits\UsersDevices;
@@ -55,9 +56,20 @@ class User extends Authenticatable
         return phoneFormat($this->phone);
     }
 
-/*  public function devices()
+    public function getOrders($id = null)
     {
-        return $this->hasMany(UserDevice::class);
+        $physUsers  = OrderPhysUser::whereUserId($this->id)->pluck('id')->toArray();
+        $legalUsers = OrderLegalUser::whereUserId($this->id)->pluck('id')->toArray();
+        $orders     = Order::where(function ($query) use($physUsers, $legalUsers) {
+                                $query->whereIn('phys_user_id', $physUsers)
+                                      ->orWhereIn('legal_user_id', $legalUsers);
+                            });
+        if ($id) {
+            $orders->whereId($id);
+        }
+        $orders = $orders->get();
+
+        return $orders;
     }
-*/
+
 }

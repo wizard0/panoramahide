@@ -174,9 +174,11 @@
     top: 0px;
     right: 0px;
 }
-.status-active{background: #7fc327;}
-.status-waitforpay{background: #ee9123;}
-.status-expired{background: #7e8f9d;}
+
+.status-completed{background: #297fc3;}
+.status-payed{background: #7fc327;}
+.status-wait{background: #ee9123;}
+.status-cancelled{background: #7e8f9d;}
 
 .form-label{
     line-height: 30px;

@@ -14,7 +14,9 @@ use Lexty\Robokassa\Payment;
  */
 class Order extends Model
 {
-    protected $table = "orders";
+    protected $table        = "orders";
+    protected $fillable     = ['status'];
+    protected $customFields = [];
 
     const PHYSICAL_USER = 'physical';
     const LEGAL_USER = 'legal';
@@ -25,28 +27,69 @@ class Order extends Model
     const STATUS_COMPLETED = 'completed';
 
     public static $translate = [
-        'type' => [
-            Cart::PRODUCT_TYPE_RELEASE => 'выпуск',
-            Cart::PRODUCT_TYPE_ARTICLE => 'статья',
-            Cart::PRODUCT_TYPE_SUBSCRIPTION => 'подписка',
+        'txtstatus' => [
+            self::STATUS_WAIT => 'Ожидает оплаты',
+            self::STATUS_PAYED => 'Оплачен',
+            self::STATUS_CANCELLED => 'Отменён',
+            self::STATUS_COMPLETED => 'Завершён',
         ],
         'version' => [
-            Subscription::TYPE_PRINTED => 'печатная',
-            Subscription::TYPE_ELECTRONIC => 'электронная',
+            Subscription::TYPE_PRINTED => [
+                Cart::PRODUCT_TYPE_RELEASE => 'Печатный выпуск',
+                Cart::PRODUCT_TYPE_ARTICLE => 'Печатная статья',
+                Cart::PRODUCT_TYPE_SUBSCRIPTION => 'Печатная подписка',
+            ],
+            Subscription::TYPE_ELECTRONIC => [
+                Cart::PRODUCT_TYPE_RELEASE => 'Электронный выпуск',
+                Cart::PRODUCT_TYPE_ARTICLE => 'Электронная статья',
+                Cart::PRODUCT_TYPE_SUBSCRIPTION => 'Электронная подписка',
+            ],
         ],
     ];
 
-    public static function translate(&$item, $field)
+    public function __get($name)
     {
-        $item->$field = self::$translate[$field][$item->$field];
+        if (isset($this->customFields[$name]))
+            return $this->customFields[$name];
+
+        switch ($name) {
+            case 'txtstatus':
+                $this->customFields[$name] = self::$translate['txtstatus'][$this->status];
+                break;
+            case 'date':
+                $this->customFields[$name] = date('d.m.Y', strtotime($this->created_at));
+                break;
+            case 'items':
+                $this->customFields[$name] = $this->getItems();
+                break;
+            default:
+                return parent::__get($name);
+                break;
+        }
+
+        return $this->customFields[$name];
     }
 
     public function getItems()
     {
         $items = json_decode($this->orderList);
         foreach ($items as &$item) {
-            self::translate($item, 'type');
-            self::translate($item, 'version');
+            switch ($item->type) {
+                case Cart::PRODUCT_TYPE_ARTICLE :
+                    $item->image = $item->product->image;
+                    $item->route = route('article', $item->product->code);
+                    break;
+                case Cart::PRODUCT_TYPE_RELEASE:
+                    $item->image = $item->product->image;
+                    $item->route = route('journal', $item->product->journal->code);
+                    break;
+                case Cart::PRODUCT_TYPE_SUBSCRIPTION:
+                    $item->image = $item->product->journal->image;
+                    $item->route = route('journal', $item->product->journal->code);
+                    break;
+            }
+            $item->typeVers    = self::$translate['version'][$item->version][$item->type];
+            $item->start_month = property_exists($item->product, 'start_month') ? $item->product->start_month : null;
         }
         return $items;
     }
