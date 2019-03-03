@@ -44,10 +44,10 @@
     }
 
     window.JSMagazineDetailManager.prototype.loadTab = function (tabName) {
-        var _result = this.result;
+        // var _result = this.result;
 
         // Empty result div
-        _result.html('');
+        // _result.html('');
 
         // If we need pagination
         if (window.location.href.search(/.*page=(\d)+/) >= 0) {
@@ -63,14 +63,16 @@
             }
         }
 
-        $.ajax({
-            method: 'GET',
-            url: '/magazines/ajax-get-page',
-            data: data,
-            success: function (res) {
-                _result.html(res);
-            }
-        });
+        ajaxLoadPage(this.result, '/magazines/ajax-get-page', data);
+
+        // $.ajax({
+        //     method: 'GET',
+        //     url: '/magazines/ajax-get-page',
+        //     data: data,
+        //     success: function (res) {
+        //         _result.html(res);
+        //     }
+        // });
     }
 
     window.JSMagazineDetailManager.prototype.sendArticle = function (e, url) {

@@ -7,15 +7,20 @@ use Illuminate\Database\Eloquent\Model;
 
 class Author extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = ['name'];
 
 //    protected $fillable = ['code'];
 
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
+
     public function articles()
     {
-        $this->belongsToMany(Article::class);
+        return $this->belongsToMany(Article::class);
     }
 
     public static function getAlphabet()

@@ -133,7 +133,7 @@ class ReaderService
         $html = $name . '.html';
         $file = $path . $html;
 
-        return File::exists($file) ? trim(file_get_contents($file)) : null;
+        return File::exists($file) ? trim(file_get_contents($file)) : '';
     }
 
     /**

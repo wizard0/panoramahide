@@ -114,6 +114,8 @@ input[type="checkbox"].is-danger + label::before {
 
 //
 @import 'modal';
+
+@import 'admin';
 //@import 'print/print';
 
 p, a, h1, h2, h3, h4 {
@@ -137,4 +139,3 @@ p, a, h1, h2, h3, h4 {
     user-select: none;
   }
 }
-
