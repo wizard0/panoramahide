@@ -87,7 +87,12 @@ let ajaxForm = {
                 self.after(result);
 
                 if (result.success) {
-                    //self.after(result);
+                    if (self.form.hasClass('cart-del')) {
+                        $('#cart-in-header').replaceWith(result.header);
+                        $('#personal-cart-content').replaceWith(result.cart);
+
+                        toastr.success('Товар удалён из корзины', 'Успех');
+                    }
                 } else if (result.error) {
                     self.showError(result.message);
                 }
@@ -460,7 +465,6 @@ let ajaxForm = {
             }
             data = supportData;
         }
-        console.log(data);
         return data;
     },
 

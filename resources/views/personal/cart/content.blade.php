@@ -51,7 +51,7 @@
 
                     <div class="acc-table-item">
                         <div class="del-fromcart">
-                            <a class="btn btn-sm text-danger ajax-link" href="#" action="{{ route('cart.del') }}" data-id="{{ $item->id }}" data-loading="1" title="Удалить">
+                            <a class="btn btn-sm text-danger ajax-link cart-del" href="#" action="{{ route('cart.del') }}" data-id="{{ $item->id }}" data-loading="1" title="Удалить">
                                 <span class="glyphicon glyphicon-remove"></span>
                             </a>
                         </div>
