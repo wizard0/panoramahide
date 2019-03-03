@@ -5,7 +5,8 @@
 
 // Variables
 /* ---------------------------------------------- */
-@import '../_variables';
+@import '../_panorama_variables';
+//@import '../_variables';
 $brand-primary: $blue;
 $brand-success: $green;
 $brand-danger: $red;
@@ -14,7 +15,8 @@ $brand-info: $blue;
 
 /* ---------------------------------------------- */
 // Bootstrap
-//@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/bootstrap';
+
 /* ---------------------------------------------- */
 // Toast
 @import '~toastr/build/toastr.min.css';
@@ -54,3 +56,9 @@ $brand-info: $blue;
 
 // Personal
 @import '../personal/personal';
+
+// Order
+@import '../personal/order';
+
+// Pages
+@import '../pages/magazines';

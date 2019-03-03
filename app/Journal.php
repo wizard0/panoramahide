@@ -120,7 +120,6 @@ class Journal extends Model
     {
         $sort = $filters['sort_by'] ?? 'name';
         $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
-
         $q = self::where('active', 1)->withTranslation();
 
         switch ($sort) {

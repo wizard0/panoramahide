@@ -22,6 +22,7 @@
     <script src="{{ asset('js/panor/scripts.js') }}"></script>
     <script src="{{ asset('js/panor/panor.js') }}"></script>
     <script src="{{ asset('js/panor/search.js') }}"></script>
+    <script src="{{ asset('js/SubscribeManager.js') }}"></script>
 
     <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
 
@@ -30,13 +31,6 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet" type="text/css">
 
     <!-- Styles -->
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    @if (preg_match('/^\/personal\.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
-    @endif
-    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">
-    @endif
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body class="{{ isset($bodyClass) ? $bodyClass : '' }}">
@@ -50,11 +44,12 @@
 
     @yield('javascript')
 
-    <script src="{{ asset('js/app.js') }}"></script>
-
     <div id="scripts">
         @include('layouts.components.scripts.captcha')
         @include('layouts.components.scripts.toastr')
+
+        @routes
     </div>
+    <script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>

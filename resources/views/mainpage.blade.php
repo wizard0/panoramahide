@@ -3,7 +3,7 @@
 @section('content')
     <div class="cover" style="background: url(/img/cover-bg.jpg) center center no-repeat;">
         <div class="container h-100">
-            <form method="GET" action="/search/" id="search_form_index" class="h-100">
+            <form method="GET" action="/search/" id="search_form_index" class="h-100 m-t-0">
                 <div class="d-flex flex-column h-100 justify-content-center align-items-center">
                     <div class="row justify-content-center w-100">
                         <div class="col-xl-6 col-lg-6 col-12 text-center">

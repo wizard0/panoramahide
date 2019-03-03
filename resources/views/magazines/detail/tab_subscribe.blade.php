@@ -76,7 +76,6 @@
     </div>
 </div>
 
-<script src="{{ asset('/js/SubscribeManager.js') }}"></script>
 <script>
     var SubscribeManager = new JSSubscribeManager('{!! json_encode([
         'prices' => $subscriptions['prices'],
@@ -116,6 +115,7 @@
                 'single_price': SubscribeManager.singlePrice.val(),
                 'journal_id': journal_id,
             };
+            console.log(version);
 
             CartManager.addToCart(version, 'subscription', 0, quantity, additionalData);
         })

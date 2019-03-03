@@ -37,7 +37,9 @@ $categories = \App\Category::has('journals')->where('active', 1)->withTranslatio
                         <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">{{ __('Регистрация') }}</a>
                     @endif
                 </div>
-                <div class="request"><a href="#" data-toggle="modal" data-target="#request-modal">{{ __('Заявка на подписку') }}</a></div>
+                <div class="request">
+                    <a class="btn btn-outline-danger" href="#" data-toggle="modal" data-target="#request-modal">{{ __('Заявка на подписку') }}</a>
+                </div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">

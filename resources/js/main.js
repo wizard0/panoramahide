@@ -4,7 +4,7 @@ $(document).ready(function() {
 
 
     $('.datetimepicker[data-format="date"]').datetimepicker({
-        format: 'L',
+        format: 'DD-MM-YYYY',
         locale: 'ru',
     });
     $('.datetimepicker[data-format="datetime"]').datetimepicker({

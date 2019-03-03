@@ -123,26 +123,13 @@ let ajaxForm = {
         });
     },
 
-    notification(notification) {
-        window.toastr.options.closeButton = true;
-        window.toastr.options.closeDuration = 10;
-        switch (notification.type) {
-            case 'warning':
-                window.toastr.warning(notification.text, notification.title, notification.options);
-                break;
-            case 'success':
-                window.toastr.success(notification.text, notification.title, notification.options);
-                break;
-            case 'error':
-                window.toastr.error(notification.text, notification.title, notification.options);
-                break;
-            case 'info':
-                window.toastr.info(notification.text, notification.title, notification.options);
-                break;
-            default:
-                window.toastr.info(notification.text, notification.title, notification.options);
-                break;
-        }
+    /**
+     * @see ../../plugins/notification.js
+     *
+     * @param toastr
+     */
+    notification(toastr) {
+        window.notification.send(toastr);
     },
 
     get() {
@@ -164,6 +151,9 @@ let ajaxForm = {
                 $(self.form.data('loading-container')).removeClass(self.loading.container[key])
             }
         }
+        if (self.form.data('outer-submit')) {
+            $(self.form.data('outer-submit')).removeClass(self.options.loadingClass);
+        }
     },
 
     startLoading() {
@@ -177,6 +167,9 @@ let ajaxForm = {
         }
         if (self.form.data('loading')) {
             self.form.addClass(self.options.loadingClass);
+        }
+        if (self.form.data('outer-submit')) {
+            $(self.form.data('outer-submit')).addClass(self.options.loadingClass);
         }
     },
 
@@ -304,6 +297,7 @@ let ajaxForm = {
         const self = this;
         self.form.find('.help.' + self.options.validation.errorClass).remove();
         self.form.find('input.' + self.options.validation.errorClass).removeClass(self.options.validation.errorClass);
+        self.form.find('.input-group.' + self.options.validation.errorClass).removeClass(self.options.validation.errorClass);
     },
     validate: function () {
         const self = this;
@@ -344,6 +338,14 @@ let ajaxForm = {
                         break;
                     case 'INPUT':
                         if ($elem.is(':checkbox')) {
+                            $elem.parent().addClass('__error');
+                        } else {
+                            $elem.addClass('__error');
+                        }
+                        if ($elem.hasClass('datetimepicker')) {
+                            $elem.closest('.input-group').addClass(self.options.validation.errorClass);
+                        }
+                        if ($elem.is(':radio')) {
                             $elem.parent().addClass('__error');
                         } else {
                             $elem.addClass('__error');

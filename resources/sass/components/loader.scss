@@ -48,7 +48,17 @@
       }
     }
   }
+  &.text-danger.is-loading {
+    * {
+      visibility: hidden;
+    }
+    &:after {
+      border-right-color: $brand-danger;
+      border-top-color: $brand-danger;
+    }
+  }
 }
+
 div {
   &.is-loading {
     min-height: 50px;

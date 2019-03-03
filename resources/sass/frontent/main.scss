@@ -153,13 +153,13 @@ a:hover {
 }
 
 .request a {
-  display: block;
-  border-radius: 4px;
-  border: solid 1px #e63201;
-  text-align: center;
-  padding: 6px 12px 8px 12px;
-  font-size: 12px;
-  color: #e63201;
+  //display: block;
+  //border-radius: 4px;
+  //border: solid 1px #e63201;
+  //text-align: center;
+  //padding: 6px 12px 8px 12px;
+  //font-size: 12px;
+  //color: #e63201;
 }
 
 /*-- header --*/
@@ -771,19 +771,20 @@ input[type="checkbox"]:checked + label span {
 }
 
 .request a {
-  display: block;
-  border-radius: 4px;
-  border: solid 1px #e63201;
-  text-align: center;
-  padding: 6px 12px 8px 12px;
-  font-size: 12px;
-  color: #e63201;
+  //display: block;
+  //border-radius: 4px;
+  //border: solid 1px #e63201;
+  //text-align: center;
+  //padding: 6px 12px 8px 12px;
+  //font-size: 12px;
+  //color: #e63201;
 }
 
 .subscribe-form .request a {
   display: block;
   height: 100%;
   padding: 14px 12px 12px 12px;
+  border: solid 1px transparent;
 }
 
 .subscribe-form .request a:hover {
@@ -877,10 +878,19 @@ input[type="text"], input[type="password"], input[type="email"] {
   border: 1px solid #e63201;
   color: #fff;
   cursor: pointer;
+  min-width: 100px;
+  padding: 4px 24px 6px 24px;
+  &:hover {
+    background-color: #FF4E1E;
+    border: 1px solid #FF4E1E;
+    color: #fff;
+  }
 }
 
 .modal button {
-  height: 50px;
+  height: 40px;
+  //padding-right: 20px;
+  //padding-left: 20px;
 }
 
 .modal input {
@@ -893,7 +903,7 @@ input[type="text"], input[type="password"], input[type="email"] {
 }
 
 button {
-  width: 100%;
+  //width: 100%;
 }
 
 .modal button {
@@ -960,7 +970,7 @@ button {
 
 /*Show results*/
 .show-results {
-  margin-top: 40px;
+  //margin-top: 40px;
 }
 
 .action-menu-title {
@@ -1462,32 +1472,32 @@ button {
 }
 
 .breadcrumbs {
-  margin-bottom: 24px;
+  //margin-bottom: 14px;
 }
 
 .breadcrumbs ul {
-  margin: 0;
-  padding: 0;
+  //margin: 0;
+  //padding: 0;
 }
 
 .breadcrumbs li {
-  display: inline;
+  //display: inline;
 }
 
 .breadcrumbs a:link, .breadcrumbs a:visited {
-  font-size: 12px;
-  color: #7E8C9F;
+  //font-size: 12px;
+  //color: #7E8C9F;
 }
 
 .breadcrumbs li:after {
-  content: "/";
-  font-size: 12px;
-  color: #7E8C9F;
-  margin-left: 6px;
+  //content: "/";
+  //font-size: 12px;
+  //color: #7E8C9F;
+  //margin-left: 6px;
 }
 
 .breadcrumbs li:last-child:after {
-  content: "";
+  //content: "";
 }
 
 .all-ussues-container {
@@ -2033,7 +2043,7 @@ button {
 .input-stepper button {
   padding: 0;
   height: 24px;
-  width: 24px;
+  min-width: 24px;
   background: #fff;
   color: #7e8c9f;
   border: 1px solid #cbd4e0;

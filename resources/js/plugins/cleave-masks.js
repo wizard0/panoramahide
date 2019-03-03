@@ -8,7 +8,8 @@ let cleaveMasks = {
         phone: '[data-role="js-mask-phone"]',
         phoneint: '[data-role="js-mask-phone-int"]',
         int: '[data-role="js-mask-int"]',
-        price: '[data-role="js-mask-price"]'
+        price: '[data-role="js-mask-price"]',
+        birthday: '[data-role="js-mask-birthday"]',
     },
 
     integer: function ($target) {
@@ -31,6 +32,15 @@ let cleaveMasks = {
             numericOnly: true
         });
     },
+    birthday: function (target) {
+        let self = this;
+        let value = target.val();
+        self.cleave = new Cleave(target, {
+            blocks: [2, 2, 4],
+            delimiters: ['-', '-'],
+            numericOnly: true
+        });
+    },
 };
 
 if ($(cleaveMasks.type.phone).is(':focus')) {
@@ -38,7 +48,9 @@ if ($(cleaveMasks.type.phone).is(':focus')) {
 }
 if ($(cleaveMasks.type.phone).length) {
     $(cleaveMasks.type.phone).each(function () {
-        cleaveMasks.phone($(this));
+        if ($(this).val() !== '') {
+            cleaveMasks.phone($(this));
+        }
     });
 }
 $('body').on('focus', cleaveMasks.type.phone, function () {
@@ -50,11 +62,19 @@ $('body').on('focus', cleaveMasks.type.phone, function () {
 });
 if ($(cleaveMasks.type.int).length) {
     $(cleaveMasks.type.int).each(function () {
-        cleaveMasks.integer($(this));
+        if ($(this).val() !== '') {
+            cleaveMasks.integer($(this));
+        }
     });
 }
 $('body').on('focus', cleaveMasks.type.int, function () {
     cleaveMasks.integer($(this));
 }).on('focusout', cleaveMasks.type.int, function () {
+
+});
+
+$('body').on('focus', cleaveMasks.type.birthday, function () {
+    cleaveMasks.birthday($(this));
+}).on('focusout', cleaveMasks.type.birthday, function () {
 
 });

@@ -7,8 +7,10 @@ use App\Order;
 use App\OrderLegalUser;
 use App\OrderPhysUser;
 use App\Paysystem;
+use App\Services\Toastr\Toastr;
 use App\User;
 use Chelout\Robokassa\Robokassa;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,9 +49,11 @@ class PersonalController extends Controller
 
         // cart clean up
         Session::forget('cart');
-        return redirect()->route('order.complete', [
-            'id' => $order->id,
-        ]);
+        return responseCommon()->success([
+            'redirect' => route('order.complete', [
+                'id' => $order->id,
+            ]),
+        ], 'Заказ успешно оформлен.');
     }
 
     public function cancelOrder($id)
@@ -108,6 +112,16 @@ class PersonalController extends Controller
     {
         $user = Auth::user();
         if ($request->ajax()) {
+            $validation = Validator::make($request->all(), [
+                'gender' => ['required'],
+                'version' => ['required'],
+            ], [], [
+                'gender' => 'Пол',
+                'version' => 'Версии журнала',
+            ]);
+            if ($validation->fails()) {
+                return responseCommon()->validationMessages($validation);
+            }
             $user->update($request->all());
 
             return responseCommon()->success([], 'Данные успешно обновлены.');
