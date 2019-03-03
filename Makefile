@@ -3,6 +3,7 @@
 .PHONY : help
 .DEFAULT_GOAL := help
 SRC ?= ./app/*
+TESTS ?= ./tests/*
 
 help: ## Показать эту подсказку
 	@echo "Сборка. Портал panor.ru"
@@ -42,7 +43,10 @@ test: seed ## Тестировать проект
 paratest: seed ## Тестировать проект (тесты запускаются параллельно)
 	./vendor/brianium/paratest/bin/paratest -p8 --coverage-html=./test-coverage
 
-analize: ## Статический анализ кода. По умолчанию SRC=./app/*
-	./vendor/squizlabs/php_codesniffer/bin/phpcs ${SRC} --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
+analyze: ## Статический анализ кода. По умолчанию SRC=./app/*
+	@echo "\033[33m\n... Анализ исхоных текстов ...\033[0m\n"
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ${SRC} -n --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
+	@echo "\033[33m\n... Анализ тестов ...\033[0m\n"
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ${TESTS} -n --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
 
 ---------------: ## ---------------

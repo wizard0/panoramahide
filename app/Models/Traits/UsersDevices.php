@@ -1,9 +1,8 @@
 <?php
-/*
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Илья Картунин (ikartunin@gmail.com)
  */
-
 namespace App\Models\Traits;
 
 use App\Models\Device;
@@ -13,6 +12,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 
+/**
+ * User devices trait
+ */
 trait UsersDevices
 {
     // Добавляем новое устровство пользователю
@@ -27,13 +29,15 @@ trait UsersDevices
     public function devices()
     {
         // Регулярным выражением проверяем, из какого класса вызван метод трейта
-        if (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__, $match))
+        if (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__, $match)) {
             // Для пользователей партнёров, определяем отношения через таблицу device_partner_user
             return $this->belongsToMany(Device::class, 'device_partner_user', 'user_id', 'device_id');
-        else
+        } else {
             // Для пользователей панорамы, определяем отношения через таблицу device_user
             return $this->belongsToMany(Device::class, 'device_user', 'user_id', 'device_id');
+        }
     }
+
     public function resetAllDevices()
     {
         foreach ($this->getActivationDevices() as $device) {
@@ -87,7 +91,7 @@ trait UsersDevices
         if (!$user->email) {
             return false;
         }
-        $code = encrypt($user->id.':'.$user->email);
+        $code = encrypt($user->id . ':' . $user->email);
 
         $link = route('reader.reset', [
             'code' => $code,
@@ -132,5 +136,4 @@ trait UsersDevices
         }
         return true;
     }
-
 }

@@ -1,7 +1,7 @@
 <?php
-/*
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Илья Картунин (ikartunin@gmail.com)
  */
 
 namespace Tests\Unit;
@@ -13,9 +13,12 @@ use App\Models\PartnerUser;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 use Carbon\Carbon;
 use Mail;
+
+/**
+ * Class for devices test.
+ */
 class DevicesTest extends TestCase
 {
     use DatabaseTransactions;
@@ -44,7 +47,9 @@ class DevicesTest extends TestCase
         $this->device = $this->user->devices()->inRandomOrder()->first();
     }
 
-    //Тесты по девайсам юзеров партала
+    /**
+     * Тесты по девайсам юзеров партала
+     */
     public function testUserDevice()
     {
         $this->getUserAndDevice(false);
@@ -54,7 +59,9 @@ class DevicesTest extends TestCase
         $this->assertNotNull($this->device->user);
     }
 
-    //Тесты по девайсам юзеров партнёров
+    /**
+     * Тесты по девайсам юзеров партнёров
+     */
     public function testPartnerUserDevice()
     {
         // Проверяем, что все устройства создались
@@ -83,7 +90,7 @@ class DevicesTest extends TestCase
         $this->device->getCode();
 
         // Проверяем активацию устройства с неверным кодом
-        $this->assertNull(Device::activateByCode(md5(rand(0,9999))), $this->textRed('Ошибка при проверке активации устройства с неверным кодом'));
+        $this->assertNull(Device::activateByCode(md5(rand(0, 9999))), $this->textRed('Ошибка при проверке активации устройства с неверным кодом'));
 
         // Проверка активации по коду
         $device = Device::activateByCode($this->device->activate_code);
@@ -102,9 +109,10 @@ class DevicesTest extends TestCase
         // Проверка просроченного устройства
         $device = $this->user->devices()->first();
         $device->activateDevice();
-        $device->activate_date = Carbon::now()->subDays(Device::ACTIVE_DAYS*2);
+        $device->activate_date = Carbon::now()->subDays(Device::ACTIVE_DAYS * 2);
         $this->assertTrue(!$device->checkActivation(), $this->textRed('Ошибка при проверке активации просроченного устройства'));
     }
+
     public function testResetAllDevices()
     {
         foreach ($this->user->devices as $device) {
@@ -114,6 +122,7 @@ class DevicesTest extends TestCase
         $this->user->resetAllDevices();
         $this->assertEquals($this->user->devices()->whereActive(true)->count(), 0, $this->textRed('Ошибка при проверке сброса активных устройств'));
     }
+
     public function testCheckOnlineDevice()
     {
         // Проверяем методы online

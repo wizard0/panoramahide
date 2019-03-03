@@ -1,14 +1,16 @@
 <?php
-/*
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Илья Картунин (ikartunin@gmail.com)
  */
-
 namespace App\Models;
 
 use App\Models\Traits\ActiveField;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class for quota.
+ */
 class Quota extends Model
 {
     use ActiveField;
@@ -19,10 +21,12 @@ class Quota extends Model
 
     public function isAvailable()
     {
-        if (!$this->isActive())
+        if (!$this->isActive()) {
             return false;
-        if ($this->used < $this->quota_size)
+        }
+        if ($this->used < $this->quota_size) {
             return true;
+        }
         return false;
     }
 
@@ -47,7 +51,7 @@ class Quota extends Model
                           ->where('active_date', '<=', $this->release_end);
                 }
             }
-        })->orWhere(function($query) {
+        })->orWhere(function ($query) {
             if ($this->release_id) {
                 $query->where('id', $this->release_id);
             }

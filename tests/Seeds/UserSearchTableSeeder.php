@@ -14,20 +14,20 @@ class UserSearchTableSeeder extends Seeder
      */
     public function run()
     {
-    	UserSearch::create([
-    		'id' => 1,
-    		'user_id' => 1,
-    		'search_params' => json_encode(
-    			array(
-	    			array('name' => 'q', 'value' => 'corrupt'),
-	    			array('name' => 'search_in', 'value' => 'all'),
-	    			array('name' => 'journal', 'value' => '2'),
-	    			array('name' => 'type', 'value' => 'article'),
-	    			array('name' => 'extend', 'value' => '1')
-	    		)
-    		),
-    		'created_at' => date('Y-m-d H:i:s'),
-    		'updated_at' => date('Y-m-d H:i:s')
-    	]);
+        UserSearch::create([
+            'id' => 1,
+            'user_id' => 1,
+            'search_params' => json_encode(
+                array(
+                    array('name' => 'q', 'value' => 'corrupt'),
+                    array('name' => 'search_in', 'value' => 'all'),
+                    array('name' => 'journal', 'value' => '2'),
+                    array('name' => 'type', 'value' => 'article'),
+                    array('name' => 'extend', 'value' => '1')
+                )
+            ),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s')
+        ]);
     }
 }
