@@ -95,7 +95,6 @@ trait IndexPageTrait
                     'html' => $html,
                     'value' => $value
                 ];
-
             }
             $this->tableBody[$model->id] = $row;
         }

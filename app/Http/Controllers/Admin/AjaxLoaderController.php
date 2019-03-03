@@ -7,8 +7,7 @@ use App\Http\Controllers\Controller;
 
 class AjaxLoaderController extends Controller
 {
-    function __invoke($url)
+    public function __invoke($url)
     {
-
     }
 }

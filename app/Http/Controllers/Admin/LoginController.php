@@ -40,10 +40,8 @@ class LoginController extends Controller
     {
         $login = $request->get('username');
         $pass = $request->get('password');
-        if (
-            Auth::attempt(['email' => $login, 'password' => $pass])
-            &&
-            Auth::user()->hasPermissionTo(User::PERMISSION_ADMIN)
+        if (Auth::attempt(['email' => $login, 'password' => $pass])
+            && Auth::user()->hasPermissionTo(User::PERMISSION_ADMIN)
         ) {
             return redirect()->route('admin.dashboard');
         }

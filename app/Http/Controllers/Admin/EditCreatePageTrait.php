@@ -72,8 +72,7 @@ trait EditCreatePageTrait
                     case self::TYPE_DATE:
                     case self::TYPE_BOOL:
                     case self::TYPE_PRICE:
-                        if (
-                            $this->isTranslatable()
+                        if ($this->isTranslatable()
                             && in_array($attribute, $model->translatedAttributes) // this attribute is translatable
                             && $model->translate($this->locale) // this model has translation to locale
                         ) {
@@ -127,7 +126,6 @@ trait EditCreatePageTrait
                         $this->model
                             ->$attribute = $value;
                     }
-
                 }
             }
             $this->model->save();

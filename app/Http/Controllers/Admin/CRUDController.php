@@ -119,7 +119,8 @@ class CRUDController extends Controller
     private function createModel()
     {
         if ($this->modelName && class_exists($this->modelName)) {
-            $this->model = new $this->modelName;
+            $model = $this->modelName;
+            $this->model = new $model();
         }
 
         return $this;
