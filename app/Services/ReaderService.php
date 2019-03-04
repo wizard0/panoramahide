@@ -4,9 +4,14 @@ namespace App\Services;
 
 use App\Article;
 use App\Journal;
+use App\Models\Bookmark;
 use App\Release;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
+/**
+ * Class for reader service.
+ */
 class ReaderService
 {
     /**
@@ -26,7 +31,6 @@ class ReaderService
      */
     public function __construct()
     {
-
     }
 
     /**
@@ -66,6 +70,22 @@ class ReaderService
         });
 
         return $oArticles;
+    }
+
+    /**
+     * Статьи для читалки по релизу со вставкой html кода
+     *
+     * @return mixed
+     */
+    public function getBookmarks()
+    {
+        $oUser = Auth::user();
+
+        $oBookmarks = $oUser->bookmarks()
+            ->where('release_id', $this->oRelease->id)
+            ->orderBy('created_at', 'asc')
+            ->get();
+        return $oBookmarks;
     }
 
     /**
@@ -109,14 +129,52 @@ class ReaderService
     private function getArticleHtml(Article $oArticle): string
     {
         $path = base_path($this->pathToHtml);
-
-        $name = 'article_00'.sprintf("%02d", $oArticle->id);
-
-        $html = $name.'.html';
-
-        $file = $path.$html;
+        $name = 'article_00' . sprintf("%02d", $oArticle->id);
+        $html = $name . '.html';
+        $file = $path . $html;
 
         return File::exists($file) ? trim(file_get_contents($file)) : null;
     }
 
+    /**
+     * Удаление закладки
+     *
+     * @param $id
+     * @return bool
+     */
+    public function bookmarkDestroy($id)
+    {
+        $oUser = Auth::user();
+
+        $oBookmark = $oUser->bookmarks()
+            ->where('id', $id)
+            ->first();
+
+        if (!is_null($oBookmark)) {
+            $oBookmark->delete();
+        }
+
+        return true;
+    }
+
+    /**
+     * Создание закладки для пользователя
+     *
+     * @param array $data
+     * @return bool
+     */
+    public function bookmarkCreate(array $data)
+    {
+        $oUser = Auth::user();
+
+        $oUser->createBookmark([
+            'release_id' => $data['release_id'],
+            'article_id' => (int)$data['article_id'],
+            'title' => $data['title'],
+            'scroll' => $data['scroll'],
+            'tag_number' => $data['tag_number'],
+        ]);
+
+        return true;
+    }
 }

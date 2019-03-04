@@ -1,9 +1,17 @@
 #reader {
   .panel-cover {
-    width: 60%;
-    margin-left: 20%;
-    margin-bottom: 10px;
+    text-align: center;
+  }
+  .panel-cover img {
+    //width: 60%;
+    //margin-left: 20%;
+    padding-bottom: 10px;
     padding-top: 10px;
+    text-align: center;
+    height: 600px;
+    @media (max-width: 930px) {
+      height: 400px;
+    }
   }
 
   table {
@@ -133,10 +141,50 @@
   }
 
   .container {
+    overflow: hidden;
     width: 960px;
     margin: 0 auto;
     background: #fff;
     padding: 40px 120px;
+    position: relative;
+    #reader-panel-bookmarks {
+      // чтобы было пространство для клика по якорю
+      width: 120px !important;
+      .bookmarks-holder .bookmark-item {
+        width: 960px !important;
+      }
+    }
+    .bookmarks-holder .bookmark-item {
+      width: 100%;
+    }
+    nav {
+      @media (max-width: 930px) {
+        padding: 40px 40px;
+      }
+    }
+    @media (max-width: 930px) {
+      // чтобы было пространство для клика по якорю
+      #reader-panel-bookmarks {
+        width: 40px !important;
+      }
+      padding: 0;
+      width: inherit;
+      .bookmarks-holder .bookmark-item {
+        width: 100%;
+        background-position: 20px 100%;
+        span {
+          margin-left: 20px;
+        }
+      }
+    }
+  }
+
+  #reader-panel-bookmarks {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
   }
 
   .author {

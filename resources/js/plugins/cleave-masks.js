@@ -53,3 +53,8 @@ if ($(cleaveMasks.type.int).length) {
         cleaveMasks.integer($(this));
     });
 }
+$('body').on('focus', cleaveMasks.type.int, function () {
+    cleaveMasks.integer($(this));
+}).on('focusout', cleaveMasks.type.int, function () {
+
+});

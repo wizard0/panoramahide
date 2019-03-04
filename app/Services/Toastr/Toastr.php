@@ -4,6 +4,9 @@ namespace App\Services\Toastr;
 
 use Bulk\Toastr\Facades\Toastr as ToastrFacade;
 
+/**
+ * Class for toastr.
+ */
 class Toastr
 {
     private $toastrMessages = [
@@ -82,6 +85,4 @@ class Toastr
     {
         return $this->get('primary', $json);
     }
-
-
 }

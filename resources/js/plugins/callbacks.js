@@ -32,8 +32,17 @@ window['after-callbackPromoAccess'] = function (result, $form) {
  * @param $form
  */
 window['after-callbackReaderAccess'] = function (result, $form) {
+    // Код успешно подтвержден
     if (result.result === 3) {
         $('.modal').modal('hide');
+    }
+    // Устройство успешно подтверждено
+    if (result.result === 4) {
+        $('.modal').modal('hide');
+    }
+    // Ссылка успешно отправлена
+    if (result.result === 5) {
+
     }
 };
 

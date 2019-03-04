@@ -1,8 +1,14 @@
 <?php
+/**
+ * @copyright
+ * @author
+ */
 
 namespace Tests;
 
-
+/**
+ * Сервисные методы
+ */
 trait StylesTestTrait
 {
     /**
@@ -13,6 +19,6 @@ trait StylesTestTrait
      */
     public function textRed($message)
     {
-        return "\033[97;41m".$message."\033[0;39m";
+        return "\033[97;41m" . $message . "\033[0;39m";
     }
 }

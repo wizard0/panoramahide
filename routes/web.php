@@ -1,5 +1,6 @@
 <?php
 
+use \Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -10,39 +11,6 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-Route::get('/test', function() {
-
-    $p = \App\Promocode::getOne(29);
-    foreach($p->getReleases('GRP6') as $r)
-        dump($r->id);
-    dd('wer');
-    for($i=0;$i<10;$i++){
-        $groups = [['name' => 'GRP'.rand(1,9), 'journals' => [1,2,3,4,5]],
-                   ['name' => 'GRP'.rand(10,19), 'journals' => [3,2,13,4,15]]];
-        \App\Promocode::store(['promocode' => 'PC'.rand(100000,999999), 'groups' => $groups]);
-    }
-    for($i=0;$i<10;$i++){
-        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'releases' => [3,2,13,4,15]]);
-        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'journals' => [3,2,13,4,15]]);
-        \App\Promocode::store(['promocode' => 'PC'.rand(100000,9999999), 'publishings' => [3,9,10,4,8]]);
-    }
-
-    //\App\Promocode::store(['promocode' => 'PC'.rand(1000,9999), 'groups' => $groups]);
-    //$p = \App\Promocode::getOne(29);
-    $groups = [['name' => 'GRP'.rand(1,9), 'journals' => [1,2,3,4,5]],
-               ['name' => 'GRP'.rand(10,19), 'journals' => [3,2,13,4,15]]];
-    $p = \App\Promocode::updateOne(29, ['releases' => [3,2,13,15], 'journals' => [2,3,4,5], 'groups' => $groups]);
-    dump($p);
-    dump($p->releases);
-    dump($p->journals);
-    dump($p->publishings);
-    foreach($p->groups as $group) {
-        dump($group->name);
-        dump($group->journals);
-    }
-    dd('ok');
-})->name('test');
-
 Route::get('/', 'MainpageController@index')->name('index');
 
 //Route::get('/test/', 'TestController');
@@ -132,6 +100,20 @@ Route::group(['prefix' => 'deskbooks'], function () {
 Route::group(['prefix' => 'reader'], function () {
     Route::get('/', 'ReaderController@index')->name('reader.index');
     Route::post('/code', 'ReaderController@code')->name('reader.code');
+    Route::post('/email', 'ReaderController@email')->name('reader.email');
+    Route::get('/reset/{code}', 'ReaderController@reset')->name('reader.reset');
+    Route::any('/online', 'ReaderController@online')->name('reader.online');
+    Route::any('/release', 'ReaderController@release')->name('reader.release');
+    Route::any('/releases', 'ReaderController@releases')->name('reader.releases');
+    Route::any('/articles', 'ReaderController@articles')->name('reader.articles');
+    Route::group(['prefix' => 'favorites'], function () {
+        Route::get('/', 'ReaderController@favorites')->name('reader.favorites');
+    });
+    Route::group(['prefix' => 'bookmarks'], function () {
+        Route::any('/', 'ReaderController@bookmarks')->name('reader.bookmarks');
+        Route::post('/{id}/destroy', 'ReaderController@bookmarksDestroy')->name('reader.bookmarks.destroy');
+        Route::post('/create', 'ReaderController@bookmarksCreate')->name('reader.bookmarks.create');
+    });
 });
 
 Route::group(['prefix' => 'home'], function () {
@@ -151,5 +133,12 @@ Route::group(['prefix' => 'promo_users'], function () {
     Route::any('/{id}/promocode/{item_id}/activate', ['uses' => 'PromoUsersController@activatePromocode', 'as' => 'promo_users.promocode.activate']);
     Route::any('/{id}/publishing/{item_id}/activate', ['uses' => 'PromoUsersController@activatePublishing', 'as' => 'promo_users.publishing.activate']);
     Route::any('/{id}/release/{item_id}/activate', ['uses' => 'PromoUsersController@activateRelease', 'as' => 'promo_users.release.activate']);
+});
+/**
+ * API
+ */
+Route::group(['prefix' => 'reader/api'], function () {
+    Route::get('/{partner}/{user}/{quota}/releases', 'ReaderApiController@list')->name('api.releases');
+    Route::get('/{partner}/{user}/{quota}/release/{release}.html', 'ReaderApiController@release')->name('api.release');
 });
 

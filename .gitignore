@@ -3,6 +3,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/test-coverage-log
 /.idea
 /.vscode
 /nbproject
@@ -18,6 +19,9 @@ composer.lock
 package-lock.json
 mix-manifest.json
 public/js/app.js
+public/css/app.css
+public/css/vue.css
 .DS_Store
 *.sublime-workspace
 test-coverage
+*.sublime-project

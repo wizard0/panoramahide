@@ -7,7 +7,9 @@ use Illuminate\Support\Facades\Hash;
 use Auth;
 use Session;
 
-
+/**
+ * Class for order.
+ */
 class Order extends Model
 {
     protected $table = "orders";
@@ -92,7 +94,8 @@ class Order extends Model
         }
     }
 
-    public function saveOrder($data) {
+    public function saveOrder($data)
+    {
         switch ($data['PERSON_TYPE']) {
             case Order::PHYSICAL_USER:
                 $physUser = OrderPhysUser::create($data);

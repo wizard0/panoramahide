@@ -38,17 +38,17 @@
                 <div class="d-flex socials">
                     <div>
                         <a href="http://vk.com/">
-                            <img src="/upload/iblock/81e/81e626c121b5b1d3f353dfc3f71171f7.png" alt="VK">
+                            <img src="/img/vk.svg" alt="VK">
                         </a>
                     </div>
                     <div>
                         <a href="http://fb.com/">
-                            <img src="/upload/iblock/21e/21e033213b497f92f43c6e5c26fcc690.png" alt="Facebook">
+                            <img src="/img/fb.svg" alt="Facebook">
                         </a>
                     </div>
                     <div>
                         <a href="http://twitter.com/">
-                            <img src="/upload/iblock/ffb/ffbe5288d412464c3502a0f75f0acf71.png" alt="twitter">
+                            <img src="/img/tw.svg" alt="twitter">
                         </a>
                     </div>
                 </div>				</div>
@@ -60,12 +60,14 @@
             </div>
             <div class="col-xl-3 col-lg-3 col-sm-4 col-12">
                 <span>Подписка:</span>
-                <p>
-                    podpiska@panor.ru					</p>
+                <p>podpiska@panor.ru</p>
             </div>
             <div class="col-xl-3 col-lg-3 col-sm-4 col-12">
                 <span>Реклама:</span>
-                <p>+7 495 274-22-22, доб. 39 					reklama@panor.ru</p>
+                <p>
+                    +7 495 274-22-22, доб. 39<br/>
+                    reklama@panor.ru
+                </p>
             </div>
         </div>
     </div>

@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright
+ * @author
+ */
 namespace App\Models;
 
 use App\Models\JbyPromo;
@@ -9,6 +12,9 @@ use App\Release;
 use App\User;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class for promo user.
+ */
 class PromoUser extends Model
 {
     protected $table = 'promo_users';
@@ -24,7 +30,7 @@ class PromoUser extends Model
 
     public function setPhoneAttribute($value)
     {
-        $this->attributes['phone'] = preg_replace('/[^0-9]/','', $value);
+        $this->attributes['phone'] = preg_replace('/[^0-9]/', '', $value);
     }
 
     /**

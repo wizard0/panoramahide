@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use App;
 
+/**
+ * Class for user search.
+ */
 class UserSearch extends Model
 {
     protected $fillable = ['user_id', 'search_params'];
@@ -50,8 +53,10 @@ class UserSearch extends Model
                         journal_translations.image as journalImage,
                         journals.issn as journalISSN,
                         journal_translations.name as journalName,
-                        journal_translations.code as journalCode"
-                )
+                        journal_translations.code as journalCode,
+                        release_translations.name as releaseName,
+                        release_translations.code as releaseCode
+                    ")
                     ->leftJoin('releases', 'releases.journal_id', '=', 'journals.id')
                     ->leftJoin('articles', 'releases.id', '=', 'articles.release_id');
 
@@ -136,41 +141,58 @@ class UserSearch extends Model
                     });
                 }
             }
-            if (isset($params['category']) && $params['category'])
+            if (isset($params['category']) && $params['category']) {
                 $q = $q->where(function ($query) use ($params) {
                     $query->where('journal_categories.id', '=', $params['category'])
                         ->orWhere('article_categories.id', '=', $params['category']);
                 });
-            if (isset($params['journal']) && $params['journal'])
+            }
+            if (isset($params['journal']) && $params['journal']) {
+                $q = $q->where(function ($query) use ($params) {
+                    $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
+                        ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
+                        ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
+                });
+            }
+            if (isset($params['category']) && $params['category']) {
+                $q = $q->where('categories.id', '=', $params['category']);
+            }
+            if (isset($params['journal']) && $params['journal']) {
                 $q = $q->where('journals.id', '=', $params['journal']);
-            if (isset($params['author_char']) && $params['author_char'])
+            }
+            if (isset($params['author_char']) && $params['author_char']) {
                 $q = $q->where('author_translations.name', 'like', $params['author_char'] . '%');
-            if (isset($params['author']))
+            }
+            if (isset($params['author'])) {
                 $q = $q->where('author_translations.name', '=', $params['author']);
-            if (isset($params['active_from']) && $params['active_from'])
+            }
+            if (isset($params['active_from']) && $params['active_from']) {
                 $q = $q->where('articles.active_date', '<', $params['active_from']);
-            if (isset($params['active_to']) && $params['active_to'])
+            }
+            if (isset($params['active_to']) && $params['active_to']) {
                 $q = $q->where('articles.active_end_date', '>', $params['active_to']);
-            if (isset($params['udk']) && $params['udk'])
-                $q = $q->where('articles.UDC', 'like', '%'.$params['udk'].'%');
+            }
+            if (isset($params['udk']) && $params['udk']) {
+                $q = $q->where('articles.UDC', 'like', '%' . $params['udk'] . '%');
+            }
 
             if (isset($params['sort_by'])) {
                 switch ($params['sort_by']) {
                     case 'name':
-                        if ($params['type'] == 'journal') $orderBy = 'journalName';
-                        else $orderBy = 'articleName';
-                        $q = $q->orderBy(
-                            $orderBy,
-                            isset($params['sort_order']) ? $params['sort_order'] : 'asc'
-                        );
+                        if ($params['type'] == 'journal') {
+                            $orderBy = 'journalName';
+                        } else {
+                            $orderBy = 'articleName';
+                        }
+                        $q = $q->orderBy($orderBy, isset($params['sort_order']) ? $params['sort_order'] : 'asc');
                         break;
                     case 'date':
-                        if ($params['type'] == 'journal') $orderBy = 'journalActiveDate';
-                        else $orderBy = 'articleActiveDate';
-                        $q = $q->orderBy(
-                            $orderBy,
-                            isset($params['sort_order']) ? $params['sort_order'] : 'asc'
-                        );
+                        if ($params['type'] == 'journal') {
+                            $orderBy = 'journalActiveDate';
+                        } else {
+                            $orderBy = 'articleActiveDate';
+                        }
+                        $q = $q->orderBy($orderBy, isset($params['sort_order']) ? $params['sort_order'] : 'asc');
                         break;
                 }
             }
@@ -183,6 +205,18 @@ class UserSearch extends Model
                 $q = $q->where('article_translations.locale', '=', $searchLocale)
                     ->where('articles.active', '=', 1);
             }
+            // Translations
+            $q = $q->where('journal_translations.locale', '=', "'" . $searchLocale . "'")
+                ->where('release_translations.locale', '=', "'" . $searchLocale . "'")
+                ->where('article_translations.locale', '=', "'" . $searchLocale . "'")
+                ->where('author_translations.locale', '=', "'" . $searchLocale .  "'")
+                ->where('category_translations.locale', '=', "'" . $searchLocale . "'");
+
+            // Activity
+            $q = $q->where('journals.active', '=', '1')
+                ->where('releases.active', '=', '1')
+                ->where('articles.active', '=', '1')
+                ->where('categories.active', '=', '1');
 
             return $q->groupBy($groupBy);
         } else {

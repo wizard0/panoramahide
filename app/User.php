@@ -3,7 +3,11 @@
 namespace App;
 
 use App\Models\PromoUser;
-use App\Models\UserDevice;
+
+use App\Models\Traits\UserBookmarks;
+use App\Models\Traits\UsersDevices;
+//use App\Models\UserDevice;
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -11,6 +15,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use Notifiable;
+    use UsersDevices;
+    use UserBookmarks;
 
     /**
      * The attributes that are mass assignable.
@@ -50,8 +56,9 @@ class User extends Authenticatable
         return phoneFormat($this->phone);
     }
 
-    public function devices()
+/*  public function devices()
     {
         return $this->hasMany(UserDevice::class);
     }
+*/
 }

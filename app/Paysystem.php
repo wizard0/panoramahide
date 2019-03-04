@@ -4,6 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class for paysystem.
+ */
 class Paysystem extends Model
 {
     protected $table = 'paysystems';
@@ -20,8 +23,9 @@ class Paysystem extends Model
     public function getDataValues()
     {
         $dataObj = (object)[];
-        foreach ($this->data as $data)
+        foreach ($this->data as $data) {
             $dataObj->{$data->code} = $data->value;
+        }
 
         return $dataObj;
     }
@@ -29,8 +33,9 @@ class Paysystem extends Model
     public function getDataNames()
     {
         $dataObj = (object)[];
-        foreach ($this->data as $data)
+        foreach ($this->data as $data) {
             $dataObj->{$data->code} = $data->name;
+        }
 
         return $dataObj;
     }
@@ -38,8 +43,9 @@ class Paysystem extends Model
     public function getDataAttributes()
     {
         $attributes = [];
-        foreach ($this->data as $data)
+        foreach ($this->data as $data) {
             $attributes[] = $data->code;
+        }
 
         return $attributes;
     }

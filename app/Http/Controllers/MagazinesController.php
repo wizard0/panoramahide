@@ -10,6 +10,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 
+/**
+ * Controls the data flow into magazines object and updates the view whenever data changes.
+ */
 class MagazinesController extends Controller
 {
     const ITEMS_PER_PAGE = 10;
@@ -21,11 +24,7 @@ class MagazinesController extends Controller
 //        $categories = Category::with('journals')->withTranslation()->get();
         $authorAlphabet = Author::getAlphabet();
 
-        return view('magazines.index', compact(
-            'journals',
-//            'categories',
-            'authorAlphabet'
-        ));
+        return view('magazines.index', compact('journals', 'authorAlphabet'));
     }
 
     /* TODO. Maybe need smth like this
