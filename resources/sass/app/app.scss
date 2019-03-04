@@ -56,9 +56,13 @@ $brand-info: $blue;
 
 // Personal
 @import '../personal/personal';
+@import '../personal/table';
 
 // Order
 @import '../personal/order';
+
+// Корзина
+@import '../personal/cart';
 
 // Pages
 @import '../pages/magazines';

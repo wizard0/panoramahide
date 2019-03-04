@@ -1,0 +1,46 @@
+/*!
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+table {
+  &.__personal {
+    img {
+      width: 90px;
+    }
+    .info {
+      font-size: 12px;
+    }
+    .price {
+      font-family: "OpenSans-Bold";
+      color: #e63201;
+    }
+    .status {
+      border-radius: 3px;
+      padding: 1px 6px;
+      color: #fff;
+      font-size: 10pt;
+      &.status-wait {
+        background: #ccc;
+      }
+      &.status-payed {
+        background: $brand-success;
+      }
+      &.status-cancelled {
+        background: $brand-danger;
+      }
+      &.status-completed {
+        background: $brand-success;
+      }
+    }
+    .list-item {
+      border-bottom: 1px solid #ccc;
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+    .osbold {
+
+    }
+  }
+}

@@ -4,11 +4,10 @@
     <NOSCRIPT>
         <div class="errortext">Для оформления заказа необходимо включить JavaScript. По-видимому, JavaScript либо не поддерживается браузером, либо отключен. Измените настройки браузера и затем <a href="">повторите попытку</a>.</div>
     </NOSCRIPT>
-    <div>
-        <a href="{{ route('journals') }}" class="btn btn-light" value="Вернуться к покупкам"
-                style="width: 210px;position: absolute;top: 20px;left: 20px;"
-        >
-            <span class="glyphicon glyphicon-chevron-left" style="margin-right: 10px"></span>Вернуться к покупкам
+    <div class="back-personal-button">
+        <a href="{{ route('personal.orders') }}" class="btn btn-light" title="Вернуться к покупкам">
+            <span class="glyphicon glyphicon-chevron-left"></span>
+            Вернуться к покупкам
         </a>
     </div>
     <table class="sale_order_full_table mt-3">

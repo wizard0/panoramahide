@@ -2,44 +2,55 @@
 
 @section('page-content')
     @if ($id)
+        <div class="back-personal-button">
+            <a href="{{ route('personal.orders') }}" class="btn btn-light" title="Вернуться к заказам">
+                <span class="glyphicon glyphicon-chevron-left"></span>
+                Вернуться к заказам
+            </a>
+        </div>
         @include('personal.orders.details')
     @else
-        @forelse($orders as $order)
-            @if ($loop->first)
-                <div class="acc-table-wrapper">
-                    <div class="acc-table-row acc-table-row-header">
-                        <div class="acc-table-item">Заказ</div>
-                        <div class="acc-table-item">Состав заказа</div>
-                        <div class="acc-table-item">Дата оформления</div>
-                        <div class="acc-table-item">Статус</div>
-                    </div>
-                </div>
-            @endif
-            <div class="acc-table-row">
-                <div class="acc-table-item subscr-table-readmore">
-                    <span class="osbold">№</span>{{ $order->id }}<br>
-                    <a href="{{ route('personal.order', $order->id) }}">подробнее</a>
-                </div>
-                <div class="acc-table-item acc-table-item-title">
-                    @foreach($order->items as $item)
-                        <div class="acc-table-item-unit">
-                            <span class="osbold">{{ $item->title }}</span>
-                            <div class="ad-type">
-                                {{ $item->typeVers }}
-                            </div>
-                        </div>
+        @if(count($orders) !== 0)
+            <div class="table-responsive">
+                <table class="table __personal __orders">
+                    <thead>
+                    <tr>
+                        <th>Заказ</th>
+                        <th>Состав заказа</th>
+                        <th>Дата оформления</th>
+                        <th>Статус</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($orders as $order)
+                        <tr>
+                            <td>
+                                №{{ $order->id }}<br>
+                                <a href="{{ route('personal.order', $order->id) }}" class="info">подробнее</a>
+                            </td>
+                            <td>
+                                @foreach($order->items as $item)
+                                    <div class="list-item">
+                                        {{ $item->title }}
+                                        <div class="info">
+                                            {{ $item->typeVers }}
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </td>
+                            <td>
+                                {{ $order->date }}
+                            </td>
+                            <td>
+                                <span class="status status-{{ $order->status }}">{{ $order->txtstatus }}</span>
+                            </td>
+                        </tr>
                     @endforeach
-                </div>
-                <div class="acc-table-item acc-table-item-duo">
-                    {{ $order->date }}
-                </div>
-                <div class="acc-table-item acc-table-item-duo">
-                    <span class="status status-{{ $order->status }}">{{ $order->txtstatus }}</span>
-                </div>
-                <div class="clear"></div>
+                    </tbody>
+                </table>
             </div>
-        @empty
+        @else
             <p class="cart_empty">Вы пока не оформляли заказов.</p>
-        @endforelse
+        @endif
     @endif
 @endsection
