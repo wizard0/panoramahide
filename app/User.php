@@ -66,7 +66,7 @@ class User extends Authenticatable
         return phoneFormat($this->phone);
     }
 
-    public function getOrders($id = null)
+    public function orders()
     {
         $physUsers  = OrderPhysUser::whereUserId($this->id)->pluck('id')->toArray();
         $legalUsers = OrderLegalUser::whereUserId($this->id)->pluck('id')->toArray();
@@ -74,11 +74,6 @@ class User extends Authenticatable
                                 $query->whereIn('phys_user_id', $physUsers)
                                       ->orWhereIn('legal_user_id', $legalUsers);
                             });
-        if ($id) {
-            $orders->whereId($id);
-        }
-        $orders = $orders->get();
-
         return $orders;
     }
 

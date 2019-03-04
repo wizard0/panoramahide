@@ -29,7 +29,7 @@ class PersonalController extends Controller
 
     public function orders(Request $request, $id = null)
     {
-        $orders = Auth::user()->getOrders($id);
+        $orders = $id ? Auth::user()->orders()->find($id) : Auth::user()->orders()->get();
         return view('personal.'.__FUNCTION__, compact('orders', 'id'));
     }
 
@@ -108,6 +108,7 @@ class PersonalController extends Controller
 
     public function subscriptions(Request $request)
     {
+        //dd(Auth::user()->orders()->get());
         return view('personal.'.__FUNCTION__);
     }
 
