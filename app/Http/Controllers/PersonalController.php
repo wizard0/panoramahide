@@ -100,6 +100,9 @@ class PersonalController extends Controller
     {
         $displayCheckout = true;
         $cart = Session::get('cart', null);
+        foreach ($cart->items as &$item) {
+            $item->typeVers = Order::typeVers($item->version, $item->type);
+        }
         return view('personal.'.__FUNCTION__, compact('cart', 'displayCheckout'));
     }
 

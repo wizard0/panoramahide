@@ -24,6 +24,7 @@
                     <div class="acc-table-item acc-table-item-about">
                         <h4>{{ $item->title }}</h4>
                         <div class="cart-item-subscr-info">
+                            {{ $item->typeVers }}
                         </div>
                         <div class="price">{{ $item->price }} руб.</div>
                     </div>

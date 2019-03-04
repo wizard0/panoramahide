@@ -88,11 +88,17 @@ class Order extends Model
                     $item->route = route('journal', $item->product->journal->code);
                     break;
             }
-            $item->typeVers    = self::$translate['version'][$item->version][$item->type];
+            $item->typeVers    = self::typeVers($item->version, $item->type);
             $item->start_month = property_exists($item->product, 'start_month') ? $item->product->start_month : null;
         }
         return $items;
     }
+
+    public static function typeVers($version, $type)
+    {
+        return self::$translate['version'][$version][$type];
+    }
+
     public function paysystem()
     {
         return $this->belongsTo(Paysystem::class);
