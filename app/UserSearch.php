@@ -147,15 +147,19 @@ class UserSearch extends Model
                         ->orWhere('article_categories.id', '=', $params['category']);
                 });
             }
-            if (isset($params['journal']) && $params['journal']) {
-                $q = $q->where(function ($query) use ($params) {
-                    $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
-                        ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
-                        ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
-                });
-            }
+//            if (isset($params['journal']) && $params['journal']) {
+//                $q = $q->where(function ($query) use ($params) {
+//                    $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
+//                        ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
+//                        ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
+//                });
+//            }
             if (isset($params['category']) && $params['category']) {
-                $q = $q->where('categories.id', '=', $params['category']);
+                if ($params['type'] == UserSearch::TYPE_JOURNAL) {
+                    $q = $q->where('journal_categories.id', '=', $params['category']);
+                } else {
+                    $q = $q->where('article_categories.id', '=', $params['category']);
+                }
             }
             if (isset($params['journal']) && $params['journal']) {
                 $q = $q->where('journals.id', '=', $params['journal']);
@@ -205,18 +209,6 @@ class UserSearch extends Model
                 $q = $q->where('article_translations.locale', '=', $searchLocale)
                     ->where('articles.active', '=', 1);
             }
-            // Translations
-            $q = $q->where('journal_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('release_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('article_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('author_translations.locale', '=', "'" . $searchLocale .  "'")
-                ->where('category_translations.locale', '=', "'" . $searchLocale . "'");
-
-            // Activity
-            $q = $q->where('journals.active', '=', '1')
-                ->where('releases.active', '=', '1')
-                ->where('articles.active', '=', '1')
-                ->where('categories.active', '=', '1');
 
             return $q->groupBy($groupBy);
         } else {
