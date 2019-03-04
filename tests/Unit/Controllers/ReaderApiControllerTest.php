@@ -1,18 +1,24 @@
 <?php
+/**
+ * @copyright
+ * @author
+ */
 namespace Tests\Unit\Controllers;
 
+use Tests\TestCase;
 use Illuminate\Http\Request;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Http\Controllers\ReaderApiController;
 use App\Http\Controllers\ReaderController;
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-
 use App\Release;
 use App\Journal;
 use App\Models\Quota;
 use App\Models\Partner;
 use App\Models\PartnerUser;
 
+/**
+ * Class for reader api controller test.
+ */
 class ReaderApiControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -22,6 +28,9 @@ class ReaderApiControllerTest extends TestCase
     protected $quota;
     protected $release_id;
 
+    /**
+     * setUp function
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -44,16 +53,21 @@ class ReaderApiControllerTest extends TestCase
         $newQuata['quota_size'] = 100;
 
         $this->release_id = $newQuata['release_id'];
-
         $this->quota = Quota::create($newQuata);
     }
 
+    /**
+     * tearDown function
+     */
     protected function tearDown()
     {
         unset($this->user);
         unset($this->partner);
     }
 
+    /**
+     * Тест Получение списка релизов
+     */
     public function testGetReleasesList()
     {
         // Получаем ссылку на страницу с релизами по квоте
@@ -63,12 +77,21 @@ class ReaderApiControllerTest extends TestCase
         $response->assertStatus(200);
         // Проверяем, что вывелась нужная страница
         $response->assertSee('Выберите выпуск для чтения');
+
+        $response = $this->get('get-error-page');
+        $this->assertIsObject($response);
     }
 
     public function testGetRelease()
     {
         // Получаем ссылку на релиз
-        $url = route('api.release', [$this->partner->secret_key, $this->user->user_id, $this->quota->id, $this->release_id], false);
+        $url = route('api.release', [
+                $this->partner->secret_key,
+                $this->user->user_id,
+                $this->quota->id,
+                $this->release_id
+            ], false);
+
         $response = $this->get($url);
         // Проверяем, что происходит редирект на читалку
         $response->assertStatus(302);
@@ -76,24 +99,24 @@ class ReaderApiControllerTest extends TestCase
         $readerUrl = route('reader.index', ['release_id' => $this->release_id]);
         $response->assertRedirect($readerUrl);
         // Проверяем куку пользователя партнёра
-        $response->assertCookie('PartnerUser', $this->partner->id.'|@|@|'.$this->user->user_id);
+        $response->assertCookie('PartnerUser', $this->partner->id . '|@|@|' . $this->user->user_id);
     }
 
     public function testReaderByPartnerUser()
     {
         $readerUrl = route('reader.index', ['release_id' => $this->release_id]);
         // Переходим на читалку с неверной кукой
-        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'||'.$this->user->user_id)]);
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id . '||' . $this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertSee('partner:        0,');
         // Переходим на читалку с кукой юзера
-        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id . '|@|@|' . $this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertSee('partner:        1,');
         // Переходим на читалку с кукой юзера но без email
         $this->user->email = null;
         $this->user->save();
-        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id . '|@|@|' . $this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertSee('partner:        1,');
         /*
@@ -115,7 +138,7 @@ class ReaderApiControllerTest extends TestCase
         $device->activateDevice();
         $device = $this->user->createDevice();
         $device->activateDevice(false);
-        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id.'|@|@|'.$this->user->user_id)]);
+        $response = $this->call('GET', $readerUrl, [], ['PartnerUser' => \Crypt::encrypt($this->partner->id . '|@|@|' . $this->user->user_id)]);
         $response->assertStatus(200)
                  ->assertSee('reader-max-pu-devices-modal');
     }

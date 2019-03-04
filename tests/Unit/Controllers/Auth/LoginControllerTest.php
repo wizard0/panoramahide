@@ -1,11 +1,10 @@
 <?php
 /**
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Дмитрий Поскачей (dposkachei@gmail.com)
  */
 
 namespace Tests\Unit\Controllers\Auth;
-
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -16,6 +15,9 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
+/**
+ * Class for login controller test.
+ */
 class LoginControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -28,15 +30,13 @@ class LoginControllerTest extends TestCase
         $oController = (new LoginController());
 
         $request = $this->request([
-            'email' => 'wrong'.testData()->user['email'],
+            'email' => 'wrong' . testData()->user['email'],
             'password' => testData()->user['password'],
         ]);
 
         try {
             $result = $oController->login($request);
-
         } catch (\Exception $e) {
-
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
         }
@@ -58,24 +58,15 @@ class LoginControllerTest extends TestCase
 
         try {
             $this->assertTrue(!Auth::guest());
-
             $result = $oController->login($request);
-
-            //dd($result);
-
             $this->assertTrue($result['success']);
 
             Auth::logout();
-
             $this->assertTrue(Auth::guest());
 
             $result = $oController->login($request);
-
-            //dd($result);
-
             $this->assertTrue(!Auth::guest());
             $this->assertTrue($result['success']);
-
         } catch (\Throwable $e) {
             $this->assertTrue(false);
         }

@@ -1,7 +1,9 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Дмитрий Поскачей (dposkachei@gmail.com)
+ */
 namespace Tests\Unit\Controllers;
-
 
 use App\Http\Controllers\PromoController;
 use App\Models\Promocode;
@@ -11,6 +13,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
+/**
+ * Class for promo controller test.
+ */
 class PromoControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -20,7 +25,6 @@ class PromoControllerTest extends TestCase
         $oController = new PromoController();
 
         $result = $oController->index();
-
         $this->assertTrue($result instanceof \Illuminate\View\View);
     }
 
@@ -29,9 +33,7 @@ class PromoControllerTest extends TestCase
         $oController = new PromoController();
 
         $request = $this->request();
-
         $result = $oController->deskbooks($request);
-
         $this->assertTrue($result instanceof \Illuminate\View\View);
     }
 
@@ -45,9 +47,7 @@ class PromoControllerTest extends TestCase
         $request = $this->request([
             'promocode' => $this->promocode(), // несуществующий промокод
         ]);
-
         $result = $oPromoController->access($request);
-
         $this->assertFalse($result['success']);
     }
 
@@ -60,15 +60,12 @@ class PromoControllerTest extends TestCase
         $request = new Request();
 
         $oPromoCode = $this->activePromocode();
-
         $this->assertNotNull($oPromoCode, $this->textRed('Активный промокод не найден'));
 
-        $user = $this->user();
-
         // авторизация
+        $user = $this->user();
         $this->actingAs($user);
         $this->assertAuthenticated();
-
 
         $oPromoCode->update([
             'release_end' => now()->subDay(),
@@ -79,7 +76,6 @@ class PromoControllerTest extends TestCase
         ]);
 
         $result = $oPromoController->access($request);
-
         $this->assertFalse($result['success']);
 
         $oPromoCode->update([
@@ -94,9 +90,7 @@ class PromoControllerTest extends TestCase
         DB::transaction(function () use ($oPromoController, $request) {
             $result = $oPromoController->access($request);
             $this->assertTrue($result['success']);
-
             $this->assertIsInt($result['code']);
-
             DB::rollBack();
         });
     }
@@ -110,9 +104,7 @@ class PromoControllerTest extends TestCase
         $request = new Request();
 
         $oPromoCode = $this->activePromocode();
-
         $this->assertNotNull($oPromoCode, $this->textRed('Активный промокод не найден'));
-
         $user = $this->user();
 
         // вывод модального окна с просьбой авторизоваться
@@ -121,9 +113,7 @@ class PromoControllerTest extends TestCase
             'email' => $user->email,
         ]);
         $result = $oPromoController->access($request);
-
         $this->assertFalse($result['success']);
-
         $this->assertTrue($result['result'] === 2, $this->textRed('Пользователь не найден'));
 
         $request->merge([
@@ -133,7 +123,6 @@ class PromoControllerTest extends TestCase
         ]);
 
         $result = $oPromoController->access($request);
-
         $this->assertTrue($result->getStatusCode() === 422, $this->textRed('Пользователь был найден или телефон уникальный'));
 
         $request->merge([
@@ -144,11 +133,8 @@ class PromoControllerTest extends TestCase
         // полуение кода подтверждения
         DB::transaction(function () use ($oPromoController, $request) {
             $result = $oPromoController->access($request);
-
             $this->assertTrue($result['success']);
-
             $this->assertIsInt($result['code'], $this->textRed('Не сгенерирован код подтверждения'));
-
             DB::rollBack();
         });
     }
@@ -175,24 +161,18 @@ class PromoControllerTest extends TestCase
         ]);
 
         $result = $oPromoController->code($request);
-
         $this->assertTrue($result->getStatusCode() === 422);
-
         $this->assertFalse(json_decode($result->getContent(), true)['success']);
-
 
         // полуение кода подтверждения
         DB::transaction(function () use ($oPromoController, $request, $oPromoCode) {
-
-            $user = $this->user();
             // авторизация
+            $user = $this->user();
             $this->actingAs($user);
             $this->assertAuthenticated();
 
             $result = $oPromoController->access($request);
-
             $this->assertTrue($result['success']);
-
             $this->assertIsInt($result['code']);
 
             $request = $this->request([
@@ -201,12 +181,9 @@ class PromoControllerTest extends TestCase
                 'code' => $result['code'], // существующий код подтверждения
             ]);
             $result = $oPromoController->code($request);
-
             $this->assertTrue($result['success']);
             DB::rollBack();
         });
-
-
     }
 
     /**
@@ -223,15 +200,12 @@ class PromoControllerTest extends TestCase
         ]);
 
         $oPromoCode = $this->activePromocode();
-
         $request->merge([
             'promocode' => $oPromoCode->promocode, // несуществующий промокод
             'email' => $this->email(), // несуществующий email
             'password' => '1234567890',
         ]);
-
         $result = $oPromoController->password($request);
-
         $this->assertFalse($result['success']);
     }
 
@@ -246,21 +220,16 @@ class PromoControllerTest extends TestCase
         $request = $this->request([
             'promocode' => $this->promocode(), // несуществующий промокод
         ]);
-
         $result = $oPromoController->password($request);
-
         $this->assertFalse($result['success']);
 
         $oPromoCode = $this->activePromocode();
-
         $request = $this->request([
             'promocode' => $oPromoCode->promocode, // существующий промокод
             'email' => testData()->user['email'], // существующий email
             'password' => testData()->user['password_string'],
         ]);
-
         $result = $oPromoController->password($request);
-
         $this->assertTrue($result['success']);
     }
 
@@ -276,7 +245,6 @@ class PromoControllerTest extends TestCase
             'promocode' => $this->promocode(), // несуществующий промокод
         ]);
         $result = $oPromoController->activation($request);
-
         $this->assertFalse($result['success']);
     }
 
@@ -294,9 +262,7 @@ class PromoControllerTest extends TestCase
 
         // авторизация
         $this->actingAs($this->user());
-
         $result = $oPromoController->activation($request);
-
         $this->assertTrue($result['success']);
     }
 
@@ -316,13 +282,12 @@ class PromoControllerTest extends TestCase
         $this->actingAs(User::create([
             'name' => testData()->user['name'],
             'last_name' => testData()->user['name'],
-            'email' => 'second'.testData()->user['email'],
+            'email' => 'second' . testData()->user['email'],
             'phone' => testData()->user['phone_second'],
             'password' => testData()->user['password'],
         ]));
 
         $result = $oPromoController->activation($request);
-
         $this->assertTrue($result['success']);
     }
 
@@ -339,9 +304,7 @@ class PromoControllerTest extends TestCase
 
         // авторизация
         $this->actingAs($this->user());
-
         $result = $oPromoController->activation($request);
-
         $this->assertFalse($result['success']);
     }
 
@@ -360,27 +323,19 @@ class PromoControllerTest extends TestCase
         ]);
 
         $oGroups = $oPromoController->deskbooks($request)['oGroups'];
-
-        $request = $this->request([
-
-        ]);
+        $request = $this->request([]);
 
         $oGroups = $oPromoController->deskbooks($request)['oGroups'];
-
         $oJournal = collect([]);
-
         foreach ($oGroups as $oGroup) {
             $oJournal = $oGroup->journals->first();
         }
-
         $this->assertNotNull($oJournal);
 
         $oPromocode = $this->activePromocode();
-
         $this->assertNotNull($oPromocode);
 
-        $aJournalPromocode[] = $oJournal->id.'::'.$oPromocode->id;
-
+        $aJournalPromocode[] = $oJournal->id . '::' . $oPromocode->id;
         $request = new Request();
         $request->merge([
             'journal::promocode' => $aJournalPromocode,
@@ -388,15 +343,11 @@ class PromoControllerTest extends TestCase
 
         // полуение кода подтверждения
         DB::transaction(function () use ($oPromoController, $request, $oJournal) {
-
             $result = $oPromoController->save($request);
-
             $this->assertTrue($result['success']);
-
             DB::rollBack();
         });
     }
-
 
     /**
      * Активный промокод

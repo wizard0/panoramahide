@@ -9,7 +9,7 @@ use App\Models\Promocode;
 
 class Release extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = [
         'name', 'code', 'number', 'image', 'description',
@@ -18,6 +18,11 @@ class Release extends Model
     ];
 
 //    protected $fillable = ['code'];
+
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
 
     /**
      * Journal the release belongs to

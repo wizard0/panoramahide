@@ -15,10 +15,11 @@ class Controller extends BaseController
     // Если переданное условие не истина, отправляем на страницу ошибки с текстом $message
     public static function errorMessage($condition, $message)
     {
-        if (!$condition)
+        if (!$condition) {
             exit(view('error', compact('message'))->render());
-        else
+        } else {
             // При получении экземпляра удобно его сразу вернуть
             return $condition;
+        }
     }
 }

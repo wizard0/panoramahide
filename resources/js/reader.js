@@ -35,20 +35,24 @@ Vue.use(vmodal);
 
 let VueScrollTo = require('vue-scrollto');
 
+window.reader = {
+    scrollToOptions: {
+        container: "#reader-panel",
+        duration: 500,
+        easing: "ease",
+        offset: 0,
+        force: true,
+        cancelable: true,
+        onStart: false,
+        onDone: false,
+        onCancel: false,
+        x: false,
+        y: true
+    }
+};
+
 // You can also pass in the default options
-Vue.use(VueScrollTo, {
-    container: "#reader-panel",
-    duration: 500,
-    easing: "ease",
-    offset: -100,
-    force: true,
-    cancelable: true,
-    onStart: false,
-    onDone: false,
-    onCancel: false,
-    x: false,
-    y: true
-});
+Vue.use(VueScrollTo, window.reader.scrollToOptions);
 
 Object.defineProperty(Vue.prototype, '$_', { value: _ });
 
@@ -66,6 +70,7 @@ if (document.getElementById('app-reader')) {
                     active: null,
                     tmpActive: null,
 
+                    readerBookmark: 'readerBookmark-modal',
                     readerCode: 'readerCode-modal',
                     readerOnline: 'readerOnline-modal',
                 },

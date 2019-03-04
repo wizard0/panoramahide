@@ -1,7 +1,7 @@
 <?php
 /**
- * Copyright (c) 2018-2019 "ИД Панорама"
- * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author    Дмитрий Поскачей (dposkachei@gmail.com)
  */
 
 namespace Tests\Unit\Controllers\Auth;
@@ -14,6 +14,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
+/**
+ * Class for register controller test.
+ */
 class RegisterControllerTest extends TestCase
 {
     use DatabaseTransactions;
@@ -46,7 +49,6 @@ class RegisterControllerTest extends TestCase
         try {
             $result = $oController->register($request);
         } catch (\Throwable $e) {
-
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
         }
@@ -64,9 +66,7 @@ class RegisterControllerTest extends TestCase
         ]));
         try {
             $result = $oController->register($request);
-
         } catch (\Throwable $e) {
-
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
         }
@@ -84,9 +84,7 @@ class RegisterControllerTest extends TestCase
         ]));
         try {
             $result = $oController->register($request);
-
         } catch (\Throwable $e) {
-
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
         }
@@ -98,15 +96,13 @@ class RegisterControllerTest extends TestCase
     public function testRegisterValidationRecaptcha()
     {
         $oController = (new RegisterController());
-
         $request = $this->request($this->registerData());
+
         try {
             $result = $oController->register($request);
-
             $this->assertTrue($result->getStatusCode() === 422);
-
         } catch (\Throwable $e) {
-
+            //
         }
     }
 
@@ -122,15 +118,10 @@ class RegisterControllerTest extends TestCase
         ]));
         try {
             $result = $oController->register($request);
-
             $this->assertTrue(!Auth::guest());
-
             $this->assertTrue($result['success']);
-
             $this->assertTrue($result['redirect'] === $oController->redirectPath());
-
         } catch (\Throwable $e) {
-
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
         }
@@ -147,7 +138,7 @@ class RegisterControllerTest extends TestCase
         return array_merge([
             'name' => testData()->user['name'],
             'last_name' => testData()->user['name'],
-            'email' => 'test'.testData()->user['email'],
+            'email' => 'test' . testData()->user['email'],
             'password' => 'testtest',
             'password_confirmation' => 'testtest',
             'phone' => 79998887755,

@@ -17,10 +17,12 @@ class DatabaseSeeder extends Seeder
 
         $this->call(PaysystemSeeder::class);
         $this->call(PaysystemDataSeeder::class);
+        $this->call(RolesAndPermissionsBaseSeeder::class);
 
         // Test
         $this->call(PublishingTestSeeder::class);
         $this->call(setReleasesYear::class);
         $this->call(CreateSubscriptions::class);
+        $this->call(UserSearchTableSeeder::class);
     }
 }

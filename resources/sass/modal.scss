@@ -5,5 +5,16 @@
     right: 10px;
   }
 }
-
+.v--modal {
+  a.btn-danger {
+    color: #fff;
+    background-color: #e63201;
+    border-color: #e63201;
+    &:hover {
+      color: #fff;
+      background-color: darken(#e63201, 10);
+      border-color: darken(#e63201, 10);
+    }
+  }
+}
 

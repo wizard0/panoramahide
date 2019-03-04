@@ -8,29 +8,39 @@ stages:
     - deploy
     - production
 
-build:
+build-php:
     stage: build
     only:
         - master
     script:
-        - php72 /usr/bin/composer install
-        - npm update
-        - npm install
-        - npm run prod
         - cp /home/gitlab-runner/.env.dev.panor.ru ./.env
+        - php72 /usr/bin/composer install
         - php72 ./artisan cache:clear
         - php72 ./artisan config:cache
     artifacts:
-        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME"
+        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME_php"
         untracked: true
         paths:
             - .env
             - composer.lock
-            - package-lock.json
             - bootstrap/
-            - node_modules/
-            - public/
             - vendor/
+
+build-npm:
+    stage: build
+    only:
+        - master
+    script:
+        - npm update
+        - npm install
+        - npm run prod
+    artifacts:
+        name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME_npm"
+        untracked: true
+        paths:
+            - package-lock.json
+            - public/
+            - node_modules/
 
 dbseed:
     stage: dbseed
@@ -42,16 +52,19 @@ dbseed:
         - php72 ./artisan migrate:fresh -vvv
         - php72 ./artisan db:seed --class=TestSeeder -vvv
     dependencies:
-        - build
+        - build-php
+        - build-npm
 
 test:
     stage: test
     only:
         - master
     script:
-        - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+        # - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+        - php72 ./vendor/brianium/paratest/bin/paratest -p4 --coverage-text tests
     dependencies:
-        - build
+        - build-php
+        - build-npm
         - dbseed
 
 deploy:
@@ -63,7 +76,8 @@ deploy:
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder'
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && chmod 774 ./deploy && ./deploy'
     dependencies:
-        - build
+        - build-php
+        - build-npm
         - dbseed
         - test
 

@@ -110,9 +110,12 @@ input[type="checkbox"].is-danger + label::before {
 @import 'promo';
 @import 'promocodes';
 @import 'tippy';
+@import 'glyphicon';
 
 //
 @import 'modal';
+
+@import 'admin';
 //@import 'print/print';
 
 p, a, h1, h2, h3, h4 {
@@ -136,4 +139,3 @@ p, a, h1, h2, h3, h4 {
     user-select: none;
   }
 }
-
