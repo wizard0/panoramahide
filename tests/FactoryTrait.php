@@ -7,11 +7,13 @@
 namespace Tests;
 
 
+use App\Article;
 use App\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
 use App\Publishing;
 use App\Release;
+use App\User;
 
 trait FactoryTrait
 {
@@ -61,5 +63,33 @@ trait FactoryTrait
     protected function factoryGroup(array $data = []): Group
     {
         return factory(Group::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Article
+     */
+    protected function factoryArticle(array $data = []): Article
+    {
+        return factory(Article::class)->create($data);
+    }
+
+    /**
+     * @param string $class
+     * @param $data
+     * @return mixed
+     */
+    protected function factoryMake(string $class, array $data = [])
+    {
+        return factory($class)->make($data);
+    }
+
+    /**
+     * @param array $data
+     * @return User
+     */
+    protected function factoryUser(array $data = []): User
+    {
+        return factory(User::class)->create($data);
     }
 }

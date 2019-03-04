@@ -8,11 +8,13 @@ namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\HomeController;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 class HomeControllerTest extends TestCase
 {
     use DatabaseTransactions;
+    use FactoryTrait;
 
     /**
      * Тестирование домашней страницы
@@ -31,7 +33,7 @@ class HomeControllerTest extends TestCase
      */
     public function testJournals()
     {
-        $this->actingAs(testData()->user());
+        $this->actingAs($this->factoryUser());
 
         $oController = new HomeController();
 

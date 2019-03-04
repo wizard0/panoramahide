@@ -33,19 +33,4 @@ trait CommonTestTrait
 
         return $request;
     }
-
-    /**
-     * @return User
-     */
-    protected function createUser(): User
-    {
-        $this->oUser = User::create([
-            'name' => testData()->user['name'],
-            'last_name' => testData()->user['name'],
-            'email' => testData()->user['email'],
-            'phone' => testData()->user['phone'],
-            'password' => testData()->user['password'],
-        ]);
-        return $this->oUser;
-    }
 }

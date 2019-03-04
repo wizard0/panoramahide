@@ -3,13 +3,16 @@
  * @copyright
  * @author
  */
+
 namespace Tests\Unit\Models;
 
 use App\User;
 use App\UserSearch;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
@@ -17,6 +20,30 @@ use Tests\TestCase;
  */
 class UserSearchModelTest extends TestCase
 {
+    use DatabaseMigrations;
+    use FactoryTrait;
+
+    /**
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+//        UserSearch::create([
+//            'id' => 1,
+//            'user_id' => 1,
+//            'search_params' => json_encode([
+//                ['name' => 'q', 'value' => 'corrupt'],
+//                ['name' => 'search_in', 'value' => 'all'],
+//                ['name' => 'journal', 'value' => '2'],
+//                ['name' => 'type', 'value' => 'article'],
+//                ['name' => 'extend', 'value' => '1'],
+//            ]),
+//            'created_at' => date('Y-m-d H:i:s'),
+//            'updated_at' => date('Y-m-d H:i:s'),
+//        ]);
+    }
+
     public function testRetrieveGuest()
     {
         $res = UserSearch::retrieve();
@@ -54,7 +81,7 @@ class UserSearchModelTest extends TestCase
                 'active_to' => "06.06.2019",
                 'udk' => '123-456',
                 'sort_by' => $sort,
-                'sort_order' => 'desc'
+                'sort_order' => 'desc',
             ];
 
             $res = UserSearch::search($requestParams);
@@ -78,8 +105,8 @@ class UserSearchModelTest extends TestCase
      *
      * @return mixed
      */
-    private function user() : User
+    private function user(): User
     {
-        return testData()->user();
+        return $this->factoryUser();
     }
 }

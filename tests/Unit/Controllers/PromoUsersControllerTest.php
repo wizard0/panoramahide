@@ -11,11 +11,13 @@ use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 class PromoUsersControllerTest extends TestCase
 {
     use DatabaseTransactions;
+    use FactoryTrait;
 
     /**
      * @var User
@@ -106,7 +108,7 @@ class PromoUsersControllerTest extends TestCase
         $this->assertEquals($result->getStatusCode(), 422);
 
         // Обновление промо пользователя
-        $phone = testData()->generatePhone();
+        $phone = $this->phone();
         $request = $this->request([
             'name' => $this->promoUser()->name,
             'phone' => '' . $phone,
@@ -249,5 +251,15 @@ class PromoUsersControllerTest extends TestCase
         $request = $this->request([], true);
         $result = $this->controller()->activateRelease($request, $id, $item_id);
         $this->assertTrue($result['success']);
+    }
+
+    /**
+     * Неверный телефон
+     *
+     * @return int
+     */
+    private function phone(): int
+    {
+        return $this->factoryMake(User::class)->phone;
     }
 }

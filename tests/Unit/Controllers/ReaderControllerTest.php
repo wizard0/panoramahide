@@ -7,12 +7,14 @@ namespace Tests\Unit\Controllers;
 
 use App\Article;
 use App\Http\Controllers\ReaderController;
+use App\Journal;
 use App\Models\Device;
 use App\Release;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
@@ -21,6 +23,7 @@ use Tests\TestCase;
 class ReaderControllerTest extends TestCase
 {
     use DatabaseTransactions;
+    use FactoryTrait;
 
     /**
      * @var User
@@ -38,6 +41,11 @@ class ReaderControllerTest extends TestCase
     private $article;
 
     /**
+     * @var Journal
+     */
+    private $journal;
+
+    /**
      *
      */
     protected function setUp()
@@ -45,10 +53,20 @@ class ReaderControllerTest extends TestCase
         parent::setUp();
         $this->setUserAndDevice();
 
+        $this->journal = $this->factoryJournal();
+
         $this->release = factory(Release::class)->create([
-            'journal_id' => 1
+            'journal_id' => $this->journal->id,
         ]);
         $this->article = factory(Article::class)->create();
+    }
+
+    /**
+     * @return ReaderController
+     */
+    public function controller(): ReaderController
+    {
+        return new ReaderController();
     }
 
     /**
@@ -66,7 +84,7 @@ class ReaderControllerTest extends TestCase
      */
     private function user(): User
     {
-        return testData()->user();
+        return $this->factoryUser();
     }
 
     /**
@@ -75,19 +93,11 @@ class ReaderControllerTest extends TestCase
     public function testIndexResetWrong()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $request = new Request();
-            $request->merge([]);
+        session()->put('reset-wrong', 1);
 
-            session()->put('reset-wrong', 1);
-
-            $result = $oController->index($request);
-            $this->assertTrue(session()->has('modal'));
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->index($this->request([]));
+        $this->assertTrue(session()->has('modal'));
     }
 
     /**
@@ -96,19 +106,11 @@ class ReaderControllerTest extends TestCase
     public function testIndexResetSuccess()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $request = new Request();
-            $request->merge([]);
+        session()->put('reset-success', 1);
 
-            session()->put('reset-success', 1);
-
-            $result = $oController->index($request);
-            $this->assertTrue(!session()->has('reset-success'));
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->index($this->request([]));
+        $this->assertTrue(!session()->has('reset-success'));
     }
 
     /**
@@ -116,21 +118,10 @@ class ReaderControllerTest extends TestCase
      */
     public function testIndexGuest()
     {
-        $oController = (new ReaderController());
+        $result = $this->controller()->index($this->request([])); // Что здесь проверяется?
 
-        DB::transaction(function () use ($oController) {
-            //$this->user->createDevice();
-            //$this->user->createDevice();
-            $request = new Request();
-            $request->merge([]);
-
-            $result = $oController->index($request); // Что здесь проверяется?
-
-            $this->assertTrue(session()->has('modal'));
-            $this->assertTrue(session()->get('modal') === 'login-modal');
-
-            DB::rollBack();
-        });
+        $this->assertTrue(session()->has('modal'));
+        $this->assertTrue(session()->get('modal') === 'login-modal');
     }
 
     /**
@@ -139,20 +130,12 @@ class ReaderControllerTest extends TestCase
     public function testIndexDeviceNull()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $countBefore = $this->user->devices()->count();
-            $request = new Request();
-            $request->merge([]);
+        $countBefore = $this->user->devices()->count();
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $result = $oController->index($request); // Что здесь проверяется?
-
-            $countAfter = $this->user->devices()->count();
-            $this->assertTrue($countAfter > $countBefore);
-
-            DB::rollBack();
-        });
+        $countAfter = $this->user->devices()->count();
+        $this->assertTrue($countAfter > $countBefore);
     }
 
     /**
@@ -161,23 +144,16 @@ class ReaderControllerTest extends TestCase
     public function testIndexDeviceIsset()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $countBefore = $this->user->devices()->count();
+        $oDevice = $this->user->createDevice();
+        $countBefore = $this->user->devices()->count();
 
-            $request = new Request();
-            $request->merge([]);
-            $_COOKIE['device_id'] = $oDevice->id;
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $result = $oController->index($request); // Что здесь проверяется?
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $countAfter = $this->user->devices()->count();
-            $this->assertTrue($countAfter === $countBefore);
-
-            DB::rollBack();
-        });
+        $countAfter = $this->user->devices()->count();
+        $this->assertTrue($countAfter === $countBefore);
     }
 
     /**
@@ -186,23 +162,16 @@ class ReaderControllerTest extends TestCase
     public function testIndexDeviceNotIsset()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $countBefore = $this->user->devices()->count();
+        $oDevice = $this->user->createDevice();
+        $countBefore = $this->user->devices()->count();
 
-            $request = new Request();
-            $request->merge([]);
-            $_COOKIE['device_id'] = Device::orderBy('id', 'desc')->first()->id + 1;
+        $_COOKIE['device_id'] = Device::orderBy('id', 'desc')->first()->id + 1;
 
-            $result = $oController->index($request); // Что здесь проверяется?
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $countAfter = $this->user->devices()->count();
-            $this->assertTrue($countAfter > $countBefore);
-
-            DB::rollBack();
-        });
+        $countAfter = $this->user->devices()->count();
+        $this->assertTrue($countAfter > $countBefore);
     }
 
     /**
@@ -212,30 +181,21 @@ class ReaderControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
-        $oController = (new ReaderController());
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-        DB::transaction(function () use ($oController) {
+        $countBefore = $this->user->devices()->count();
 
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $_COOKIE['device_id'] = null;
 
-            $countBefore = $this->user->devices()->count();
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $request = new Request();
-            $request->merge([]);
-            $_COOKIE['device_id'] = null;
-
-            $result = $oController->index($request); // Что здесь проверяется?
-
-            $countAfter = $this->user->devices()->count();
-            $this->assertTrue($countAfter > $countBefore);
-            $this->assertTrue(session()->has('modal'));
-            $this->assertTrue(session()->get('modal') === 'reader-max-devices-modal');
-
-            DB::rollBack();
-        });
+        $countAfter = $this->user->devices()->count();
+        $this->assertTrue($countAfter > $countBefore);
+        $this->assertTrue(session()->has('modal'));
+        $this->assertTrue(session()->get('modal') === 'reader-max-devices-modal');
     }
 
     /**
@@ -244,25 +204,18 @@ class ReaderControllerTest extends TestCase
     public function testIndexDeviceActivation()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $countBefore = $this->user->devices()->count();
+        $oDevice = $this->user->createDevice();
+        $countBefore = $this->user->devices()->count();
 
-            $request = new Request();
-            $request->merge([]);
-            $_COOKIE['device_id'] = null;
+        $_COOKIE['device_id'] = null;
 
-            $result = $oController->index($request); // Что здесь проверяется?
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $countAfter = $this->user->devices()->count();
-            $this->assertTrue($countAfter > $countBefore);
-            $this->assertTrue(session()->has('modal'));
-            $this->assertTrue(session()->get('modal') === 'reader-code-modal');
-
-            DB::rollBack();
-        });
+        $countAfter = $this->user->devices()->count();
+        $this->assertTrue($countAfter > $countBefore);
+        $this->assertTrue(session()->has('modal'));
+        $this->assertTrue(session()->get('modal') === 'reader-code-modal');
     }
 
     /**
@@ -273,24 +226,18 @@ class ReaderControllerTest extends TestCase
         $this->actingAs($this->user);
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
-            $oDevice->setOnline();
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
+        $oDevice->setOnline();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([]);
-            $_COOKIE['device_id'] = $oDevice->id;
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $result = $oController->index($request); // Что здесь проверяется?
+        $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
-            $this->assertTrue(session()->has('modal'));
-            $this->assertTrue(session()->get('modal') === 'reader-confirm-online-modal');
-
-            DB::rollBack();
-        });
+        $this->assertTrue(session()->has('modal'));
+        $this->assertTrue(session()->get('modal') === 'reader-confirm-online-modal');
     }
 
     /**
@@ -299,25 +246,22 @@ class ReaderControllerTest extends TestCase
     public function testIndexSuccess()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([
-                'release_id' => 1,
-            ]);
-            $_COOKIE['device_id'] = $oDevice->id;
+        $request = new Request();
+        $request->merge([
+            'release_id' => 1,
+        ]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $result = $oController->index($request); // Что здесь проверяется?
+        $result = $this->controller()->index($this->request([
+            'release_id' => 1,
+        ])); // Что здесь проверяется?
 
-            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-            $this->assertTrue($oDevice->isOnline());
-
-            DB::rollBack();
-        });
+        $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
+        $this->assertTrue($oDevice->isOnline());
     }
 
     /**
@@ -326,12 +270,8 @@ class ReaderControllerTest extends TestCase
     public function testRelease()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([]);
-
-        $result = $oController->release($request);
+        $result = $this->controller()->release($this->request());
         $this->assertTrue(!empty($result['data']));
     }
 
@@ -342,10 +282,7 @@ class ReaderControllerTest extends TestCase
     {
         $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([]);
-
-        $result = $oController->release($request);
+        $result = $this->controller()->release($this->request());
         $this->assertFalse($result['success']);
     }
 
@@ -356,10 +293,13 @@ class ReaderControllerTest extends TestCase
     {
         $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([]);
+        $oRelease = $this->factoryRelease([
+            'journal_id' => $this->journal->id,
+        ]);
 
-        $result = $oController->releases($request);
+        $result = $this->controller()->releases($this->request([
+            'release_id' => $oRelease->id,
+        ]));
         $this->assertTrue(!empty($result['data']));
     }
 
@@ -370,10 +310,7 @@ class ReaderControllerTest extends TestCase
     {
         $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([]);
-
-        $result = $oController->articles($request);
+        $result = $this->controller()->articles($this->request());
         $this->assertTrue(!empty($result['data']));
     }
 
@@ -383,24 +320,16 @@ class ReaderControllerTest extends TestCase
     public function testCodeNullDevice()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->sendCodeToUser();
+        $oDevice = $this->user->createDevice();
+        $oDevice->sendCodeToUser();
 
-            $request = new Request();
-            $request->merge([
-                'code' => $oDevice->activate_code . '00000',
-            ]);
+        $_COOKIE['device_id'] = null;
 
-            $_COOKIE['device_id'] = null;
-
-            $result = $oController->code($request);
-            $this->assertFalse($result->getData()->success);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->code($this->request([
+            'code' => $oDevice->activate_code . '00000',
+        ]));
+        $this->assertFalse($result->getData()->success);
     }
 
     /**
@@ -409,24 +338,16 @@ class ReaderControllerTest extends TestCase
     public function testCodeWrongCode()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->sendCodeToUser();
+        $oDevice = $this->user->createDevice();
+        $oDevice->sendCodeToUser();
 
-            $request = new Request();
-            $request->merge([
-                'code' => $oDevice->activate_code . '00000',
-            ]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->code($request);
-            $this->assertFalse($result->getData()->success);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->code($this->request([
+            'code' => $oDevice->activate_code . '00000',
+        ]));
+        $this->assertFalse($result->getData()->success);
     }
 
     /**
@@ -435,24 +356,16 @@ class ReaderControllerTest extends TestCase
     public function testCodeSuccess()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->sendCodeToUser();
+        $oDevice = $this->user->createDevice();
+        $oDevice->sendCodeToUser();
 
-            $request = new Request();
-            $request->merge([
-                'code' => $oDevice->activate_code,
-            ]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->code($request);
-            $this->assertTrue($result['success']);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->code($this->request([
+            'code' => $oDevice->activate_code,
+        ]));
+        $this->assertTrue($result['success']);
     }
 
     /**
@@ -461,19 +374,11 @@ class ReaderControllerTest extends TestCase
     public function testEmailSuccess()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $request = new Request();
-            $request->merge([
-                'email' => 'ewfweqfe@mail.ru',
-            ]);
-
-            $result = $oController->email($request);
-            $this->assertTrue($result['success']);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->email($this->request([
+            'email' => 'ewfweqfe@mail.ru',
+        ]));
+        $this->assertTrue($result['success']);
     }
     /**
      * Email для кода подтверждения устройства: успешный
@@ -481,19 +386,11 @@ class ReaderControllerTest extends TestCase
     public function testEmailWrong()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $request = new Request();
-            $request->merge([
-                'email' => 'ewfweqfemail',
-            ]);
-
-            $result = $oController->email($request);
-            $this->assertFalse($result->getData()->success);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->email($this->request([
+            'email' => 'ewfweqfemail',
+        ]));
+        $this->assertFalse($result->getData()->success);
     }
 
     /**
@@ -502,24 +399,14 @@ class ReaderControllerTest extends TestCase
     public function testOnlineNullDevice()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([
+        $_COOKIE['device_id'] = null;
 
-            ]);
-
-            $_COOKIE['device_id'] = null;
-
-            $result = $oController->online($request);
-            $this->assertFalse($result['success']);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->online($this->request());
+        $this->assertFalse($result['success']);
     }
 
     /**
@@ -528,25 +415,17 @@ class ReaderControllerTest extends TestCase
     public function testOnlineSetOnline()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([
-                'online' => 1
-            ]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->online($request);
-            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-            $this->assertTrue($oDevice->isOnline());
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->online($this->request([
+            'online' => 1,
+        ]));
+        $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
+        $this->assertTrue($oDevice->isOnline());
     }
 
     /**
@@ -555,24 +434,16 @@ class ReaderControllerTest extends TestCase
     public function testOnlineReset()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([
-                'reset' => 1
-            ]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->online($request);
-            $this->assertTrue($result['result'] === 5);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->online($this->request([
+            'reset' => 1,
+        ]));
+        $this->assertTrue($result['result'] === 5);
     }
 
     /**
@@ -581,26 +452,18 @@ class ReaderControllerTest extends TestCase
     public function testOnlineHasOnline()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
-            $oDevice->setOnline();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
+        $oDevice->setOnline();
 
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->online($request);
-            $this->assertFalse($result['success']);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->online($this->request());
+        $this->assertFalse($result['success']);
     }
 
     /**
@@ -611,21 +474,14 @@ class ReaderControllerTest extends TestCase
         $this->actingAs($this->user);
         $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
-            $oDevice->setOnline();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
+        $oDevice->setOnline();
 
-            $request = new Request();
-            $request->merge([]);
+        $_COOKIE['device_id'] = $oDevice->id;
 
-            $_COOKIE['device_id'] = $oDevice->id;
-
-            $result = $oController->online($request);
-            $this->assertTrue($result['success']);
-
-            DB::rollBack();
-        });
+        $result = $this->controller()->online($this->request());
+        $this->assertTrue($result['success']);
     }
 
     /**
@@ -633,19 +489,10 @@ class ReaderControllerTest extends TestCase
      */
     public function testResetGuest()
     {
-        $oController = (new ReaderController());
+        $result = $this->controller()->reset($this->request(), 'code');
 
-        DB::transaction(function () use ($oController) {
-            $request = new Request();
-            $request->merge([]);
-
-            $result = $oController->reset($request, 'code');
-
-            $this->assertTrue(session()->has('modal'));
-            $this->assertTrue(session()->get('modal') === 'login-modal');
-
-            DB::rollBack();
-        });
+        $this->assertTrue(session()->has('modal'));
+        $this->assertTrue(session()->get('modal') === 'login-modal');
     }
 
     /**
@@ -654,23 +501,15 @@ class ReaderControllerTest extends TestCase
     public function testResetCheckError()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([]);
+        $result = $this->controller()->reset($this->request(), 'code');
 
-            $result = $oController->reset($request, 'code');
-
-            $this->assertTrue(session()->has('reset-wrong'));
-            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-            $this->assertTrue($oDevice->active === 1);
-
-            DB::rollBack();
-        });
+        $this->assertTrue(session()->has('reset-wrong'));
+        $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
+        $this->assertTrue($oDevice->active === 1);
     }
 
     /**
@@ -679,25 +518,17 @@ class ReaderControllerTest extends TestCase
     public function testResetCheckSuccess()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        DB::transaction(function () use ($oController) {
-            $oDevice = $this->user->createDevice();
-            $oDevice->activateDevice();
+        $oDevice = $this->user->createDevice();
+        $oDevice->activateDevice();
 
-            $request = new Request();
-            $request->merge([]);
+        $code = encrypt($this->user->id . ':' . $this->user->email);
 
-            $code = encrypt($this->user->id . ':' . $this->user->email);
+        $result = $this->controller()->reset($this->request(), $code);
 
-            $result = $oController->reset($request, $code);
-
-            $this->assertTrue(session()->has('reset-success'));
-            $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-            $this->assertTrue($oDevice->active === 0);
-
-            DB::rollBack();
-        });
+        $this->assertTrue(session()->has('reset-success'));
+        $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
+        $this->assertTrue($oDevice->active === 0);
     }
 
     /**
@@ -706,12 +537,8 @@ class ReaderControllerTest extends TestCase
     public function testBookmarks()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([]);
-
-        $result = $oController->bookmarks($request);
+        $result = $this->controller()->bookmarks($this->request());
 
         $this->assertTrue($result['success']);
     }
@@ -722,33 +549,24 @@ class ReaderControllerTest extends TestCase
     public function testBookmarksCreate()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarks($this->request([
             'release_id' => $this->release->id,
-        ]);
-
-        $result = $oController->bookmarks($request);
+        ]));
         $this->assertEquals([], $result['data']);
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarksCreate($this->request([
             'release_id' => $this->release->id,
             'article_id' => $this->article->id,
             'title' => 'Название закладки',
             'scroll' => 0,
             'tag_number' => 1,
-        ]);
-
-        $result = $oController->bookmarksCreate($request);
+        ]));
         $this->assertTrue($result['success']);
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarks($this->request([
             'release_id' => $this->release->id,
-        ]);
-        $result = $oController->bookmarks($request);
+        ]));
         $this->assertContains('id', $result);
         $this->assertContains('owner_type', $result);
         $this->assertContains('release_id', $result);
@@ -762,62 +580,36 @@ class ReaderControllerTest extends TestCase
     public function testBookmarksDestroy()
     {
         $this->actingAs($this->user);
-        $oController = (new ReaderController());
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarks($this->request([
             'release_id' => $this->release->id,
-        ]);
-
-        $result = $oController->bookmarks($request);
+        ]));
         $this->assertTrue(empty($result['data']));
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarksCreate($this->request([
             'release_id' => $this->release->id,
             'article_id' => $this->article->id,
             'title' => 'Название закладки',
             'scroll' => 0,
             'tag_number' => 1,
-        ]);
-
-        $result = $oController->bookmarksCreate($request);
+        ]));
         $this->assertTrue($result['success']);
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarks($this->request([
             'release_id' => $this->release->id,
-        ]);
-
-        $result = $oController->bookmarks($request);
+        ]));
         $this->assertTrue(!empty($result['data']));
 
         $bookmark = $result['data'][0];
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarksDestroy($this->request([
             'release_id' => $this->release->id,
-        ]);
-
-        $result = $oController->bookmarksDestroy($request, $bookmark['id']);
+        ]), $bookmark['id']);
         $this->assertTrue($result['success']);
 
-        $request = new Request();
-        $request->merge([
+        $result = $this->controller()->bookmarks($this->request([
             'release_id' => $this->release->id,
-        ]);
-
-        $result = $oController->bookmarks($request);
+        ]));
         $this->assertEquals([], $result['data']);
-    }
-
-    /**
-     * Неверный код
-     *
-     * @return int
-     */
-    public function code(): int
-    {
-        return 100001;
     }
 }

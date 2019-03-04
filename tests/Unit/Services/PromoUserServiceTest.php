@@ -10,11 +10,13 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 class PromoUserServiceTest extends TestCase
 {
     use DatabaseTransactions;
+    use FactoryTrait;
 
     /**
      * @var User
@@ -32,7 +34,7 @@ class PromoUserServiceTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->user = $this->createUser();
+        $this->user = $this->factoryUser();
 
         $this->promoUser = factory(PromoUser::class)->create([
             'user_id' => $this->user->id,
@@ -63,7 +65,7 @@ class PromoUserServiceTest extends TestCase
         $oPromoUser = $this->service()->create([
             'name' => 'Промо пользовтаель',
             'user_id' => $this->user->id,
-            'phone' => testData()->user['phone'],
+            'phone' => $this->user->phone,
         ]);
         $this->assertNotNull($oPromoUser);
     }
@@ -75,7 +77,7 @@ class PromoUserServiceTest extends TestCase
     {
         $oPromoUser = $this->service()->update($this->promoUser()->id, [
             'name' => 'Промо пользовтаель',
-            'phone' => testData()->user['phone'],
+            'phone' => $this->user->phone,
         ]);
         $this->assertTrue($oPromoUser->name === 'Промо пользовтаель');
     }
