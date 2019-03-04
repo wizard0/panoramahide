@@ -8,9 +8,14 @@ use App\Models\Promocode;
 
 class Publishing extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = ['name', 'code', 'image', 'description'];
+
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
 
     public function promocode()
     {

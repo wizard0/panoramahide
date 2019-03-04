@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subscription extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     protected $table = 'subscriptions';
 
@@ -49,6 +49,10 @@ class Subscription extends Model
         self::PERIOD_TWICE_MONTH => 12,
         self::PERIOD_ONCE_2_MONTH => 3,
         self::PERIOD_ONCE_3_MONTH => 2,
+    ];
+
+    public $rules = [
+        'name' => 'required|string'
     ];
 
     public function journal()

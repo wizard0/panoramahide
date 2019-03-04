@@ -13,8 +13,8 @@ help: ## Показать эту подсказку
 	@echo "  Вы можете изменить следующие параметры:\n\
 		SRC - Файл для статического анализа кода\n\
 		Примеры:\n\
-		   make SRC=./app/Http/Controllers/* analize\n\
-		   make SRC=./app/Http/Controllers/Controller.php analize\n"
+		   make SRC=./app/Http/Controllers analyze\n\
+		   make SRC=./app/Http/Controllers/Controller.php analyze\n"
 
 clear: ## Очиститить проект
 	composer clearcache

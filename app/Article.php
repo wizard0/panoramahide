@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     const RESTRICTION_NO = 'no';
     const RESTRICTION_REGISTER = 'register';
@@ -17,6 +17,11 @@ class Article extends Model
     public $translatedAttributes = [
         'name', 'code', 'keywords', 'image', 'description',
         'preview_image', 'preview_description', 'bibliography', 'price'
+    ];
+
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
     ];
 
     public function release()

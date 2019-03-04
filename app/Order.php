@@ -35,10 +35,20 @@ class Order extends Model
     public function user()
     {
         if (isset($this->phys_user_id) && $this->phys_user_id) {
-            return $this->belongsTo(OrderPhysUser::class, 'phys_user_id');
+            return $this->phys_user();
         } else {
-            return $this->belongsTo(OrderLegalUser::class, 'legal_user_id');
+            return $this->legal_user();
         }
+    }
+
+    public function phys_user()
+    {
+        return $this->belongsTo(OrderPhysUser::class, 'phys_user_id');
+    }
+
+    public function legal_user()
+    {
+        return $this->belongsTo(OrderLegalUser::class, 'legal_user_id');
     }
 
     public function getFullUserName()

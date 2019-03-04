@@ -15,7 +15,7 @@ class CategoriesController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $categories = Category::withTranslation()->get();
+        $categories = Category::where('active', 1)->withTranslation()->get();
 
         return view('categories.index', compact('categories'));
     }

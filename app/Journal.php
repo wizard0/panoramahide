@@ -13,7 +13,7 @@ use App\Models\Promocode;
  * Class Journal
  *
  * @property integer id
- * @property string  locale
+ * @property string  journal_locale
  * @property boolean active
  * @property string  active_date
  * @property string  ISSN
@@ -45,12 +45,17 @@ use App\Models\Promocode;
  */
 class Journal extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',
         'format', 'volume', 'periodicity', 'editorial_board', 'article_index', 'rubrics', 'review_procedure',
         'article_submission_rules', 'chief_editor', 'phone', 'email', 'site', 'about_editor', 'contacts'
+    ];
+
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
     ];
 
     /**
@@ -70,7 +75,7 @@ class Journal extends Model
      */
     public function publishings()
     {
-        return $this->belongsToMany(Publishing::class);
+        return $this->belongsToMany(Publishing::class, 'journal_publishing');
     }
 
     public function releases()

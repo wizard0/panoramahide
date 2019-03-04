@@ -27,8 +27,9 @@
     @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
+    <script src="{{ asset('js/AjaxPageLoader.js') }}"></script>
 
-    <link rel="shortcut icon" href="{{{ asset('img/favicon.png') }}}">
+    <link rel="shortcut icon" href="{{ asset('img/favicon.png') }}">
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
