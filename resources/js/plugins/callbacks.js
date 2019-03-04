@@ -70,3 +70,17 @@ window['after-showMessageLoading'] = function (result, $form) {
         $messageContainer.addClass('__is-danger');
     }
 };
+
+/**
+ * Обновление корзины после удаления
+ *
+ * @param result
+ * @param $form
+ */
+window['after-cartDeleteItem'] = function (result, $form) {
+    console.log('after-cartDeleteItem');
+    if (result.success) {
+        $('#cart-in-header').replaceWith(result.header);
+        $('#personal-cart-content').replaceWith(result.cart);
+    }
+};
