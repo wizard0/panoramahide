@@ -16,11 +16,11 @@ class SearchController extends Controller
         $extend = $request->get('extend');
 
         $params = $request->all();
-
+        // dd($request, $request->query, $params);
         if (!isset($params['type'])) $params['type'] = UserSearch::TYPE_ARTICLE;
 
         $searchDBResult = UserSearch::search($params);
-        if ($searchDBResult) {
+        // if ($searchDBResult) {
             $search = $searchDBResult->paginate(10);
             $rowCount = $search->total();
             foreach ($search as $s) {
@@ -32,9 +32,9 @@ class SearchController extends Controller
                     }
                 }
             }
-        } else {
-            $search = [];
-        }
+        // } else {
+        //     $search = [];
+        // }
 
         return view('search.index', compact('search', 'extend', 'rowCount', 'params'));
     }
