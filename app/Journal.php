@@ -194,7 +194,7 @@ class Journal extends Model
         // создать части подписки | generate subscribe parts
         foreach (array(Subscription::TYPE_PRINTED, Subscription::TYPE_ELECTRONIC) as $type) {
             if ($type == Subscription::TYPE_ELECTRONIC) {
-//                $start_month = date('n');
+                // $start_month = date('n');
                 $start_month = 1;
                 $start_year = date('Y');
             } else {

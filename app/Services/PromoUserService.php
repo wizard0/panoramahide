@@ -36,9 +36,9 @@ class PromoUserService
     /**
      * Сообщение с текстом ошибки
      *
-     * @var null
+     * @var string
      */
-    private $message = null;
+    private $message = '';
 
     /**
      * PromoUserService constructor.
@@ -121,9 +121,9 @@ class PromoUserService
     }
 
     /**
-     * @param $message
+     * @param string $message
      */
-    private function setMessage(string $message) : void
+    private function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -131,7 +131,7 @@ class PromoUserService
     /**
      * @return string
      */
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->message;
     }
@@ -142,7 +142,7 @@ class PromoUserService
      * @param array $data
      * @return PromoUser
      */
-    public function create(array $data) : PromoUser
+    public function create(array $data): PromoUser
     {
         $oPromoUser = PromoUser::create([
             'name' => $data['name'],
@@ -155,7 +155,7 @@ class PromoUserService
     /**
      * Обновить промо-юзера
      *
-     * @param $id
+     * @param integer $id
      * @param array $data
      * @return PromoUser
      */
@@ -207,8 +207,8 @@ class PromoUserService
     /**
      * Проверка кода подтверждения по телефону
      *
-     * @param $phone
-     * @param $code
+     * @param integer $phone
+     * @param integer $code
      * @return bool
      */
     public function codeCheckByPhone(int $phone, int $code) : bool

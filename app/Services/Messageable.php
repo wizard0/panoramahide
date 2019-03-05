@@ -2,20 +2,19 @@
 
 namespace App\Services;
 
-
 trait Messageable
 {
     /**
      * Сообщение с текстом ошибки
      *
-     * @var null
+     * @var string
      */
-    private $message = null;
+    private $message = '';
 
     /**
-     * @param $message
+     * @param string $message
      */
-    private function setMessage(string $message) : void
+    private function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -23,7 +22,7 @@ trait Messageable
     /**
      * @return string
      */
-    public function getMessage() : ?string
+    public function getMessage(): ?string
     {
         return $this->message;
     }

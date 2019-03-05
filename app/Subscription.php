@@ -8,16 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Subscription
  *
- * @property integer price_for_half_year
- * @property integer id
- * @property string  locale
- * @property boolean active
- * @property string  type
- * @property string  year
- * @property string  half_year
- * @property string  period
- * @property integer price_for_release
- * @property integer price_for_year
+ * @property integer $price_for_half_year
+ * @property integer $id
+ * @property string  $locale
+ * @property boolean $active
+ * @property string  $type
+ * @property string  $year
+ * @property string  $half_year
+ * @property string  $period
+ * @property integer $price_for_release
+ * @property integer $price_for_year
  *
  * @package App
  */

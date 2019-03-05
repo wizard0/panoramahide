@@ -30,9 +30,9 @@ class PromocodeService
     /**
      * Сообщение с текстом ошибки
      *
-     * @var null
+     * @var string
      */
-    private $message = null;
+    private $message = '';
 
     /**
      * PromocodeService constructor.
@@ -76,7 +76,7 @@ class PromocodeService
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @param array $data
      * @return Promocode
      */
@@ -99,7 +99,7 @@ class PromocodeService
     }
 
     /**
-     * @param $id
+     * @param integer $id
      * @return Promocode
      */
     public function findById(int $id): ?Promocode
@@ -112,7 +112,7 @@ class PromocodeService
     }
 
     /**
-     * @param $code
+     * @param string $code
      * @return Promocode
      */
     public function findByCode(string $code): ?Promocode
@@ -238,10 +238,10 @@ class PromocodeService
      * Общий - промо-выпуски (отмеченные как промо) журналов тех издательств, которые выбрал промо-участник.
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByCommon(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByCommon(Promocode $oPromocode, Release $query): Release
     {
         $aPublishings = $this->promoUser()->publishings->pluck('id')->toArray();
         //$aPublishings = $oPromocode->publishings->pluck('id')->toArray();
@@ -258,10 +258,10 @@ class PromocodeService
      * На журнал - промо-выпуски журнала, указанного в промокоде (свойство "Журнал")
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByOnJournal(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByOnJournal(Promocode $oPromocode, Release $query): Release
     {
         $query = $query
             ->where('journal_id', $oPromocode->journal_id)
@@ -274,13 +274,12 @@ class PromocodeService
      * На издательство - как и общий, но если заданы "дата начала выпусков" и "дата окончания выпусков", то они используются как ограничение по дате выхода выпусков.
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByOnPublishing(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByOnPublishing(Promocode $oPromocode, Release $query): Release
     {
         $query = $this->queryReleasesByCommon($oPromocode, $query);
-
         $query = $this->queryReleasesByActiveDate($oPromocode, $query);
 
         return $query;
@@ -291,10 +290,10 @@ class PromocodeService
      * вышедшие в указанный интервал
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByOnRelease(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByOnRelease(Promocode $oPromocode, Release $query): Release
     {
         $query = $query
             ->whereIn('id', $oPromocode->releases->pluck('id')->toArray());
@@ -311,10 +310,10 @@ class PromocodeService
      * На издательство + на выпуски - объединение выпусков вида "На издательство" и "На выпуск"
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByPublishingPlusRelease(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByPublishingPlusRelease(Promocode $oPromocode, Release $query): Release
     {
         $query = $this->queryReleasesByCommon($oPromocode, $query);
 
@@ -334,10 +333,10 @@ class PromocodeService
      * При активации/использовании промокода у него увеличивается на 1 свойство "использован".
      *
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByCustom(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByCustom(Promocode $oPromocode, Release $query): Release
     {
         if ($oPromocode->journal_id) {
             $query = $query->where('journal_id', $oPromocode->journal_id);
@@ -347,10 +346,10 @@ class PromocodeService
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
-     * @return Builder
+     * @param Release $query
+     * @return Release
      */
-    private function queryReleasesByActiveDate(Promocode $oPromocode, Builder $query): Builder
+    private function queryReleasesByActiveDate(Promocode $oPromocode, Release $query): Release
     {
         if (!is_null($oPromocode->release_begin)) {
             $query = $query->where('releases.active_date', '>=', $oPromocode->release_begin);
@@ -396,20 +395,20 @@ class PromocodeService
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return Collection
      */
-    private function queryJournalsByCommon(Promocode $oPromocode, Builder $query): Collection
+    private function queryJournalsByCommon(Promocode $oPromocode, $query): Collection
     {
         return $query->get();
     }
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return \Illuminate\Support\Collection
      */
-    private function queryJournalsByOnJournal(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    private function queryJournalsByOnJournal(Promocode $oPromocode, $query): \Illuminate\Support\Collection
     {
         $oJournal = $oPromocode->journal;
 
@@ -420,10 +419,10 @@ class PromocodeService
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return \Illuminate\Support\Collection
      */
-    private function queryJournalsByOnPublishing(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    private function queryJournalsByOnPublishing(Promocode $oPromocode, $query): \Illuminate\Support\Collection
     {
         $oPublishings = $oPromocode->publishings;
 
@@ -438,10 +437,10 @@ class PromocodeService
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return \Illuminate\Support\Collection
      */
-    private function queryJournalsByOnRelease(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    private function queryJournalsByOnRelease(Promocode $oPromocode, $query): \Illuminate\Support\Collection
     {
         $oReleases = $oPromocode->releases;
 
@@ -456,20 +455,20 @@ class PromocodeService
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return Collection
      */
-    private function queryJournalsByPublishingPlusRelease(Promocode $oPromocode, Builder $query): Collection
+    private function queryJournalsByPublishingPlusRelease(Promocode $oPromocode, $query): Collection
     {
         return $query->get();
     }
 
     /**
      * @param Promocode $oPromocode
-     * @param Builder $query
+     * @param Builder|Journal $query
      * @return \Illuminate\Support\Collection
      */
-    private function queryJournalsByCustom(Promocode $oPromocode, Builder $query): \Illuminate\Support\Collection
+    private function queryJournalsByCustom(Promocode $oPromocode, $query): \Illuminate\Support\Collection
     {
         $oJournals = new PromocodeCustomService($oPromocode, $this->promoUser);
 
@@ -477,7 +476,7 @@ class PromocodeService
     }
 
     /**
-     * @param $message
+     * @param string $message
      */
     private function setMessage(string $message): void
     {

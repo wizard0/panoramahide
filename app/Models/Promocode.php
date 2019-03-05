@@ -104,4 +104,9 @@ class Promocode extends Model
     {
         return $this->hasMany(Group::class)->with('journals');
     }
+
+    public function increment($column, $amount = 1, array $extra = [])
+    {
+        return parent::increment($column, $amount, $extra);
+    }
 }

@@ -8,7 +8,7 @@ trait PromocodeGetSetableTrait
 {
     /**
      * Promocode
-     * @var null
+     * @var Promocode|null
      */
     private $promocode = null;
 
