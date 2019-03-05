@@ -44,6 +44,22 @@ class LoginControllerTest extends TestCase
         $responseAdmin->assertOk();
     }
 
+    public function testAdminLoginPage()
+    {
+        $user = factory(User::class)->create();
+        $admin = factory(User::class)
+            ->create()
+            ->assignRole('admin');
+
+        $responseNoUser = $this->get(route('admin.login'));
+        $responseNoAdmin = $this->actingAs($user)->get(route('admin.login'));
+        $responseAdmin = $this->actingAs($admin)->get(route('admin.login'));
+
+        $responseNoUser->assertOk();
+        $responseNoAdmin->assertOk();
+        $responseAdmin->assertRedirect(route('admin.dashboard'));
+    }
+
     public function testLoginAction()
     {
         Session::start();
