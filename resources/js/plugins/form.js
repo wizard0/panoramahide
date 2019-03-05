@@ -87,12 +87,7 @@ let ajaxForm = {
                 self.after(result);
 
                 if (result.success) {
-                    if (self.form.hasClass('cart-del')) {
-                        $('#cart-in-header').replaceWith(result.header);
-                        $('#personal-cart-content').replaceWith(result.cart);
 
-                        toastr.success('Товар удалён из корзины', 'Успех');
-                    }
                 } else if (result.error) {
                     self.showError(result.message);
                 }

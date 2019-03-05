@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin'], function () {
 Route::post('/add-to-cart', 'ProductController@addToCart')->name('cart.add');
 Route::post('/delete-from-cart', 'ProductController@deleteFromCart')->name('cart.del');
 
-Route::group(['prefix' => 'personal'], function () {
+Route::group(['prefix' => 'personal', 'middleware' => 'auth'], function () {
     Route::get('/', 'PersonalController@index')->name('personal');
     Route::get('orders', 'PersonalController@orders')->name('personal.orders');
     Route::get('order/{id}', 'PersonalController@orders')->where('id', '[0-9]+')->name('personal.order');
