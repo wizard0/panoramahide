@@ -6,6 +6,7 @@ use App\Cart;
 use App\Order;
 use App\OrderLegalUser;
 use App\OrderPhysUser;
+use App\OrderedSubscription;
 use App\Paysystem;
 use App\Services\Toastr\Toastr;
 use App\User;
@@ -100,16 +101,40 @@ class PersonalController extends Controller
     {
         $displayCheckout = true;
         $cart = Session::get('cart', null);
-        foreach ($cart->items as &$item) {
-            $item->typeVers = Order::typeVers($item->version, $item->type);
+        if (!empty($cart->items)) {
+            foreach ($cart->items as &$item) {
+                $item->typeVers = Order::typeVers($item->version, $item->type);
+            }
         }
         return view('personal.'.__FUNCTION__, compact('cart', 'displayCheckout'));
     }
 
     public function subscriptions(Request $request)
     {
-        //dd(Auth::user()->orders()->get());
-        return view('personal.'.__FUNCTION__);
+        // Получаем все заказы с подписками
+        $subscriptions = Auth::user()->orders()->get()
+                              // Трансформируем заказ в коллекцию подписок, либо в null
+                              ->transform(function ($order) {
+                                    return $order->subscription->isEmpty() ? null : $order->subscription;
+                                })
+                              // Убираем null'и
+                              ->reject(function ($items) {
+                                    return is_null($items);
+                                })
+                              // Делаем единую коллекцию подписок
+                              ->collapse();
+
+        $sort = self::getSortBy('type', $request, $subscriptions);
+
+        return view('personal.'.__FUNCTION__, compact('subscriptions', 'sort'));
+    }
+
+    public function subscriptionsReleases($id)
+    {
+        $subscription = OrderedSubscription::find($id);
+        //$subscription->order()->user->user;
+        $releases = $subscription->getReleases();
+        return view('release.list', compact('releases'));
     }
 
     public function profile(Request $request)
@@ -138,4 +163,16 @@ class PersonalController extends Controller
         return view('personal.'.__FUNCTION__);
     }
 
+    public static function getSortBy($name, $request, &$data)
+    {
+        $sort = $request->get('sort') ?? [$name => 'asc'];
+        if ($sort[$name] === 'asc') {
+            $data = $data->sortBy($name);
+            $sort = ['sort' => [$name => 'desc']];
+        } else {
+            $data = $data->sortByDesc('type');
+            $sort = ['sort' => [$name => 'asc']];
+        }
+        return $sort;
+    }
 }

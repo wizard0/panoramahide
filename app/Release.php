@@ -16,7 +16,8 @@ class Release extends Model
         'preview_image', 'preview_description',
         'price_for_electronic', 'price_for_printed', 'price_for_articles'
     ];
-
+    // Ссылка для перехода к читалке
+    private $readerLink = null;
 //    protected $fillable = ['code'];
 
     /**
@@ -61,6 +62,16 @@ class Release extends Model
     public function getLink()
     {
         return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
+    }
+    // По умолчанию ссылка ведёт прямо на выпуск в читалку
+    public function getReaderLink()
+    {
+        return $this->readerLink ?? route('reader.index', ['release_id' => $this->id]);
+    }
+    // Можно задать другую ссылку. Например для перехода от партнёра
+    public function setReaderLink($link)
+    {
+        $this->readerLink = $link;
     }
     public function promocode()
     {
