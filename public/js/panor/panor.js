@@ -8,5 +8,5 @@
 		}
 	}
 
-	window.P = new Panor();
+	window.Panorama = new Panor();
 })(window);

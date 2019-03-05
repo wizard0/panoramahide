@@ -268,7 +268,7 @@
         // расширенный поиск
         function isExtend()
         {
-            return !P.search.settings.form.parents('.cover').eq(0).hasClass('form-collapsed');
+            return !Panorama.search.settings.form.parents('.cover').eq(0).hasClass('form-collapsed');
         }
 
         // переключить режим формы поиска
@@ -283,53 +283,53 @@
         }
 
         $(function() {
-            P.search.settings.form = $('.search-form form');
-            P.search.isExtendHandler = isExtend;
-            P.search.toggleExtendHandler = toggleExtend;
+            Panorama.search.settings.form = $('.search-form form');
+            Panorama.search.isExtendHandler = isExtend;
+            Panorama.search.toggleExtendHandler = toggleExtend;
 
-            P.search.settings.form.on('change input', 'input, select', function(){
-                P.search.showSearchSave();
+            Panorama.search.settings.form.on('change input', 'input, select', function(){
+                Panorama.search.showSearchSave();
             });
 
             // Change 'form' to class or ID of your specific form
-            P.search.settings.form.submit(function() {
+            Panorama.search.settings.form.submit(function() {
                 $(this).find(":input").filter(function(){ return !this.value; }).attr("disabled", "disabled");
                 return true; // ensure form still submits
             });
 
             // Un-disable form fields when page loads, in case they click back after submission
-            P.search.settings.form.find( ":input" ).prop( "disabled", false );
+            Panorama.search.settings.form.find( ":input" ).prop( "disabled", false );
 
             // переключить режим поиска
             $('.collapse-search a').on('click', function(e) {
-                P.search.toggleExtend();
+                Panorama.search.toggleExtend();
                 return false;
             });
 
             // сбросить поиск
-            P.search.settings.form.on('click', '._reset', function(){
-                P.search.resetForm();
+            Panorama.search.settings.form.on('click', '._reset', function(){
+                Panorama.search.resetForm();
                 return false;
             });
 
             // сохранить поиск
-            P.search.settings.form.on('click', P.search.settings.saveSearch, function(event){
+            Panorama.search.settings.form.on('click', Panorama.search.settings.saveSearch, function(event){
                 if ($(event.target).data('target') == '#searchesModal')
-                    P.search.saveSearch();
+                    Panorama.search.saveSearch();
 //                return false;
             });
 
             // применить сохраенный поиск
-            $(P.search.settings.savedSearchApply).on('click', function(event){
+            $(Panorama.search.settings.savedSearchApply).on('click', function(event){
                 event.preventDefault();
-                P.search.applySavedSearch($(this).data('id'));
+                Panorama.search.applySavedSearch($(this).data('id'));
                 return false;
             });
 
             // удалить сохраненный поиск
-            P.search.settings.form.on('click', P.search.settings.savedSearchDelete, function(){
+            Panorama.search.settings.form.on('click', Panorama.search.settings.savedSearchDelete, function(){
                 if (confirm('Вы уверены что хотите удалить этот сохраненный поиск?')) {
-                    P.search.deleteSavedSearch($(this).data('id'));
+                    Panorama.search.deleteSavedSearch($(this).data('id'));
                 }
                 return false;
             });
@@ -344,7 +344,7 @@
                 $('.mysearches').attr('id','searchesModal');
                 $('.mysearches').on('show.bs.modal', function() {
                     $('.mysearches').toggle();
-//                    P.search.loadSavedSearch();
+//                    Panorama.search.loadSavedSearch();
                 });
             } else {
                 /*--На больших экранах выводим в виде выпадающего меню--*/
@@ -355,7 +355,7 @@
                 /*--Появление выпадающего блока по клику на ссылке--*/
                 $('.my-searches a').on('click', function(e) {
                     e.stopPropagation();
-//                    P.search.loadSavedSearch();
+//                    Panorama.search.loadSavedSearch();
                     $('.mysearches').toggle();
                     e.preventDefault();
                 });
@@ -367,7 +367,7 @@
             }
         });
         $(function(){
-            P.search.toggleExtend();
+            Panorama.search.toggleExtend();
         });
     </script>
 {{--@endsection--}}

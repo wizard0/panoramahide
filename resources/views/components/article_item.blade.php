@@ -23,8 +23,15 @@
         </div>
         <div class="article-footer w-100">
             <div class="to-fav-this"><a href="#" class="_add_to_favorite" data-id="{{ $id }}"></a></div>
-            <div class="share-this"><a href="#" class="_share" title="Поделиться"></a></div>
-            {{--Here there must be yandex sharing buttons--}}
+            <div class="share-this"><a href="javascript:void(0)" class="_share" data-id="{{ $id }}" title="Поделиться"></a></div>
+
+            <div class="ya-share2 share_block_{{ $id }}" style="display: none"
+                 data-services="vkontakte,facebook,odnoklassniki,twitter,viber,whatsapp,telegram"
+                 data-limit="4"
+                 data-url="{{ route('article', compact('code')) }}"
+                 data-title="{{ $name }}"
+                 data-image="{{ route('index') }}"></div>
+
             <div class="get-access-link">
                 <a href="{{ route('article', ['code' => $code]) }}" class="black-link _access_article" data-id="{{ $id }}">Получить доступ</a>
             </div>

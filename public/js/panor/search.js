@@ -204,4 +204,4 @@
 	}
 
 	panor.search = new Search();
-})(window.P);
+})(window.Panorama);

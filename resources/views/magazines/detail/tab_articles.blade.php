@@ -25,7 +25,8 @@
                 </div>
             </div>
             <div class="row">
-
+                <script src="//yastatic.net/es5-shims/0.0.2/es5-shims.min.js"></script>
+                <script src="//yastatic.net/share2/share.js"></script>
                 @foreach($articles as $article)
                     @php
                         $release = $article->release->load('translations');
@@ -44,6 +45,22 @@
                     ])
                     @endcomponent
                 @endforeach
+
+                <script>
+                    $("._share").on('click', function (e) {
+                        e.preventDefault();
+                        console.log('clicked');
+                        var id = $(e.target).data('id');
+                        console.log(id);
+                        if ($('.share_block_' + id).is(':visible')) {
+                            $('.share_block_' + id).hide();
+                        } else {
+                            $('.share_block_' + id).show();
+                        }
+
+                        return false;
+                    });
+                </script>
 
                 <div class="article-item entity-item d-flex _article" data-id="443516">
 
