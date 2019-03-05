@@ -1,4 +1,3 @@
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html>
 <head>
@@ -129,7 +128,7 @@
         <td class="c9" colspan="24">{{ $order->getDeliveryAddress() }}</td>
     </tr>
     <tr class="r1">		<td class="c5"> </td><td class="c10 c1 c27" colspan="6"><div class="d1 d15"><div>Сумма платежа </div></div></td>
-        <td class="c15" colspan="3">{{ $order->totalPrice }}&nbsp;</td><td class="c21 c1 c28" colspan="2"><div class="d1 d16"><div>руб.</div></div></td>
+        <td class="c15" colspan="3">{{ $order->totalPrice['sum'] }}&nbsp;</td><td class="c21 c1 c28" colspan="2"><div class="d1 d16"><div>руб.</div></div></td>
         <td class="c29" colspan="2">00&nbsp;</td><td class="c21 c1 c30" colspan="2"><div class="d1 d17"><div>коп.</div></div></td>
         <td class="c21 c1 c31" colspan="8"><div class="d1 d18"><div>Сумма платы за услуги </div></div></td>
         <td class="c32" colspan="3"> </td><td class="c21 c1 c28" colspan="2"><div class="d1 d16"><div>руб.</div></div></td>
