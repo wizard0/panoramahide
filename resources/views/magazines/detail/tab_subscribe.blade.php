@@ -105,7 +105,7 @@
     ]) !!}');
     $(document).ready(function () {
         $('#add_2_basket_btn').on('click', function () {
-            var version = SubscribeManager.version.val();
+            var version = SubscribeManager.version.filter(':checked').val();
             var quantity = SubscribeManager.quantityInput.val();
             var journal_id = $('input#journal').val();
             var additionalData = {
@@ -115,8 +115,6 @@
                 'single_price': SubscribeManager.singlePrice.val(),
                 'journal_id': journal_id,
             };
-            console.log(version);
-
             CartManager.addToCart(version, 'subscription', 0, quantity, additionalData);
         })
     })
