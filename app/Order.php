@@ -118,6 +118,21 @@ class Order extends Model
         }
     }
 
+    public function release()
+    {
+        return $this->belongsToMany(Release::class, 'order_product', 'order_id', 'release_id');
+    }
+
+    public function article()
+    {
+        return $this->belongsToMany(Article::class, 'order_product', 'order_id', 'article_id');
+    }
+
+    public function subscription()
+    {
+        return $this->belongsToMany(OrderedSubscription::class, 'order_product', 'order_id', 'subscription_id');
+    }
+
     public function getFullUserName()
     {
         return $this->user->getFullName();
@@ -210,5 +225,26 @@ class Order extends Model
         } else {
             $model->user()->associate($user)->save();
         }
+    }
+
+    public function approve()
+    {
+        if ($this->status === Order::STATUS_COMPLETED)
+            return;
+        $items = json_decode($this->orderList);
+        foreach ($items as $item) {
+            switch ($item->type) {
+                case Cart::PRODUCT_TYPE_ARTICLE :
+                    $this->article()->attach($item->product->id);
+                    break;
+                case Cart::PRODUCT_TYPE_RELEASE:
+                    $this->release()->attach($item->product->id);
+                    break;
+                case Cart::PRODUCT_TYPE_SUBSCRIPTION:
+                    $this->subscription()->attach($item->product->id);
+                    break;
+            }
+        }
+        $this->update(['status' => Order::STATUS_COMPLETED]);
     }
 }

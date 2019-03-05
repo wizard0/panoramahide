@@ -33,6 +33,7 @@ Route::group(['prefix' => 'personal'], function () {
     Route::get('order/{id}', 'PersonalController@orders')->where('id', '[0-9]+')->name('personal.order');
     Route::get('cart', 'PersonalController@cart')->name('personal.cart');
     Route::get('subscriptions', 'PersonalController@subscriptions')->name('personal.subscriptions');
+    Route::get('subscriptions/{id}/releases', 'PersonalController@subscriptionsReleases')->name('subscriptions.releases');
     Route::any('profile', 'PersonalController@profile')->name('personal.profile');
     Route::get('magazines', 'PersonalController@magazines')->name('personal.magazines');
 
@@ -145,3 +146,8 @@ Route::group(['prefix' => 'reader/api'], function () {
     Route::get('/{partner}/{user}/{quota}/release/{release}.html', 'ReaderApiController@release')->name('api.release');
 });
 
+
+Route::get('order/approve/{id}', function($id) {
+    // Заглушка для подтверждения заказа
+    App\Order::find($id)->approve();
+});
