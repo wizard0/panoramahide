@@ -96,14 +96,16 @@ class CRUDController extends Controller
 
     private function isTranslatable($modelName = null)
     {
+        $result = false;
         if (!$modelName && isset($this->modelName)) {
             $modelName = $this->modelName;
         }
 
         $_modelName = $modelName ? $modelName : $this->modelName;
         if (!is_null($_modelName) && class_exists($_modelName)) {
-            return in_array('Dimsav\Translatable\Translatable', class_uses($_modelName));
+            $result = in_array('Dimsav\Translatable\Translatable', class_uses($_modelName));
         }
+        return $result;
     }
 
     protected function getModel($id)
