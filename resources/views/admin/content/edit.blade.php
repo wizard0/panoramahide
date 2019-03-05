@@ -133,12 +133,14 @@
                         @php
                             $hasValues = array_key_exists('value', $row->value);
                         @endphp
-                        @foreach($row->value['available'] as $available)
-                            <input type="checkbox" name="{{ $row->name }}[]" value="{{ $available['id'] }}"
-                            {{ ($hasValues && in_array($available['id'], $row->value['value'])) ? 'checked' : '' }}>
-                            {{ $available['name'] }}
-                            <br>
-                        @endforeach
+                        @if(isset($row->value['available']))
+                            @foreach($row->value['available'] as $available)
+                                <input type="checkbox" name="{{ $row->name }}[]" value="{{ $available['id'] }}"
+                                        {{ ($hasValues && in_array($available['id'], $row->value['value'])) ? 'checked' : '' }}>
+                                {{ $available['name'] }}
+                                <br>
+                            @endforeach
+                        @endif
                     </div>
                 </div>
                 @break

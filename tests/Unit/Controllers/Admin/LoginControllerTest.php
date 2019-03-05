@@ -15,6 +15,12 @@ class LoginControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function setUp()
+    {
+        parent::setUp();
+        (new \RolesAndPermissionsBaseSeeder())->run();
+    }
+
     /**
      * Testing default admin route '/' as
      * - unauthenticated user

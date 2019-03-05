@@ -8,6 +8,8 @@ namespace Tests;
 
 
 use App\Article;
+use App\Author;
+use App\Category;
 use App\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
@@ -52,7 +54,7 @@ trait FactoryTrait
      * @param array $data
      * @return Publishing
      */
-    protected function factoryPublishiing(array $data = []): Publishing
+    protected function factoryPublishing(array $data = []): Publishing
     {
         return factory(Publishing::class)->create($data);
     }
@@ -101,5 +103,23 @@ trait FactoryTrait
     protected function factoryPromoUser(array $data = []): PromoUser
     {
         return factory(PromoUser::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Category
+     */
+    protected function factoryCategory(array $data = []): Category
+    {
+        return factory(Category::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return Author
+     */
+    protected function factoryAuthor(array $data = []): Author
+    {
+        return factory(Author::class)->create($data);
     }
 }
