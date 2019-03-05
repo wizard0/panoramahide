@@ -8,20 +8,22 @@ namespace Tests\Unit\Models;
 
 use App\User;
 use App\UserSearch;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
  * Class for user search model test.
  */
-class UserSearchModelTest extends TestCase
+class UserSearchTest extends TestCase
 {
-    use DatabaseMigrations;
+    use DatabaseTransactions;
     use FactoryTrait;
+
+    /**
+     * @var User
+     */
+    private $user;
 
     /**
      *
@@ -29,19 +31,20 @@ class UserSearchModelTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-//        UserSearch::create([
-//            'id' => 1,
-//            'user_id' => 1,
-//            'search_params' => json_encode([
-//                ['name' => 'q', 'value' => 'corrupt'],
-//                ['name' => 'search_in', 'value' => 'all'],
-//                ['name' => 'journal', 'value' => '2'],
-//                ['name' => 'type', 'value' => 'article'],
-//                ['name' => 'extend', 'value' => '1'],
-//            ]),
-//            'created_at' => date('Y-m-d H:i:s'),
-//            'updated_at' => date('Y-m-d H:i:s'),
-//        ]);
+        $this->user = $this->factoryUser();
+        UserSearch::create([
+            'id' => 1,
+            'user_id' => $this->user->id,
+            'search_params' => json_encode([
+                ['name' => 'q', 'value' => 'corrupt'],
+                ['name' => 'search_in', 'value' => 'all'],
+                ['name' => 'journal', 'value' => '2'],
+                ['name' => 'type', 'value' => 'article'],
+                ['name' => 'extend', 'value' => '1'],
+            ]),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
     }
 
     public function testRetrieveGuest()
@@ -53,8 +56,7 @@ class UserSearchModelTest extends TestCase
     public function testRetrieve()
     {
         // авторизация
-        $user = $this->user();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
         $this->assertAuthenticated();
         $res = UserSearch::retrieve();
         $this->assertNotEmpty($res, $this->textRed(' Таблица user_search пуста '));
@@ -63,8 +65,7 @@ class UserSearchModelTest extends TestCase
     public function testSearch()
     {
         // авторизация
-        $user = $this->user();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
         $this->assertAuthenticated();
 
         foreach (['name', 'date'] as $sort) {
@@ -92,21 +93,10 @@ class UserSearchModelTest extends TestCase
     public function testSearchWithoutParams()
     {
         // авторизация
-        $user = $this->user();
-        $this->actingAs($user);
+        $this->actingAs($this->user);
         $this->assertAuthenticated();
 
         $res = UserSearch::search(null);
         $this->assertFalse($res);
-    }
-
-    /**
-     * Тестовый пользователь
-     *
-     * @return mixed
-     */
-    private function user(): User
-    {
-        return $this->factoryUser();
     }
 }

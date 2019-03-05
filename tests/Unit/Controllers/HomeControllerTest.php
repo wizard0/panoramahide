@@ -33,7 +33,17 @@ class HomeControllerTest extends TestCase
      */
     public function testJournals()
     {
-        $this->actingAs($this->factoryUser());
+        $promocode = $this->factoryPromocode();
+
+        $user = $this->factoryUser();
+
+        $promoUser = $this->factoryPromoUser([
+            'user_id' => $user->id,
+        ]);
+
+        $promoUser->promocodes()->attach($promocode->id);
+
+        $this->actingAs($user);
 
         $oController = new HomeController();
 

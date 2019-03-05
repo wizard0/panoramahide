@@ -11,6 +11,7 @@ use App\Article;
 use App\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
+use App\Models\PromoUser;
 use App\Publishing;
 use App\Release;
 use App\User;
@@ -91,5 +92,14 @@ trait FactoryTrait
     protected function factoryUser(array $data = []): User
     {
         return factory(User::class)->create($data);
+    }
+
+    /**
+     * @param array $data
+     * @return PromoUser
+     */
+    protected function factoryPromoUser(array $data = []): PromoUser
+    {
+        return factory(PromoUser::class)->create($data);
     }
 }
