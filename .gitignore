@@ -25,3 +25,4 @@ public/css/vue.css
 *.sublime-workspace
 test-coverage
 *.sublime-project
+vue.css

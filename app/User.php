@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\PromoUser;
 use App\Order;
+use Illuminate\Database\Eloquent\Relations\Relation;
 
 use App\Models\Traits\UserBookmarks;
 use App\Models\Traits\UsersDevices;
@@ -12,12 +13,23 @@ use Carbon\Carbon;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
+/**
+ * @property string name
+ * @property string last_name
+ * @property string  phone
+ */
 class User extends Authenticatable
 {
     use Notifiable;
+    use HasRoles;
     use UsersDevices;
     use UserBookmarks;
+
+    const PERMISSION_ADMIN = 'web admin';
+    const ROLE_ADMIN = 'admin';
+    const ROLE_SUPERADMIN = 'super-admin';
 
     /**
      * The attributes that are mass assignable.
@@ -46,24 +58,29 @@ class User extends Authenticatable
         $this->attributes['birthday'] = Carbon::parse($value);
     }
 
-    public function isAdmin()
+    public function isAdmin(): bool
     {
         return $this->hasRole('admin');
     }
 
-    public function searches()
+    public function searches(): Relation
     {
         return $this->hasMany(UserSearch::class);
     }
 
-    public function promo()
+    public function promo(): Relation
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
 
-    public function getPhoneFormatAttribute()
+    public function getPhoneFormatAttribute(): string
     {
         return phoneFormat($this->phone);
+    }
+
+    public function getFullNameAttribute(): string
+    {
+        return $this->name . ' ' . $this->last_name;
     }
 
     public function orders()
@@ -76,5 +93,4 @@ class User extends Authenticatable
                             });
         return $orders;
     }
-
 }

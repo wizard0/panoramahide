@@ -17,7 +17,39 @@ Route::get('/', 'MainpageController@index')->name('index');
 
 
 Route::group(['prefix' => 'admin'], function () {
+    Route::get('/login', 'Admin\LoginController')->name('admin.login');
+    Route::post('/login', 'Admin\LoginController@login');
 
+    Route::group(['middleware' => ['permission:' . \App\User::PERMISSION_ADMIN]], function () {
+        Route::get('/', 'Admin\DashboardController')->name('admin');
+        Route::get('/dashboard', 'Admin\DashboardController')->name('admin.dashboard');
+
+        // CRUD
+        Route::group(['prefix' => 'content-management'], function () {
+            Route::resource('categories', 'Admin\CategoryController');
+            Route::resource('publishings', 'Admin\PublishingController');
+            Route::resource('authors', 'Admin\AuthorController');
+            Route::resource('journals', 'Admin\JournalController');
+            Route::resource('releases', 'Admin\ReleaseController');
+            Route::resource('articles', 'Admin\ArticleController');
+
+            Route::resource('news', 'Admin\NewsController');
+
+            Route::resource('subscriptions', 'Admin\SubscriptionController');
+            Route::resource('paysystems', 'Admin\PaysystemController');
+            Route::resource('order_phys_users', 'Admin\OrderPhysUserController');
+            Route::resource('order_legal_users', 'Admin\OrderLegalUserController');
+            Route::resource('orders', 'Admin\OrderController');
+            Route::resource('promocodes', 'Admin\PromocodeController');
+            Route::resource('promo_userz', 'Admin\PromoUserController');
+            Route::resource('jby_promo', 'Admin\JbyPromoController');
+            Route::resource('partners', 'Admin\PartnerController');
+            Route::resource('quotas', 'Admin\QuotaController');
+            Route::resource('partner_users', 'Admin\PartnerUserController');
+            Route::resource('users', 'Admin\UserController');
+            Route::resource('roles', 'Admin\RoleController');
+        });
+    });
 });
 
 //Auth::routes();

@@ -1,6 +1,6 @@
 @component('components.modal', ['id' => 'login-modal', 'title' => 'Войти в личный кабинет'])
     @slot('body')
-        <form action="{{ route('login') }}" class="ajax-form">
+        <form action="{{ route('login') }}" class="ajax-form" id="login-form">
             <div class="form-group">
                 <label>Логин</label>
                 <input type="text" name="email" placeholder="test@test.com" autocomplete="username">
@@ -27,6 +27,27 @@
                 </button>
             </div>
         </form>
+        <script>
+            $(document).on('submit', '#login-form', function (event) {
+                event.preventDefault();
+                var data = $(event.target).serialize();
+                var action = $(event.target).attr('action');
+                $.ajax({
+                    url: action,
+                    method: 'POST',
+                    data: data,
+                    success: function (res) {
+                        window.location = res.redirect;
+                    },
+                    error: function (jqXHR, textStatus) {
+                        console.log(jqXHR.responseJSON.errors);
+                        alert(textStatus);
+                    }
+                });
+
+                return false;
+            })
+        </script>
     @endslot
 @endcomponent
 

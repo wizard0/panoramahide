@@ -8,11 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use Translatable;
+    use Translatable, WithTranslationTrait;
 
     public $translatedAttributes = ['name', 'code', 'description', 'image', 'preview', 'preview_image'];
 
 //    protected $fillable = ['code'];
+
+    public $rules = [
+        'name' => 'required|string',
+        'code' => 'required|string'
+    ];
 
     /**
      * Publishing boards the news belongs to
