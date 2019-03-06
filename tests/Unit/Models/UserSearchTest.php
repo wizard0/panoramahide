@@ -64,7 +64,7 @@ class UserSearchTest extends TestCase
 
         // Creating new data row at DB
         $userSearch = UserSearch::create([
-            'user_id' => $user->id,
+            'user_id' => $this->user->id,
             'search_params' => json_encode([
                 ['name' => 'q', 'value' => 'atata'],
                 ['name' => 'author', 'value' => 'Gogol'],
