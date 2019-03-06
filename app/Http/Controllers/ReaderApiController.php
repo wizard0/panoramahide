@@ -19,8 +19,9 @@ class ReaderApiController extends Controller
         self::errorMessage($quota->partner->secret_key === $partner, 'Неверный secret_key пртнёра');
         // Проверяем что такой пользователь есть у партнёра
         $pUser = $quota->partner->users()->whereUserId($user)->first();
-        if (!$pUser)
+        if (!$pUser) {
             $quota->partner->users()->save(PartnerUser::create(['user_id' => $user, 'partner_id' => $quota->partner->id]));
+        }
     }
     public function list($partner, $user, $quota)
     {
@@ -45,11 +46,9 @@ class ReaderApiController extends Controller
             // Устанавливаем отношение пользователь->выпуск
             $user->releases()->save($release);
         }
-        Cookie::queue(PartnerUser::COOKIE_NAME, $user->partner->id.PartnerUser::COOKIE_NAME_SEPORATOR.$user->user_id);
+        Cookie::queue(PartnerUser::COOKIE_NAME, $user->partner->id . PartnerUser::COOKIE_NAME_SEPORATOR . $user->user_id);
 
         // Отправляем пользователя на читалку
         return redirect(route('reader.index', ['release_id' => $release->id]));
     }
 }
-
-

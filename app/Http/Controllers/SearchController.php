@@ -18,10 +18,11 @@ class SearchController extends Controller
     public function __invoke(Request $request)
     {
         $extend = $request->get('extend');
-
         $params = $request->all();
 
-        if (!isset($params['type'])) $params['type'] = 'any';
+        if (!isset($params['type'])) {
+            $params['type'] = 'any';
+        }
 
         $searchDBResult = UserSearch::search($params);
         if ($searchDBResult) {

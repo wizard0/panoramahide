@@ -46,7 +46,7 @@ class Article extends Model
 
     public function scopeFavorites()
     {
-        return $this->whereHas('userFavorites', function($query) {
+        return $this->whereHas('userFavorites', function ($query) {
             $query->where('type', UserFavorite::TYPE_ARTICLE)
                 ->where('user_id', Auth::id());
         });
