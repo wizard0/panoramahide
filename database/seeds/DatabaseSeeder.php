@@ -23,6 +23,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PublishingTestSeeder::class);
         $this->call(setReleasesYear::class);
         $this->call(CreateSubscriptions::class);
-        $this->call(UserSearchTableSeeder::class);
+        $this->call(\Tests\Seeds\UserSearchTableSeeder::class);
     }
 }
