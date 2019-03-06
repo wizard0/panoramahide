@@ -3,7 +3,15 @@
 @section('page-content')
     <div class="row justify-content-md-center">
         <div class="col-12 col-lg-8 col-lg-offset-2">
-            <form action="{{ route('personal.profile') }}" class="ajax-form" enctype="multipart/form-data" method="post">
+            <div class="text-center">
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                    <label class="btn btn-outline-secondary active">
+                        <input type="radio" name="chgForm" value="profile" autocomplete="off" checked>Личные данные</label>
+                    <label class="btn btn-outline-secondary">
+                        <input type="radio" name="chgForm" value="password" autocomplete="off">Изменить пароль</label>
+                </div>
+            </div>
+            <form action="{{ route('personal.profile') }}" class="ajax-form" enctype="multipart/form-data" method="post" id="profileForm">
                 <div class="form-group">
                     <label>Обращение</label>
                     <input type="text" class="form-control" name="title" value="{{ $user->title }}" placeholder="Как к вам обращаться?" required>
@@ -85,6 +93,34 @@
                     </button>
                 </div>
             </form>
+            <form action="{{ route('profile.password') }}" class="ajax-form" enctype="multipart/form-data" method="post" id="passwordForm" style="display: none">
+                <div class="form-group">
+                    <label>Текущий пароль</label>
+                    <input type="password" class="form-control" name="password" value="" placeholder="Введите текущий пароль" required>
+                </div>
+                <div class="form-group">
+                    <label>Новый пароль</label>
+                    <input type="password" class="form-control" name="new_password" value="" placeholder="Введите новый пароль" required>
+                </div>
+                <div class="form-group">
+                    <label>Подтверждение нового пароля</label>
+                    <input type="password" class="form-control" name="new_password_confirm" placeholder="Введите новый пароль ещё раз" value="" required>
+                </div>
+                <hr>
+                <div class="form-buttons-holder text-center">
+                    <button type="submit" class="btn btn-primary inner-form-submit" style="width:200px">
+                        <span>Изменить пароль</span>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('input[name=chgForm]').change(function() {
+                $('#profileForm').toggle();
+                $('#passwordForm').toggle();
+            });
+        });
+    </script>
 @endsection

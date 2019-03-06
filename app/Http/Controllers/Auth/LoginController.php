@@ -60,4 +60,8 @@ class LoginController extends Controller
                //'redirect' => url($this->redirectTo)
             ];
     }
+    public function changePassword()
+    {
+        return responseCommon()->success([], 'Пароль успешно изменён.');
+    }
 }
