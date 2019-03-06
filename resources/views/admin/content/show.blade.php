@@ -19,6 +19,7 @@
             </select>
         </div>
         <div class="card-body card-block">
+            @if(is_iterable($data))
                 @foreach($data as $row)
                     @switch($row->type)
                         @case('text')
@@ -106,19 +107,22 @@
                                 @php
                                     $hasValues = array_key_exists('value', $row->value);
                                 @endphp
-                                @foreach($row->value['available'] as $available)
-                                    @if($hasValues && in_array($available['id'], $row->value['value']))
-                                    <input type="checkbox" name="{{ $row->name }}[]" value="{{ $available['id'] }}"
-                                            checked disabled>
-                                        <a href="{{ route($row->value['slug'] . ".show", [$available['id']]) }}">{{ $available['name'] }}</a>
-                                    <br>
-                                    @endif
-                                @endforeach
+                                @if(isset($row->value['available']))
+                                    @foreach($row->value['available'] as $available)
+                                        @if($hasValues && in_array($available['id'], $row->value['value']))
+                                            <input type="checkbox" name="{{ $row->name }}[]" value="{{ $available['id'] }}"
+                                                   checked disabled>
+                                            <a href="{{ route($row->value['slug'] . ".show", [$available['id']]) }}">{{ $available['name'] }}</a>
+                                            <br>
+                                        @endif
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                         @break
                     @endswitch
                 @endforeach
+            @endif
         </div>
     </div>
 

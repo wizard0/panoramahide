@@ -5,13 +5,18 @@ namespace Tests\Unit\Controllers;
 use App\User;
 use App\UserSearch;
 use App\Http\Controllers\SearchController;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 class SearchControllerTest extends TestCase
 {
+    use DatabaseTransactions;
+    use FactoryTrait;
+
     private $allSearchParams = [
         'type',
         'q',
@@ -139,6 +144,6 @@ class SearchControllerTest extends TestCase
      */
     private function user() : User
     {
-        return testData()->user();
+        return $this->factoryUser();
     }
 }

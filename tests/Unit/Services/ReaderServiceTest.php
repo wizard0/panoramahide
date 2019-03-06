@@ -2,18 +2,24 @@
 
 namespace Tests\Unit\Services;
 
+use App\Article;
 use App\Release;
 use App\Services\ReaderService;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 class ReaderServiceTest extends TestCase
 {
+    use FactoryTrait;
+    use DatabaseTransactions;
+
     /**
      * Пример использования
      */
     public function example()
     {
-        $oService = (new ReaderService())->byRelease($this->release());
+        $oService = (new ReaderService())->byRelease($this->factoryRelease());
 
         // Журнал релиза
         $oJournal = $oService->getJournal();
@@ -26,13 +32,11 @@ class ReaderServiceTest extends TestCase
     }
 
     /**
-     * @see JournalsTableSeeder
-     *
-     * @return Release
+     * @return ReaderService
      */
-    private function release(): Release
+    public function service(): ReaderService
     {
-        return Release::first();
+        return new ReaderService();
     }
 
     /**
@@ -40,7 +44,13 @@ class ReaderServiceTest extends TestCase
      */
     public function testGetJournal()
     {
-        $oService = (new ReaderService())->byRelease($this->release());
+        $oJournal = $this->factoryJournal();
+
+        $oRelease = $this->factoryRelease([
+            'journal_id' => $oJournal->id,
+        ]);
+
+        $oService = $this->service()->byRelease($oRelease);
 
         $oJournal = $oService->getJournal();
 
@@ -52,15 +62,21 @@ class ReaderServiceTest extends TestCase
      */
     public function testGetArticles()
     {
-        $oService = (new ReaderService())->byRelease($this->release());
+        $oRelease = $this->factoryRelease();
+
+        $oArticle = $this->factoryArticle([
+            'release_id' => $oRelease->id,
+        ]);
+
+        $oService = $this->service()->byRelease($oRelease);
 
         $oArticles = $oService->getArticles();
 
         $oArticle = $oArticles->first();
 
-        $this->assertNotNull($oArticle);
+        $this->assertTrue($oArticle instanceof Article);
 
-        $this->assertNotNull($oArticle->html);
+        $this->assertNotNull($oArticle);
     }
 
     /**
@@ -68,14 +84,18 @@ class ReaderServiceTest extends TestCase
      */
     public function testGetReleases()
     {
-        $oService = (new ReaderService())->byRelease($this->release());
+        $oRelease = $this->factoryRelease();
+
+        $oService = $this->service()->byRelease($oRelease);
+
+        $oRelease = $this->factoryRelease();
 
         $oReleases = $oService->getReleases();
 
         $oRelease = $oReleases->first();
 
-        $this->assertNotNull($oRelease);
+        $this->assertTrue($oRelease instanceof Release);
 
-        $this->assertNotNull($oRelease->image);
+        $this->assertNotNull($oRelease);
     }
 }
