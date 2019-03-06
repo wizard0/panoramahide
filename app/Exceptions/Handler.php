@@ -43,15 +43,15 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $exception)
     {
         if ($exception instanceof \Spatie\Permission\Exceptions\UnauthorizedException) {
-                if ($request->is('admin*')) {
-                    return redirect()->route('admin.login');
-                }
-                return response('OK', '200');
+            if ($request->is('admin*')) {
+                return redirect()->route('admin.login');
+            }
+            return response('Ok', 200);
         }
 
         return parent::render($request, $exception);

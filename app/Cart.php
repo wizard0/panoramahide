@@ -26,8 +26,20 @@ class Cart
         }
     }
 
+    /**
+     * { function_description }
+     *
+     * @param      object   $product   The product
+     * @param      string   $version   The version
+     * @param      integer  $quantity  The quantity
+     *
+     * @return     boolean  ( description_of_the_return_value )
+     */
     public function add($product, $version, $quantity = 1)
     {
+        $price = 0;
+        $type = '';
+
         switch (get_class($product)) {
             case Release::class:
                 $price = $version == self::VERSION_ELECTRONIC
