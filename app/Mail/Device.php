@@ -20,7 +20,7 @@ class Device extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * @var
+     * @var mixed
      */
     private $oUser;
 
@@ -36,9 +36,9 @@ class Device extends Mailable
 
     /**
      * Device constructor.
-     * @param $type
-     * @param $oUser
-     * @param $data
+     * @param string $type
+     * @param mixed $oUser
+     * @param array $data
      */
     public function __construct(string $type, $oUser, array $data = [])
     {
@@ -54,12 +54,13 @@ class Device extends Mailable
      */
     public function build()
     {
+        $result = null;
         $this->from(config('mail.from.address'), config('mail.from.name'));
 
         switch ($this->type) {
             case 'confirm':
                 $title = config('app.name') . ' - Подтвердите устройство';
-                return $this->view('email.device.confirm')->with([
+                $result = $this->view('email.device.confirm')->with([
                     'title' => $title,
                     'code' => $this->data['code'],
                     'oUser' => $this->oUser,
@@ -67,15 +68,13 @@ class Device extends Mailable
                 break;
             case 'reset':
                 $title = config('app.name') . ' - Сброс устройств';
-                return $this->view('email.device.reset')->with([
+                $result = $this->view('email.device.reset')->with([
                     'title' => $title,
                     'link' => $this->data['link'],//url('/'),
                     'oUser' => $this->oUser,
                 ])->subject($title);
                 break;
-            default:
-                return null;
-                break;
         }
+        return $result;
     }
 }

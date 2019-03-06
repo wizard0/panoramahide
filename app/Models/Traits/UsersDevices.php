@@ -51,7 +51,6 @@ trait UsersDevices
     /**
      * Активированные устройства с исключением текущего
      *
-     * @param Device|null $oSelectedDevice
      * @return mixed
      */
     public function getActivationDevices(): Collection
@@ -108,11 +107,10 @@ trait UsersDevices
         }
     }
 
-
     /**
      * Проверка кода сброса устройств
      *
-     * @param $code
+     * @param string $code
      * @return bool
      */
     public function checkResetCode(string $code): bool

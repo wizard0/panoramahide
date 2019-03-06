@@ -74,7 +74,7 @@ class PromoUser extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function jByPromo()
     {

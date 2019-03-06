@@ -31,7 +31,7 @@ class ReaderController extends Controller
      *
      * @param \Illuminate\Http\Request $request The request
      *
-     * @return <type> The user.
+     * @return \Illuminate\Contracts\Auth\Authenticatable|null|false The user.
      */
     public static function getUser(Request $request)
     {
@@ -66,7 +66,7 @@ class ReaderController extends Controller
      *
      * @param \Illuminate\Http\Request $request The request
      *
-     * @return <type> ( description_of_the_return_value )
+     * @return mixed
      */
     public function index(Request $request)
     {
@@ -142,7 +142,7 @@ class ReaderController extends Controller
      *
      * @param \Illuminate\Http\Request $request The request
      *
-     * @return <type> ( description_of_the_return_value )
+     * @return array
      */
     public function release(Request $request)
     {
@@ -164,7 +164,7 @@ class ReaderController extends Controller
      *
      * @param \Illuminate\Http\Request $request The request
      *
-     * @return <type> ( description_of_the_return_value )
+     * @return array
      */
     public function releases(Request $request)
     {
@@ -217,7 +217,7 @@ class ReaderController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
+     * @param integer $id
      * @return array
      */
     public function bookmarksDestroy(Request $request, $id)
@@ -239,11 +239,11 @@ class ReaderController extends Controller
     }
 
     /**
-     * @param $type
-     * @param $oDevice
-     * @param $oUser
+     * @param string $type
+     * @param \App\Models\Device|null $oDevice
+     * @param \Illuminate\Contracts\Auth\Authenticatable|null $oUser
      */
-    private function sessionModalError($type, $oDevice = null, $oUser = null)
+    private function sessionModalError(string $type, $oDevice = null, $oUser = null)
     {
         switch ($type) {
             case 'login':
@@ -283,7 +283,6 @@ class ReaderController extends Controller
                 break;
         }
     }
-
 
     /**
      * @param Request $request
@@ -387,7 +386,7 @@ class ReaderController extends Controller
      * Reset function
      *
      * @param Request $request
-     * @param $code
+     * @param string $code
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function reset(Request $request, $code)

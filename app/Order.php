@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 use Auth;
 use Session;
+use Chelout\Robokassa\Robokassa;
+use Lexty\Robokassa\Payment;
 
 /**
  * Class for order.
@@ -117,7 +119,7 @@ class Order extends Model
                 break;
 
             case Order::LEGAL_USER:
-                $legalUser = OrderLegalUser::create(data);
+                $legalUser = OrderLegalUser::create($data);
 
                 $this->assocWithUser($legalUser, $data['l_name'], $data['l_email']);
 

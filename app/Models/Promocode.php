@@ -11,29 +11,28 @@ use Illuminate\Database\Eloquent\Model;
  * Class Promocode
  * @package App\Models
  *
- * @property integer id
- * @property string promocode
- * @property integer active
- * @property string type
- * @property integer journal_id
- * @property integer limit
- * @property integer used
- * @property integer journal_for_releases_id
- * @property \Carbon\Carbon release_begin
- * @property \Carbon\Carbon release_end
- * @property integer release_limit
- * @property \Carbon\Carbon created_at
- * @property \Carbon\Carbon updated_at
+ * @property integer $id
+ * @property string $promocode
+ * @property integer $active
+ * @property string $type
+ * @property integer $journal_id
+ * @property integer $limit
+ * @property integer $used
+ * @property integer $journal_for_releases_id
+ * @property \Carbon\Carbon $release_begin
+ * @property \Carbon\Carbon $release_end
+ * @property integer $release_limit
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
  *
- * @property \Illuminate\Database\Eloquent\Relations\BelongsTo journal
- * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany journals
- * @property \Illuminate\Database\Eloquent\Relations\hasMany jByPromo
- * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany publishings
- * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany releases
- * @property \Illuminate\Database\Eloquent\Relations\HasMany groups
+ * @property \Illuminate\Database\Eloquent\Relations\BelongsTo $journal
+ * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany $journals
+ * @property \Illuminate\Database\Eloquent\Relations\hasMany $jByPromo
+ * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany $publishings
+ * @property \Illuminate\Database\Eloquent\Relations\BelongsToMany $releases
+ * @property \Illuminate\Database\Eloquent\Relations\HasMany $groups
  *
- *
- * @method static Promocode find
+ * @method static Promocode find(mixed $key, mixed $default)
  */
 class Promocode extends Model
 {
@@ -64,7 +63,7 @@ class Promocode extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function jByPromo()
     {
