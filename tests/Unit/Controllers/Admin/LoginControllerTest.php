@@ -7,6 +7,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,6 +16,17 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class LoginControllerTest extends TestCase
 {
     use DatabaseTransactions;
+
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $permission = Permission::where('name', User::PERMISSION_ADMIN)->first();
+        $role = Role::where('name', User::ROLE_ADMIN)->first();
+        if (is_null($permission) && is_null($role)) {
+            (new \RolesAndPermissionsBaseSeeder())->run();
+        }
+    }
 
     /**
      * Testing default admin route '/' as

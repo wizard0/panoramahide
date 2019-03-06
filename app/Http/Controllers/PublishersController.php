@@ -35,10 +35,11 @@ class PublishersController extends Controller
                     })->orderByTranslation('name', $order)->get();
                     break;
                 case 'date':
-                    if ($order != 'asc')
+                    if ($order != 'asc') {
                         $journals = $journals->sortByDesc('active_date');
-                    else
+                    } else {
                         $journals = $journals->sortBy('active_date');
+                    }
                     break;
             }
         }

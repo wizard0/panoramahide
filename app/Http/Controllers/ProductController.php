@@ -26,12 +26,13 @@ class ProductController extends Controller
             }
 
             $cart = $this->getCart();
-            if (!$cart->add($product, $version, $quantity))
+            if (!$cart->add($product, $version, $quantity)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'true',
                     'message' => 'No price'
                 ]);
+            }
             return $this->updateCart($cart);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);

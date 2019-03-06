@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,6 +25,7 @@ class MagazinesSendArticleTest extends TestCase
 {
     use DatabaseTransactions;
     use WithoutMiddleware;
+    use FactoryTrait;
 
     /**
      * Testing sendArticle() method of the MagazinesController
@@ -33,6 +35,10 @@ class MagazinesSendArticleTest extends TestCase
     public function testMethod()
     {
         Storage::fake('journal_sent_articles');
+
+        $this->factoryJournal([
+            'active' => 1,
+        ]);
 
         $journal = Journal::where('active', 1)->first();
         $oMagazinesController = new MagazinesController();

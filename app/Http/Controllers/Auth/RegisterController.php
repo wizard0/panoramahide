@@ -53,7 +53,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         if (isset($data['phone'])) {
-            $data['phone'] = preg_replace('/[^0-9]/','', $data['phone']);
+            $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         }
         $validateResister = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -90,7 +90,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'phone' => preg_replace('/[^0-9]/','', $data['phone']),
+            'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
             'password' => Hash::make($data['password']),
         ]);
     }
