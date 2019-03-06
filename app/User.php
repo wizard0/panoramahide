@@ -4,6 +4,7 @@ namespace App;
 
 use App\Models\PromoUser;
 use App\Order;
+use App\OrderedSubscription;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 use App\Models\Traits\UserBookmarks;
@@ -95,10 +96,21 @@ class User extends Authenticatable
 
         return $orders;
     }
+    // Подписки пользователя
+    public function getSubscriptions($sort)
+    {
+        $subscriptions = OrderedSubscription::whereHas('order', function($query) {
+                            $query->where('status', 'completed')
+                                  ->whereIn('order_id', $this->orders()->get()->pluck('id'));
+                         });
+        $subscriptions = $subscriptions->orderBy('type', $sort['type']);
+
+        return $subscriptions->get();
+    }
     // Выпуски доступные пользователю по заказам/промокодам
     public function getReleases()
     {
-                    // Получаем выпуски пользователя доступные по заказам
+        // Получаем выпуски пользователя доступные по заказам
         $releases = Release::whereHas('order', function($query) {
                         $query->where('status', 'completed')
                               ->whereIn('order_id', $this->orders()->get()->pluck('id'));
@@ -108,7 +120,8 @@ class User extends Authenticatable
                         $q->whereHas('user', function($q) {
                             $q->where('id', $this->id);
                         });
-                    });
+                    })
+                    ->orderBy('active_date', 'desc');
 
         return $releases->get();
     }

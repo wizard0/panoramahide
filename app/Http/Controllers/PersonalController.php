@@ -111,19 +111,7 @@ class PersonalController extends Controller
 
     public function subscriptions(Request $request)
     {
-        // Получаем все заказы с подписками
-        $subscriptions = Auth::user()->orders()->get()
-                              // Трансформируем заказ в коллекцию подписок, либо в null
-                              ->transform(function ($order) {
-                                    return $order->subscription->isEmpty() ? null : $order->subscription;
-                                })
-                              // Убираем null'и
-                              ->reject(function ($items) {
-                                    return is_null($items);
-                                })
-                              // Делаем единую коллекцию подписок
-                              ->collapse();
-
+        $subscriptions = Auth::user()->getSubscriptions($request->get('sort') ?? ['type' => 'asc']);
         $sort = self::getSortBy('type', $request, $subscriptions);
 
         return view('personal.'.__FUNCTION__, compact('subscriptions', 'sort'));
@@ -163,6 +151,9 @@ class PersonalController extends Controller
         $releases = Auth::user()->getReleases();
         // Группируем по журналам
         $journals = $releases->groupBy('journal_id');
+        $journals = $journals->sortBy(function($releases) {
+                                   return $releases->first()->name;
+                               });
         return view('personal.'.__FUNCTION__, compact('journals'));
     }
     // Сортировка $data по столбцу $name в направлении $request->get('sort')
@@ -170,10 +161,8 @@ class PersonalController extends Controller
     {
         $sort = $request->get('sort') ?? [$name => 'asc'];
         if ($sort[$name] === 'asc') {
-            $data = $data->sortBy($name);
             $sort = ['sort' => [$name => 'desc']];
         } else {
-            $data = $data->sortByDesc('type');
             $sort = ['sort' => [$name => 'asc']];
         }
         return $sort;

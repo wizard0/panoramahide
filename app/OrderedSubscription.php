@@ -23,7 +23,7 @@ class OrderedSubscription extends Model
 
     public function order()
     {
-        return $this->belongsToMany(Order::class, 'order_product', 'subscription_id', 'order_id')->first();
+        return $this->belongsToMany(Order::class, 'order_product', 'subscription_id', 'order_id');
     }
 
     public function getNameAttribute()
@@ -60,6 +60,10 @@ class OrderedSubscription extends Model
         $to = $to_year.'-'.$to_month.'-31 23:59:59';
 
 
-        return $this->journal->releases()->whereBetween('active_date', [$from, $to])->get();
+        return $this->journal
+                    ->releases()
+                    ->whereBetween('active_date', [$from, $to])
+                    ->orderBy('active_date', 'desc')
+                    ->get();
     }
 }
