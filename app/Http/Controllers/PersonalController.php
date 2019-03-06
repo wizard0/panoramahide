@@ -167,4 +167,9 @@ class PersonalController extends Controller
         }
         return $sort;
     }
+
+    public function changePassword(Request $request)
+    {
+        return responseCommon()->success([], 'Пароль успешно изменён.');
+    }
 }

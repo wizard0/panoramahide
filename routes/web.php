@@ -67,7 +67,7 @@ Route::group(['prefix' => 'personal', 'middleware' => 'auth'], function () {
     Route::get('subscriptions', 'PersonalController@subscriptions')->name('personal.subscriptions');
     Route::get('subscriptions/{id}/releases', 'PersonalController@subscriptionsReleases')->name('subscriptions.releases');
     Route::any('profile', 'PersonalController@profile')->name('personal.profile');
-    Route::post('profile/password', 'Auth\LoginController@changePassword')->name('profile.password');
+    Route::post('profile/password', 'PersonalController@changePassword')->name('personal.profile.password');
     Route::get('magazines', 'PersonalController@magazines')->name('personal.magazines');
 
     Route::get('order/make', 'PersonalController@orderMake')->name('order.make');

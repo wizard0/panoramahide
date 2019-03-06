@@ -93,7 +93,7 @@
                     </button>
                 </div>
             </form>
-            <form action="{{ route('profile.password') }}" class="ajax-form" enctype="multipart/form-data" method="post" id="passwordForm" style="display: none">
+            <form action="{{ route('personal.profile.password') }}" class="ajax-form" enctype="multipart/form-data" method="post" id="passwordForm" style="display: none">
                 <div class="form-group">
                     <label>Текущий пароль</label>
                     <input type="password" class="form-control" name="password" value="" placeholder="Введите текущий пароль" required>
