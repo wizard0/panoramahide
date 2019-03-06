@@ -18,16 +18,16 @@ class UserSearchTableSeeder extends Seeder
             'id' => 1,
             'user_id' => 1,
             'search_params' => json_encode(
-                array(
-                    array('name' => 'q', 'value' => 'corrupt'),
-                    array('name' => 'search_in', 'value' => 'all'),
-                    array('name' => 'journal', 'value' => '2'),
-                    array('name' => 'type', 'value' => 'article'),
-                    array('name' => 'extend', 'value' => '1')
-                )
+                [
+                    ['name' => 'q', 'value' => 'corrupt'],
+                    ['name' => 'search_in', 'value' => 'all'],
+                    ['name' => 'journal', 'value' => '2'],
+                    ['name' => 'type', 'value' => 'article'],
+                    ['name' => 'extend', 'value' => '1'],
+                ]
             ),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s')
+            'updated_at' => date('Y-m-d H:i:s'),
         ]);
     }
 }

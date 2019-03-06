@@ -33,7 +33,7 @@ class SearchController extends Controller
                     $found = $this->getFoundString($request->get('q'), $s->found);
                     if ($found) {
                         $s->found = $found[0];
-                        $s->length = sizeof($found);
+                        $s->length = is_iterable($found) ? count($found) : 0;
                     }
                 }
             }
