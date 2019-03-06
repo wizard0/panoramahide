@@ -6,8 +6,11 @@ use App\Journal;
 use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Services\PromocodeCustomService;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
@@ -15,78 +18,92 @@ use Tests\TestCase;
  */
 class PromocodeCustomServiceTest extends TestCase
 {
+    use FactoryTrait;
+    use DatabaseTransactions;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var PromoUser
+     */
+    private $promoUser;
+
+    /**
+     * @var PromoUser
+     */
+    private $promocode;
+
+    /**
+     *
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->user = $this->factoryUser();
+
+        $this->promoUser = factory(PromoUser::class)->create([
+            'user_id' => $this->user->id,
+        ]);
+    }
+
+    /**
+     * @return PromoUser
+     */
+    private function promoUser(): PromoUser
+    {
+        return PromoUser::find($this->promoUser->id);
+    }
+
+    /**
+     * @return Promocode
+     */
+    private function promocode(): Promocode
+    {
+        if (is_null($this->promocode)) {
+            $this->promocode = $this->factoryPromocode([
+                'type' => Promocode::TYPE_CUSTOM,
+                'release_end' => now()->addDay(),
+                'used' => 0,
+                'limit' => 10,
+            ]);
+        } else {
+            $this->promocode->find($this->promocode->id);
+        }
+        return $this->promocode;
+    }
+
+    /**
+     * @param Promocode|null $promocode
+     * @return PromocodeCustomService
+     */
+    private function service(Promocode $promocode = null): PromocodeCustomService
+    {
+        if (is_null($promocode)) {
+            $promocode = $this->promocode();
+        }
+        return new PromocodeCustomService($promocode, $this->promoUser());
+    }
+
     /**
      * Пример использования
      */
     public function example()
     {
-        $service = new PromocodeCustomService($this->promocode(), $this->promoUser());
-        $oJournal = $this->journal();
+        $oJournal = $this->factoryJournal();
 
-        if (!$service->attachJournal($oJournal)) {
+        if (!$this->service()->attachJournal($oJournal)) {
             // не удалось добавить журнал к промо-участнику $service->getMessage()
         }
 
-        if (!$service->detachJournal($oJournal)) {
+        if (!$this->service()->detachJournal($oJournal)) {
             // не удалось открепить журнал от промо-участника $service->getMessage()
         }
 
         // все журналы
-        $service->getPromoUserJournals();
-    }
-
-    /**
-     * Тестовый пользователь
-     *
-     * @return mixed
-     */
-    private function promoUser(): PromoUser
-    {
-        return PromoUser::find(1);
-    }
-
-    /**
-     * Тестовый промокод
-     *
-     * @return mixed
-     */
-    private function promocode(): Promocode
-    {
-        return Promocode::find(1);
-    }
-
-    /**
-     * Журнал, который в связи с промокодом
-     *
-     * @return Journal
-     */
-    private function journal(): Journal
-    {
-        return Journal::find(1);
-    }
-
-    /**
-     * Журнал, который не в связи с промокодом
-     *
-     * @return Journal
-     */
-    private function journalNotIssetInPromocodes(): Journal
-    {
-        $oJournals = Journal::all();
-        $oJournals = $oJournals->reject(function ($item) {
-            return count($item->promocodes) !== 0;
-        });
-        return $oJournals->first();
-    }
-
-    /**
-     * Сервис
-     *
-     * @return PromocodeCustomService
-     */
-    private function service(): PromocodeCustomService
-    {
-        return new PromocodeCustomService($this->promocode(), $this->promoUser());
+        $this->service()->getPromoUserJournals();
     }
 
     /**
@@ -94,21 +111,15 @@ class PromocodeCustomServiceTest extends TestCase
      */
     public function testAttachJournal()
     {
-        $oJournal = $this->journalNotIssetInPromocodes();
-        $oService = $this->service();
+        $oJournal = $this->factoryJournal();
 
-        DB::transaction(function () use ($oJournal, $oService) {
-            $oJournal = $this->journal();
-            $countBefore = $oService->getPromoUserJournals()->count();
+        $countBefore = $this->service()->getPromoUserJournals()->count();
 
-            $result = $oService->attachJournal($oJournal);
-            $this->assertTrue($result);
+        $result = $this->service()->attachJournal($oJournal);
+        $this->assertTrue($result);
 
-            $countAfter = $this->service()->getPromoUserJournals()->count();
-            $this->assertTrue($countAfter > $countBefore);
-
-            DB::rollBack();
-        });
+        $countAfter = $this->service()->getPromoUserJournals()->count();
+        $this->assertTrue($countAfter > $countBefore);
     }
 
     /**
@@ -116,27 +127,48 @@ class PromocodeCustomServiceTest extends TestCase
      */
     public function testDetachJournal()
     {
-        $oJournal = $this->journalNotIssetInPromocodes();
-        $oService = $this->service();
+        $oJournal = $this->factoryJournal();
+        $oPromocode = $this->promocode();
 
-        DB::transaction(function () use ($oJournal, $oService) {
-            $oJournal = $this->journal();
-            $countBefore = $oService->getPromoUserJournals()->count();
+        $oJournal->promocodes()->attach($oPromocode->id);
 
-            $result = $oService->attachJournal($oJournal);
-            $this->assertTrue($result);
+        $countBefore = $this->service($oPromocode)->getPromoUserJournals()->count();
 
-            $countAfter = $this->service()->getPromoUserJournals()->count();
-            $this->assertTrue($countAfter > $countBefore);
+        $result = $this->service($oPromocode)->attachJournal($oJournal);
+        $this->assertTrue($result);
 
-            $result = $this->service()->detachJournal($oJournal);
-            $this->assertTrue($result);
+        $countAfter = $this->service($oPromocode)->getPromoUserJournals()->count();
+        $this->assertTrue($countAfter > $countBefore);
 
-            $countAfterDetach = $this->service()->getPromoUserJournals()->count();
-            $this->assertTrue($countAfterDetach < $countAfter && $countAfterDetach === $countBefore);
+        $result = $this->service($oPromocode)->detachJournal($oJournal);
+        $this->assertTrue($result);
 
-            DB::rollBack();
-        });
+        $countAfterDetach = $this->service($oPromocode)->getPromoUserJournals()->count();
+        $this->assertTrue($countAfterDetach < $countAfter && $countAfterDetach === $countBefore);
+    }
+
+    /**
+     * Тестирование отвязки журнала по промокоду к промо-участнику
+     */
+    public function testDetachJournalNotExists()
+    {
+        $oJournal = $this->factoryJournal();
+        $oPromocode = $this->promocode();
+
+        $result = $this->service($oPromocode)->detachJournal($oJournal);
+
+        $this->assertFalse($result);
+    }
+
+    public function testSyncJournals()
+    {
+        $oJournal = $this->factoryJournal();
+
+        $oJournals = Journal::where('id', $oJournal->id)->get();
+
+        $result = $this->service()->syncJournal($oJournals);
+
+        $this->assertTrue($result);
     }
 
     /**
@@ -144,23 +176,17 @@ class PromocodeCustomServiceTest extends TestCase
      */
     public function testGetPromoUserJournals()
     {
-        $oJournal = $this->journalNotIssetInPromocodes();
-        $oService = $this->service();
+        $oJournal = $this->factoryJournal();
 
-        DB::transaction(function () use ($oJournal, $oService) {
-            $oJournal = $this->journal();
-            $count = $oService->getPromoUserJournals()->count();
+        $count = $this->service()->getPromoUserJournals()->count();
 
-            $result = $oService->attachJournal($oJournal);
-            $this->assertTrue($result);
-            $count++;
+        $result = $this->service()->attachJournal($oJournal);
+        $this->assertTrue($result);
+        $count++;
 
-            $this->assertTrue($this->service()->getPromoUserJournals()->count() === $count);
-            $this->assertTrue($this->service()->getPromoUserJournals() instanceof Collection);
-            $this->assertTrue($this->service()->getPromoUserJournals()->first() instanceof Journal);
-
-            DB::rollBack();
-        });
+        $this->assertTrue($this->service()->getPromoUserJournals()->count() === $count);
+        $this->assertTrue($this->service()->getPromoUserJournals() instanceof Collection);
+        $this->assertTrue($this->service()->getPromoUserJournals()->first() instanceof Journal);
     }
 
     /**
@@ -168,7 +194,10 @@ class PromocodeCustomServiceTest extends TestCase
      */
     public function testIssetGetJbyPromo()
     {
-        $oJournal = $this->journal();
+        $oJournal = $this->factoryJournal();
+
+        $oJournal->promocodes()->attach($this->promocode()->id);
+
         $this->assertTrue(in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray()));
     }
 
@@ -177,8 +206,8 @@ class PromocodeCustomServiceTest extends TestCase
      */
     public function testNotIssetGetJbyPromo()
     {
-        $oJournal = $this->journalNotIssetInPromocodes();
-        $this->assertTrue(!is_null($oJournal));
+        $oJournal = $this->factoryJournal();
+
         $this->assertTrue(!in_array($this->promocode()->id, $oJournal->promocodes()->pluck('id')->toArray()));
     }
 }

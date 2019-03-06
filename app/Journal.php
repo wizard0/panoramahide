@@ -12,34 +12,34 @@ use App\Models\Promocode;
 /**
  * Class Journal
  *
- * @property integer id
- * @property string  journal_locale
- * @property boolean active
- * @property string  active_date
- * @property string  ISSN
- * @property boolean price_prev_halfyear
- * @property string  name
- * @property string  code
- * @property string  in_HAC_list
- * @property string  image
- * @property string  description
- * @property string  preview_image
- * @property string  preview_description
- * @property string  format
- * @property string  volume
- * @property string  periodicity
- * @property string  editorial_board
- * @property string  article_index
- * @property string  rubrics
- * @property string  review_procedure
- * @property string  article_submission_rules
- * @property string  chief_editor
- * @property string  phone
- * @property string  email
- * @property string  site
- * @property string  about_editor
- * @property string  contacts
- * @property mixed   subscriptions
+ * @property integer $id
+ * @property string  $journal_locale
+ * @property boolean $active
+ * @property string  $active_date
+ * @property string  $ISSN
+ * @property boolean $price_prev_halfyear
+ * @property string  $name
+ * @property string  $code
+ * @property string  $in_HAC_list
+ * @property string  $image
+ * @property string  $description
+ * @property string  $preview_image
+ * @property string  $preview_description
+ * @property string  $format
+ * @property string  $volume
+ * @property string  $periodicity
+ * @property string  $editorial_board
+ * @property string  $article_index
+ * @property string  $rubrics
+ * @property string  $review_procedure
+ * @property string  $article_submission_rules
+ * @property string  $chief_editor
+ * @property string  $phone
+ * @property string  $email
+ * @property string  $site
+ * @property string  $about_editor
+ * @property string  $contacts
+ * @property mixed   $subscriptions
  *
  * @package App
  */
@@ -126,7 +126,7 @@ class Journal extends Model
         $sort = $filters['sort_by'];
         $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
 
-        $q = self::where('active', 1)->withTranslation();
+        $q = self::where('active', 1)->orderBy('id', 'asc')->withTranslation();
 
         switch ($sort) {
             case 'name':
@@ -194,7 +194,7 @@ class Journal extends Model
         // создать части подписки | generate subscribe parts
         foreach (array(Subscription::TYPE_PRINTED, Subscription::TYPE_ELECTRONIC) as $type) {
             if ($type == Subscription::TYPE_ELECTRONIC) {
-//                $start_month = date('n');
+                // $start_month = date('n');
                 $start_month = 1;
                 $start_year = date('Y');
             } else {
@@ -209,7 +209,7 @@ class Journal extends Model
 
             $subs = Subscription::where('active', '=', 1)
                 ->where('journal_id', '=', $this->id)
-                ->whereIn('year', [$start_year, $start_year + 1])
+                ->whereIn('year', [$start_year, intval($start_year) + 1])
                 ->where('type', '=', $type)
                 ->where('locale', '=', App::getLocale())
                 ->get();
@@ -220,7 +220,7 @@ class Journal extends Model
                 if ($sub_info->year == $start_year && $sub_info->half_year == halfyear($start_month)) {
                     if ($sub_info->half_year == Subscription::HALFYEAR_2) {
                         $new_halfyear = Subscription::HALFYEAR_1;
-                        $new_year = $start_year + 1;
+                        $new_year = intval($start_year) + 1;
                     } else {
                         $new_halfyear = Subscription::HALFYEAR_2;
                         $new_year = $start_year;
@@ -320,7 +320,7 @@ class Journal extends Model
                             ||
                             (halfyear($_month) == Subscription::HALFYEAR_2
                                 && halfyear($end_month) == Subscription::HALFYEAR_1
-                                && $end_year == $_year + 1)
+                                && $end_year == intval($_year) + 1)
                         )
                     ) {
                         $halfyear = halfyear($_month) == Subscription::HALFYEAR_1

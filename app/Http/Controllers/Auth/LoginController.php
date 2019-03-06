@@ -45,12 +45,12 @@ class LoginController extends Controller
      */
     protected function sendLoginResponse(Request $request)
     {
-
         try {
             $request->session()->regenerate();
         } catch (\Exception $e) {
-
+            echo $e;
         }
+
         $this->clearLoginAttempts($request);
 
         return $this->authenticated($request, $this->guard()->user())

@@ -13,7 +13,7 @@ class PartnerUser extends Model
 
     public function partner()
     {
-        return $this->belongsTo(Partner::class);
+        return $this->belongsTo(Models\Partner::class);
     }
 
     public function quotas()

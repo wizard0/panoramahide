@@ -14,10 +14,11 @@ class SearchController extends Controller
     public function __invoke(Request $request)
     {
         $extend = $request->get('extend');
-
         $params = $request->all();
-        // dd($request, $request->query, $params);
-        if (!isset($params['type'])) $params['type'] = UserSearch::TYPE_ARTICLE;
+
+        if (!isset($params['type'])) {
+            $params['type'] = 'any';
+        }
 
         $searchDBResult = UserSearch::search($params);
         // if ($searchDBResult) {
@@ -28,7 +29,7 @@ class SearchController extends Controller
                     $found = $this->getFoundString($request->get('q'), $s->found);
                     if ($found) {
                         $s->found = $found[0];
-                        $s->length = sizeof($found);
+                        $s->{'length'} = is_iterable($found) ? count($found) : 0;
                     }
                 }
             }
@@ -40,8 +41,8 @@ class SearchController extends Controller
     }
 
     /**
-     * @param $seek
-     * @param $found
+     * @param string $seek
+     * @param string $found
      *
      * @return string|null sentences from article where query word (q) was found
      */

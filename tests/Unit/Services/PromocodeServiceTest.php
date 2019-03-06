@@ -1,11 +1,18 @@
 <?php
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author Дмитрий Поскачей (dposkachei@gmail.com)
+ */
 
 namespace Tests\Unit\Services;
 
 use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Services\PromocodeService;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
@@ -13,19 +20,85 @@ use Tests\TestCase;
  */
 class PromocodeServiceTest extends TestCase
 {
-    public function testExample()
+    use FactoryTrait;
+    use DatabaseTransactions;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * @var PromoUser
+     */
+    private $promoUser;
+
+    /**
+     *
+     */
+    protected function setUp()
     {
-        $this->assertTrue(true);
+        parent::setUp();
+        $this->user = $this->factoryUser();
+
+        $this->promoUser = factory(PromoUser::class)->create([
+            'user_id' => $this->user->id,
+        ]);
     }
 
     /**
-     * Сервис
-     *
+     * @return PromoUser
+     */
+    private function promoUser(): PromoUser
+    {
+        return PromoUser::find($this->promoUser->id);
+    }
+
+    /**
+     * @param Promocode|null $promocode
      * @return PromocodeService
      */
-    private function service(): PromocodeService
+    private function service(Promocode $promocode = null): PromocodeService
     {
-        return new PromocodeService();
+        return new PromocodeService($promocode);
+    }
+
+    /**
+     * @covers \App\Services\PromocodeService::redirectsByType()
+     */
+    public function testRedirectsByType()
+    {
+        $oPromocode = $this->factoryPromocode([
+            'type' => Promocode::TYPE_ON_JOURNAL,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+        ]);
+        $service = $this->service($oPromocode);
+        $this->assertTrue($service->redirectsByType() === route('home.journals'));
+
+        $oPromocode = $this->factoryPromocode([
+            'type' => Promocode::TYPE_CUSTOM,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+        ]);
+        $service = $this->service($oPromocode);
+        $this->assertTrue($service->redirectsByType() === route('deskbooks.index', [
+            'promocode' => $oPromocode->id
+        ]));
+    }
+
+    /**
+     * @covers \App\Services\PromocodeService::promoUser()
+     */
+    public function testSetAuthPromoUser()
+    {
+        $service = $this->service();
+        $this->actingAs($this->user);
+
+        $oPromoUser = $service->promoUser();
+        $this->assertTrue($oPromoUser->id === $this->promoUser()->id);
     }
 
     /**
@@ -33,18 +106,14 @@ class PromocodeServiceTest extends TestCase
      */
     public function testCreate()
     {
-        $oService = $this->service();
         $countBefore = Promocode::count();
 
-        DB::transaction(function () use ($oService, $countBefore) {
-            $oPromocode = $oService->create([
-                'promocode' => str_random(10)
-            ]);
-            $this->assertNotNull($oPromocode);
-            $countAfter = Promocode::count();
-            $this->assertTrue($countAfter > $countBefore);
-            DB::rollBack();
-        });
+        $oPromocode = $this->service()->create([
+            'promocode' => str_random(10)
+        ]);
+        $this->assertNotNull($oPromocode);
+        $countAfter = Promocode::count();
+        $this->assertTrue($countAfter > $countBefore);
     }
 
     /**
@@ -52,19 +121,13 @@ class PromocodeServiceTest extends TestCase
      */
     public function testUpdate()
     {
-        $oService = $this->service();
+        $oPromoCode = $this->factoryPromocode();
 
-        $oPromoCode = Promocode::first();
-        $this->assertNotNull($oPromoCode, $this->textRed('Таблица promocodes пуста'));
-
-        DB::transaction(function () use ($oService, $oPromoCode) {
-            $promocode = $oPromoCode->promocode;
-            $oPromocode = $oService->update($oPromoCode->id, [
-                'promocode' => str_random(10)
-            ]);
-            $this->assertTrue($promocode !== $oPromocode->promocode);
-            DB::rollBack();
-        });
+        $promocode = $oPromoCode->promocode;
+        $oPromocode = $this->service()->update($oPromoCode->id, [
+            'promocode' => str_random(10)
+        ]);
+        $this->assertTrue($promocode !== $oPromocode->promocode);
     }
 
     /**
@@ -72,18 +135,12 @@ class PromocodeServiceTest extends TestCase
      */
     public function testDestroy()
     {
-        $oService = $this->service();
+        $oPromoCode = $this->factoryPromocode();
 
-        $oPromoCode = Promocode::first();
-        $this->assertNotNull($oPromoCode, $this->textRed('Таблица promocodes пуста'));
         $countBefore = Promocode::count();
-
-        DB::transaction(function () use ($oService, $oPromoCode, $countBefore) {
-            $oService->destroy($oPromoCode->id);
-            $countAfter = Promocode::count();
-            $this->assertTrue($countAfter < $countBefore);
-            DB::rollBack();
-        });
+        $this->service()->destroy($oPromoCode->id);
+        $countAfter = Promocode::count();
+        $this->assertTrue($countAfter < $countBefore);
     }
 
     /**
@@ -91,11 +148,12 @@ class PromocodeServiceTest extends TestCase
      */
     public function testFind()
     {
-        $oService = $this->service();
-        $oPromoCode = Promocode::where('active', 1)->first();
+        $oPromoCode = $this->factoryPromocode([
+            'active' => 1,
+        ]);
 
-        $this->assertNotNull($oService->findById($oPromoCode->id));
-        $this->assertNotNull($oService->findByCode($oPromoCode->promocode));
+        $this->assertNotNull($this->service()->findById($oPromoCode->id));
+        $this->assertNotNull($this->service()->findByCode($oPromoCode->promocode));
     }
 
     /**
@@ -103,16 +161,12 @@ class PromocodeServiceTest extends TestCase
      */
     public function testCheckExceptionsReleaseEnd()
     {
-        $oService = $this->service();
-        $oPromoCode = Promocode::where('release_end', '<', now())->first();
+        $oPromoCode = $this->factoryPromocode([
+            'release_end' => now()->subDay(),
+        ]);
 
-        $this->assertNotNull($oPromoCode);
-
-        DB::transaction(function () use ($oService, $oPromoCode) {
-            $result = $oService->checkPromocodeBeforeActivate($oPromoCode);
-            $this->assertFalse($result, $this->textRed('Не прошла проверка просроченности промокода'));
-            DB::rollBack();
-        });
+        $result = $this->service()->checkPromocodeBeforeActivate($oPromoCode);
+        $this->assertFalse($result);
     }
 
     /**
@@ -120,20 +174,14 @@ class PromocodeServiceTest extends TestCase
      */
     public function testCheckExceptionsUsedEqualLimit()
     {
-        $oService = $this->service();
+        $oPromoCode = $this->factoryPromocode([
+            'release_end' => now()->addDay(),
+            'used' => 1,
+            'limit' => 1,
+        ]);
 
-        $oPromoCode = Promocode::where('release_end', '>', now())
-            ->where('used', 1)
-            ->where('limit', 1)
-            ->first();
-
-        $this->assertNotNull($oPromoCode);
-
-        DB::transaction(function () use ($oService, $oPromoCode) {
-            $result = $oService->checkPromocodeBeforeActivate($oPromoCode);
-            $this->assertFalse($result, $this->textRed('Не прошла проверка просроченности промокода'));
-            DB::rollBack();
-        });
+        $result = $this->service()->checkPromocodeBeforeActivate($oPromoCode);
+        $this->assertFalse($result);
     }
 
     /**
@@ -141,30 +189,24 @@ class PromocodeServiceTest extends TestCase
      */
     public function testActivatePromocode()
     {
-        $oService = $this->service();
+        $oPromoCode = $this->factoryPromocode([
+            'type' => Promocode::TYPE_ON_JOURNAL,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+        ]);
 
-        $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser);
+        $countBefore = $this->promoUser()->promocodes()->count();
+        $usedBefore = $oPromoCode->used;
 
-        $oPromoCode = Promocode::whereNotIn('id', $oPromoUser->promocodes->pluck('id')->toArray())->first();
-        $this->assertNotNull($oPromoCode);
+        $result = $this->service()->activatePromocode($oPromoCode, $this->promoUser());
+        $this->assertTrue($result);
 
-        DB::transaction(function () use ($oService, $oPromoCode, $oPromoUser) {
-            $countBefore = $oPromoUser->promocodes->count();
-            $usedBefore = $oPromoCode->used;
+        $countAfter = $this->promoUser()->promocodes()->count();
+        $usedAfter = $oPromoCode->used;
 
-            $result = $oService->activatePromocode($oPromoCode, $oPromoUser);
-            $this->assertTrue($result);
-
-            $oPromoUser = PromoUser::first();
-            $countAfter = $oPromoUser->promocodes->count();
-            $usedAfter = $oPromoCode->used;
-
-            $this->assertTrue($usedAfter > $usedBefore);
-            $this->assertTrue($countAfter > $countBefore);
-
-            DB::rollBack();
-        });
+        $this->assertTrue($usedAfter > $usedBefore);
+        $this->assertTrue($countAfter > $countBefore);
     }
 
     /**
@@ -172,37 +214,29 @@ class PromocodeServiceTest extends TestCase
      */
     public function testDeactivatePromocode()
     {
-        $oService = $this->service();
+        $oPromoCode = $this->factoryPromocode([
+            'type' => Promocode::TYPE_ON_JOURNAL,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+        ]);
 
-        $oPromoUser = PromoUser::first();
-        $this->assertNotNull($oPromoUser);
+        $countBefore = $this->promoUser()->promocodes()->count();
+        $usedBefore = $oPromoCode->used;
 
-        $oPromoCode = Promocode::whereNotIn('id', $oPromoUser->promocodes->pluck('id')->toArray())->first();
-        $this->assertNotNull($oPromoCode);
+        $result = $this->service()->activatePromocode($oPromoCode, $this->promoUser());
+        $this->assertTrue($result);
 
-        DB::transaction(function () use ($oService, $oPromoCode, $oPromoUser) {
-            $countBefore = $oPromoUser->promocodes->count();
-            $usedBefore = $oPromoCode->used;
+        $usedAfter = $oPromoCode->used;
+        $this->assertTrue($usedAfter > $usedBefore);
 
-            $result = $oService->activatePromocode($oPromoCode, $oPromoUser);
-            $this->assertTrue($result);
+        $countAfter = $this->promoUser()->promocodes()->count();
+        $this->assertTrue($countAfter > $countBefore);
 
-            $oPromoUser = PromoUser::first();
+        $result = $this->service()->deactivatePromocode($oPromoCode, $this->promoUser());
+        $this->assertTrue($result);
 
-            $usedAfter = $oPromoCode->used;
-            $this->assertTrue($usedAfter > $usedBefore);
-
-            $countAfter = $oPromoUser->promocodes->count();
-            $this->assertTrue($countAfter > $countBefore);
-
-            $result = $oService->deactivatePromocode($oPromoCode, $oPromoUser);
-            $this->assertTrue($result);
-
-            $oPromoUser = PromoUser::first();
-            $countAfterDeactivate = $oPromoUser->promocodes->count();
-            $this->assertTrue($countAfterDeactivate < $countAfter);
-
-            DB::rollBack();
-        });
+        $countAfterDeactivate = $this->promoUser()->promocodes()->count();
+        $this->assertTrue($countAfterDeactivate < $countAfter);
     }
 }

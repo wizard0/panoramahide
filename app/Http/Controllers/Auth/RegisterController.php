@@ -53,7 +53,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         if (isset($data['phone'])) {
-            $data['phone'] = preg_replace('/[^0-9]/','', $data['phone']);
+            $data['phone'] = preg_replace('/[^0-9]/', '', $data['phone']);
         }
         $validateResister = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
@@ -90,7 +90,7 @@ class RegisterController extends Controller
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'phone' => preg_replace('/[^0-9]/','', $data['phone']),
+            'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
             'password' => Hash::make($data['password']),
         ]);
     }
@@ -99,7 +99,7 @@ class RegisterController extends Controller
      * Handle a registration request for the application.
      *
      * @param  \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function register(Request $request)
     {

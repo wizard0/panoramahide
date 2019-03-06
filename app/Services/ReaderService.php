@@ -123,7 +123,7 @@ class ReaderService
     /**
      * Получить html по статье
      *
-     * @param $oArticle
+     * @param Article $oArticle
      * @return string
      */
     private function getArticleHtml(Article $oArticle): string
@@ -139,7 +139,7 @@ class ReaderService
     /**
      * Удаление закладки
      *
-     * @param $id
+     * @param integer $id
      * @return bool
      */
     public function bookmarkDestroy($id)

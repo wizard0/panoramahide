@@ -28,7 +28,7 @@ class Code
     }
 
     /**
-     * @param $code
+     * @param int $code
      * @return array
      */
     public function sendConfirmationPromoCode($code)

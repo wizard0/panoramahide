@@ -20,11 +20,11 @@ trait IndexPageTrait
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index(Request $request)
     {
-        if ($request && $request->has('sort_by')) {
+        if ($request->has('sort_by')) {
             $data = $this->getTableData($request->get('sort_by'));
         } else {
             $data = $this->getTableData();

@@ -12,7 +12,7 @@ class PublishersController extends Controller
      * Handle the incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function __invoke(Request $request)
     {
@@ -35,10 +35,11 @@ class PublishersController extends Controller
                     })->orderByTranslation('name', $order)->get();
                     break;
                 case 'date':
-                    if ($order != 'asc')
+                    if ($order != 'asc') {
                         $journals = $journals->sortByDesc('active_date');
-                    else
+                    } else {
                         $journals = $journals->sortBy('active_date');
+                    }
                     break;
             }
         }

@@ -22,7 +22,7 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function index()
     {
@@ -32,12 +32,12 @@ class HomeController extends Controller
     /**
      * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\View\View
      */
     public function journals()
     {
+        $result = view('home.journals');
         $oPromoUser = Auth::user()->promo;
-
         $oPromocodes = $oPromoUser->promocodes;
 
         if (count($oPromocodes) !== 0) {
@@ -48,11 +48,10 @@ class HomeController extends Controller
                     ->getJournals();
                 return $item;
             });
+            $result = view('home.journals', [
+                'oPromocodes' => $oPromocodes
+            ]);
         }
-
-        return view('home.journals', [
-            'oPromocodes' => $oPromocodes
-        ]);
-        return view('home.journals');
+        return $result;
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Journal;
-use App\Partner;
+use App\Models\Partner;
 use App\Release;
 
 class QuotaController extends CRUDController

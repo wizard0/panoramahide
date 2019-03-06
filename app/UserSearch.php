@@ -118,7 +118,7 @@ class UserSearch extends Model
                 break;
         }
 
-        if (isset($q) && isset($params)) {
+        if (isset($params)) {
             $q = $q->leftJoin('article_author', 'article_author.article_id', '=', 'articles.id')
                 ->leftJoin('authors', 'article_author.author_id', '=', 'authors.id')
                 ->leftJoin('journal_category', 'journal_category.journal_id', '=', 'journals.id')

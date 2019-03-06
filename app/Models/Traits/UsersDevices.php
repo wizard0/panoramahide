@@ -6,6 +6,8 @@
 namespace App\Models\Traits;
 
 use App\Models\Device;
+use App\Models\PartnerUser;
+use App\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;
@@ -51,8 +53,7 @@ trait UsersDevices
     /**
      * Активированные устройства с исключением текущего
      *
-     * @param Device|null $oSelectedDevice
-     * @return mixed
+     * @return User|PartnerUser|Collection
      */
     public function getActivationDevices(): Collection
     {
@@ -108,11 +109,10 @@ trait UsersDevices
         }
     }
 
-
     /**
      * Проверка кода сброса устройств
      *
-     * @param $code
+     * @param string $code
      * @return bool
      */
     public function checkResetCode(string $code): bool

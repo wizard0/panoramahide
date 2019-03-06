@@ -161,7 +161,7 @@ class PromoController extends Controller
                 ]);
             }
         }
-        $code = $oPromoUserService->codeGenerateByPhone($phone);
+        $code = $oPromoUserService->codeGenerateByPhone(intval($phone));
 
         return responseCommon()->success([
             'result' => 1,
@@ -318,5 +318,4 @@ class PromoController extends Controller
             'redirect' => $redirect,
         ], 'Промокод успешно активирован');
     }
-
 }

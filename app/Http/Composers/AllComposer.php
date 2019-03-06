@@ -9,25 +9,23 @@ use Illuminate\Support\Facades\Cache;
 class AllComposer
 {
 
-    public function __construct(Route $route)
+    public function __construct()
     {
-
     }
 
     /**
      * Bind data to the view.
      *
-     * @param  View  $view
+     * @param  View $view
      * @return void
      */
     public function compose(View $view)
     {
-
     }
 
     /**
-     * @param $name
-     * @param $function
+     * @param string $name
+     * @param \Closure $function
      * @param int $time
      * @return mixed
      */
@@ -35,5 +33,4 @@ class AllComposer
     {
         return Cache::remember($name, $time, $function);
     }
-
 }

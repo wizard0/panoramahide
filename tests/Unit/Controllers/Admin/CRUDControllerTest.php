@@ -20,6 +20,12 @@ class CRUDControllerTest extends TestCase
 {
     use DatabaseTransactions;
 
+    protected function setUp()
+    {
+        parent::setUp();
+        (new \PaysystemSeeder())->run();
+    }
+
     public function testEdit()
     {
         // Journal editing
@@ -57,14 +63,16 @@ class CRUDControllerTest extends TestCase
             'locale' => 'fr'
         ]);
 
+        $oPaysystem = App\Paysystem::first();
+
         // Paysystem editing. The model has not translated attributes
         $oCRUDController = new App\Http\Controllers\Admin\PaysystemController();
         $oCRUDController->update((new Request())->merge([
             'name' => 'new_paysystem_name'
-        ]), 1);
+        ]), $oPaysystem->id);
 
         $this->assertDatabaseHas('paysystems', [
-            'id' => 1,
+            'id' => $oPaysystem->id,
             'name' => 'new_paysystem_name'
         ]);
     }

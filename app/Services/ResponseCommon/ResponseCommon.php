@@ -9,12 +9,12 @@ use Illuminate\Support\Str;
 class ResponseCommon
 {
     /**
-     * @var array
+     * @var array $aData
      */
     private $aData = [];
 
     /**
-     * @var null
+     * @var string $method
      */
     private $method = null;
 
@@ -55,7 +55,7 @@ class ResponseCommon
     /**
      * Ajax return json error with status 422
      *
-     * @param $text
+     * @param string $text
      * @param string $key
      * @return \Illuminate\Http\JsonResponse
      */
@@ -67,7 +67,7 @@ class ResponseCommon
     }
 
     /**
-     * @param $message
+     * @param string $message
      * @return $this
      */
     public function withMessage($message)
@@ -86,7 +86,7 @@ class ResponseCommon
     }
 
     /**
-     * @param $method
+     * @param string $method
      */
     public function setMethod($method)
     {
