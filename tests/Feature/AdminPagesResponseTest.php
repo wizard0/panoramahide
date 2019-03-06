@@ -10,6 +10,8 @@ use App\Publishing;
 use App\Release;
 use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 use Tests\FactoryTrait;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -28,7 +30,11 @@ class AdminPagesResponseTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        (new \RolesAndPermissionsBaseSeeder())->run();
+        $permission = Permission::where('name', User::PERMISSION_ADMIN)->first();
+        $role = Role::where('name', User::ROLE_ADMIN)->first();
+        if (is_null($permission) && is_null($role)) {
+            (new \RolesAndPermissionsBaseSeeder())->run();
+        }
 
         $oCategory = $this->factoryCategory();
         $oJournal = $this->factoryJournal();
