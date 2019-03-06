@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Partner;
+use App\Models\Partner;
 use App\Quota;
 use App\Release;
 use App\User;

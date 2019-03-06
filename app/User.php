@@ -16,9 +16,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 
 /**
- * @property string name
- * @property string last_name
- * @property string  phone
+ * @property string $name
+ * @property string $last_name
+ * @property string $phone
  */
 class User extends Authenticatable
 {

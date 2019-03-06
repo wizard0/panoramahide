@@ -30,10 +30,10 @@ trait UserBookmarks
     /**
      * Создание закладки для пользоватея
      *
-     * @param $data
+     * @param array $data
      * @return mixed
      */
-    public function createBookmark($data)
+    public function createBookmark(array $data)
     {
         $data = array_merge([
             'owner_type' => (preg_match('#.*\\\\(PartnerUser)$#', __CLASS__) ? 'partner_user' : 'user')

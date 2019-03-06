@@ -8,14 +8,14 @@ trait PromoUserGetSetableTrait
 {
     /**
      * Promocode
-     * @var null
+     * @var PromoUser|null
      */
     private $promoUser = null;
 
     /**
      * @return PromoUser
      */
-    public function promoUser(): PromoUser
+    public function promoUser(): ?PromoUser
     {
         return $this->promoUser;
     }

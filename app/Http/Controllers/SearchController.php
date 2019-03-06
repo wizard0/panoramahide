@@ -44,8 +44,8 @@ class SearchController extends Controller
     }
 
     /**
-     * @param $seek
-     * @param $found
+     * @param string $seek
+     * @param string $found
      *
      * @return string|null sentences from article where query word (q) was found
      */

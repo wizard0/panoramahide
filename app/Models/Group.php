@@ -20,7 +20,7 @@ class Group extends Model
 
     public static function store($group, $promocode_id)
     {
-        $Self = self::create(['name' => $group['name'], 'promocode_id' => $promocode_id]);
+        $Self = Group::create(['name' => $group['name'], 'promocode_id' => $promocode_id]);
         $Self->journals()->saveMany(\App\Journal::whereIn('id', $group['journals'])->get());
         return $Self;
     }

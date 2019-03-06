@@ -5,9 +5,9 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * @property integer  user_id
- * @property integer  element_id
- * @property string type
+ * @property integer $user_id
+ * @property integer $element_id
+ * @property string $type
  */
 class UserFavorite extends Model
 {

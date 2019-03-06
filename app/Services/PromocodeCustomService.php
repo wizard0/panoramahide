@@ -17,7 +17,7 @@ class PromocodeCustomService
     use PromoUserGetSetableTrait;
 
     /**
-     * @var null
+     * @var Journal
      */
     private $journals = null;
 
@@ -45,6 +45,10 @@ class PromocodeCustomService
      */
     public function getPromoUserJournals(): Collection
     {
+        if (is_null($this->promoUser)) {
+            return new Collection();
+        }
+
         $oJbyPromo = $this->promoUser->jByPromo->load('journals');
 
         $ojByPromoJournals = collect([]);

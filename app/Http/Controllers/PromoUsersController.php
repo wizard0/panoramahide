@@ -91,8 +91,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param integer $id
+     * @return \Illuminate\View\View
      */
     public function promocodes(Request $request, $id)
     {
@@ -114,8 +114,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @param $item_id
+     * @param integer $id
+     * @param integer $item_id
      * @return \Illuminate\Http\JsonResponse
      */
     public function activatePromocode(Request $request, $id, $item_id)
@@ -134,8 +134,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param integer $id
+     * @return \Illuminate\View\View
      */
     public function publishings(Request $request, $id)
     {
@@ -153,8 +153,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @param $item_id
+     * @param int $id
+     * @param int $item_id
      * @return \Illuminate\Http\JsonResponse
      */
     public function activatePublishing(Request $request, $id, $item_id)
@@ -168,8 +168,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @return \Illuminate\Http\JsonResponse
+     * @param int $id
+     * @return \Illuminate\View\View
      */
     public function releases(Request $request, $id)
     {
@@ -187,8 +187,8 @@ class PromoUsersController extends Controller
 
     /**
      * @param Request $request
-     * @param $id
-     * @param $item_id
+     * @param int $id
+     * @param int $item_id
      * @return \Illuminate\Http\JsonResponse
      */
     public function activateRelease(Request $request, $id, $item_id)

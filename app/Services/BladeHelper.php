@@ -7,7 +7,7 @@ class BladeHelper
 {
     /**
      *
-     * @param $oItem
+     * @param string $oItem
      * @return string
      * @throws \Throwable
      */
