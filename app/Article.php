@@ -3,6 +3,7 @@
 namespace App;
 
 use Dimsav\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 
@@ -55,5 +56,10 @@ class Article extends Model
     public function getLink()
     {
         return route('article', ['code' => $this->code]);
+    }
+
+    public function scopeWhereTranslationCode($query, $value, $locale = null)
+    {
+        return $this->scopeWhereTranslation($query, 'code', $value, $locale);
     }
 }

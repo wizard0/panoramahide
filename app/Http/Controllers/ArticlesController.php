@@ -9,7 +9,7 @@ class ArticlesController extends Controller
 {
     public function detail(Request $request, $code)
     {
-        $article = Article::whereTranslation('code', $code)->first();
+        $article = Article::whereTranslationCode($code)->first();
         $release = $article->release;
         $journal = $release->journal;
 

@@ -23,7 +23,7 @@ class PublishersController extends Controller
 
     public function detail(Request $request, $code)
     {
-        $publisher = Publishing::whereTranslation('code', $code)->first();
+        $publisher = Publishing::whereTranslationCode($code)->first();
         $journals = $publisher->journals;
 
         if ($request->has('sort_by')) {
