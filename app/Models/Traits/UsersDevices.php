@@ -53,7 +53,7 @@ trait UsersDevices
     /**
      * Активированные устройства с исключением текущего
      *
-     * @return User|PartnerUser|Collection
+     * @return Collection
      */
     public function getActivationDevices(): Collection
     {
