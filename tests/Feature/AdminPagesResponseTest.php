@@ -27,6 +27,36 @@ class AdminPagesResponseTest extends TestCase
      */
     private $admin;
 
+    /**
+     * @var Journal
+     */
+    private $oJournal;
+
+    /**
+     * @var Release
+     */
+    private $oRelease;
+
+    /**
+     * @var Publishing
+     */
+    private $oPublishing;
+
+    /**
+     * @var Author
+     */
+    private $oAuthor;
+
+    /**
+     * @var Category
+     */
+    private $oCategory;
+
+    /**
+     * @var Article
+     */
+    private $oArticle;
+
     protected function setUp()
     {
         parent::setUp();
@@ -36,20 +66,20 @@ class AdminPagesResponseTest extends TestCase
             (new \RolesAndPermissionsBaseSeeder())->run();
         }
 
-        $oCategory = $this->factoryCategory();
-        $oJournal = $this->factoryJournal();
-        $oCategory->journals()->attach($oJournal->id);
+        $this->oCategory = $this->factoryCategory();
+        $this->oJournal = $this->factoryJournal();
+        $this->oCategory->journals()->attach($this->oJournal->id);
 
-        $this->factoryArticle();
+        $this->oArticle = $this->factoryArticle();
 
-        $oPublishing = $this->factoryPublishing();
-        $oPublishing->journals()->attach($oJournal->id);
+        $this->oPublishing = $this->factoryPublishing();
+        $this->oPublishing->journals()->attach($this->oJournal->id);
 
-        $this->factoryRelease([
-            'journal_id' => $oJournal->id,
+        $this->oRelease = $this->factoryRelease([
+            'journal_id' => $this->oJournal->id,
         ]);
 
-        $this->factoryAuthor();
+        $this->oAuthor = $this->factoryAuthor();
 
         $this->admin = factory(User::class)->create()->assignRole('admin');
     }
@@ -88,60 +118,59 @@ class AdminPagesResponseTest extends TestCase
     public function testAllEditPagesResponse()
     {
         $this->actingAs($this->admin)
-            ->get(route('categories.edit', [Category::first()->id]))
+            ->get(route('categories.edit', [$this->oCategory->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('publishings.edit', [Publishing::first()->id]))
+            ->get(route('publishings.edit', [$this->oPublishing->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('authors.edit', [Author::first()->id]))
+            ->get(route('authors.edit', [$this->oAuthor->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('journals.edit', [Journal::first()->id]))
+            ->get(route('journals.edit', [$this->oJournal->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('releases.edit', [Release::first()->id]))
+            ->get(route('releases.edit', [$this->oRelease->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('articles.edit', [Article::first()->id]))
+            ->get(route('articles.edit', [$this->oArticle->id]))
             ->assertOk();
     }
 
     public function testAllShowPagesResponse()
     {
-        $category = Category::first();
         $this->actingAs($this->admin)
-            ->get(route('categories.show', [$category->id]))
+            ->get(route('categories.show', [$this->oCategory->id]))
             ->assertOk()
-            ->assertSee($category->journals->first()->name);
+            ->assertSee($this->oCategory->journals->first()->name);
 
         $this->actingAs($this->admin)
-            ->get(route('publishings.show', [Publishing::first()->id]))
+            ->get(route('publishings.show', [$this->oPublishing->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
-            ->get(route('authors.show', [Author::first()->id]))
+            ->get(route('authors.show', [$this->oAuthor->id]))
             ->assertOk();
 
-        $journal = Journal::first();
+        $journal = Journal::find($this->oJournal->id);
         $this->actingAs($this->admin)
             ->get(route('journals.show', [$journal->id]))
             ->assertOk()
             ->assertSee($journal->publishings->first()->name);
 
-        $release = Release::first();
+        $release = Release::find($this->oRelease->id);
         $this->actingAs($this->admin)
             ->get(route('releases.show', [$release->id]))
             ->assertOk()
             ->assertSee($release->journal->name);
 
         $this->actingAs($this->admin)
-            ->get(route('articles.show', [Article::first()->id]))
+            ->get(route('articles.show', [$this->oArticle->id]))
             ->assertOk();
 
         $this->actingAs($this->admin)
