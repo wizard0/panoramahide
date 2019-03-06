@@ -51,7 +51,7 @@ trait UsersDevices
     /**
      * Активированные устройства с исключением текущего
      *
-     * @return mixed
+     * @return Illuminate\Database\Eloquent\Collection
      */
     public function getActivationDevices(): Collection
     {
