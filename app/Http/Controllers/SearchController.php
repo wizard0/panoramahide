@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
-use App\Journal;
 use App\UserSearch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -25,11 +21,11 @@ class SearchController extends Controller
         }
 
         $searchDBResult = UserSearch::search($params);
-        if ($searchDBResult) {
+        // if ($searchDBResult) {
             $search = $searchDBResult->paginate(10);
             $rowCount = $search->total();
             foreach ($search as $s) {
-                if (property_exists($s, 'found')) {
+                if ($s->found && $s->found != '') {
                     $found = $this->getFoundString($request->get('q'), $s->found);
                     if ($found) {
                         $s->found = $found[0];
@@ -37,9 +33,9 @@ class SearchController extends Controller
                     }
                 }
             }
-        } else {
-            $search = [];
-        }
+        // } else {
+        //     $search = [];
+        // }
 
         return view('search.index', compact('search', 'extend', 'rowCount', 'params'));
     }
@@ -61,7 +57,7 @@ class SearchController extends Controller
     {
         $userSearch = UserSearch::create([
             'user_id' => Auth::id(),
-            'search_params' => json_decode($request->get('data'))
+            'search_params' => json_encode($request->get('data'))
         ]);
 
         return json_encode(['success' => true, 'ID' => $userSearch->id]);

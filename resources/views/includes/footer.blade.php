@@ -96,7 +96,3 @@
         </div>
     </div>
 </footer>
-
-<script>
-    var CartManager = new JSCartManager();
-</script>

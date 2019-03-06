@@ -29,6 +29,9 @@ class UserSearch extends Model
                     $search[$s->id]->{$value->name} = $value->value;
                 }
                 $search[$s->id]->created = $s->created_at;
+                if (!isset($search[$s->id]->type)) {
+                    $search[$s->id]->type = UserSearch::TYPE_ARTICLE;
+                }
             }
 
             return $search;
@@ -48,15 +51,7 @@ class UserSearch extends Model
                 $q = Journal::selectRaw("
                         journals.id as journalID,
                         journal_translations.image as journalImage,
-                        journals.active_date as journalActiveDate,
-                        article_translations.name as articleName,
-                        articles.id as articleID,
-                        article_translations.code as articleCode,
-                        article_translations.description as articleDescr,
                         journals.issn as journalISSN,
-                        releases.id as releaseID,
-                        author_translations.name as authorName,
-                        authors.id as authorID,
                         journal_translations.name as journalName,
                         journal_translations.code as journalCode,
                         release_translations.name as releaseName,
@@ -127,22 +122,44 @@ class UserSearch extends Model
             $q = $q->leftJoin('article_author', 'article_author.article_id', '=', 'articles.id')
                 ->leftJoin('authors', 'article_author.author_id', '=', 'authors.id')
                 ->leftJoin('journal_category', 'journal_category.journal_id', '=', 'journals.id')
-                ->leftJoin('categories', 'categories.id', '=', 'journal_category.category_id')
+                ->leftJoin('article_category', 'article_category.article_id', '=', 'articles.id')
+                ->leftJoin('categories as journal_categories', 'journal_categories.id', '=', 'journal_category.category_id')
+                ->leftJoin('categories as article_categories', 'article_categories.id', '=', 'article_category.category_id')
                 ->leftJoin('journal_translations', 'journals.id', '=', 'journal_translations.journal_id')
                 ->leftJoin('release_translations', 'releases.id', '=', 'release_translations.release_id')
                 ->leftJoin('article_translations', 'articles.id', '=', 'article_translations.article_id')
-                ->leftJoin('author_translations', 'authors.id', '=', 'author_translations.author_id')
-                ->leftJoin('category_translations', 'categories.id', '=', 'category_translations.category_id');
+                ->leftJoin('author_translations', 'authors.id', '=', 'author_translations.author_id');
 
             if (isset($params['q']) && $params['q']) {
-                $q = $q->where(function ($query) use ($params) {
-                    $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
-                        ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
-                        ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
-                });
+                if ($params['type'] == UserSearch::TYPE_JOURNAL) {
+                    $q = $q->where('journal_translations.name', 'like', '%' . $params['q'] . '%');
+                } else {
+                    $q = $q->where(function ($query) use ($params) {
+                        $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
+                            ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
+                            ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
+                    });
+                }
             }
             if (isset($params['category']) && $params['category']) {
-                $q = $q->where('categories.id', '=', $params['category']);
+                $q = $q->where(function ($query) use ($params) {
+                    $query->where('journal_categories.id', '=', $params['category'])
+                        ->orWhere('article_categories.id', '=', $params['category']);
+                });
+            }
+//            if (isset($params['journal']) && $params['journal']) {
+//                $q = $q->where(function ($query) use ($params) {
+//                    $query->where('article_translations.name', 'like', '%' . $params['q'] . '%')
+//                        ->orWhere('release_translations.name', 'like', '%' . $params['q'] . '%')
+//                        ->orWhere('article_translations.description', 'like', '%' . $params['q'] . '%');
+//                });
+//            }
+            if (isset($params['category']) && $params['category']) {
+                if ($params['type'] == UserSearch::TYPE_JOURNAL) {
+                    $q = $q->where('journal_categories.id', '=', $params['category']);
+                } else {
+                    $q = $q->where('article_categories.id', '=', $params['category']);
+                }
             }
             if (isset($params['journal']) && $params['journal']) {
                 $q = $q->where('journals.id', '=', $params['journal']);
@@ -184,18 +201,14 @@ class UserSearch extends Model
                 }
             }
 
-            // Translations
-            $q = $q->where('journal_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('release_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('article_translations.locale', '=', "'" . $searchLocale . "'")
-                ->where('author_translations.locale', '=', "'" . $searchLocale .  "'")
-                ->where('category_translations.locale', '=', "'" . $searchLocale . "'");
-
-            // Activity
-            $q = $q->where('journals.active', '=', '1')
-                ->where('releases.active', '=', '1')
-                ->where('articles.active', '=', '1')
-                ->where('categories.active', '=', '1');
+            // Translations + activity
+            if ($params['type'] == UserSearch::TYPE_JOURNAL) {
+                $q = $q->where('journal_translations.locale', '=', $searchLocale)
+                    ->where('journals.active', '=', 1);
+            } else {
+                $q = $q->where('article_translations.locale', '=', $searchLocale)
+                    ->where('articles.active', '=', 1);
+            }
 
             return $q->groupBy($groupBy);
         } else {

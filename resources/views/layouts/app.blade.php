@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+    <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -24,7 +24,7 @@
     <script src="{{ asset('js/panor/scripts.js') }}"></script>
     <script src="{{ asset('js/panor/panor.js') }}"></script>
     <script src="{{ asset('js/panor/search.js') }}"></script>
-    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
+    @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
         <script src="{{ asset('js/order_scripts.js') }}"></script>
     @endif
     <script src="{{ asset('js/AjaxPageLoader.js') }}"></script>
@@ -42,10 +42,10 @@
     <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
     <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
-    @if (preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
+    @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
         <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
     @endif
-    @if (preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
+    @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
         <link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">
     @endif
 </head>
@@ -58,7 +58,11 @@
 
     @include('includes.footer')
 
-    @yield('javascript');
+    <script>
+        var CartManager = new JSCartManager()
+    </script>
+
+    @yield('javascript')
 
     <script src="{{ asset('js/app.js') }}"></script>
 

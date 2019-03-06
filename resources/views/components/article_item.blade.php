@@ -9,9 +9,10 @@
         <div class="d-flex article-texts-holder justify-content-between">
             <div class="article-item-announce">
                 <h3><a href="/articles/{{ $code }}.html" class="black-link itemName">{{ $name }}</a></h3>
-                @if (isset($s) && property_exists($s, 'found') && $s->found != null)
-                    <div class="col-12"><p>...{{ $s->found }}...</p></div>
-                    <div class="coincidence-counter">И еще {{ $s->length }} совпадений <a href="/articles/{{ $s->articleCode }}.html" class="red-link">в статье</a></div>
+                @if ($found)
+                    <div class="col-12"><p>...{{ $found }}...</p></div>
+                    <div class="coincidence-counter">И еще {{ $length }} совпадений
+                        <a href="{{ route('article', compact('code')) }}" class="red-link">в статье</a></div>
                 @endif
                 <div class="output">
                     <span>Журнал:</span>
@@ -22,8 +23,15 @@
         </div>
         <div class="article-footer w-100">
             <div class="to-fav-this"><a href="#" class="_add_to_favorite" data-id="{{ $id }}"></a></div>
-            <div class="share-this"><a href="#" class="_share" title="Поделиться"></a></div>
-            {{--Here there must be yandex sharing buttons--}}
+            <div class="share-this"><a href="javascript:void(0)" class="_share" data-id="{{ $id }}" title="Поделиться"></a></div>
+
+            <div class="ya-share2 share_block_{{ $id }}" style="display: none"
+                 data-services="vkontakte,facebook,odnoklassniki,twitter,viber,whatsapp,telegram"
+                 data-limit="4"
+                 data-url="{{ route('article', compact('code')) }}"
+                 data-title="{{ $name }}"
+                 data-image="{{ route('index') }}"></div>
+
             <div class="get-access-link">
                 <a href="{{ route('article', ['code' => $code]) }}" class="black-link _access_article" data-id="{{ $id }}">Получить доступ</a>
             </div>
