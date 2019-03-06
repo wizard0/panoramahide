@@ -6,6 +6,7 @@ use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Promocode;
+use App\Models\PromoUser;
 
 class Release extends Model
 {
@@ -81,5 +82,13 @@ class Release extends Model
     public function promocode()
     {
         return $this->belongsToMany(Promocode::class);
+    }
+    public function promo_user()
+    {
+        return $this->belongsToMany(PromoUser::class);
+    }
+    public function order()
+    {
+        return $this->belongsToMany(Order::class, 'order_product', 'release_id', 'order_id');
     }
 }

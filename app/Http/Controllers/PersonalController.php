@@ -132,7 +132,6 @@ class PersonalController extends Controller
     public function subscriptionsReleases($id)
     {
         $subscription = OrderedSubscription::find($id);
-        //$subscription->order()->user->user;
         $releases = $subscription->getReleases();
         return view('release.list', compact('releases'));
     }
@@ -160,9 +159,13 @@ class PersonalController extends Controller
 
     public function magazines(Request $request)
     {
-        return view('personal.'.__FUNCTION__);
+        // Получаем доступные пользователю выпуски
+        $releases = Auth::user()->getReleases();
+        // Группируем по журналам
+        $journals = $releases->groupBy('journal_id');
+        return view('personal.'.__FUNCTION__, compact('journals'));
     }
-
+    // Сортировка $data по столбцу $name в направлении $request->get('sort')
     public static function getSortBy($name, $request, &$data)
     {
         $sort = $request->get('sort') ?? [$name => 'asc'];
