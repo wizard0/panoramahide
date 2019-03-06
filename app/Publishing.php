@@ -26,4 +26,9 @@ class Publishing extends Model
     {
         return $this->belongsToMany(Journal::class);
     }
+
+    public function scopeWhereTranslationCode($query, $value, $locale = null)
+    {
+        return $this->scopeWhereTranslation($query, 'code', $value, $locale);
+    }
 }
