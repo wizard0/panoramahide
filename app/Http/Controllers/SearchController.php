@@ -21,21 +21,18 @@ class SearchController extends Controller
         }
 
         $searchDBResult = UserSearch::search($params);
-        // if ($searchDBResult) {
-            $search = $searchDBResult->paginate(10);
-            $rowCount = $search->total();
-            foreach ($search as $s) {
-                if ($s->found && $s->found != '') {
-                    $found = $this->getFoundString($request->get('q'), $s->found);
-                    if ($found) {
-                        $s->found = $found[0];
-                        $s->{'length'} = is_iterable($found) ? count($found) : 0;
-                    }
+        $search = $searchDBResult->paginate(10);
+        $rowCount = $search->total();
+
+        foreach ($search as $s) {
+            if ($s->found && $s->found != '') {
+                $found = $this->getFoundString($request->get('q'), $s->found);
+                if ($found) {
+                    $s->found = $found[0];
+                    $s->{'length'} = is_iterable($found) ? count($found) : 0;
                 }
             }
-        // } else {
-        //     $search = [];
-        // }
+        }
 
         return view('search.index', compact('search', 'extend', 'rowCount', 'params'));
     }

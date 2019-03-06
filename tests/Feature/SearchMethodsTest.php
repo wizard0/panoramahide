@@ -75,7 +75,7 @@ class SearchMethodsTest extends TestCase
             'udk' => '123-456',
         ];
         $dataFormatted = [];
-        foreach($data as $key=>$value) {
+        foreach ($data as $key => $value) {
             $dataFormatted[]['name'] = $key;
             $dataFormatted[]['value'] = $value;
         }
@@ -90,7 +90,8 @@ class SearchMethodsTest extends TestCase
         ]);
     }
 
-    public function testSearchDeleteOne() {
+    public function testSearchDeleteOne()
+    {
         $user = factory(User::class)->create();
         $userSearch = UserSearch::create([
             'user_id' => $user->id,
@@ -107,16 +108,16 @@ class SearchMethodsTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post(route('delete.search'), [
-            'id' => $userSearch->id
-        ])->assertOk();
+            ->post(route('delete.search'), ['id' => $userSearch->id])
+            ->assertOk();
 
         $this->assertDatabaseMissing('user_search', [
             'id' => $userSearch->id
         ]);
     }
 
-    public function testSearchDeleteAll() {
+    public function testSearchDeleteAll()
+    {
         $user = factory(User::class)->create();
         UserSearch::create(
             [
@@ -142,9 +143,8 @@ class SearchMethodsTest extends TestCase
         ]);
 
         $this->actingAs($user)
-            ->post(route('delete.search'), [
-            'id' => 'all'
-        ])->assertOk();
+            ->post(route('delete.search'), ['id' => 'all'])
+            ->assertOk();
 
         $this->assertDatabaseMissing('user_search', [
             'user_id' => $user->id
