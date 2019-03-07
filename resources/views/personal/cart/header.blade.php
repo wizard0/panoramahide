@@ -1,7 +1,15 @@
 <div class="cart-holder" id="cart-in-header">
     <ul>
         <li class="dropdown">
-            <a class="dropdown-toggle" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>Корзина</span></a>
+            <a class="dropdown-toggle"
+               @if($cart)
+               href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               @else
+               href="{{ route('personal.cart') }}"
+               @endif
+            >
+                <span>Корзина</span>
+            </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink3">
                 <div id="basket_html">
                     @if ($cart)

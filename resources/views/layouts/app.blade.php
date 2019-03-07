@@ -33,19 +33,6 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-    <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/main.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/responsive.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet">
-    @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/personal.css') }}" rel="stylesheet">
-    @endif
-    @if (array_key_exists('REQUEST_URI', $_SERVER) && preg_match('/^\/personal\/order\/make.*/', $_SERVER['REQUEST_URI']))
-        <link href="{{ asset('css/style_for_orders.css') }}" rel="stylesheet">
-    @endif
-
 </head>
 <body class="{{ isset($bodyClass) ? $bodyClass : '' }}">
     @include('includes.header')
@@ -64,8 +51,6 @@
     </script>
 
     @yield('javascript')
-
-    <script src="{{ asset('js/app.js') }}"></script>
 
     <div id="scripts">
         @include('layouts.components.scripts.captcha')

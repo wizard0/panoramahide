@@ -96,7 +96,7 @@
                     <button type="submit" class="btn btn-primary inner-form-submit" style="width:120px">
                         <span>Сохранить</span>
                     </button>
-                    <button class="btn btn-light" onClick="window.location.reload()" style="width:120px">
+                    <button type="button" class="btn btn-light" onClick="window.location.reload()" style="width:120px">
                         <span>Отменить</span>
                     </button>
                 </div>

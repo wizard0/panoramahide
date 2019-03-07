@@ -6,7 +6,7 @@
 #cart-in-header {
   .cartItem.__basket {
     display: flex;
-    align-items: start;
+    align-items: flex-start;
     margin-bottom: 10px;
     justify-content: space-between;
     &:last-child {

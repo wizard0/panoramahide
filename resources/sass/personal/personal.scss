@@ -281,15 +281,19 @@
   right: 0px;
 }
 
-.status-active {
+.status-completed {
+  background: #297fc3;
+}
+
+.status-payed {
   background: #7fc327;
 }
 
-.status-waitforpay {
+.status-wait {
   background: #ee9123;
 }
 
-.status-expired {
+.status-cancelled {
   background: #7e8f9d;
 }
 
