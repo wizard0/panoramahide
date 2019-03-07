@@ -5,8 +5,8 @@ use Faker\Generator as Faker;
 $factory->define(App\Article::class, function (Faker $faker) {
     if (!$release = App\Release::first())
     {
-        $journal = factory(Journal::class)->create();
-        $release = factory(Release::class)->create(['journal_id' => $journal->id]);
+        $journal = factory(\App\Journal::class)->create();
+        $release = factory(\App\Release::class)->create(['journal_id' => $journal->id]);
     }
 
     return [

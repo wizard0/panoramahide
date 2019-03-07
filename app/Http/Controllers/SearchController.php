@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
-use App\Journal;
 use App\UserSearch;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
-use Illuminate\Support\Facades\DB;
 
 class SearchController extends Controller
 {
@@ -18,26 +14,24 @@ class SearchController extends Controller
     public function __invoke(Request $request)
     {
         $extend = $request->get('extend');
-
         $params = $request->all();
 
-        if (!isset($params['type'])) $params['type'] = 'any';
+        if (!isset($params['type'])) {
+            $params['type'] = 'any';
+        }
 
         $searchDBResult = UserSearch::search($params);
-        if ($searchDBResult) {
-            $search = $searchDBResult->paginate(10);
-            $rowCount = $search->total();
-            foreach ($search as $s) {
-                if (property_exists($s, 'found')) {
-                    $found = $this->getFoundString($request->get('q'), $s->found);
-                    if ($found) {
-                        $s->found = $found[0];
-                        $s->length = sizeof($found);
-                    }
+        $search = $searchDBResult->paginate(10);
+        $rowCount = $search->total();
+
+        foreach ($search as $s) {
+            if ($s->found && $s->found != '') {
+                $found = $this->getFoundString($request->get('q'), $s->found);
+                if ($found) {
+                    $s->found = $found[0];
+                    $s->{'length'} = is_iterable($found) ? count($found) : 0;
                 }
             }
-        } else {
-            $search = [];
         }
 
         return view('search.index', compact('search', 'extend', 'rowCount', 'params'));
@@ -60,7 +54,7 @@ class SearchController extends Controller
     {
         $userSearch = UserSearch::create([
             'user_id' => Auth::id(),
-            'search_params' => json_decode($request->get('data'))
+            'search_params' => json_encode($request->get('data'))
         ]);
 
         return json_encode(['success' => true, 'ID' => $userSearch->id]);

@@ -8,19 +8,25 @@ use App\Mail\Recommend;
 use App\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 class AjaxActionsRecommendTest extends TestCase
 {
     use DatabaseTransactions;
     use WithoutMiddleware;
+    use FactoryTrait;
 
     public function testArticleRecommend()
     {
         Mail::fake();
+
+        $this->factoryArticle([
+            'active' => 1,
+        ]);
 
         $article = Article::where('active', 1)->first();
 
@@ -40,6 +46,10 @@ class AjaxActionsRecommendTest extends TestCase
     public function testJournalRecommend()
     {
         Mail::fake();
+
+        $this->factoryJournal([
+            'active' => 1,
+        ]);
 
         $journal = Journal::where('active', 1)->first();
 

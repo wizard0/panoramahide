@@ -51,6 +51,7 @@ dbseed:
         - mysql --user=$MYSQL_USER --password=$MYSQL_PASS -e "drop database if exists dev_panor; create database dev_panor;" dev_panor
         - php72 ./artisan migrate:fresh -vvv
         - php72 ./artisan db:seed --class=TestSeeder -vvv
+        - php72 ./artisan admin:create
     dependencies:
         - build-php
         - build-npm
@@ -61,6 +62,10 @@ test:
         - master
     script:
         # - php72 ./vendor/phpunit/phpunit/phpunit --testdox --coverage-text --colors=never tests
+        - php72 ./artisan cache:clear
+        - php72 ./artisan config:clear
+        - php72 ./artisan route:clear
+        - php72 ./artisan view:clear
         - php72 ./vendor/brianium/paratest/bin/paratest -p4 --coverage-text tests
     dependencies:
         - build-php
@@ -73,7 +78,7 @@ deploy:
         - master
     script:
         - sftp -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru <<< 'put -r ../laravel-panor /var/www/html/dev.panor.ru.new'
-        - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder'
+        - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && php72 ./artisan migrate:fresh && php72 ./artisan db:seed --class=TestSeeder && php72 ./artisan admin:create'
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && chmod 774 ./deploy && ./deploy'
     dependencies:
         - build-php

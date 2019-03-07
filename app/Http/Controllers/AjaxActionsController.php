@@ -23,10 +23,12 @@ class AjaxActionsController extends Controller
         $links = [];
         foreach ($ids as $data) {
             if (is_numeric($data['id'])) {
-                if ($data['type'] == 'journal')
+                if ($data['type'] == 'journal') {
                     $links[] = Journal::where('id', $data['id'])->first()->getLink();
-                if ($data['type'] == 'article')
+                }
+                if ($data['type'] == 'article') {
                     $links[] = Article::where('id', $data['id'])->first()->getLink();
+                }
             }
         }
 
@@ -39,8 +41,9 @@ class AjaxActionsController extends Controller
             return Redirect::back();
         }
         $data = $request->get('data');
-        if (!is_array($data))
+        if (!is_array($data)) {
             $data = json_decode($data, true);
+        }
 
         foreach ($data as $dataRow) {
             UserFavorite::create([
@@ -105,6 +108,5 @@ class AjaxActionsController extends Controller
                 'userAddr'
             ));
         }
-
     }
 }

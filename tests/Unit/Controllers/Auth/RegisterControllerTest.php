@@ -7,10 +7,13 @@
 namespace Tests\Unit\Controllers\Auth;
 
 use App\Http\Controllers\Auth\RegisterController;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Tests\FactoryTrait;
 use Tests\TestCase;
 
 /**
@@ -19,20 +22,39 @@ use Tests\TestCase;
 class RegisterControllerTest extends TestCase
 {
     use DatabaseTransactions;
+    use FactoryTrait;
+
+    /**
+     * @var User
+     */
+    private $user;
+
+    /**
+     * Создание сущностей
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+    }
+
+    /**
+     * @return RegisterController
+     */
+    public function controller(): RegisterController
+    {
+        return new RegisterController();
+    }
 
     /**
      * Провал валидации на уникальный телефон
      */
     public function testRegisterValidationPhoneUnique()
     {
-        $oController = (new RegisterController());
-
-        $request = $this->request($this->registerData([
-            'phone' => testData()->user['phone']
-        ]));
-
+        $oUser = $this->factoryUser();
         try {
-            $result = $oController->register($request);
+            $result = $this->controller()->register($this->request($this->registerData([
+                'phone' => $oUser->phone,
+            ])));
         } catch (\Throwable $e) {
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
@@ -44,13 +66,11 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterValidationEmailUnique()
     {
-        $oController = (new RegisterController());
-
-        $request = $this->request($this->registerData([
-            'email' => testData()->user['email'],
-        ]));
+        $oUser = $this->factoryUser();
         try {
-            $result = $oController->register($request);
+            $result = $this->controller()->register($this->request($this->registerData([
+                'email' => $oUser->email,
+            ])));
         } catch (\Throwable $e) {
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
@@ -62,13 +82,10 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterValidationPasswordWrongConfirmation()
     {
-        $oController = (new RegisterController());
-
-        $request = $this->request($this->registerData([
-            'password_confirmation' => 'wrong-password',
-        ]));
         try {
-            $result = $oController->register($request);
+            $result = $this->controller()->register($this->request($this->registerData([
+                'password_confirmation' => 'wrong-password',
+            ])));
         } catch (\Throwable $e) {
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
@@ -80,11 +97,8 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterValidationRecaptcha()
     {
-        $oController = (new RegisterController());
-        $request = $this->request($this->registerData());
-
         try {
-            $result = $oController->register($request);
+            $result = $this->controller()->register($this->request($this->registerData()));
             $this->assertTrue($result->getStatusCode() === 422);
         } catch (\Throwable $e) {
             $this->assertTrue(false, $this->textRed('Проверьте настройки reCAPTCHA и метод RegisterController::register()'));
@@ -96,16 +110,13 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterSuccess()
     {
-        $oController = (new RegisterController());
-
-        $request = $this->request($this->registerData([
-            'g-recaptcha-response' => config('googlerecaptchav3.except_value'),
-        ]));
         try {
-            $result = $oController->register($request);
+            $result = $this->controller()->register($this->request($this->registerData([
+                'g-recaptcha-response' => config('googlerecaptchav3.except_value'),
+            ])));
             $this->assertTrue(!Auth::guest());
             $this->assertTrue($result['success']);
-            $this->assertTrue($result['redirect'] === $oController->redirectPath());
+            $this->assertTrue($result['redirect'] === $this->controller()->redirectPath());
         } catch (\Throwable $e) {
             // ValidationException code 422
             $this->assertTrue($e->status === 422);
@@ -120,13 +131,17 @@ class RegisterControllerTest extends TestCase
      */
     private function registerData(array $data = [])
     {
+        $oUser = $this->factoryMake(User::class, [
+            'password' => Hash::make('1234567890'),
+        ]);
+
         return array_merge([
-            'name' => testData()->user['name'],
-            'last_name' => testData()->user['name'],
-            'email' => 'test' . testData()->user['email'],
-            'password' => 'testtest',
-            'password_confirmation' => 'testtest',
-            'phone' => 79998887755,
+            'name' => $oUser->name,
+            'last_name' => $oUser->name,
+            'email' => $oUser->email,
+            'password' => '1234567890',
+            'password_confirmation' => '1234567890',
+            'phone' => $oUser->phone,
         ], $data);
     }
 }

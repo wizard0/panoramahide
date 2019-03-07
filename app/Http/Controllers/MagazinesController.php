@@ -34,7 +34,7 @@ class MagazinesController extends Controller
      */
     public function detail(Request $request, $code)
     {
-        $journal = Journal::whereTranslation('code', $code)->first();
+        $journal = Journal::whereTranslationCode($code)->first();
 
         return view('magazines.detail.index', compact('journal'));
     }
@@ -43,7 +43,7 @@ class MagazinesController extends Controller
     {
         if ($request->ajax()) {
             $code = $request->get('code');
-            $journal = Journal::whereTranslation('code', $code)->first();
+            $journal = Journal::whereTranslationCode($code)->first();
 
             $tab = $request->get('tab');
             switch ($tab) {

@@ -170,6 +170,19 @@ class PersonalController extends Controller
 
     public function changePassword(Request $request)
     {
-        return responseCommon()->success([], 'Пароль успешно изменён.');
+        // Проверяем правильность ввода текущего пароля
+        if (!Auth::attempt(['email' => Auth::user()->email, 'password' => $request->get('password')]))
+            return responseCommon()->validationMessages(null, ['password' => 'Неверно указан текущий пароль']);
+
+        // Валидация нового пароля
+        $validation = Validator::make($request->all(), ['new_password' => 'required|string|min:6|confirmed']);
+        if ($validation->fails()) {
+            return responseCommon()->validationMessages($validation);
+        } else {
+            Auth::user()->password = bcrypt($request->get('new_password'));
+            Auth::user()->save();
+
+            return responseCommon()->success([], 'Пароль успешно изменён.');
+        }
     }
 }

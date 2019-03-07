@@ -404,4 +404,9 @@ class Journal extends Model
     {
         return $this->belongsToMany(Journal::class, 'group_journal');
     }
+
+    public function scopeWhereTranslationCode($query, $value, $locale = null)
+    {
+        return $this->scopeWhereTranslation($query, 'code', $value, $locale);
+    }
 }

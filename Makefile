@@ -31,11 +31,11 @@ build: clear ## Сборать проект
 	npm run dev
 
 seed: ## Заполнить БД тестовыми данными
-	artisan migrate:fresh
-	artisan db:seed --class=TestSeeder
+	./artisan migrate:fresh
+	./artisan db:seed --class=TestSeeder
 
 admin: ## Создать пользователя admin (user: admin; pass: admin)
-	artisan admin:create
+	./artisan admin:create
 
 test: seed ## Тестировать проект
 	./vendor/phpunit/phpunit/phpunit --testdox --coverage-html ./test-coverage

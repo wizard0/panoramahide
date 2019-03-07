@@ -33,5 +33,4 @@ class AllComposer
     {
         return Cache::remember($name, $time, $function);
     }
-
 }

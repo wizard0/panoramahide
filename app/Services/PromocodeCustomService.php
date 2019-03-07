@@ -33,14 +33,6 @@ class PromocodeCustomService
     }
 
     /**
-     * @return Journal
-     */
-    public function journals(): Journal
-    {
-        return $this->journals;
-    }
-
-    /**
      * @return Collection
      */
     public function getPromoUserJournals(): Collection

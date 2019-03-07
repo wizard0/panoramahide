@@ -1,4 +1,8 @@
 <?php
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author Дмитрий Поскачей (dposkachei@gmail.com)
+ */
 
 namespace Tests\Seeds;
 
@@ -17,24 +21,11 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $oUser = User::create([
-            'name' => testData()->user['name'],
-            'last_name' => testData()->user['name'],
-            'email' => testData()->user['email'],
-            'phone' => testData()->user['phone'],
-            'password' => testData()->user['password'],
+            'name' => 'Тестовый',
+            'last_name' => 'Тестовый',
+            'email' => 'test@test.com',
+            'phone' => '79998887766',
+            'password' => '$2y$10$pf83r3UTfcTuGMCfU0M0neords7hON3fEMAThuxvlwwbDpndd1W72', // testtest
         ]);
-
-//        UserDevice::create([
-//            'user_id' => $oUser->id,
-//            'code' => testData()->userDevice['code'],
-//            'name' => testData()->userDevice['name'],
-//            'status' => 1,
-//        ]);
-//        UserDevice::create([
-//            'user_id' => $oUser->id,
-//            'code' => testData()->userDevice['code'],
-//            'name' => testData()->userDevice['name'].'2',
-//            'status' => 1,
-//        ]);
     }
 }

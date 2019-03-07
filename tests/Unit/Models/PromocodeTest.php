@@ -102,7 +102,7 @@ class PromocodeTest extends TestCase
      */
     public function testPublishings()
     {
-        $oPublishiing = $this->factoryPublishiing();
+        $oPublishiing = $this->factoryPublishing();
         $oPromocode = $this->factoryPromocode();
 
         $countBefore = $oPromocode->publishings()->count();

@@ -112,7 +112,7 @@
                 </div>
                 <div class="form-group">
                     <label>Подтверждение нового пароля</label>
-                    <input type="password" class="form-control" name="new_password_confirm" placeholder="Введите новый пароль ещё раз" value="" required>
+                    <input type="password" class="form-control" name="new_password_confirmation" placeholder="Введите новый пароль ещё раз" value="" required>
                 </div>
                 <hr>
                 <div class="form-buttons-holder text-center">

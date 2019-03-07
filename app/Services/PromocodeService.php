@@ -150,22 +150,17 @@ class PromocodeService
      */
     public function activatePromocode(Promocode $promocode, PromoUser $promoUser): bool
     {
-        try {
-            if ($promocode->type === 'custom') {
-                JbyPromo::create([
-                    'promo_user_id' => $promoUser->id,
-                    'promocode_id' => $promocode->id,
-                ]);
-                //$promoUser->promocodes()->attach($promocode->id);
-            } else {
-                $promoUser->promocodes()->attach($promocode->id);
-            }
-            $promocode->increment('used');
-            return true;
-        } catch (\Exception $e) {
-            $this->setMessage('' . $e->getMessage());
-            return false;
+        if ($promocode->type === 'custom') {
+            JbyPromo::create([
+                'promo_user_id' => $promoUser->id,
+                'promocode_id' => $promocode->id,
+            ]);
+            //$promoUser->promocodes()->attach($promocode->id);
+        } else {
+            $promoUser->promocodes()->attach($promocode->id);
         }
+        $promocode->increment('used');
+        return true;
     }
 
     /**
@@ -177,13 +172,8 @@ class PromocodeService
      */
     public function deactivatePromocode(Promocode $promocode, PromoUser $promoUser): bool
     {
-        try {
-            $promoUser->promocodes()->detach($promocode->id);
-            return true;
-        } catch (\Exception $e) {
-            $this->setMessage('' . $e->getMessage());
-            return false;
-        }
+        $promoUser->promocodes()->detach($promocode->id);
+        return true;
     }
 
     /**
