@@ -14,8 +14,13 @@ class PartnerUsersTableSeeder extends Seeder
     public function run()
     {
         foreach (Partner::inRandomOrder()->get() as $partner) {
-            for ($i=0; $i < 10; $i++)
-                PartnerUser::create(['user_id' => md5(rand(0,999999)), 'active' => rand(0,1), 'partner_id' => $partner->id]);
+            for ($i=0; $i < 10; $i++) {
+                try {
+                    PartnerUser::create(['user_id' => md5(rand(0,999999)), 'active' => rand(0,1), 'partner_id' => $partner->id]);
+                } catch (\Exception $e) {
+                    // перехват Duplicate entry
+                }
+            }
         }
     }
 }
