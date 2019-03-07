@@ -25,12 +25,13 @@ class ProductController extends Controller
                 $product = $this->getModel($type, $id);
             }
             $cart = $this->getCart();
-            if (!$cart->add($product, $version, $quantity))
+            if (!$cart->add($product, $version, $quantity)) {
                 return response()->json([
                     'success' => false,
                     'error' => 'true',
                     'message' => 'No price'
                 ]);
+            }
             return response()->json([
                 'success' => true,
                 'header' => $this->updateCart($cart),

@@ -15,12 +15,10 @@ class PaymentController extends Controller
 
     public function robokassaSuccess()
     {
-
     }
 
     public function robokassaFail()
     {
-
     }
 
     public function payment(Request $request, $id)

@@ -21,11 +21,6 @@ class TestSeeder extends Seeder
     {
         $this->clear();
 
-        $this->call(UsersTableSeeder::class);
-        $this->call(PromoUsersTableSeeder::class);
-        $this->call(PromocodesTableSeeder::class);
-        $this->call(JournalsTableSeeder::class);
-
         $this->call(FullDBTestSeeder::class);
 
         $this->call(PaysystemSeeder::class);
@@ -51,6 +46,20 @@ class TestSeeder extends Seeder
                 continue;
             }
             DB::statement('TRUNCATE TABLE `' . $table . '`');
+        }
+        Schema::enableForeignKeyConstraints();
+    }
+
+    private function resetAutoincrement()
+    {
+        Schema::disableForeignKeyConstraints();
+        foreach (DB::select('SHOW TABLES') as $k => $v) {
+            $table = array_values((array)$v)[0];
+            if ($table === 'migrations') {
+                continue;
+            }
+            $maxId = DB::table($table)->max('id');
+            DB::statement('ALTER TABLE `' . $table . '` AUTO_INCREMENT=' . intval($maxId + 1) . ';');
         }
         Schema::enableForeignKeyConstraints();
     }

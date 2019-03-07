@@ -318,5 +318,4 @@ class PromoController extends Controller
             'redirect' => $redirect,
         ], 'Промокод успешно активирован');
     }
-
 }

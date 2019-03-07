@@ -141,7 +141,6 @@
 
 		    var savedSearch = $(this.settings.savedSearch+'[data-id='+id+']');
 		    var data = savedSearch.data();
-		    console.log(data);
 		    for(var key in data) {
 		        if (key == 'extend') {
 		            if (!this.isExtend()) this.toggleExtend();
@@ -176,7 +175,7 @@
 		    }
 		    var _this = this;
 		    ajax(
-		    	'save-search',
+		    	'search/save',
 		    	data, 
 		    	function(res) 
 		    	{
@@ -205,4 +204,4 @@
 	}
 
 	panor.search = new Search();
-})(window.P);
+})(window.Panorama);
