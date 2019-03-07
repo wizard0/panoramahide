@@ -18,7 +18,7 @@ class PartnerUsersTableSeeder extends Seeder
                 try {
                     PartnerUser::create(['user_id' => md5(rand(0,999999)), 'active' => rand(0,1), 'partner_id' => $partner->id]);
                 } catch (\Exception $e) {
-                    // перехват Duplicate entry
+                    // перехват Duplicate entry partner_users_user_id_unique
                 }
             }
         }
