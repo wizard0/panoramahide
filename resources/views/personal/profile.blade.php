@@ -55,32 +55,40 @@
                         >
                     </div>
                 </div>
-                <div class="form-group text-center">
-                    <label>Пол</label>
-                    <div>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary @if($user->gender == 1) active @endif ">
-                                <input type="radio" name="gender" @if($user->gender == 1) checked @endif value="1" autocomplete="off" required>Женский</label>
-                            <label class="btn btn-outline-secondary @if($user->gender == 2) active @endif ">
-                                <input type="radio" name="gender" @if($user->gender == 2) checked @endif value="2" autocomplete="off" required>Мужской</label>
+                <div class="form-group">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group text-center">
+                                <label>Пол</label>
+                                <div>
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                        <label class="btn btn-outline-secondary w-50 @if($user->gender == 1) active @endif ">
+                                            <input type="radio" name="gender" @if($user->gender == 1) checked @endif value="1" autocomplete="off" required>Женский</label>
+                                        <label class="btn btn-outline-secondary w-50 @if($user->gender == 2) active @endif ">
+                                            <input type="radio" name="gender" @if($user->gender == 2) checked @endif value="2" autocomplete="off" required>Мужской</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group text-center">
+                                <label>Предпочитаемые версии журнала</label>
+                                <div>
+                                    <div class="btn-group btn-group-toggle w-100" data-toggle="buttons">
+                                        <label class="btn btn-outline-secondary w-50 @if( $user->version === Cart::VERSION_PRINTED) active @endif">
+                                            <input type="radio" name="version" value="{{ Cart::VERSION_PRINTED }}" @if( $user->version == Cart::VERSION_PRINTED) checked @endif autocomplete="off" required>Печатный</label>
+                                        <label class="btn btn-outline-secondary w-50 @if( $user->version === Cart::VERSION_ELECTRONIC) active @endif">
+                                            <input type="radio" name="version" value="{{ Cart::VERSION_ELECTRONIC }}" @if( $user->version == Cart::VERSION_ELECTRONIC) checked @endif autocomplete="off" required>Электронный</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group text-center">
+                <div class="form-group">
                     <div class="checkbox simple-checkbox">
                         <input type="checkbox" name="agree" value="1" id="agree" @if( $user->agree ) checked @endif>
                         <label for="agree"><span>Согласен получать рассылку</span></label>
-                    </div>
-                </div>
-                <div class="form-group text-center">
-                    <label>Предпочитаемые версии журнала</label>
-                    <div>
-                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                            <label class="btn btn-outline-secondary @if( $user->version === Cart::VERSION_PRINTED) active @endif">
-                                <input type="radio" name="version" value="{{ Cart::VERSION_PRINTED }}" @if( $user->version == Cart::VERSION_PRINTED) checked @endif autocomplete="off" required>Печатный</label>
-                            <label class="btn btn-outline-secondary @if( $user->version === Cart::VERSION_ELECTRONIC) active @endif">
-                                <input type="radio" name="version" value="{{ Cart::VERSION_ELECTRONIC }}" @if( $user->version == Cart::VERSION_ELECTRONIC) checked @endif autocomplete="off" required>Электронный</label>
-                        </div>
                     </div>
                 </div>
                 <hr>
