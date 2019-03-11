@@ -2,10 +2,15 @@
     <ul>
         <li class="dropdown">
             <a class="dropdown-toggle"
-               @if($cart)
-               href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+               @if (Auth::check())
+                   @if($cart)
+                   href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true"
+                   aria-expanded="false"
+                   @else
+                   href="{{ route('personal.cart') }}"
+                   @endif
                @else
-               href="{{ route('personal.cart') }}"
+               href="#" data-toggle="modal" data-target="#login-modal"
                @endif
             >
                 <span>Корзина</span>
@@ -15,10 +20,12 @@
                     @if ($cart)
                         @foreach ($cart->items as $key => $item)
                             @continue($loop->iteration > 3)
-                            <div class="cartItem __basket" data-id="{{ $item->product->id }}" data-type="{{ $item->type }}">
+                            <div class="cartItem __basket" data-id="{{ $item->product->id }}"
+                                 data-type="{{ $item->type }}">
                                 <div>
                                     <div class="__title" style="font-size: 14px;">
-                                        <a href="{{ $item->product->getLink() }}" style="background: none; padding-left: 0;">
+                                        <a href="{{ $item->product->getLink() }}"
+                                           style="background: none; padding-left: 0;">
                                             {{ $item->product->name }}
                                         </a>
                                     </div>
@@ -32,7 +39,9 @@
                                 </div>
                                 <div>
                                     <div class="__delete">
-                                        <a class="btn btn-sm text-danger ajax-link" href="#" action="{{ route('cart.del') }}" data-id="{{ $item->id }}" data-loading="1" title="Удалить"
+                                        <a class="btn btn-sm text-danger ajax-link" href="#"
+                                           action="{{ route('cart.del') }}" data-id="{{ $item->id }}" data-loading="1"
+                                           title="Удалить"
                                            data-callback="cartDeleteItem"
                                         >
                                             <span class="glyphicon glyphicon-remove"></span>
@@ -56,5 +65,7 @@
             </div>
         </li>
     </ul>
-    <div id="count_in_basket" class="purchase-number" style="width: 13px;"><span>{{ $cart ? $cart->totalQty : "" }}</span></div>
+    <div id="count_in_basket" class="purchase-number" style="width: 13px;">
+        <span>{{ $cart ? $cart->totalQty : "" }}</span>
+    </div>
 </div>

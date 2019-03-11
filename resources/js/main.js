@@ -11,7 +11,68 @@ $(document).ready(function() {
         format: 'LT',
         locale: 'ru',
     });
+
+    // личный кабинет, смена вкладок для редактирования профиля
+    $('input[name=chgForm]').change(function() {
+        $('#profileForm').toggle();
+        $('#passwordForm').toggle();
+    });
+
+    // личный кабинет, смена вкладок оформление заказа
+    $('input[name=person_type]').change(function() {
+        $('#phys_user_form').toggleClass('hidden');
+        $('#legal_user_form').toggleClass('hidden');
+    });
+
+    // валидация оформления заказов, закомментирован из-за ajax-form
+    $('#order_confirm_button').click(function() {
+        let $content = $('#order_form_content');
+        let $legal = $content.find('#legal_user_form');
+        let $phys = $content.find('#phys_user_form');
+        if (!$legal.hasClass('hidden')) {
+            $legal.find('form').submit();
+        }
+        if (!$phys.hasClass('hidden')) {
+            $phys.find('form').submit();
+        }
+    });
+    /*
+    $('#order_confirm_button').click(function() {
+        console.log('order_confirm_button');
+        $('.is-danger').removeClass('is-danger');
+        let result = true;
+        let form = 'l_order_form';
+        let fields = ['org_name', 'l_surname', 'l_name', 'l_patronymic', 'l_phone', 'l_email', 'l_personal_data_consent', 'l_contract_accept'];
+        if ($('input[name=person_type]:checked').val() == 'physical') {
+            form = 'p_order_form';
+            fields = ['surname','name','patronymic','phone','email','personal_data_consent','contract_accept'];
+        }
+
+        $('#' + form).find(':input').each(function() {
+            console.log($(this));
+            if (this.hasAttribute('required')) {
+                if ($(this).attr('type') == 'checkbox' && !$(this).is(':checked')) {
+                    $(this).addClass('is-danger');
+                    result = false;
+                } else if ((($(this).attr('name') == 'phone' || $(this).attr('name') == 'l_phone') && $(this).val().length != 18) ||
+                    (($(this).attr('name') == 'email' || $(this).attr('name') == 'l_email') && !validateEmail($(this).val())) || $(this).val() == '') {
+                    $(this).addClass('is-danger');
+                    result = false;
+                }
+            }
+        });
+
+        if (result) {
+            $('#' + form).submit();
+        }
+    });
+    */
 });
+
+function validateEmail(email) {
+    let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(String(email).toLowerCase());
+}
 
 /**
  * Для выбора журналов

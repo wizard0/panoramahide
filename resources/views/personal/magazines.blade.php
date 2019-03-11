@@ -2,23 +2,31 @@
 
 @section('page-content')
     <div class="content">
-        @forelse($journals as $releases)
-            @foreach($releases->chunk(4) as $chunk)
-                @if($loop->first)
-                    <h3>{{ $releases[0]->journal->name }}</h3>
-                @endif
-                <div class="row" style="margin-top: 30px;">
-                    @foreach($chunk as $release)
-                        <a class="col-xs-12 col-md-4 col-lg-3" style="margin-bottom: 30px;" href="{{ $release->getReaderLink() }}">
-                            <p style="text-align: center;">{{ $release->name }}</p>
-                            <p style="text-align: center;">№{{ $release->number }}/{{ $release->year }}</p>
-                            <img src="{{ $release->image }}" style="width: 100%;">
-                        </a>
-                    @endforeach
-                </div>
+        @if(count($journals) !== 0)
+            @foreach($journals as $releases)
+                @foreach($releases->chunk(4) as $chunk)
+                    @if($loop->first)
+                        <h3 class="text-center text-uppercase section-title personal-title m-t-20 m-b-20">{{ $releases[0]->journal->name }}</h3>
+                    @endif
+                    <div class="row">
+                        @foreach($chunk as $release)
+                            <div class="col-12 col-md-6 col-lg-4 col-xl-3 m-b-30">
+                                <div class="title-magazine">
+                                    <a title="{{ $release->name }}" href="{{ $release->getReaderLink() }}">
+                                        {{ str_limit($release->name, 40) }}
+                                    </a>
+                                    <p>№{{ $release->number }}/{{ $release->year }}</p>
+                                </div>
+                                <a title="{{ $release->name }}" href="{{ $release->getReaderLink() }}">
+                                    <img class="w-100" src="{{ $release->image }}">
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                @endforeach
             @endforeach
-        @empty
+        @else
             <p class="cart_empty">У вас нет доступных журналов.</p>
-        @endforelse
+        @endif
     </div>
 @endsection

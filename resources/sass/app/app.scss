@@ -16,6 +16,7 @@ $brand-info: $blue;
 /* ---------------------------------------------- */
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+@import '~font-awesome/css/font-awesome.min.css';
 
 /* ---------------------------------------------- */
 // Toast
@@ -57,6 +58,7 @@ $brand-info: $blue;
 // Personal
 @import '../personal/personal';
 @import '../personal/table';
+@import '../personal/magazines';
 
 // Order
 @import '../personal/order';
