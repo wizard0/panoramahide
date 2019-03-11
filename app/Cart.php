@@ -14,8 +14,8 @@ class Cart
     const PRODUCT_TYPE_ARTICLE = 'article';
     const PRODUCT_TYPE_SUBSCRIPTION = 'subscription';
 
-    const VERSION_PRINTED = Subscription::TYPE_PRINTED;
-    const VERSION_ELECTRONIC = Subscription::TYPE_ELECTRONIC;
+    const VERSION_PRINTED = Models\Subscription::TYPE_PRINTED;
+    const VERSION_ELECTRONIC = Models\Subscription::TYPE_ELECTRONIC;
 
     public function __construct($oldCart)
     {
@@ -41,17 +41,17 @@ class Cart
         $type = '';
 
         switch (get_class($product)) {
-            case Release::class:
+            case Models\Release::class:
                 $price = $version == self::VERSION_ELECTRONIC
                     ? $product->price_for_electronic
                     : $product->price_for_printed;
                 $type = self::PRODUCT_TYPE_RELEASE;
                 break;
-            case Article::class:
+            case Models\Article::class:
                 $price = $product->price;
                 $type = self::PRODUCT_TYPE_ARTICLE;
                 break;
-            case OrderedSubscription::class:
+            case Models\OrderedSubscription::class:
                 $price = $product->single_price;
                 $type = self::PRODUCT_TYPE_SUBSCRIPTION;
                 break;

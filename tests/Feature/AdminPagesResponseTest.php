@@ -2,13 +2,13 @@
 
 namespace Tests\Feature;
 
-use App\Article;
-use App\Author;
-use App\Category;
-use App\Journal;
-use App\Publishing;
-use App\Release;
-use App\User;
+use App\Models\Article;
+use App\Models\Author;
+use App\Models\Category;
+use App\Models\Journal;
+use App\Models\Publishing;
+use App\Models\Release;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
-use App\Author;
-use App\Category;
-use App\Release;
+use App\Models\Article;
+use App\Models\Author;
+use App\Models\Category;
+use App\Models\Release;
 
 class ArticleController extends CRUDController
 {

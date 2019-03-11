@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Release::class, function (Faker $faker) {
+$factory->define(App\Models\Release::class, function (Faker $faker) {
     $images = [ '/upload/1bbd2957617fae1ae419bcc9375c7687.png',
                 '/upload/8f713e2c915dd7e8c5f211d0473aeced.png',
                 '/upload/061b50ac1a73c58bd61c82fcdadc75c5.png',
@@ -14,7 +14,7 @@ $factory->define(App\Release::class, function (Faker $faker) {
               ];
     return [
         'name' => $faker->sentence(3),
-        'image' => $images[rand(0,count($images)-1)],
+        'image' => $images[rand(0, count($images)-1)],
         'number' => $faker->randomNumber(2),
         'code' => $faker->unique()->slug(3),
         'price_for_electronic' => $faker->randomNumber(3),
@@ -22,6 +22,6 @@ $factory->define(App\Release::class, function (Faker $faker) {
     ];
 });
 
-//$factory->afterCreating(App\Release::class, function ($release, $faker) {
+//$factory->afterCreating(App\Models\Release::class, function ($release, $faker) {
 //    $release->journal()->save(factory(App\Journal::class)->make());
 //});

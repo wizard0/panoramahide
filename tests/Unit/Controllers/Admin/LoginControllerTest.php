@@ -2,7 +2,7 @@
 
 namespace Tests\Unit\Controllers\Admin;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\App;

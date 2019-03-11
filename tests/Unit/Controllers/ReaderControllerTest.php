@@ -5,12 +5,12 @@
  */
 namespace Tests\Unit\Controllers;
 
-use App\Article;
 use App\Http\Controllers\ReaderController;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Journal;
 use App\Models\Device;
-use App\Release;
-use App\User;
+use App\Models\Release;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
 
         // Test
         $this->call(PublishingTestSeeder::class);
-        $this->call(setReleasesYear::class);
+        $this->call(SetReleasesYear::class);
         $this->call(CreateSubscriptions::class);
         $this->call(\Tests\Seeds\UserSearchTableSeeder::class);
     }

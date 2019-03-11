@@ -10,7 +10,7 @@ use App\Http\Controllers\PromoController;
 use App\Models\Activations;
 use App\Models\Promocode;
 use App\Models\PromoUser;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

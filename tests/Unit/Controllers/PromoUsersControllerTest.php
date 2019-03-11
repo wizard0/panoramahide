@@ -9,7 +9,7 @@ namespace Tests\Unit\Controllers;
 use App\Http\Controllers\PromoUsersController;
 use App\Models\Promocode;
 use App\Models\PromoUser;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\FactoryTrait;
 use Tests\TestCase;

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
-use App\Journal;
+use App\Models\Journal;
 use App\Models\Activations;
 use App\Models\Group;
 use App\Models\PromoUser;
@@ -14,7 +14,7 @@ use App\Services\PromocodeCustomService;
 use App\Services\PromocodeService;
 use App\Services\PromoUserService;
 use App\Services\Toastr\Toastr;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;

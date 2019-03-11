@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Journal;
+use App\Models\Journal;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
@@ -21,7 +21,7 @@ class Group extends Model
     public static function store($group, $promocode_id)
     {
         $Self = Group::create(['name' => $group['name'], 'promocode_id' => $promocode_id]);
-        $Self->journals()->saveMany(\App\Journal::whereIn('id', $group['journals'])->get());
+        $Self->journals()->saveMany(Journal::whereIn('id', $group['journals'])->get());
         return $Self;
     }
 

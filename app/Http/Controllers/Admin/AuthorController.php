@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
+use App\Models\Article;
 
 class AuthorController extends CRUDController
 {

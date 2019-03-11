@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Journal;
-use App\Subscription;
+use App\Models\Journal;
+use App\Models\Subscription;
 
 class SubscriptionController extends CRUDController
 {

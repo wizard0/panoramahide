@@ -24,6 +24,14 @@ clear: ## Очиститить проект
 	rm -f ./composer.lock
 	rm -f ./package-lock.json
 
+clear-cache: ## Очистить кеш
+	./artisan cache:clear
+	./artisan config:clear
+	./artisan route:clear
+	./artisan view:clear
+	composer clearcache
+	composer dumpautoload
+
 build: clear ## Сборать проект
 	composer install
 	composer dumpautoload
@@ -38,10 +46,10 @@ admin: ## Создать пользователя admin (user: admin; pass: admi
 	./artisan admin:create
 
 test: seed ## Тестировать проект
-	./vendor/phpunit/phpunit/phpunit --testdox --coverage-html ./test-coverage
+	./vendor/phpunit/phpunit/phpunit --stop-on-failure --testdox --coverage-html ./test-coverage
 
 paratest: seed ## Тестировать проект (тесты запускаются параллельно)
-	./vendor/brianium/paratest/bin/paratest -p8 --coverage-html=./test-coverage
+	./vendor/brianium/paratest/bin/paratest -p8 --stop-on-failure --coverage-html=./test-coverage
 
 psr: ## Анализ кода по PSR. По умолчанию SRC=./app/*
 	@echo "\033[33m\n... Анализ исхоных текстов ...\033[0m\n"

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Journal;
+use App\Models\Journal;
 use Illuminate\Database\Eloquent\Model;
 
 class JbyPromo extends Model

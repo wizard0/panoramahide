@@ -22,7 +22,6 @@ class HomeControllerTest extends TestCase
     public function testIndex()
     {
         $oController = new HomeController();
-
         $result = $oController->index();
 
         $this->assertTrue($result instanceof \Illuminate\View\View);
@@ -34,21 +33,16 @@ class HomeControllerTest extends TestCase
     public function testJournals()
     {
         $promocode = $this->factoryPromocode();
-
         $user = $this->factoryUser();
-
         $promoUser = $this->factoryPromoUser([
             'user_id' => $user->id,
         ]);
 
         $promoUser->promocodes()->attach($promocode->id);
-
         $this->actingAs($user);
 
         $oController = new HomeController();
-
         $result = $oController->journals();
-
         $this->assertTrue($result instanceof \Illuminate\View\View);
     }
 }

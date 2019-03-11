@@ -5,9 +5,9 @@
  */
 namespace Tests\Unit\Controllers\Admin;
 
-use \App\Order;
-use \App\OrderPhysUser;
-use \App\OrderLegalUser;
+use \App\Models\Order;
+use \App\Models\OrderPhysUser;
+use \App\Models\OrderLegalUser;
 
 class OrderControllerMock extends \App\Http\Controllers\Admin\OrderController
 {
@@ -39,5 +39,5 @@ class OrderControllerMock extends \App\Http\Controllers\Admin\OrderController
         'paysystems_id' => Paysystem::class
     ];
 
-    protected $modelName = '\\App\\Order';
+    protected $modelName = '\\App\\Models\\Order';
 }
