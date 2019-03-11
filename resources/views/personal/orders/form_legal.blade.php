@@ -47,10 +47,10 @@
         <label>Телефон</label>
         <input type="text" class="form-control" id="l_phone" placeholder="Телефон" value="" name="l_phone" data-role="js-mask-phone" required>
     </div>
-    <div class="form-group" @if(Auth::check())style="display:none"@endif>
+    <div class="form-group {{ Auth::check() ? 'hidden' : '' }}">
         <label>Электронная почта</label>
         <input type="email" class="form-control" id="l_email" placeholder="Электронная почта"
-        @if(Auth::check())value="{{Auth::user()->email}}"@endif name="l_email" required>
+               value="{{ Auth::check() ? Auth::user()->email : '' }}" name="l_email" required>
     </div>
     <div class="form-group">
         <label>Адрес доставки</label>
