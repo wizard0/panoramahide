@@ -1,17 +1,16 @@
 <?php
-
+/*
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Илья Картунин (ikartunin@gmail.com)
+ */
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Hash;
 use Auth;
 use Session;
 use Chelout\Robokassa\Robokassa;
 use Lexty\Robokassa\Payment;
 
-/**
- * Class for order.
- */
 class Order extends Model
 {
     protected $table        = "orders";
@@ -192,7 +191,7 @@ class Order extends Model
             case Order::PHYSICAL_USER:
                 $physUser = OrderPhysUser::create($data);
 
-                $this->assocWithUser($physUser, $data['name'], $data['email']);
+                $this->assocWithUser($physUser);
 
                 $this->phys_user_id = $physUser->id;
                 $this->paysystem()->associate(Paysystem::getByCode($data['paysystem_physic']));
@@ -201,7 +200,7 @@ class Order extends Model
             case Order::LEGAL_USER:
                 $legalUser = OrderLegalUser::create($data);
 
-                $this->assocWithUser($legalUser, $data['l_name'], $data['l_email']);
+                $this->assocWithUser($legalUser);
 
                 $this->legal_user_id = $legalUser->id;
                 $this->paysystem()->associate(Paysystem::getByCode($data['paysystem_legal']));
@@ -213,15 +212,21 @@ class Order extends Model
         $this->save();
     }
 
-    private function assocWithUser($model, $name, $email)
+    private function assocWithUser($model)
     {
-        if (!$user = User::where(['email' => $email])->first()) {
-            $model->user()->associate(User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make(str_random())
+        // Создаём пользователя, если email указанный при оформлении - отсутствует
+        if (!$user = User::where(['email' => $model->email])->first()) {
+            $password = str_random(8);
+            $model->user()->associate(User::createNew([
+                'name'      => $model->name,
+                'email'     => $model->email,
+                'last_name' => $model->surname,
+                'phone'     => $model->phone,
+                'password'  => $password,
             ]))->save();
-
+            // Высылаем на почту пароль
+            \Mail::to($model->email)->send(new \App\Mail\Registration($model->email, $password));
+            // Авторизуем пользователя
             Auth::login($model->user, true);
         } else {
             $model->user()->associate($user)->save();

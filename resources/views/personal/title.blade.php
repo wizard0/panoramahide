@@ -2,6 +2,9 @@
     @case('personal.orders')
         Статус заказов
         @break
+    @case('personal.login')
+        Авторизация
+        @break
     @case('personal.order')
         Заказ №{{ $id }}
         @break
@@ -22,6 +25,12 @@
         @break
     @case('order.complete')
         Заказ сформирован
+        @break
+    @case('forgot_password')
+        Восстановление пароля
+        @break
+    @case('reset_password')
+        Сброс пароля
         @break
     @default
         Личный кабинет

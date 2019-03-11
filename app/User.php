@@ -15,6 +15,7 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * @property string $name
@@ -124,5 +125,17 @@ class User extends Authenticatable
                     ->orderBy('active_date', 'desc');
 
         return $releases->get();
+    }
+    public static function createNew($data)
+    {
+        return self::create([
+            'role_id' => 2,
+            'private' => isset($data['uf']['private_person']) ? 1 : 0,
+            'name' => $data['name'],
+            'last_name' => $data['last_name'],
+            'email' => $data['email'],
+            'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
+            'password' => Hash::make($data['password']),
+        ]);
     }
 }

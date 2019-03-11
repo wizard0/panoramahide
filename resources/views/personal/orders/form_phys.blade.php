@@ -18,9 +18,10 @@
         <input type="text" class="form-control" id="phone" placeholder="Телефон" value="" name="phone"
                data-role="js-mask-phone" required>
     </div>
-    <div class="form-group">
+    <div class="form-group" @if(Auth::check())style="display:none"@endif>
         <label>Email</label>
-        <input type="email" class="form-control" id="email" placeholder="Email" value="" name="email" required>
+        <input type="email" class="form-control" id="email" placeholder="Email"
+        @if(Auth::check())value="{{Auth::user()->email}}"@endif name="email" required>
     </div>
     <div class="form-group">
         <label>Адрес доставки</label>

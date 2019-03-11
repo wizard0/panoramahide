@@ -6,7 +6,7 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
@@ -84,14 +84,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'role_id' => 2,
-            'private' => isset($data['uf']['private_person']) ? 1 : 0,
+        return User::createNew([
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
-            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'password' => $data['password'],
         ]);
     }
 
@@ -126,4 +124,10 @@ class RegisterController extends Controller
                 'redirect' => $this->redirectPath()
             ];
     }
+
+    protected function registered(Request $request, $user)
+    {
+        \Mail::to($user->email)->send(new \App\Mail\Registration($request->get('email'), $request->get('password')));
+    }
+
 }

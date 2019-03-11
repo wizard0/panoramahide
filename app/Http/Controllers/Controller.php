@@ -25,8 +25,8 @@ class Controller extends BaseController
         }
     }
     // Добавление в представление переменной с именем маршрута
-    public static function getRouteNameToView()
+    public static function getRouteNameToView($default = null)
     {
-        View::share('route_name', Route::currentRouteName());
+        View::share('route_name', $default ?? Route::currentRouteName());
     }
 }

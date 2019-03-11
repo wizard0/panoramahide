@@ -31,6 +31,9 @@ class PersonalController extends Controller
     public function orders(Request $request, $id = null)
     {
         $orders = $id ? Auth::user()->orders()->find($id) : Auth::user()->orders()->get();
+        if (!$orders) {
+            return redirect(route('personal.orders'));
+        }
         return view('personal.'.__FUNCTION__, compact('orders', 'id'));
     }
 
@@ -66,7 +69,9 @@ class PersonalController extends Controller
 
     public function completeOrder($id)
     {
-        $order = Order::where('id', $id)->first();
+        $order = Auth::user()->orders()->find($id);
+        if (!$order)
+            return redirect(route('personal.orders'));
         $payData = $order->collectPayData();
 
         return view('personal.orders.complete', compact(
@@ -77,19 +82,17 @@ class PersonalController extends Controller
 
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
-
-        if (Auth::attempt($credentials)) {
-            return redirect()->to('/personal');
+        if (Auth::check()) {
+            return redirect(route('personal'));
         } else {
-            return redirect()->back();
+            return view('personal.'.__FUNCTION__, $request->only('backTo'));
         }
     }
 
     public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->back();
+        return redirect(route('index'));
     }
 
     public function index(Request $request)

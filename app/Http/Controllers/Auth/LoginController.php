@@ -56,12 +56,7 @@ class LoginController extends Controller
         return $this->authenticated($request, $this->guard()->user())
             ?: [
                 'success' => true,
-                'redirect' => redirect()->back()->getTargetUrl(),
-               //'redirect' => url($this->redirectTo)
+                'redirect' => $request->get('backTo') ?? redirect()->back()->getTargetUrl(),
             ];
-    }
-    public function changePassword()
-    {
-        return responseCommon()->success([], 'Пароль успешно изменён.');
     }
 }
