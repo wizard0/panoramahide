@@ -2,16 +2,12 @@
     <ul>
         <li class="dropdown">
             <a class="dropdown-toggle"
-               @if (Auth::check())
-                   @if($cart)
-                   href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true"
-                   aria-expanded="false"
-                   @else
-                   href="{{ route('personal.cart') }}"
-                   @endif
+               @if($cart)
+               href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false"
                @else
-               href="#" data-toggle="modal" data-target="#login-modal"
-               @endif
+               href="{{ route('personal.cart') }}"
+                @endif
             >
                 <span>Корзина</span>
             </a>

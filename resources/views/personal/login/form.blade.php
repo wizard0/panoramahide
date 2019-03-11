@@ -4,11 +4,11 @@
     @endif
     <div class="form-group">
         <label>Логин</label>
-        <input type="text" name="email" placeholder="test@test.com" autocomplete="username">
+        <input type="text" name="email" placeholder="test@test.com" autocomplete="username" class="form-control" required>
     </div>
     <div class="form-group">
         <label>Пароль</label>
-        <input type="password" name="password" placeholder="" autocomplete="current-password">
+        <input type="password" name="password" placeholder="" autocomplete="current-password" class="form-control" required>
     </div>
     <div class="form-group">
         <div class="d-flex justify-content-between" style="margin-bottom: 24px;">
@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="form-group m-0 text-right">
-        <button type="submit" class="btn inner-form-submit">
+        <button type="submit" class="btn btn-danger inner-form-submit" style="min-width: 100px;">
             <span>Войти</span>
         </button>
     </div>
