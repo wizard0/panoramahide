@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(App\Journal::class, function (Faker $faker) {
+$factory->define(App\Models\Journal::class, function (Faker $faker) {
     return [
         'name' => $faker->sentence,
         'code' => $faker->unique()->slug(3),
@@ -11,6 +11,6 @@ $factory->define(App\Journal::class, function (Faker $faker) {
     ];
 });
 
-//$factory->afterCreating(App\Journal::class, function ($journal, $faker) {
+//$factory->afterCreating(App\Models\Journal::class, function ($journal, $faker) {
 //    $journal->accounts()->save(factory(App\Account::class)->make());
 //});

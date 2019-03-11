@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use Translatable, WithTranslationTrait;
+    use Translatable, Traits\WithTranslationTrait;
 
     public $translatedAttributes = ['name', 'code', 'description', 'image', 'preview', 'preview_image'];
 

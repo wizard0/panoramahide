@@ -2,17 +2,17 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\Article;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Journal;
 use App\Mail\Recommend;
-use App\UserSearch;
+use App\Models\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\FactoryTrait;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
+use Tests\FactoryTrait;
+use Tests\TestCase;
 
 class AjaxActionsRecommendTest extends TestCase
 {

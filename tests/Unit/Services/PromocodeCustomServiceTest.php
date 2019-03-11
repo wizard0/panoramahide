@@ -2,11 +2,11 @@
 
 namespace Tests\Unit\Services;
 
-use App\Journal;
+use App\Models\Journal;
 use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Services\PromocodeCustomService;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;

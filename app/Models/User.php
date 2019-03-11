@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Models\PromoUser;
 use Illuminate\Database\Eloquent\Relations\Relation;

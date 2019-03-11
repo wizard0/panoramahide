@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Publishing;
+use App\Models\Publishing;
 
 class NewsController extends CRUDController
 {

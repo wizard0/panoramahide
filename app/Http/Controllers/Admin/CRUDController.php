@@ -69,7 +69,7 @@ class CRUDController extends Controller
         if (!isset($this->modelName)) {
             $className = get_class($this);
             if (preg_match('/\\\\([a-zA-Z]*)Controller$/', $className, $matches)) {
-                $modelName = '\\App\\' . $matches[1];
+                $modelName = '\\App\\Models\\' . $matches[1];
                 if (class_exists($modelName)) {
                     $this->modelName = $modelName;
                     if (!isset($this->slug) || $this->slug == '') {

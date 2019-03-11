@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
+use App\Models\Article;
 use App\Cart;
-use App\OrderedSubscription;
-use App\Release;
-use App\Subscription;
+use App\Models\OrderedSubscription;
+use App\Models\Release;
+use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Session;
 

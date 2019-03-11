@@ -2,15 +2,15 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\Article;
-use App\Journal;
-use App\UserSearch;
+use App\Models\Article;
+use App\Models\Journal;
+use App\Models\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Tests\FactoryTrait;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\FactoryTrait;
+use Tests\TestCase;
 
 class AjaxActionsAddToFavoriteTest extends TestCase
 {
@@ -32,7 +32,7 @@ class AjaxActionsAddToFavoriteTest extends TestCase
         $response = $this->post(route('to.favorite'), [
             'data' => $data
         ]);
-        $responseAsUser = $this->actingAs(factory(\App\User::class)->create())->post(route('to.favorite'), [
+        $responseAsUser = $this->actingAs(factory(\App\Models\User::class)->create())->post(route('to.favorite'), [
             'data' => $data
         ]);
 
@@ -53,7 +53,7 @@ class AjaxActionsAddToFavoriteTest extends TestCase
         $response = $this->post(route('to.favorite'), [
             'data' => $data
         ]);
-        $responseAsUser = $this->actingAs(factory(\App\User::class)->create())->post(route('to.favorite'), [
+        $responseAsUser = $this->actingAs(factory(\App\Models\User::class)->create())->post(route('to.favorite'), [
             'data' => $data
         ]);
 

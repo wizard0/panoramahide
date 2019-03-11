@@ -8,7 +8,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Promocode;
 use App\Models\PromoUser;
-use App\Release;
+use App\Models\Release;
 use App\Services\PromoUserService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;

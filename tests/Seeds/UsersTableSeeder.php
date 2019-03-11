@@ -8,7 +8,7 @@ namespace Tests\Seeds;
 
 use App\Models\UserDevice;
 use App\Services\DeviceService;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class UsersTableSeeder extends Seeder

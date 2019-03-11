@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Article;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Journal;
 
 class CategoryController extends CRUDController
 {

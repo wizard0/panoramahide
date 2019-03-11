@@ -40,7 +40,7 @@ class DevicesTest extends TestCase
 
     protected function getUserAndDevice($partner_user = true)
     {
-        $this->user = ($partner_user ? factory(PartnerUser::class)->create() : factory(\App\User::class)->create());
+        $this->user = ($partner_user ? factory(PartnerUser::class)->create() : factory(\App\Models\User::class)->create());
         $this->user->createDevice();
         $this->user->createDevice();
         $this->user->createDevice();

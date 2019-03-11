@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Services;
 
-use App\Article;
-use App\Release;
+use App\Models\Article;
+use App\Models\Release;
 use App\Services\ReaderService;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\FactoryTrait;

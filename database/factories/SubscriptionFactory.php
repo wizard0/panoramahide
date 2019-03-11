@@ -2,30 +2,30 @@
 
 use Faker\Generator as Faker;
 
-$factory->define(\App\Subscription::class, function (Faker $faker) {
-    $randLocale = rand(0,1);
-    $randType = rand(0,1);
-    $randHalfYear = rand(0,1);
-    $randPeriod = rand(0,4);
+$factory->define(\App\Models\Subscription::class, function (Faker $faker) {
+    $randLocale = rand(0, 1);
+    $randType = rand(0, 1);
+    $randHalfYear = rand(0, 1);
+    $randPeriod = rand(0, 4);
 
     $locale = [
         'ru', 'en'
     ];
 
     $type = [
-        \App\Subscription::TYPE_PRINTED,
-        \App\Subscription::TYPE_ELECTRONIC
+        \App\Models\Subscription::TYPE_PRINTED,
+        \App\Models\Subscription::TYPE_ELECTRONIC
     ];
     $halfYear = [
-        \App\Subscription::HALFYEAR_1,
-        \App\Subscription::HALFYEAR_2
+        \App\Models\Subscription::HALFYEAR_1,
+        \App\Models\Subscription::HALFYEAR_2
     ];
     $period = [
-        \App\Subscription::PERIOD_TWICE_MONTH,
-        \App\Subscription::PERIOD_ONCE_MONTH,
-        \App\Subscription::PERIOD_ONCE_2_MONTH,
-        \App\Subscription::PERIOD_ONCE_3_MONTH,
-        \App\Subscription::PERIOD_ONCE_HALFYEAR,
+        \App\Models\Subscription::PERIOD_TWICE_MONTH,
+        \App\Models\Subscription::PERIOD_ONCE_MONTH,
+        \App\Models\Subscription::PERIOD_ONCE_2_MONTH,
+        \App\Models\Subscription::PERIOD_ONCE_3_MONTH,
+        \App\Models\Subscription::PERIOD_ONCE_HALFYEAR,
     ];
 
     return [

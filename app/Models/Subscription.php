@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Subscription extends Model
 {
-    use Translatable, WithTranslationTrait;
+    use Translatable, Traits\WithTranslationTrait;
 
     protected $table = 'subscriptions';
 

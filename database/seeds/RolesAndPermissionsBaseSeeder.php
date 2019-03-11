@@ -17,12 +17,12 @@ class RolesAndPermissionsBaseSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // create permissions
-        Permission::create(['name' => \App\User::PERMISSION_ADMIN]);
+        Permission::create(['name' => \App\Models\User::PERMISSION_ADMIN]);
 
-        $role = Role::create(['name' => \App\User::ROLE_ADMIN]);
-        $role->givePermissionTo(\App\User::PERMISSION_ADMIN);
+        $role = Role::create(['name' => \App\Models\User::ROLE_ADMIN]);
+        $role->givePermissionTo(\App\Models\User::PERMISSION_ADMIN);
 
-        $role = Role::create(['name' => \App\User::ROLE_SUPERADMIN]);
+        $role = Role::create(['name' => \App\Models\User::ROLE_SUPERADMIN]);
         $role->givePermissionTo(Permission::all());
     }
 }

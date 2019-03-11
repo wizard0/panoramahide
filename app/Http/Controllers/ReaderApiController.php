@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Release;
+use App\Models\Release;
 use App\Models\Partner;
 use App\Models\PartnerUser;
 use App\Models\Quota;

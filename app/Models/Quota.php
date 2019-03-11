@@ -43,7 +43,7 @@ class Quota extends Model
 
     public function getReleases()
     {
-        $Releases = \App\Release::where(function ($query) {
+        $Releases = Release::where(function ($query) {
             if ($this->journal_id) {
                 $query->where('journal_id', $this->journal_id);
                 if ($this->release_begin && $this->release_end) {
@@ -62,5 +62,15 @@ class Quota extends Model
     public function partner()
     {
         return $this->belongsTo(Partner::class);
+    }
+
+    public function journal()
+    {
+        return $this->belongsTo(Journal::class);
+    }
+
+    public function release()
+    {
+        return $this->belongsTo(Release::class);
     }
 }

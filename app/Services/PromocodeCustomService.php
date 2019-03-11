@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Models\JbyPromo;
-use App\Journal;
+use App\Models\Journal;
 use App\Models\Promocode;
 use App\Models\PromoUser;
 use App\Services\GetSetable\PromocodeGetSetableTrait;

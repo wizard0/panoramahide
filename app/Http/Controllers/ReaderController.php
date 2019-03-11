@@ -13,7 +13,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Device;
 use App\Models\PartnerUser;
-use App\Release;
+use App\Models\Release;
 use App\Services\ReaderService;
 use App\Services\Toastr\Toastr;
 use Illuminate\Http\Request;

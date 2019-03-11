@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class Article extends Model
 {
-    use Translatable, WithTranslationTrait;
+    use Translatable, Traits\WithTranslationTrait;
 
     const RESTRICTION_NO = 'no';
     const RESTRICTION_REGISTER = 'register';

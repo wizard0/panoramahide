@@ -11,31 +11,31 @@ class CreateSubscriptions extends Seeder
      */
     public function run()
     {
-        $journals = \App\Journal::all();
-        foreach($journals as $j) {
-            factory(\App\Subscription::class)->make([
+        $journals = \App\Models\Journal::all();
+        foreach ($journals as $j) {
+            factory(\App\Models\Subscription::class)->make([
                 'journal_id' => $j->id,
                 'locale' => App::getLocale(),
                 'half_year' => 'first',
-                'type' => \App\Subscription::TYPE_ELECTRONIC
+                'type' => \App\Models\Subscription::TYPE_ELECTRONIC
             ])->save();
-            factory(\App\Subscription::class)->make([
+            factory(\App\Models\Subscription::class)->make([
                 'journal_id' => $j->id,
                 'locale' => App::getLocale(),
                 'half_year' => 'second',
-                'type' => \App\Subscription::TYPE_ELECTRONIC
+                'type' => \App\Models\Subscription::TYPE_ELECTRONIC
             ])->save();
-            factory(\App\Subscription::class)->make([
+            factory(\App\Models\Subscription::class)->make([
                 'journal_id' => $j->id,
                 'locale' => App::getLocale(),
                 'half_year' => 'first',
-                'type' => \App\Subscription::TYPE_PRINTED
+                'type' => \App\Models\Subscription::TYPE_PRINTED
             ])->save();
-            factory(\App\Subscription::class)->make([
+            factory(\App\Models\Subscription::class)->make([
                 'journal_id' => $j->id,
                 'locale' => App::getLocale(),
                 'half_year' => 'second',
-                'type' => \App\Subscription::TYPE_PRINTED
+                'type' => \App\Models\Subscription::TYPE_PRINTED
             ])->save();
         }
     }

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Journal;
+use App\Models\Journal;
 use App\Models\Promocode;
-use App\Publishing;
-use App\Release;
+use App\Models\Publishing;
+use App\Models\Release;
 
 class PromocodeController extends CRUDController
 {

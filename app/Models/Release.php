@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -9,7 +9,7 @@ use App\Models\Promocode;
 
 class Release extends Model
 {
-    use Translatable, WithTranslationTrait;
+    use Translatable, Traits\WithTranslationTrait;
 
     public $translatedAttributes = [
         'name', 'code', 'number', 'image', 'description',

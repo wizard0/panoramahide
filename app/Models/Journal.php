@@ -1,13 +1,13 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
-use App\Models\Promocode;
+use Promocode;
 
 /**
  * Class Journal
@@ -45,7 +45,7 @@ use App\Models\Promocode;
  */
 class Journal extends Model
 {
-    use Translatable, WithTranslationTrait;
+    use Translatable, Traits\WithTranslationTrait;
 
     public $translatedAttributes = [
         'name', 'code', 'in_HAC_list', 'image', 'description', 'preview_image', 'preview_description',

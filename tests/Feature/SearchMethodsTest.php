@@ -2,19 +2,19 @@
 
 namespace Tests\Feature;
 
-use App\Article;
-use App\Category;
+use App\Models\User;
+use App\Models\Article;
+use App\Models\Category;
+use App\Models\Journal;
+use App\Models\Release;
+use App\Models\UserSearch;
 use App\Http\Controllers\SearchController;
-use App\Journal;
-use App\Release;
-use App\User;
-use App\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class SearchMethodsTest extends TestCase
 {

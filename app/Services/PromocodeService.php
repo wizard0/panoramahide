@@ -2,12 +2,11 @@
 
 namespace App\Services;
 
-
-use App\Journal;
+use App\Models\Journal;
 use App\Models\JbyPromo;
 use App\Models\Promocode;
 use App\Models\PromoUser;
-use App\Release;
+use App\Models\Release;
 use App\Services\GetSetable\PromocodeGetSetableTrait;
 use App\Services\GetSetable\PromoUserGetSetableTrait;
 use Carbon\Carbon;

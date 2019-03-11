@@ -2,11 +2,10 @@
 
 namespace Tests\Unit\Services;
 
-
 use App\Models\PromoUser;
 use App\Models\Promocode;
 use App\Services\PromoUserService;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;

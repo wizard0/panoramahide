@@ -5,12 +5,12 @@
  */
 namespace Tests\Unit\Controllers;
 
-use App\Journal;
+use App\Models\Journal;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Tests\FactoryTrait;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\FactoryTrait;
+use Tests\TestCase;
 
 /**
  * Class for magazines ajax get page test.

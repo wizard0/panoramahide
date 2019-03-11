@@ -4,7 +4,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\PartnerUser;
 use App\Models\Device;
-use App\User;
+use App\Models\User;
 
 class DevicesTableSeeder extends Seeder
 {
@@ -17,13 +17,15 @@ class DevicesTableSeeder extends Seeder
     {
         foreach (PartnerUser::inRandomOrder()->limit(50)->get() as $user) {
             $user->createDevice();
-            if (rand(0,1))
+            if (rand(0, 1)) {
                 $user->createDevice();
+            }
         }
         foreach (User::inRandomOrder()->limit(50)->get() as $user) {
             $user->createDevice();
-            if (rand(0,1))
+            if (rand(0, 1)) {
                 $user->createDevice();
+            }
         }
     }
 }
