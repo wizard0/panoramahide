@@ -123,12 +123,4 @@
             </form>
         </div>
     </div>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $('input[name=chgForm]').change(function() {
-                $('#profileForm').toggle();
-                $('#passwordForm').toggle();
-            });
-        });
-    </script>
 @endsection

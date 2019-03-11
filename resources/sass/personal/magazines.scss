@@ -1,0 +1,23 @@
+/*!
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+#personal-magazines-content {
+  .title-magazine {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: space-between;
+    min-height: 69px;
+    margin-bottom: 10px;
+    text-align: center;
+    a {
+      text-transform: uppercase;
+    }
+  }
+  img {
+    &:hover {
+
+    }
+  }
+}
