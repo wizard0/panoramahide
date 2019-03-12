@@ -179,6 +179,6 @@ Route::group(['prefix' => 'reader/api'], function () {
 
 Route::get('order/approve/{id}', function($id) {
     // Заглушка для подтверждения заказа
-    App\Order::find($id)->approve();
+    App\Models\Order::find($id)->approve();
 });
 

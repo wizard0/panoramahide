@@ -25,7 +25,7 @@
     </div>
     <div class="form-group">
         <label>Адрес доставки</label>
-        <input type="text" class="form-control" id="delivery_address" placeholder="Адрес доставки" value="" name="delivery_address" required>
+        <input type="text" class="form-control" id="delivery_address" placeholder="Адрес доставки" value="" name="delivery_address">
     </div>
     <div class="form-group">
         <div class="checkbox simple-checkbox">

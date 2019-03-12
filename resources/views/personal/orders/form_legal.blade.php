@@ -12,8 +12,7 @@
     </div>
     <div class="form-group">
         <label>Юридический адрес</label>
-        <input type="text" class="form-control" id="legal_address" placeholder="Юридический адрес" value=""
-               name="legal_address" required>
+        <input type="text" class="form-control" id="legal_address" placeholder="Юридический адрес" value="" name="legal_address">
     </div>
     <div class="form-group">
         <label>ИНН</label>

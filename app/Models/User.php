@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Models\PromoUser;
-use App\Order;
-use App\OrderedSubscription;
+use App\Models\Order;
+use App\Models\OrderedSubscription;
 use Illuminate\Database\Eloquent\Relations\Relation;
 
 use App\Models\Traits\UserBookmarks;
