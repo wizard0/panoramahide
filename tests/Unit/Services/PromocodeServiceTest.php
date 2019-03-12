@@ -132,7 +132,7 @@ class PromocodeServiceTest extends TestCase
     }
 
     /**
-     * Удаленик
+     * Удаление
      */
     public function testDestroy()
     {

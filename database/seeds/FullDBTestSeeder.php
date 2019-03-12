@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+// @codingStandardsIgnoreLine
 class FullDBTestSeeder extends Seeder
 {
     const CATEGORIES = 5;

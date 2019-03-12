@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 use App\Models\Partner;
 
+// @codingStandardsIgnoreLine
 class PartnersTableSeeder extends Seeder
 {
     /**
@@ -12,8 +13,8 @@ class PartnersTableSeeder extends Seeder
      */
     public function run()
     {
-        for ($i=0; $i < 10; $i++) {
-            Partner::create(['secret_key' => md5(rand(0,999999)), 'active' => rand(0,1)]);
+        for ($i = 0; $i < 10; $i++) {
+            Partner::create(['secret_key' => md5(rand(0, 999999)), 'active' => rand(0, 1)]);
         }
     }
 }
