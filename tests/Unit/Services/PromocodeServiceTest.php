@@ -285,7 +285,7 @@ class PromocodeServiceTest extends TestCase
         foreach ($types as $type) {
             $oPromoCode = $this->createPromocodeByType($type);
             $result = $this->service($oPromoCode)->getReleases();
-            $this->assertTrue($result instanceof Collection, 'Type: '.$type);
+            $this->assertTrue($result instanceof Collection, 'Type: ' . $type);
         }
     }
 
@@ -316,7 +316,7 @@ class PromocodeServiceTest extends TestCase
             }
 
             $result = $this->service($oPromoCode)->getJournals();
-            $this->assertTrue($result instanceof Collection, 'Type: '.$type);
+            $this->assertTrue($result instanceof Collection, 'Type: ' . $type);
         }
     }
 
