@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Category;
-use App\Journal;
+use App\Models\Category;
+use App\Models\Journal;
 use App\Models\Promocode;
-use App\News;
-use App\Release;
+use App\Models\News;
+use App\Models\Release;
 use App\Services\PromocodeService;
 use Illuminate\Http\Request;
 use App\Cart;

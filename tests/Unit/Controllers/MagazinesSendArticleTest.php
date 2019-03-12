@@ -6,17 +6,17 @@
 namespace Tests\Unit\Controllers;
 
 use App\Http\Controllers\MagazinesController;
-use App\Journal;
+use App\Models\Journal;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Tests\FactoryTrait;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\FactoryTrait;
+use Tests\TestCase;
 
 /**
  * Class for magazines send article test.

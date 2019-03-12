@@ -1,5 +1,5 @@
 @php
-$categories = \App\Category::has('journals')->where('active', 1)->withTranslation()->get();
+$categories = \App\Models\Category::has('journals')->where('active', 1)->withTranslation()->get();
 @endphp
 
 <div class="header">

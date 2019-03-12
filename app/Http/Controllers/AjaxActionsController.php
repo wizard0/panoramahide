@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Article;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Journal;
+use App\Models\UserFavorite;
 use App\Mail\Recommend;
-use App\UserFavorite;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;

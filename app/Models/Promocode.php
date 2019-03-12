@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Journal;
-use App\Publishing;
-use App\Release;
+use App\Models\Journal;
+use App\Models\Publishing;
+use App\Models\Release;
 use Illuminate\Database\Eloquent\Model;
 
 /**

@@ -7,7 +7,7 @@
 namespace Tests\Unit\Controllers\Auth;
 
 use App\Http\Controllers\Auth\LoginController;
-use App\User;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

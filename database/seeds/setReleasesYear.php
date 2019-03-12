@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class setReleasesYear extends Seeder
+class SetReleasesYear extends Seeder
 {
     /**
      * This seeder is only for test. Do not! run it at staged mode
@@ -11,7 +11,7 @@ class setReleasesYear extends Seeder
      */
     public function run()
     {
-        $releases = \App\Release::all();
+        $releases = \App\Models\Release::all();
         foreach ($releases as $release) {
             $release->year = rand(2010, 2019);
             $release->save();

@@ -27,7 +27,7 @@ class TestSeeder extends Seeder
         $this->call(PaysystemSeeder::class);
         $this->call(PaysystemDataSeeder::class);
         $this->call(PublishingTestSeeder::class);
-        $this->call(setReleasesYear::class);
+        $this->call(SetReleasesYear::class);
         $this->call(CreateSubscriptions::class);
         $this->call(RolesAndPermissionsBaseSeeder::class);
         $this->call(UserSearchTableSeeder::class);

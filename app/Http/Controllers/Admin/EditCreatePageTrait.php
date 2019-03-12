@@ -55,7 +55,6 @@ trait EditCreatePageTrait
         }
 
         $this->updateModel($request);
-
         return redirect()->route($this->slug . '.show', ['id' => $id]);
     }
 

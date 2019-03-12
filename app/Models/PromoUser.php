@@ -7,9 +7,9 @@ namespace App\Models;
 
 use App\Models\JbyPromo;
 use App\Models\Promocode;
-use App\Publishing;
-use App\Release;
-use App\User;
+use App\Models\Publishing;
+use App\Models\Release;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 
 /**

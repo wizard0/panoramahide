@@ -1,5 +1,7 @@
 <?php
 
+// namespace Database\Seeds;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -21,41 +23,40 @@ class FullDBTestSeeder extends Seeder
     {
 //        $this->clear();
         $this->command->getOutput()->progressStart(FullDBTestSeeder::TOTAL);
-        factory(App\Category::class, FullDBTestSeeder::CATEGORIES) // 5
+        factory(App\Models\Category::class, FullDBTestSeeder::CATEGORIES) // 5
             ->create()
             ->each(function ($category) {
                 $journals = [];
                 $category->journals()->saveMany(
-                    factory(App\Journal::class, FullDBTestSeeder::JOURNALS) // 5
+                    factory(App\Models\Journal::class, FullDBTestSeeder::JOURNALS) // 5
                     ->create()
                     ->each(function ($journal, $key) use (&$journals) {
-                        factory(App\Release::class, FullDBTestSeeder::RELEASES) // 5
-                            ->create(['journal_id' => $journal->id])
-                            ->each(function ($release) {
-                                $authors = factory(App\Author::class, FullDBTestSeeder::AUTHORS)->make();
-                                $release->articles()->saveMany(factory(App\Article::class, FullDBTestSeeder::ARTICLES) // 5
-                                    ->create()
-                                    ->each(function ($article) use ($authors) {
-                                        $article->authors()->saveMany($authors);
-                                        $this->command->getOutput()->progressAdvance();
-                                    })
-                                );
-                            });
-                            $journals[] = $journal->id;
-                            if ($key !== 0 && $key % 5 === 0) {
-                                factory(App\Models\Promocode::class, 1)
-                                    ->create(['journal_id' => $journal->id])
-                                    ->each(function ($promocode) use (&$journals) {
-                                        $group = factory(App\Models\Group::class, 1)
-                                            ->create(['promocode_id' => $promocode->id,])
-                                            ->each(function ($group) use (&$journals) {
-                                                foreach ($journals as $nJournal) {
-                                                    $group->journals()->attach($nJournal);
-                                                }
-                                                $journals = [];
-                                            });
-                                    });
-                            } // if
+                        factory(App\Models\Release::class, FullDBTestSeeder::RELEASES) // 5
+                        ->create(['journal_id' => $journal->id])
+                        ->each(function ($release) {
+                            $authors = factory(App\Models\Author::class, FullDBTestSeeder::AUTHORS)->make();
+                            $release->articles()->saveMany(factory(App\Models\Article::class, FullDBTestSeeder::ARTICLES) // 5
+                                ->create()
+                                ->each(function ($article) use ($authors) {
+                                    $article->authors()->saveMany($authors);
+                                    $this->command->getOutput()->progressAdvance();
+                                }));
+                        });
+                        $journals[] = $journal->id;
+                        if ($key !== 0 && $key % 5 === 0) {
+                            factory(App\Models\Promocode::class, 1)
+                                ->create(['journal_id' => $journal->id])
+                                ->each(function ($promocode) use (&$journals) {
+                                    $group = factory(App\Models\Group::class, 1)
+                                        ->create(['promocode_id' => $promocode->id,])
+                                        ->each(function ($group) use (&$journals) {
+                                            foreach ($journals as $nJournal) {
+                                                $group->journals()->attach($nJournal);
+                                            }
+                                            $journals = [];
+                                        });
+                                });
+                        } // if
                     })
                 );
             });

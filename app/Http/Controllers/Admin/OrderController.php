@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Order;
-use App\OrderLegalUser;
-use App\OrderPhysUser;
-use App\Paysystem;
+use App\Models\Order;
+use App\Models\OrderLegalUser;
+use App\Models\OrderPhysUser;
+use App\Models\Paysystem;
 
 class OrderController extends CRUDController
 {

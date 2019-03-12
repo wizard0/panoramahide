@@ -2,11 +2,11 @@
 
 namespace Tests\Unit;
 
-use App\Journal;
-use App\Subscription;
-use Tests\TestCase;
+use App\Models\Journal;
+use App\Models\Subscription;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class JournalGetSubscribeInfoTest extends TestCase
 {

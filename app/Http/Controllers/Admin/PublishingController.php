@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Journal;
+use App\Models\Journal;
 use App\Models\Promocode;
 
 class PublishingController extends CRUDController

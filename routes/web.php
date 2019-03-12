@@ -1,6 +1,7 @@
 <?php
 
 use \Illuminate\Support\Facades\Route;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,7 +18,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', 'Admin\LoginController')->name('admin.login');
     Route::post('/login', 'Admin\LoginController@login');
 
-    Route::group(['middleware' => ['permission:' . \App\User::PERMISSION_ADMIN]], function () {
+    Route::group(['middleware' => ['permission:' . \App\Models\User::PERMISSION_ADMIN]], function () {
         Route::get('/', 'Admin\DashboardController')->name('admin');
         Route::get('/dashboard', 'Admin\DashboardController')->name('admin.dashboard');
 

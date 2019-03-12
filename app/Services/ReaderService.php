@@ -2,10 +2,10 @@
 
 namespace App\Services;
 
-use App\Article;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Journal;
 use App\Models\Bookmark;
-use App\Release;
+use App\Models\Release;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 

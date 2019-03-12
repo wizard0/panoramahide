@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\Admin\JournalController;
-use App\Journal;
+use App\Models\Journal;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Tests\TestCase;

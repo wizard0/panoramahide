@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Journal;
-use App\Publishing;
+use App\Models\Journal;
+use App\Models\Publishing;
 use Illuminate\Http\Request;
 
 class PublishersController extends Controller

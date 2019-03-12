@@ -21,7 +21,7 @@ $factory->define(App\Models\PromoUser::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'user_id' => function () {
-            return factory(App\User::class)->create()->id;
+            return factory(App\Models\User::class)->create()->id;
         },
         'phone' => mt_rand(10000000000, 79999999999),
     ];

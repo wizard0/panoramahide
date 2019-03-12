@@ -17,13 +17,13 @@
                         <div class="row no-gutters form-margin align-items-end mag-art-filter">
                             <div class="d-flex justify-content-start">
                                 <div>
-                                    <input id="print" type="radio" name="version" value="{{ Subscription::TYPE_PRINTED }}">
+                                    <input id="print" type="radio" name="version" value="{{ Models\Subscription::TYPE_PRINTED }}">
                                     <label for="print" class="rightsharp">
                                         <span>Печатная</span>
                                     </label>
                                 </div>
                                 <div style="margin-left: -1px;">
-                                    <input id="electro" type="radio" name="version" value="{{ Subscription::TYPE_ELECTRONIC }}">
+                                    <input id="electro" type="radio" name="version" value="{{ Models\Subscription::TYPE_ELECTRONIC }}">
                                     <label for="electro" class="leftsharp">
                                         <span>Электронная</span>
                                     </label>

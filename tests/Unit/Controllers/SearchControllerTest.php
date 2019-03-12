@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Controllers;
 
-use App\User;
-use App\UserSearch;
+use App\Models\User;
+use App\Models\UserSearch;
 use App\Http\Controllers\SearchController;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;

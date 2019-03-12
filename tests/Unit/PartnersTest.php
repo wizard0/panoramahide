@@ -6,8 +6,8 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use App\Release;
-use App\Journal;
+use App\Models\Release;
+use App\Models\Journal;
 use App\Models\Quota;
 use App\Models\Partner;
 use App\Models\PartnerUser;

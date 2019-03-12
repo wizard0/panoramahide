@@ -2,7 +2,7 @@
 
 namespace Tests\Seeds;
 
-use App\UserSearch;
+use App\Models\UserSearch;
 use Illuminate\Database\Seeder;
 
 class UserSearchTableSeeder extends Seeder

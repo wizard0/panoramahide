@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Author;
-use App\Category;
-use App\Journal;
-use App\JournalSentArticle;
+use App\Models\Author;
+use App\Models\Category;
+use App\Models\Journal;
+use App\Models\JournalSentArticle;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;

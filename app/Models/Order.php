@@ -3,8 +3,9 @@
  * Copyright (c) 2018-2019 "ИД Панорама"
  * Автор модуля: Илья Картунин (ikartunin@gmail.com)
  */
-namespace App;
+namespace App\Models;
 
+use App\Cart;
 use Illuminate\Database\Eloquent\Model;
 use Auth;
 use Session;

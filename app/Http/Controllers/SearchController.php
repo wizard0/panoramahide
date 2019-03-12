@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\UserSearch;
+use App\Models\UserSearch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
@@ -63,6 +63,7 @@ class SearchController extends Controller
     public function deleteSearch(Request $request)
     {
         $id = $request->get('id');
+
         $ids = [];
         if ($id == 'all') {
             Auth::user()->searches()->each(function ($item, $key) {

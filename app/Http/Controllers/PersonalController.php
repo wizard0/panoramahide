@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Cart;
-use App\Order;
-use App\OrderLegalUser;
-use App\OrderPhysUser;
-use App\OrderedSubscription;
-use App\Paysystem;
+use App\Models\OrderedSubscription;
+use App\Models\User;
+use App\Models\Order;
+use App\Models\OrderLegalUser;
+use App\Models\OrderPhysUser;
+use App\Models\Paysystem;
 use App\Services\Toastr\Toastr;
-use App\User;
 use Chelout\Robokassa\Robokassa;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;

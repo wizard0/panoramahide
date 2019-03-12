@@ -6,17 +6,16 @@
 
 namespace Tests;
 
-
-use App\Article;
-use App\Author;
-use App\Category;
-use App\Journal;
+use App\Models\Article;
+use App\Models\Author;
+use App\Models\Category;
+use App\Models\Journal;
 use App\Models\Group;
 use App\Models\Promocode;
 use App\Models\PromoUser;
-use App\Publishing;
-use App\Release;
-use App\User;
+use App\Models\Publishing;
+use App\Models\Release;
+use App\Models\User;
 
 trait FactoryTrait
 {

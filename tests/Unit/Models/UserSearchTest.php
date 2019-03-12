@@ -6,8 +6,8 @@
 
 namespace Tests\Unit\Models;
 
-use App\User;
-use App\UserSearch;
+use App\Models\User;
+use App\Models\UserSearch;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

@@ -11,7 +11,7 @@ class PaysystemDataSeeder extends Seeder
      */
     public function run()
     {
-        $roboID = \App\Paysystem::getByCode(\App\Paysystem::ROBOKASSA)->id;
+        $roboID = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::ROBOKASSA)->id;
         DB::table('paysystem_data')->insert([
             'name' => 'Логин магазина',
             'code' => 'shop_login',
@@ -31,7 +31,7 @@ class PaysystemDataSeeder extends Seeder
             'paysystem_id' => $roboID
         ]);
 
-        $sberbankID = \App\Paysystem::getByCode(\App\Paysystem::SBERBANK)->id;
+        $sberbankID = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::SBERBANK)->id;
         DB::table('paysystem_data')->insert([
             'name' => 'Банковские реквизиты',
             'code' => 'requisites',
@@ -75,12 +75,12 @@ class PaysystemDataSeeder extends Seeder
             'paysystem_id' => $sberbankID
         ]);
 
-        $invoiceID = \App\Paysystem::getByCode(\App\Paysystem::INVOICE)->id;
+        $invoiceID = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::INVOICE)->id;
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись генерального директора',
             'code' => 'CEO_signature',
             'value' => 'paysystem_invoice/ceo_sign.png',
-            'type' => \App\PaysystemData::TYPE_FILE,
+            'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
         DB::table('paysystem_data')->insert([
@@ -111,14 +111,14 @@ class PaysystemDataSeeder extends Seeder
             'name' => 'Печать',
             'code' => 'stamp',
             'value' => 'paysystem_invoice/stamp.png',
-            'type' => \App\PaysystemData::TYPE_FILE,
+            'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись главного бухгалтера',
             'code' => 'chief_accountant_sign',
             'value' => 'paysystem_invoice/chief_accountant_sign.png',
-            'type' => \App\PaysystemData::TYPE_FILE,
+            'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
         DB::table('paysystem_data')->insert([
@@ -188,13 +188,13 @@ class PaysystemDataSeeder extends Seeder
             'paysystem_id' => $invoiceID
         ]);
 
-        $robokassa = \App\Paysystem::getByCode(\App\Paysystem::ROBOKASSA);
+        $robokassa = \App\Models\Paysystem::getByCode(\App\Paysystem::ROBOKASSA);
         $robokassa->logo = 'paysystem_logo/robokassa.jpg';
         $robokassa->save();
-        $sberbank = \App\Paysystem::getByCode(\App\Paysystem::SBERBANK);
+        $sberbank = \App\Models\Paysystem::getByCode(\App\Paysystem::SBERBANK);
         $sberbank->logo = 'paysystem_logo/sberbank.jpg';
         $sberbank->save();
-        $invoice = \App\Paysystem::getByCode(\App\Paysystem::INVOICE);
+        $invoice = \App\Models\Paysystem::getByCode(\App\Paysystem::INVOICE);
         $invoice->logo = 'paysystem_logo/invoice.png';
         $invoice->save();
     }

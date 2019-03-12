@@ -14,8 +14,8 @@ class Cart
     const PRODUCT_TYPE_ARTICLE = 'article';
     const PRODUCT_TYPE_SUBSCRIPTION = 'subscription';
 
-    const VERSION_PRINTED = Subscription::TYPE_PRINTED;
-    const VERSION_ELECTRONIC = Subscription::TYPE_ELECTRONIC;
+    const VERSION_PRINTED = Models\Subscription::TYPE_PRINTED;
+    const VERSION_ELECTRONIC = Models\Subscription::TYPE_ELECTRONIC;
 
     public function __construct($oldCart)
     {

@@ -7,7 +7,7 @@ namespace App\Models\Traits;
 
 use App\Models\Device;
 use App\Models\PartnerUser;
-use App\User;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Auth;

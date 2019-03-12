@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Partner;
-use App\Quota;
-use App\Release;
-use App\User;
+use App\Models\Quota;
+use App\Models\Release;
+use App\Models\User;
 
 class PartnerUserController extends CRUDController
 {

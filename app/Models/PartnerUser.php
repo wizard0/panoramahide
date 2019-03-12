@@ -44,6 +44,7 @@ class PartnerUser extends Model
         }
         return false;
     }
+
     public function isAvailable()
     {
         // Проверяем, активен ли партнёр
@@ -89,11 +90,16 @@ class PartnerUser extends Model
 
     public function releases()
     {
-        return $this->belongsToMany(\App\Release::class, 'partner_user_release', 'p_user_id', 'release_id');
+        return $this->belongsToMany(Release::class, 'partner_user_release', 'p_user_id', 'release_id');
     }
 
     public function quotas()
     {
         return $this->belongsToMany(Quota::class, 'partner_user_quota', 'p_user_id', 'quota_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
