@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+// @codingStandardsIgnoreLine
 class TranslatableAllPrices extends Migration
 {
     /**
@@ -30,11 +31,12 @@ class TranslatableAllPrices extends Migration
             $table->integer('left_to_pay')->nullable();
         });
 
-        Schema::table('releases', function(Blueprint $table) {
+        Schema::table('releases', function (Blueprint $table) {
             $table->dropColumn('price_for_printed');
             $table->dropColumn('price_for_electronic');
             $table->dropColumn('price_for_articles');
         });
+
         Schema::table('release_translations', function (Blueprint $table) {
             $table->integer('price_for_printed')->nullable();
             $table->integer('price_for_electronic')->nullable();
@@ -56,7 +58,6 @@ class TranslatableAllPrices extends Migration
             $table->integer('price_for_half_year')->nullable();
             $table->integer('price_for_year')->nullable();
         });
-
     }
 
     /**

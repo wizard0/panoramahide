@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
+// @codingStandardsIgnoreLine
 class CreatePromoUserTable extends Migration
 {
     /**
@@ -32,7 +33,6 @@ class CreatePromoUserTable extends Migration
 
             $table->primary(['promo_user_id', 'promocode_id']);
         });
-
     }
 
     /**

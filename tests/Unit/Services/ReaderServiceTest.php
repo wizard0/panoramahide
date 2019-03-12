@@ -50,7 +50,7 @@ class ReaderServiceTest extends TestCase
             'journal_id' => $oJournal->id,
         ]);
 
-        $oService = $this->service()->byRelease($oRelease);
+        $oService = $this->service()->setPathToHtml('resources/views/reader/html/')->byRelease($oRelease);
 
         $oJournal = $oService->getJournal();
 

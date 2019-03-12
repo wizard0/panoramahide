@@ -11,6 +11,7 @@ use App\Models\PromoUser;
 use App\Services\PromocodeService;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Tests\FactoryTrait;
 use Tests\TestCase;
@@ -131,7 +132,7 @@ class PromocodeServiceTest extends TestCase
     }
 
     /**
-     * Удаленик
+     * Удаление
      */
     public function testDestroy()
     {
@@ -210,6 +211,34 @@ class PromocodeServiceTest extends TestCase
     }
 
     /**
+     * Активация промокода
+     */
+    public function testActivateCustomPromocode()
+    {
+        $oPromoCode = $this->factoryPromocode([
+            'type' => Promocode::TYPE_CUSTOM,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+        ]);
+
+        $result = $this->service()->checkPromocodeBeforeActivate($oPromoCode);
+        $this->assertTrue($result);
+
+        $countBefore = $this->promoUser()->jByPromocodes()->count();
+        $usedBefore = $oPromoCode->used;
+
+        $result = $this->service()->activatePromocode($oPromoCode, $this->promoUser());
+        $this->assertTrue($result);
+
+        $countAfter = $this->promoUser()->jByPromocodes()->count();
+        $usedAfter = $oPromoCode->used;
+
+        $this->assertTrue($usedAfter > $usedBefore);
+        $this->assertTrue($countAfter > $countBefore);
+    }
+
+    /**
      * Деактивация промокода
      */
     public function testDeactivatePromocode()
@@ -238,5 +267,72 @@ class PromocodeServiceTest extends TestCase
 
         $countAfterDeactivate = $this->promoUser()->promocodes()->count();
         $this->assertTrue($countAfterDeactivate < $countAfter);
+    }
+
+    public function testGetReleases()
+    {
+        $types = [
+            0 => Promocode::TYPE_COMMON,
+            1 => Promocode::TYPE_ON_JOURNAL,
+            2 => Promocode::TYPE_ON_RELEASE,
+            3 => Promocode::TYPE_ON_PUBLISHING,
+            4 => Promocode::TYPE_PUBL_RELEASE,
+            5 => Promocode::TYPE_CUSTOM,
+        ];
+
+        $this->actingAs($this->user);
+
+        foreach ($types as $type) {
+            $oPromoCode = $this->createPromocodeByType($type);
+            $result = $this->service($oPromoCode)->getReleases();
+            $this->assertTrue($result instanceof Collection, 'Type: ' . $type);
+        }
+    }
+
+    public function testGetJournals()
+    {
+        $types = [
+            0 => Promocode::TYPE_COMMON,
+            1 => Promocode::TYPE_ON_JOURNAL,
+            2 => Promocode::TYPE_ON_RELEASE,
+            3 => Promocode::TYPE_ON_PUBLISHING,
+            4 => Promocode::TYPE_PUBL_RELEASE,
+            5 => Promocode::TYPE_CUSTOM,
+        ];
+
+        $this->actingAs($this->user);
+
+        foreach ($types as $type) {
+            $oPromoCode = $this->createPromocodeByType($type);
+
+            if ($type === Promocode::TYPE_ON_PUBLISHING) {
+                $oPublishing = $this->factoryPublishing();
+                $oPromoCode->publishings()->attach($oPublishing->id);
+            }
+
+            if ($type === Promocode::TYPE_ON_RELEASE) {
+                $oRelease = $this->factoryRelease();
+                $oPromoCode->releases()->attach($oRelease->id);
+            }
+
+            $result = $this->service($oPromoCode)->getJournals();
+            $this->assertTrue($result instanceof Collection, 'Type: ' . $type);
+        }
+    }
+
+    /**
+     * @param $type
+     * @return Promocode
+     */
+    private function createPromocodeByType($type)
+    {
+        $oJournal = $this->factoryJournal();
+        return $this->factoryPromocode([
+            'type' => $type,
+            'release_end' => now()->addDay(),
+            'used' => 0,
+            'limit' => 10,
+            'journal_id' => $oJournal->id,
+        ]);
     }
 }
