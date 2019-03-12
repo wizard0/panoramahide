@@ -269,9 +269,6 @@ class PromocodeServiceTest extends TestCase
         $this->assertTrue($countAfterDeactivate < $countAfter);
     }
 
-    /**
-     * @covers \App\Services\PromocodeService::getReleases()
-     */
     public function testGetReleases()
     {
         $types = [
@@ -292,9 +289,6 @@ class PromocodeServiceTest extends TestCase
         }
     }
 
-    /**
-     * @covers \App\Services\PromocodeService::getJournals()
-     */
     public function testGetJournals()
     {
         $types = [
