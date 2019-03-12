@@ -48,10 +48,10 @@ seed: ## Заполнить БД тестовыми данными
 admin: ## Создать пользователя admin (user: admin; pass: admin)
 	./artisan admin:create
 
-test: seed ## Тестировать проект
+test: ## Тестировать проект
 	./vendor/phpunit/phpunit/phpunit --stop-on-failure --testdox --coverage-html ./test-coverage
 
-paratest: seed ## Тестировать проект (тесты запускаются параллельно)
+paratest: ## Тестировать проект (тесты запускаются параллельно)
 	./vendor/brianium/paratest/bin/paratest -p8 --stop-on-failure --coverage-html=./test-coverage
 
 psr: ## Анализ кода по PSR. По умолчанию SRC=./app/* TESTS=./tests DBS=./database
