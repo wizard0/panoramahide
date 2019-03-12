@@ -66,6 +66,7 @@ test:
         - php72 ./artisan config:clear
         - php72 ./artisan route:clear
         - php72 ./artisan view:clear
+        - php72 /usr/bin/composer dumpautoload
         - php72 ./vendor/brianium/paratest/bin/paratest -p4 --coverage-text tests
     dependencies:
         - build-php
