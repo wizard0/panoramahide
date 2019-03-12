@@ -46,9 +46,7 @@ class LoginController extends Controller
     protected function sendLoginResponse(Request $request)
     {
         try {
-            if ($request->exists('phpunit')) {
-
-            } else {
+            if (!$request->exists('phpunit')) {
                 $request->session()->regenerate();
             }
         } catch (\Exception $e) {
