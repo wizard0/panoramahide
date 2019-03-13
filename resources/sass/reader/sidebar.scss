@@ -22,9 +22,16 @@
       margin: 0;
       //font-weight: bold;
     }
+    .nav-link {
+      border: none;
+    }
+    .nav-link:hover {
+      border: none;
+    }
     .nav-link.active {
+      border: none;
       color: #e63201;
-      border-bottom: 1px solid #e63201;
+      border-bottom: 1px solid #e63201 !important;
     }
   }
   .tab-content {

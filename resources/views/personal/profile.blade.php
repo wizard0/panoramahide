@@ -52,6 +52,7 @@
                                value="{{ !is_null($user->birthday) ? $user->birthday->format('d-m-Y') : '' }}"
                                placeholder="XX-XX-XXXX"
                                required
+                               autocomplete="off"
                         >
                     </div>
                 </div>

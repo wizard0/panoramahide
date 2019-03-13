@@ -216,7 +216,9 @@
                 <div class="inform-string" style="">
                     <div class="inform-string-holder">
                         <div class="inform-string-home">
-                            <a href=""></a>
+                            <a :href="'#reader'"
+                               v-scroll-to="scrollOptions('#reader')"
+                            ></a>
                         </div>
                         <div class="inform-string-magazine">
                             <a href="#">
@@ -259,9 +261,9 @@
                     </div>
                 </div>
                 <div class="col-sm-12 text-right">
-                    <a class="btn btn-danger" @click="bookmarkAdd($event)">
+                    <button type="button" class="btn btn-danger" @click="bookmarkAdd($event)">
                         Добавить
-                    </a>
+                    </button>
                 </div>
             </div>
         </vue-modal>
