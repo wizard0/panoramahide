@@ -52,6 +52,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 Route::post('/add-to-cart', 'ProductController@addToCart')->name('cart.add');
 Route::post('/delete-from-cart', 'ProductController@deleteFromCart')->name('cart.del');
+Route::post('/qty-change-cart', 'ProductController@qtyCartChange')->name('cart.qty');
 
 Route::group(['prefix' => 'personal'], function () {
     Route::get('login', 'PersonalController@login')->name('personal.login');

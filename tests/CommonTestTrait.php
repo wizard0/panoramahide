@@ -33,4 +33,9 @@ trait CommonTestTrait
 
         return $request;
     }
+    protected function postAjax($url, $data = [])
+    {
+        return $this->post($url, $data, array('HTTP_X-Requested-With' => 'XMLHttpRequest'));
+    }
+
 }

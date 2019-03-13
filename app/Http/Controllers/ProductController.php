@@ -40,6 +40,19 @@ class ProductController extends Controller
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
 
+    public function qtyCartChange(Request $request)
+    {
+        if ($request->ajax()) {
+            $cart = $this->getCart();
+            $cart->changeQty($request->get('id'), $request->get('qty'));
+            return response()->json([
+                'success' => true,
+                'header' => $this->updateCart($cart),
+            ]);
+        }
+        return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
+    }
+
     public function deleteFromCart(Request $request)
     {
         if ($request->ajax()) {

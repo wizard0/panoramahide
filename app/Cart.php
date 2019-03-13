@@ -103,16 +103,15 @@ class Cart
         $this->totalPrice -= $itemPrice * $itemQty;
     }
 
-    public function changeQty($product, $type, $q)
+    public function changeQty($id, $qty)
     {
-        $itemIndex = $type . $product->id;
-        $item = $this->items[$itemIndex];
+        $item = $this->items[$id];
         $itemPrice = $item->price;
         $itemQty = $item->qty;
 
-        $this->items[$itemIndex]->qty = $q;
+        $this->items[$id]->qty = $qty;
         $this->totalPrice -= $itemPrice * $itemQty;
-        $this->totalPrice += $itemPrice * $q;
+        $this->totalPrice += $itemPrice * $qty;
         $this->totalQty = sizeof($this->items);
     }
 }
