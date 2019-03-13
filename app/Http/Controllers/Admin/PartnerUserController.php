@@ -10,6 +10,7 @@ use App\Models\User;
 class PartnerUserController extends CRUDController
 {
     protected $displayAttributes = ['id', 'user_id', 'partner_id'];
+    protected $slug = 'partner_users';
     protected $attributeTypes = [
         'user_id' => self::TYPE_REL_BELONGS_TO,
         'active' => self::TYPE_BOOL,
