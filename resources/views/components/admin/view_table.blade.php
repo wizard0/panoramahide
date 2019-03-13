@@ -3,9 +3,9 @@
         <thead>
         <tr>
             @foreach($head as $name)
-                <th>{{ $name }}</th>
+                <th>{{ __('admin.' . strtolower($name)) }}</th>
             @endforeach
-            <th>{{ __('admin.actions') }}</th>
+            <th style="text-align: center">{{ __('admin.actions') }}</th>
         </tr>
         </thead>
         <tbody>
@@ -18,21 +18,17 @@
                         <td>{{ $item->value }}</td>
                     @endif
                 @endforeach
-                <td>
-                    <a href="{{ url()->current() }}/{{ $id }}/edit">
-                        <i class="far fa-edit"></i></a>
-                    <a href="{{ url()->current() }}/{{ $id }}">
-                        <i class="far fa-eye"></i></a>
-                    <form action="{{ url()->current() }}/{{ $id }}" method="post">
+                <td style="text-align: center">
+                    <a href="{{ url()->current() }}/{{ $id }}/edit"><i class="far fa-edit"></i></a>
+                    <a href="{{ url()->current() }}/{{ $id }}"><i class="fa fa-eye"></i></a>
+                    <form action="{{ url()->current() }}/{{ $id }}" method="post" style="display: inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit">
-                            <i class="far fa-trash-alt"></i></button>
+                        <button type="submit"><i class="far fa-trash-alt"></i></button>
                     </form>
                 </td>
             </tr>
         @endforeach
-
         </tbody>
     </table>
 </div>
