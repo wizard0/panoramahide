@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tests\FactoryTrait;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class for promo controller test.

@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Tests\FactoryTrait;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class for register controller test.
