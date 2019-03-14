@@ -2,15 +2,16 @@ $(document).ready(function() {
     deskbooksForm.initEvents();
 
 
-
-    $('.datetimepicker[data-format="date"]').datetimepicker({
-        format: 'DD-MM-YYYY',
-        locale: 'ru',
-    });
-    $('.datetimepicker[data-format="datetime"]').datetimepicker({
-        format: 'LT',
-        locale: 'ru',
-    });
+    if(typeof $.fn.datetimepicker !== 'undefined') {
+        $('.datetimepicker[data-format="date"]').datetimepicker({
+            format: 'DD-MM-YYYY',
+            locale: 'ru',
+        });
+        $('.datetimepicker[data-format="datetime"]').datetimepicker({
+            format: 'LT',
+            locale: 'ru',
+        });
+    }
 
     // личный кабинет, смена вкладок для редактирования профиля
     $('input[name=chgForm]').change(function() {

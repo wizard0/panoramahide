@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8">
@@ -53,10 +53,7 @@
     @yield('javascript')
 
     <div id="scripts">
-        @include('layouts.components.scripts.captcha')
-        @include('layouts.components.scripts.toastr')
-
-        @routes
+        @include('layouts.components.scripts')
     </div>
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
