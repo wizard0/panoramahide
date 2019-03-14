@@ -14,7 +14,7 @@ $factory->define(App\Models\Release::class, function (Faker $faker) {
               ];
     return [
         'name' => $faker->sentence(3),
-        'image' => $images[rand(0, count($images)-1)],
+        'image' => $images[rand(0, count($images) - 1)],
         'number' => $faker->randomNumber(2),
         'code' => $faker->unique()->slug(3),
         'price_for_electronic' => $faker->randomNumber(3),

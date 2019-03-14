@@ -26,6 +26,9 @@ trait CommonTestTrait
     {
         $request = new Request();
         $request->merge($data);
+        $request->merge([
+            'phpunit' => true,
+        ]);
 
         if ($ajax) {
             $request->headers->set('X-Requested-With', 'XMLHttpRequest');

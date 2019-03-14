@@ -6,6 +6,7 @@ use App\Models\PartnerUser;
 use App\Models\Device;
 use App\Models\User;
 
+// @codingStandardsIgnoreLine
 class DevicesTableSeeder extends Seeder
 {
     /**

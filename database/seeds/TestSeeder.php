@@ -10,6 +10,7 @@ use Tests\Seeds\UserSearchTableSeeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
+// @codingStandardsIgnoreLine
 class TestSeeder extends Seeder
 {
     /**

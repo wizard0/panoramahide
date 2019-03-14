@@ -30,20 +30,33 @@ Route::group(['prefix' => 'admin'], function () {
             Route::resource('journals', 'Admin\JournalController');
             Route::resource('releases', 'Admin\ReleaseController');
             Route::resource('articles', 'Admin\ArticleController');
-
             Route::resource('news', 'Admin\NewsController');
+        });
 
+        Route::group(['prefix' => 'subscriptions-management'], function () {
             Route::resource('subscriptions', 'Admin\SubscriptionController');
+        });
+
+        Route::group(['prefix' => 'orders-management'], function () {
             Route::resource('paysystems', 'Admin\PaysystemController');
             Route::resource('order_phys_users', 'Admin\OrderPhysUserController');
             Route::resource('order_legal_users', 'Admin\OrderLegalUserController');
             Route::resource('orders', 'Admin\OrderController');
+        });
+
+        Route::group(['prefix' => 'promo-management'], function () {
             Route::resource('promocodes', 'Admin\PromocodeController');
             Route::resource('promo_userz', 'Admin\PromoUserController');
             Route::resource('jby_promo', 'Admin\JbyPromoController');
+        });
+
+        Route::group(['prefix' => 'partners-management'], function () {
             Route::resource('partners', 'Admin\PartnerController');
             Route::resource('quotas', 'Admin\QuotaController');
             Route::resource('partner_users', 'Admin\PartnerUserController');
+        });
+
+        Route::group(['prefix' => 'users-management'], function () {
             Route::resource('users', 'Admin\UserController');
             Route::resource('roles', 'Admin\RoleController');
         });
