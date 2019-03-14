@@ -62,7 +62,10 @@ class PersonalController extends Controller
 
     public function cancelOrder($id)
     {
-        Order::find($id)->update(['status' => Order::STATUS_CANCELLED]);
+        $order = Auth::user()->orders()->find($id);
+        if (!$order)
+            return redirect(route('personal.orders'));
+        $order->update(['status' => Order::STATUS_CANCELLED]);
 
         return redirect()->back();
     }

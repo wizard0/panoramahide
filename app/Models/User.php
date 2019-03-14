@@ -98,7 +98,7 @@ class User extends Authenticatable
         return $orders;
     }
     // Подписки пользователя
-    public function getSubscriptions($sort)
+    public function getSubscriptions($sort = ['type' => 'asc'])
     {
         $subscriptions = OrderedSubscription::whereHas('order', function($query) {
                             $query->where('status', 'completed')

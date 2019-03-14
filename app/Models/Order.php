@@ -237,7 +237,7 @@ class Order extends Model
     public function approve()
     {
         if ($this->status === Order::STATUS_COMPLETED)
-            return;
+            return false;
         $items = json_decode($this->orderList);
         foreach ($items as $item) {
             switch ($item->type) {
@@ -253,5 +253,6 @@ class Order extends Model
             }
         }
         $this->update(['status' => Order::STATUS_COMPLETED]);
+        return true;
     }
 }
