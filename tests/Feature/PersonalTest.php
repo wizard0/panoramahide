@@ -175,7 +175,7 @@ class PersonalTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
     }
     // Добавляем журнал в корзину
     public function addToCart($q = 1)
@@ -187,7 +187,7 @@ class PersonalTest extends TestCase
                 'version' => Cart::VERSION_ELECTRONIC
             ]);
         }
-        if ($q >=2) {
+        if ($q >= 2) {
             $subscription = factory(Subscription::class)->create([
                                 'journal_id' => $this->journal->id,
                                 'locale' => \App::getLocale(),
@@ -210,14 +210,13 @@ class PersonalTest extends TestCase
                 ],
             ]);
         }
-        if ($q >=3) {
+        if ($q >= 3) {
             // Добавляем в журнал 2 статьи
             $authors = factory(\App\Models\Author::class, 2)->make();
             $this->release->articles()->saveMany(factory(Article::class, 2)
                  ->create()
                  ->each(function ($article) use ($authors) {
                     $article->authors()->saveMany($authors);
-
                  }));
             // Добавляем их в корзину
             foreach ($this->release->articles as $article) {
@@ -229,7 +228,7 @@ class PersonalTest extends TestCase
                 $response->assertStatus(200)
                          ->assertJson([
                              'success' => true,
-                        ]);
+                         ]);
             }
         }
     }
@@ -398,6 +397,4 @@ class PersonalTest extends TestCase
         $this->assertNotNull($order->getFullUserName());
         $this->assertNotNull($order->getDate());
     }
-
-
 }

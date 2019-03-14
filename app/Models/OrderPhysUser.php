@@ -12,5 +12,4 @@ class OrderPhysUser extends Model
     protected $table = "order_phys_users";
 
     public $fillable = ['name', 'surname', 'patronymic', 'phone', 'email', 'delivery_address'];
-
 }

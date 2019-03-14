@@ -83,6 +83,7 @@ class Release extends Model
     {
         return $this->belongsToMany(Promocode::class);
     }
+
     public function promo_user()
     {
         return $this->belongsToMany(PromoUser::class);

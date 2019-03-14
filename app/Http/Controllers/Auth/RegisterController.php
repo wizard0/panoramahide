@@ -129,5 +129,4 @@ class RegisterController extends Controller
     {
         \Mail::to($user->email)->send(new \App\Mail\Registration($request->get('email'), $request->get('password')));
     }
-
 }

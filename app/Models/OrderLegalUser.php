@@ -18,6 +18,4 @@ class OrderLegalUser extends Model
         'org_name', 'legal_address', 'INN', 'KPP', 'l_name', 'l_surname',
         'l_patronymic', 'l_email', 'l_phone', 'l_delivery_address'
     ];
-
-
 }
