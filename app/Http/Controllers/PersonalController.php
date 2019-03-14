@@ -34,7 +34,7 @@ class PersonalController extends Controller
         if (!$orders) {
             return redirect(route('personal.orders'));
         }
-        return view('personal.'.__FUNCTION__, compact('orders', 'id'));
+        return view('personal.' . __FUNCTION__, compact('orders', 'id'));
     }
 
     public function orderMake()
@@ -63,8 +63,9 @@ class PersonalController extends Controller
     public function cancelOrder($id)
     {
         $order = Auth::user()->orders()->find($id);
-        if (!$order)
+        if (!$order) {
             return redirect(route('personal.orders'));
+        }
         $order->update(['status' => Order::STATUS_CANCELLED]);
 
         return redirect()->back();
@@ -73,8 +74,9 @@ class PersonalController extends Controller
     public function completeOrder($id)
     {
         $order = Auth::user()->orders()->find($id);
-        if (!$order)
+        if (!$order) {
             return redirect(route('personal.orders'));
+        }
         $payData = $order->collectPayData();
 
         return view('personal.orders.complete', compact(
@@ -88,7 +90,7 @@ class PersonalController extends Controller
         if (Auth::check()) {
             return redirect(route('personal'));
         } else {
-            return view('personal.'.__FUNCTION__, $request->only('backTo'));
+            return view('personal.' . __FUNCTION__, $request->only('backTo'));
         }
     }
 
@@ -100,7 +102,7 @@ class PersonalController extends Controller
 
     public function index(Request $request)
     {
-        return view('personal.'.__FUNCTION__);
+        return view('personal.' . __FUNCTION__);
     }
 
     public function cart(Request $request)
@@ -112,7 +114,7 @@ class PersonalController extends Controller
                 $item->typeVers = Order::typeVers($item->version, $item->type);
             }
         }
-        return view('personal.'.__FUNCTION__, compact('cart', 'displayCheckout'));
+        return view('personal.' . __FUNCTION__, compact('cart', 'displayCheckout'));
     }
 
     public function subscriptions(Request $request)
@@ -120,7 +122,7 @@ class PersonalController extends Controller
         $subscriptions = Auth::user()->getSubscriptions($request->get('sort') ?? ['type' => 'asc']);
         $sort = self::getSortBy('type', $request, $subscriptions);
 
-        return view('personal.'.__FUNCTION__, compact('subscriptions', 'sort'));
+        return view('personal.' . __FUNCTION__, compact('subscriptions', 'sort'));
     }
 
     public function subscriptionsReleases($id)
@@ -148,7 +150,7 @@ class PersonalController extends Controller
 
             return responseCommon()->success([], 'Данные успешно обновлены.');
         }
-        return view('personal.'.__FUNCTION__, ['user' => $user]);
+        return view('personal.' . __FUNCTION__, ['user' => $user]);
     }
 
     public function magazines(Request $request)
@@ -157,10 +159,10 @@ class PersonalController extends Controller
         $releases = Auth::user()->getReleases();
         // Группируем по журналам
         $journals = $releases->groupBy('journal_id');
-        $journals = $journals->sortBy(function($releases) {
+        $journals = $journals->sortBy(function ($releases) {
                                    return $releases->first()->name;
-                               });
-        return view('personal.'.__FUNCTION__, compact('journals'));
+        });
+        return view('personal.' . __FUNCTION__, compact('journals'));
     }
     // Сортировка $data по столбцу $name в направлении $request->get('sort')
     public static function getSortBy($name, $request, &$data)
@@ -177,8 +179,9 @@ class PersonalController extends Controller
     public function changePassword(Request $request)
     {
         // Проверяем правильность ввода текущего пароля
-        if (!Auth::attempt(['email' => Auth::user()->email, 'password' => $request->get('password')]))
+        if (!Auth::attempt(['email' => Auth::user()->email, 'password' => $request->get('password')])) {
             return responseCommon()->validationMessages(null, ['password' => 'Неверно указан текущий пароль']);
+        }
 
         // Валидация нового пароля
         $validation = Validator::make($request->all(), ['new_password' => 'required|string|min:6|confirmed']);

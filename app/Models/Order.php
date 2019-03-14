@@ -49,8 +49,9 @@ class Order extends Model
 
     public function __get($name)
     {
-        if (isset($this->customFields[$name]))
+        if (isset($this->customFields[$name])) {
             return $this->customFields[$name];
+        }
 
         switch ($name) {
             case 'txtstatus':
@@ -75,7 +76,7 @@ class Order extends Model
         $items = json_decode($this->orderList);
         foreach ($items as &$item) {
             switch ($item->type) {
-                case Cart::PRODUCT_TYPE_ARTICLE :
+                case Cart::PRODUCT_TYPE_ARTICLE:
                     $item->image = $item->product->image;
                     $item->route = route('article', $item->product->code);
                     break;
@@ -236,12 +237,13 @@ class Order extends Model
 
     public function approve()
     {
-        if ($this->status === Order::STATUS_COMPLETED)
+        if ($this->status === Order::STATUS_COMPLETED) {
             return false;
+        }
         $items = json_decode($this->orderList);
         foreach ($items as $item) {
             switch ($item->type) {
-                case Cart::PRODUCT_TYPE_ARTICLE :
+                case Cart::PRODUCT_TYPE_ARTICLE:
                     $this->article()->attach($item->product->id);
                     break;
                 case Cart::PRODUCT_TYPE_RELEASE:

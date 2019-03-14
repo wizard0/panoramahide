@@ -38,7 +38,7 @@ class OrderedSubscription extends Model
 
     public function getBegin()
     {
-        return substr($this->start_month, 4, 2).'/'.substr($this->start_month, 0, 4);
+        return substr($this->start_month, 4, 2) . '/' . substr($this->start_month, 0, 4);
     }
 
     public function getType()
@@ -49,7 +49,7 @@ class OrderedSubscription extends Model
     public function getReleases()
     {
         // Высчитываем дату начала периуда подписки
-        $from     = substr($this->start_month, 0, 4).'-'.substr($this->start_month, 4, 2).'-01 00:00:00';
+        $from     = substr($this->start_month, 0, 4) . '-' . substr($this->start_month, 4, 2) . '-01 00:00:00';
         // Высчитываем дату конца периуда подписки
         $to_month = substr($this->start_month, 4, 2) + $this->term - 1;
         $to_year  = substr($this->start_month, 0, 4);
@@ -57,7 +57,7 @@ class OrderedSubscription extends Model
             $to_year++;
             $to_month -= 12;
         }
-        $to = $to_year.'-'.$to_month.'-31 23:59:59';
+        $to = $to_year . '-' . $to_month . '-31 23:59:59';
 
 
         return $this->journal

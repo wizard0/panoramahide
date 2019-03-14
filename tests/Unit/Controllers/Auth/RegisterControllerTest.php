@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Tests\FactoryTrait;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Mail;
 
 /**
  * Class for register controller test.
@@ -110,6 +111,7 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterSuccess()
     {
+        Mail::fake();
         try {
             $result = $this->controller()->register($this->request($this->registerData([
                 'g-recaptcha-response' => config('googlerecaptchav3.except_value'),

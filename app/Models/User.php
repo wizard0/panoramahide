@@ -90,20 +90,20 @@ class User extends Authenticatable
     {
         $physUsers  = OrderPhysUser::whereUserId($this->id)->pluck('id')->toArray();
         $legalUsers = OrderLegalUser::whereUserId($this->id)->pluck('id')->toArray();
-        $orders     = Order::where(function ($query) use($physUsers, $legalUsers) {
+        $orders     = Order::where(function ($query) use ($physUsers, $legalUsers) {
                                 $query->whereIn('phys_user_id', $physUsers)
                                       ->orWhereIn('legal_user_id', $legalUsers);
-                            });
+        });
 
         return $orders;
     }
     // Подписки пользователя
     public function getSubscriptions($sort = ['type' => 'asc'])
     {
-        $subscriptions = OrderedSubscription::whereHas('order', function($query) {
+        $subscriptions = OrderedSubscription::whereHas('order', function ($query) {
                             $query->where('status', 'completed')
                                   ->whereIn('order_id', $this->orders()->get()->pluck('id'));
-                         });
+        });
         $subscriptions = $subscriptions->orderBy('type', $sort['type']);
 
         return $subscriptions->get();
@@ -112,20 +112,19 @@ class User extends Authenticatable
     public function getReleases()
     {
         // Получаем выпуски пользователя доступные по заказам
-        $releases = Release::whereHas('order', function($query) {
-                        $query->where('status', 'completed')
-                              ->whereIn('order_id', $this->orders()->get()->pluck('id'));
-                    })
-                    // Получаем выпуски пользователя доступные по промокодам
-                    ->orWhereHas('promo_user', function($q) {
-                        $q->whereHas('user', function($q) {
-                            $q->where('id', $this->id);
-                        });
-                    })
-                    ->orderBy('active_date', 'desc');
+        $releases = Release::whereHas('order', function ($query) {
+            $query->where('status', 'completed')
+                  ->whereIn('order_id', $this->orders()->get()->pluck('id'));
+        })->orWhereHas('promoUser', function ($q) {
+        // Получаем выпуски пользователя доступные по промокодам
+            $q->whereHas('user', function ($q) {
+                $q->where('id', $this->id);
+            });
+        })->orderBy('active_date', 'desc');
 
         return $releases->get();
     }
+
     public static function createNew($data)
     {
         return self::create([

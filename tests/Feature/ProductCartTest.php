@@ -34,23 +34,18 @@ class ProductCartTest extends TestCase
         $this->release = factory(Release::class)->create(['journal_id' => $this->journal->id]);
     }
 
-    protected function tearDown()
-    {
-
-    }
-
     public function testWrongCartRequest()
     {
         $response = $this->post(route('cart.add'));
         $response->assertStatus(200)
-         ->assertJson([
-            'success' => false,
-        ]);
+                 ->assertJson([
+                    'success' => false,
+                 ]);
         $response = $this->post(route('cart.del'));
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => false,
-                ]);
+                 ]);
 
         $response = $this->postAjax(route('cart.add'), [
             'id'      => '$this->release->id',
@@ -84,7 +79,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
         // Добавляем в корзину ещё один экземпляр того же журнала
         $response = $this->postAjax(route('cart.add'), [
             'id'      => $this->release->id,
@@ -94,7 +89,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
     }
 
     public function testCartDel()
@@ -108,7 +103,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
         // Удаляем журнал из корзины
         $response = $this->postAjax(route('cart.del'), [
             'id'      => Cart::PRODUCT_TYPE_RELEASE . $this->release->id,
@@ -116,7 +111,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
     }
 
     public function testCartAddArticle()
@@ -127,7 +122,6 @@ class ProductCartTest extends TestCase
              ->create()
              ->each(function ($article) use ($authors) {
                 $article->authors()->saveMany($authors);
-
              }));
         // Добавляем их в корзину
         foreach ($this->release->articles as $article) {
@@ -139,9 +133,8 @@ class ProductCartTest extends TestCase
             $response->assertStatus(200)
                      ->assertJson([
                          'success' => true,
-                    ]);
+                     ]);
         }
-
     }
 
     public function testCartAddSubscription()
@@ -168,7 +161,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
     }
 
     public function testCartQtyChange()
@@ -179,7 +172,7 @@ class ProductCartTest extends TestCase
             'type'    => Cart::PRODUCT_TYPE_RELEASE,
             'version' => Cart::VERSION_PRINTED
         ]);
-        $prdId = Cart::PRODUCT_TYPE_RELEASE.$this->release->id;
+        $prdId = Cart::PRODUCT_TYPE_RELEASE . $this->release->id;
         // Имитируем ошибку
         $response = $this->post(route('cart.qty'), [
             'id'  => $prdId,
@@ -188,7 +181,7 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => false,
-                ]);
+                 ]);
         // меняем количество журналов на 2
         $response = $this->postAjax(route('cart.qty'), [
             'id'  => $prdId,
@@ -197,9 +190,8 @@ class ProductCartTest extends TestCase
         $response->assertStatus(200)
                  ->assertJson([
                     'success' => true,
-                ]);
+                 ]);
         $cart = new Cart(Session::get('cart'));
         $this->assertEquals($cart->items[$prdId]->qty, 2);
-
     }
 }

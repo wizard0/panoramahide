@@ -30,6 +30,6 @@ trait OrdersUsers
 
     public function __get($name)
     {
-        return parent::__get($name)?? parent::__get('l_'.$name);
+        return parent::__get($name) ?? parent::__get('l_' . $name);
     }
 }

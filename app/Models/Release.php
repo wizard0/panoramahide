@@ -19,7 +19,7 @@ class Release extends Model
     ];
     // Ссылка для перехода к читалке
     private $readerLink = null;
-//    protected $fillable = ['code'];
+    // protected $fillable = ['code'];
 
     public $rules = [
         'name' => 'required|string',
@@ -83,7 +83,8 @@ class Release extends Model
     {
         return $this->belongsToMany(Promocode::class);
     }
-    public function promo_user()
+
+    public function promoUser()
     {
         return $this->belongsToMany(PromoUser::class);
     }

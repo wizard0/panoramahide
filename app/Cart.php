@@ -75,7 +75,7 @@ class Cart
 
         if ($type == self::PRODUCT_TYPE_RELEASE) {
             $storedItems->title = $product->journal->name . ' №' . $product->number . '. ' . $product->year;
-        } else if ($type == self::PRODUCT_TYPE_SUBSCRIPTION) {
+        } elseif ($type == self::PRODUCT_TYPE_SUBSCRIPTION) {
             $storedItems->title = $product->journal->name . ' с ' . substr_replace($product->start_month, "/", 4, 0) . ' на ' . $product->term;
         }
 
