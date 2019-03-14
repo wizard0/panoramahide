@@ -19,7 +19,7 @@ class Release extends Model
     ];
     // Ссылка для перехода к читалке
     private $readerLink = null;
-//    protected $fillable = ['code'];
+    // protected $fillable = ['code'];
 
     public $rules = [
         'name' => 'required|string',

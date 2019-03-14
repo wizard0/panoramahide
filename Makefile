@@ -54,13 +54,13 @@ test: ## Тестировать проект
 paratest: ## Тестировать проект (тесты запускаются параллельно)
 	./vendor/brianium/paratest/bin/paratest -p8 --stop-on-failure --coverage-html=./test-coverage
 
-psr: ## Анализ кода по PSR. По умолчанию SRC=./app/* TESTS=./tests DBS=./database
+psr: ## Анализ кода по PSR. По умолчанию SRC=./app TESTS=./tests DBS=./database
 	@echo "\033[33m\n... Анализ кода классов ...\033[0m\n"
-	./vendor/squizlabs/php_codesniffer/bin/phpcs ${SRC} -n --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ${SRC} -n -s -p --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
 	@echo "\033[33m\n... Анализ кода миграций ...\033[0m\n"
-	./vendor/squizlabs/php_codesniffer/bin/phpcs ${DBS} -n --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ${DBS} -n -s -p --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
 	@echo "\033[33m\n... Анализ кода тестов ...\033[0m\n"
-	./vendor/squizlabs/php_codesniffer/bin/phpcs ${TESTS} -n --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
+	./vendor/squizlabs/php_codesniffer/bin/phpcs ${TESTS} -n -s -p --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
 
 analyse: ## Статический анализ кода
 	./artisan code:analyse || true
