@@ -9,6 +9,7 @@ use Tests\TestCase;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Mail;
 use Tests\FactoryTrait;
 use App\Models\Journal;
 use App\Models\Release;
@@ -18,7 +19,6 @@ use App\Models\User;
 use App\Models\Subscription;
 use App\Models\Article;
 use App\Cart;
-
 
 class PersonalTest extends TestCase
 {
@@ -248,6 +248,7 @@ class PersonalTest extends TestCase
 
     public function testProcessOrderPhysical()
     {
+        Mail::fake();
         $this->addToCart();
         $response = $this->postAjax(route('order.make'), $this->p_data);
         $response->assertStatus(200);

@@ -115,7 +115,7 @@ class User extends Authenticatable
         $releases = Release::whereHas('order', function ($query) {
             $query->where('status', 'completed')
                   ->whereIn('order_id', $this->orders()->get()->pluck('id'));
-        })->orWhereHas('promo_user', function ($q) {
+        })->orWhereHas('promoUser', function ($q) {
         // Получаем выпуски пользователя доступные по промокодам
             $q->whereHas('user', function ($q) {
                 $q->where('id', $this->id);
@@ -124,6 +124,7 @@ class User extends Authenticatable
 
         return $releases->get();
     }
+
     public static function createNew($data)
     {
         return self::create([
