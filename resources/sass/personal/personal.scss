@@ -61,6 +61,9 @@
   background: #e3e6e9;
   padding: 20px;
   margin: 0 0 45px 0;
+  @media (max-width: map-get($grid-breakpoints, sm)) {
+    margin: 0 0 15px 0;
+  }
 }
 
 .account-menu ul {

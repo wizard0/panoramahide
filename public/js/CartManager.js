@@ -61,7 +61,7 @@
             data: data,
             dataType: 'json',
             success: function (res) {
-                $('#cart-in-header').replaceWith(res.header);
+                $('.--cart-in-header').replaceWith(res.header);
                 if (res.cart && $('#personal-cart-content').length)
                     $('#personal-cart-content').replaceWith(res.cart);
 

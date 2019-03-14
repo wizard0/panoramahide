@@ -25,6 +25,7 @@ $brand-info: $blue;
 @import '~tippy.js/dist/tippy.css';
 
 // Frontend
+@import '../header';
 @import '../frontent/main';
 @import '../frontent/responsive';
 @import '../frontent/style';
