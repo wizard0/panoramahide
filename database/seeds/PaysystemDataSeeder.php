@@ -189,13 +189,13 @@ class PaysystemDataSeeder extends Seeder
             'paysystem_id' => $invoiceID
         ]);
 
-        $robokassa = \App\Models\Paysystem::getByCode(\App\Paysystem::ROBOKASSA);
+        $robokassa = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::ROBOKASSA);
         $robokassa->logo = 'paysystem_logo/robokassa.jpg';
         $robokassa->save();
-        $sberbank = \App\Models\Paysystem::getByCode(\App\Paysystem::SBERBANK);
+        $sberbank = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::SBERBANK);
         $sberbank->logo = 'paysystem_logo/sberbank.jpg';
         $sberbank->save();
-        $invoice = \App\Models\Paysystem::getByCode(\App\Paysystem::INVOICE);
+        $invoice = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::INVOICE);
         $invoice->logo = 'paysystem_logo/invoice.png';
         $invoice->save();
     }
