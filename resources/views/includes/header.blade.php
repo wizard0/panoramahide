@@ -13,6 +13,7 @@
                         </button>
                         <div id="menu">
                             <ul>
+                                <li><a href="/">{{ __('Главная') }}</a></li>
                                 <li><a href="{{ route('journals', ['sort_by' => 'name']) }}">{{ __('Журналы по алфавиту') }}</a></li>
                                 <li>
                                     <a href="#" class="toggle-button" data-target=".dropdown-flex-menu" data-toggle-next="1">
