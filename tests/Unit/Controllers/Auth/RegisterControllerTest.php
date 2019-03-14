@@ -110,6 +110,7 @@ class RegisterControllerTest extends TestCase
      */
     public function testRegisterSuccess()
     {
+        Mail::fake();
         try {
             $result = $this->controller()->register($this->request($this->registerData([
                 'g-recaptcha-response' => config('googlerecaptchav3.except_value'),

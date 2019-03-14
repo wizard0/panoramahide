@@ -191,6 +191,7 @@ class PromoControllerTest extends TestCase
      */
     public function testCodeGuestNewUser()
     {
+        Mail::fake();
         $oPromoCode = $this->activePromocode();
 
         $phone = $this->phone();
