@@ -6,7 +6,7 @@ use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Validation\Rule;
@@ -32,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/personal';
 
     /**
      * Create a new controller instance.
@@ -58,7 +58,7 @@ class RegisterController extends Controller
         $validateResister = Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', Rule::unique('users', 'email')],
+            'email' => ['required', 'email', Rule::unique('users', 'email')],
             'phone' => ['required', 'string', Rule::unique('users', 'phone')],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
             'password_confirmation' => ['required', 'string', 'min:6'],
@@ -84,14 +84,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'role_id' => 2,
-            'private' => isset($data['uf']['private_person']) ? 1 : 0,
+        return User::createNew([
             'name' => $data['name'],
             'last_name' => $data['last_name'],
             'email' => $data['email'],
-            'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
-            'password' => Hash::make($data['password']),
+            'phone' => $data['phone'],
+            'password' => $data['password'],
         ]);
     }
 
@@ -104,7 +102,6 @@ class RegisterController extends Controller
     public function register(Request $request)
     {
         $this->validator($request->all())->validate();
-
         $code = $request->get('g-recaptcha-response');
         if ($code !== config('googlerecaptchav3.except_value')) {
             $captcha = GoogleReCaptchaV3::setAction('auth/register')->verifyResponse(
@@ -117,7 +114,6 @@ class RegisterController extends Controller
                 ], 422);
             }
         }
-
         event(new Registered($user = $this->create($request->all())));
 
         $this->guard()->login($user);
@@ -127,5 +123,10 @@ class RegisterController extends Controller
                 'success' => true,
                 'redirect' => $this->redirectPath()
             ];
+    }
+
+    protected function registered(Request $request, $user)
+    {
+        \Mail::to($user->email)->send(new \App\Mail\Registration($request->get('email'), $request->get('password')));
     }
 }

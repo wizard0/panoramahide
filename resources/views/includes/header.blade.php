@@ -37,11 +37,13 @@ $categories = \App\Models\Category::has('journals')->where('active', 1)->withTra
                         <a href="#" class="grey-link" data-toggle="modal" data-target="#registration-modal">{{ __('Регистрация') }}</a>
                     @endif
                 </div>
-                <div class="request"><a href="#" data-toggle="modal" data-target="#request-modal">{{ __('Заявка на подписку') }}</a></div>
+                <div class="request">
+                    <a class="btn btn-outline-danger" href="#" data-toggle="modal" data-target="#request-modal">{{ __('Заявка на подписку') }}</a>
+                </div>
             </div>
 
             <div class="col-xl-10 col-lg-10 col-md-2 col-sm-2 col-2 order-1 order-sm-1 order-xl-4 order-lg-4 order-md-1">
-                <nav class="navmenu navmenu-fixed-left offcanvas" role="navigation">
+                <nav class=" {{-- @todo подозрения, что на js эти классы удаляются, тогда скачет навигация, что недопустимо - navmenu navmenu-fixed-left offcanvas --}}" role="navigation">
                     <ul class="topmenu">
                         <li><a href="{{ route('journals', ['sort_by' => 'name']) }}">{{ __('Журналы по алфавиту') }}</a></li>
                         <li class="dropdown">
@@ -70,7 +72,7 @@ $categories = \App\Models\Category::has('journals')->where('active', 1)->withTra
                 </div>
             </div>
             <div class="d-flex col-xl-2 col-lg-2 col-md-2 col-sm-2 col-2 order-sm-3 order-3 order-xl-5 order-lg-5 order-md-3 offset-sm-1 offset-xl-0 offset-lg-0 offset-md-2 justify-content-xl-center justify-content-lg-center justify-content-end">
-                @include('personal.header_cart', ['cart' => Session::has('cart') ? Session::get('cart') : null])
+                @include('personal.cart.header', ['cart' => Session::has('cart') ? Session::get('cart') : null])
             </div>
         </div>
     </div>

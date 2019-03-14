@@ -123,7 +123,7 @@ class Journal extends Model
 
     public static function getSome($filters)
     {
-        $sort = $filters['sort_by'];
+        $sort = $filters['sort_by'] ?? 'name';
         $order = isset($filters['order_by']) ? $filters['order_by'] : 'asc';
 
         $q = self::where('active', 1)->orderBy('id', 'asc')->withTranslation();

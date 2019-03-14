@@ -1,0 +1,55 @@
+/*!
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+.toast {
+  font-size: 14px;
+  box-shadow: 0 0 6px #999 !important;
+  opacity: .9 !important;
+  padding: 10px 10px 10px 50px !important;
+  &:hover {
+    box-shadow: none;
+    opacity: 1 !important;
+  }
+  user-select: none;
+  .toast-close-button {
+    width: 20px;
+    position: absolute;
+    top: 5px;
+    padding-right: 5px;
+    padding-left: 5px;
+    right: 5px;
+    outline: none;
+  }
+}
+.toast-top-right {
+  right: 25px;
+}
+#toast-container > div {
+  &:hover {
+    box-shadow: none;
+  }
+}
+
+#toast-container {
+  .toast {
+    background-color: #030303
+  }
+
+  .toast-success {
+    background-color: #51A351
+  }
+
+  .toast-error {
+    background-color: #BD362F
+  }
+
+  .toast-info {
+    background-color: #2F96B4
+  }
+
+  .toast-warning {
+    background-color: #F89406
+  }
+}

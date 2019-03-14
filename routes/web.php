@@ -14,9 +14,6 @@ use \Illuminate\Support\Facades\Route;
 */
 Route::get('/', 'MainpageController@index')->name('index');
 
-//Route::get('/test/', 'TestController');
-
-
 Route::group(['prefix' => 'admin'], function () {
     Route::get('/login', 'Admin\LoginController')->name('admin.login');
     Route::post('/login', 'Admin\LoginController@login');
@@ -66,23 +63,29 @@ Route::group(['prefix' => 'admin'], function () {
     });
 });
 
-//Auth::routes();
-
-
-
-Route::post('/add-to-cart', 'ProductController@addToCart');
-Route::post('/delete-from-cart', 'ProductController@deleteFromCart');
+Route::post('/add-to-cart', 'ProductController@addToCart')->name('cart.add');
+Route::post('/delete-from-cart', 'ProductController@deleteFromCart')->name('cart.del');
+Route::post('/qty-change-cart', 'ProductController@qtyCartChange')->name('cart.qty');
 
 Route::group(['prefix' => 'personal'], function () {
-    Route::get('/', 'PersonalController@index')->name('personal');
-
-    Route::get('cart', 'PersonalController@cart')
-        ->name('cart');
-    Route::get('order/make', 'PersonalController@orderMake')
-        ->name('order.make');
+    Route::get('login', 'PersonalController@login')->name('personal.login');
+    //Route::get('login', 'PersonalController@showLinkRequestForm')->name('forgotPassword');
+    Route::get('cart', 'PersonalController@cart')->name('personal.cart');
+    Route::get('order/make', 'PersonalController@orderMake')->name('order.make');
     Route::post('order/make', 'PersonalController@processOrder');
-    Route::get('order/complete/{id}', 'PersonalController@completeOrder')
-        ->name('order.complete');
+});
+Route::group(['prefix' => 'personal', 'middleware' => 'auth'], function () {
+    Route::get('/', 'PersonalController@index')->name('personal');
+    Route::get('orders', 'PersonalController@orders')->name('personal.orders');
+    Route::get('order/{id}', 'PersonalController@orders')->where('id', '[0-9]+')->name('personal.order');
+    Route::get('subscriptions', 'PersonalController@subscriptions')->name('personal.subscriptions');
+    Route::get('subscriptions/{id}/releases', 'PersonalController@subscriptionsReleases')->name('subscriptions.releases');
+    Route::any('profile', 'PersonalController@profile')->name('personal.profile');
+    Route::post('profile/password', 'PersonalController@changePassword')->name('personal.profile.password');
+    Route::get('magazines', 'PersonalController@magazines')->name('personal.magazines');
+
+    Route::get('order/complete/{id}', 'PersonalController@completeOrder')->name('order.complete');
+    Route::get('order/cancel/{id}', 'PersonalController@cancelOrder')->name('order.cancel');
 
     Route::group(['prefix' => 'robokassa'], function () {
         Route::get('result_receiver', 'PaymentController@robokassaResult');
@@ -90,7 +93,7 @@ Route::group(['prefix' => 'personal'], function () {
         Route::get('fail', 'PaymentController@robokassaFail');
     });
 
-    Route::get('order/payment', 'PaymentController@payment')->name('personal.order.payment');
+    Route::get('order/payment/{id}', 'PaymentController@payment')->name('personal.order.payment');
 });
 
 Route::group(['prefix' => 'magazines'], function () {
@@ -126,10 +129,10 @@ Route::group(['prefix' => 'search'], function () {
 
 Route::get('/logout', 'PersonalController@logout');
 
-//Route::post('/login', 'PersonalController@login')->name('login');
-Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
-Route::post('/auth/login', 'Auth\LoginController@login')->name('login');
-Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
+Route::auth();
+//Route::post('/auth/register', 'Auth\RegisterController@register')->name('register');
+//Route::post('/auth/login', 'Auth\LoginController@login')->name('login');
+//Route::post('/auth/code', 'Auth\RegisterController@code')->name('code');
 
 Route::group(['prefix' => 'promo'], function () {
     Route::get('/', 'PromoController@index')->name('promo.index');
@@ -187,3 +190,9 @@ Route::group(['prefix' => 'reader/api'], function () {
     Route::get('/{partner}/{user}/{quota}/releases', 'ReaderApiController@list')->name('api.releases');
     Route::get('/{partner}/{user}/{quota}/release/{release}.html', 'ReaderApiController@release')->name('api.release');
 });
+
+Route::get('order/approve/{id}', function($id) {
+    // Заглушка для подтверждения заказа
+    App\Models\Order::find($id)->approve();
+});
+

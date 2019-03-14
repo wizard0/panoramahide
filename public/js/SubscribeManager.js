@@ -10,7 +10,7 @@
         this.resultPrice = $('#cur_price');
         this.quantityInput = $('input#quantity');
         this.singlePrice = $('input#single_price');
-        this.version = $('input[name="version"]');
+        this.version = $('.container').find('input[name="version"]');
 
         if (typeof params != 'undefined') {
             params = JSON.parse(params);

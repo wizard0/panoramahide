@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="17px" viewBox="0 0 15 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Icons / Share min icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="6.04330832" y="7.61776436" width="1.54608325" height="6.01254573"></rect>
+        <rect id="path-2" x="6.04330832" y="2.71851292" width="1.54608325" height="6.01254573"></rect>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Articles" transform="translate(-268.000000, -924.000000)">
+            <g id="Контент" transform="translate(202.000000, 654.123047)">
+                <g id="Articles" transform="translate(1.000000, 108.000000)">
+                    <g id="Article-01" transform="translate(0.000000, 0.718750)">
+                        <g id="Действия" transform="translate(32.019531, 158.390625)">
+                            <g id="Icons">
+                                <g id="Icons-/-Share-min-icon" transform="translate(34.116211, 2.826172)">
+                                    <circle id="Oval-10" stroke="#7E8C9F" stroke-width="1.2" cx="2.48278698" cy="8.1997329" r="2.14733776"></circle>
+                                    <g id="Rectangle-7" transform="translate(6.816350, 10.624037) rotate(-60.000000) translate(-6.816350, -10.624037) ">
+                                        <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-1"></use>
+                                        <rect stroke="#7E8C9F" stroke-width="1" x="6.54330832" y="8.11776436" width="1" height="5.01254573"></rect>
+                                    </g>
+                                    <g id="Rectangle-7" transform="translate(6.816350, 5.724786) scale(1, -1) rotate(-60.000000) translate(-6.816350, -5.724786) ">
+                                        <use fill="#D8D8D8" fill-rule="evenodd" xlink:href="#path-2"></use>
+                                        <rect stroke="#7E8C9F" stroke-width="1" x="6.54330832" y="3.21851292" width="1" height="5.01254573"></rect>
+                                    </g>
+                                    <circle id="Oval-10-Copy" stroke="#7E8C9F" stroke-width="1.2" cx="11.0321192" cy="3.21734693" r="2.14733776"></circle>
+                                    <circle id="Oval-10-Copy-2" stroke="#7E8C9F" stroke-width="1.2" cx="11.0321192" cy="13.2784669" r="2.14733776"></circle>
+                                </g>
+                            </g>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

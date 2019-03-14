@@ -80,7 +80,7 @@ class PaysystemDataSeeder extends Seeder
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись генерального директора',
             'code' => 'CEO_signature',
-            'value' => '/storage/paysystem_invoice/ceo_sign.png',
+            'value' => 'paysystem_invoice/ceo_sign.png',
             'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
@@ -111,14 +111,14 @@ class PaysystemDataSeeder extends Seeder
         DB::table('paysystem_data')->insert([
             'name' => 'Печать',
             'code' => 'stamp',
-            'value' => '/storage/paysystem_invoice/stamp.png',
+            'value' => 'paysystem_invoice/stamp.png',
             'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
         DB::table('paysystem_data')->insert([
             'name' => 'Подпись главного бухгалтера',
             'code' => 'chief_accountant_sign',
-            'value' => '/storage/paysystem_invoice/chief_accountant_sign.png',
+            'value' => 'paysystem_invoice/chief_accountant_sign.png',
             'type' => \App\Models\PaysystemData::TYPE_FILE,
             'paysystem_id' => $invoiceID
         ]);
@@ -190,13 +190,13 @@ class PaysystemDataSeeder extends Seeder
         ]);
 
         $robokassa = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::ROBOKASSA);
-        $robokassa->logo = '/storage/paysystem_logo/robokassa.jpg';
+        $robokassa->logo = 'paysystem_logo/robokassa.jpg';
         $robokassa->save();
         $sberbank = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::SBERBANK);
-        $sberbank->logo = '/storage/paysystem_logo/sberbank.jpg';
+        $sberbank->logo = 'paysystem_logo/sberbank.jpg';
         $sberbank->save();
         $invoice = \App\Models\Paysystem::getByCode(\App\Models\Paysystem::INVOICE);
-        $invoice->logo = '/storage/paysystem_logo/invoice.png';
+        $invoice->logo = 'paysystem_logo/invoice.png';
         $invoice->save();
     }
 }

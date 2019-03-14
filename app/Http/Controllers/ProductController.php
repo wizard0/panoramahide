@@ -18,13 +18,12 @@ class ProductController extends Controller
             $type = $request->get('type');
             $id = $request->get('id');
             $version = $request->get('version');
-            $quantity = $request->get('quantity');
+            $quantity = $request->has('quantity') ? $request->get('quantity') : 1;
             if ($request->has('additionalData')) {
                 $product = $this->getModel($type, $id, $request->get('additionalData'));
             } else {
                 $product = $this->getModel($type, $id);
             }
-
             $cart = $this->getCart();
             if (!$cart->add($product, $version, $quantity)) {
                 return response()->json([
@@ -33,7 +32,23 @@ class ProductController extends Controller
                     'message' => 'No price'
                 ]);
             }
-            return $this->updateCart($cart);
+            return response()->json([
+                'success' => true,
+                'header' => $this->updateCart($cart),
+            ]);
+        }
+        return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
+    }
+
+    public function qtyCartChange(Request $request)
+    {
+        if ($request->ajax()) {
+            $cart = $this->getCart();
+            $cart->changeQty($request->get('id'), $request->get('qty'));
+            return response()->json([
+                'success' => true,
+                'header' => $this->updateCart($cart),
+            ]);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
@@ -41,13 +56,13 @@ class ProductController extends Controller
     public function deleteFromCart(Request $request)
     {
         if ($request->ajax()) {
-            $type = $request->get('type');
-            $id = $request->get('id');
-
             $cart = $this->getCart();
-            $product = $this->getModel($type, $id);
-            $cart->delete($product, $type);
-            return $this->updateCart($cart);
+            $cart->delete($request->get('id'));
+
+            return responseCommon()->success([
+                'header' => $this->updateCart($cart),
+                'cart' => view('personal.cart.content', ['cart' => Session::get('cart'), 'displayCheckout' => true])->render(),
+            ]);
         }
         return json_encode(['success' => false, 'error' => true, 'message' => 'The request must be AJAX']);
     }
@@ -55,7 +70,7 @@ class ProductController extends Controller
     public function getHeaderCart()
     {
         $cart = Session::get('cart');
-        return view('personal.header_cart', compact('cart'));
+        return view('personal.cart.header', compact('cart'))->render();
     }
 
     private function getModel($type, $id, $additionalData = null)
@@ -79,7 +94,12 @@ class ProductController extends Controller
 
     private function updateCart($cart)
     {
-        Session::put('cart', $cart);
+        if (empty($cart->items)) {
+            Session::forget('cart');
+        } else {
+            Session::put('cart', $cart);
+        }
+
         return $this->getHeaderCart();
     }
 }

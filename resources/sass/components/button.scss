@@ -1,0 +1,25 @@
+/*!
+ * Copyright (c) 2018-2019 "ИД Панорама"
+ * Автор модуля: Дмитрий Поскачей (dposkachei@gmail.com)
+ */
+
+/* ---------------------------------------------- */
+.btn {
+  outline: none;
+}
+a.btn-primary {
+  color: #fff;
+}
+
+.btn-group-toggle {
+  .btn-outline-secondary {
+    cursor: pointer;
+    &.active {
+
+    }
+    &:hover {
+      color: $secondary;
+      background-color: lighten($secondary, 50%);
+    }
+  }
+}

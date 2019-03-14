@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Author;
 use App\Models\Category;
+use App\Models\Subscription;
 use App\Models\Journal;
 use App\Models\JournalSentArticle;
 use Illuminate\Http\Request;

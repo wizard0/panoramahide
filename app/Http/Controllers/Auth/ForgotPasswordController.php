@@ -29,4 +29,14 @@ class ForgotPasswordController extends Controller
     {
         $this->middleware('guest');
     }
+    /**
+     * Display the form to request a password reset link.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function showLinkRequestForm()
+    {
+        self::getRouteNameToView('forgot_password');
+        return view('personal.login.forgot_password');
+    }
 }

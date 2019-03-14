@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49 (51002) - http://www.bohemiancoding.com/sketch -->
+    <title>Delete Bell Icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Icons-/-Delete-Bell-Icon" transform="translate(-1.000000, -3.000000)">
+            <g id="Delete-Bell-Icon" transform="translate(0.789062, 0.674805)">
+                <circle id="Oval-6" fill="#E63201" cx="4.40722656" cy="14.7873535" r="1.5"></circle>
+                <path d="M3.3536377,3.61206055 L13.8583984,12.1129761" id="Path-11" stroke="#E63201" stroke-width="1.4" stroke-linecap="round"></path>
+                <path d="M4.89678955,7.3850708 C4.53631592,7.87693278 3.93448893,8.19140625 3.09130859,8.32849121 C1.82653809,8.53411865 0.149902344,9.75878906 1.50152588,10.560791 C2.40260824,11.095459 5.11336263,12.4584554 9.63378906,14.6497803 C10.5370687,14.872762 11.0294189,14.6918132 11.1108398,14.1069336 C11.1922607,13.522054 11.0206095,12.7497559 10.5958862,11.7900391" id="Path-2" stroke="#E63201" stroke-width="1.2" stroke-linecap="round"></path>
+                <path d="M6.82409668,4.08776855 C7.99979655,2.72814941 9.36889648,2.55904134 10.9313965,3.58044434 C12.4938965,4.60184733 12.7607218,6.03647868 11.7318726,7.88433838" id="Path-4" stroke="#E63201" stroke-width="1.2" stroke-linecap="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>

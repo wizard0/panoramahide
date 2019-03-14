@@ -3,7 +3,7 @@
 @section('content')
     <div class="cover" style="background: url(/img/cover-bg.jpg) center center no-repeat;">
         <div class="container h-100">
-            <form method="GET" action="/search/" id="search_form_index" class="h-100">
+            <form method="GET" action="/search/" id="search_form_index" class="h-100 m-t-0">
                 <div class="d-flex flex-column h-100 justify-content-center align-items-center">
                     <div class="row justify-content-center w-100">
                         <div class="col-xl-6 col-lg-6 col-12 text-center">
@@ -59,7 +59,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8"><div class="latest-articles">
-                        <h2 class="text-uppercase text-center">Новые статьи</h2>
+                        <h2 class="text-uppercase text-center m-b-20 m-t-20">Новые статьи</h2>
                         <div class="article-item">
                             <h3>
                                 <a href="/articles/kalendar_delovykh_meropriyatiy_po_selskomu_khozyaystvu_na_dekabr_2018_goda_423398_article_0011.html.html" class="black-link">Календарь деловых мероприятий по сельскому хозяйству на декабрь 2018 года</a>

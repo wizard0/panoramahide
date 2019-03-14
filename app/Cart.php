@@ -40,18 +40,20 @@ class Cart
         $price = 0;
         $type = '';
 
-        switch (get_class($product)) {
-            case Models\Release::class:
+        $prClass = (preg_match('#(.*)\\\\(.*)$#', get_class($product), $match) ? $match[2] : null);
+
+        switch ($prClass) {
+            case 'Release':
                 $price = $version == self::VERSION_ELECTRONIC
                     ? $product->price_for_electronic
                     : $product->price_for_printed;
                 $type = self::PRODUCT_TYPE_RELEASE;
                 break;
-            case Models\Article::class:
+            case 'Article':
                 $price = $product->price;
                 $type = self::PRODUCT_TYPE_ARTICLE;
                 break;
-            case Models\OrderedSubscription::class:
+            case 'OrderedSubscription':
                 $price = $product->single_price;
                 $type = self::PRODUCT_TYPE_SUBSCRIPTION;
                 break;
@@ -67,43 +69,49 @@ class Cart
             'version' => $version,
             'price' => $price,
             'product' => $product,
-            'id' => $type . $product->id
+            'id' => $type . $product->id,
+            'title' => $product->name,
         ];
-        if ($this->items) {
-            if (array_key_exists($type . $product->id, $this->items)) {
-                $storedItems = $this->items[$type . $product->id];
-                $storedItems->qty++;
-            }
+
+        if ($type == self::PRODUCT_TYPE_RELEASE) {
+            $storedItems->title = $product->journal->name . ' №' . $product->number . '. ' . $product->year;
+        } elseif ($type == self::PRODUCT_TYPE_SUBSCRIPTION) {
+            $storedItems->title = $product->journal->name . ' с ' . substr_replace($product->start_month, "/", 4, 0) . ' на ' . $product->term;
+        }
+
+        if ($this->items && array_key_exists($type . $product->id, $this->items)) {
+            $storedItems = $this->items[$type . $product->id];
+            $storedItems->qty++;
         }
 
         $storedItems->price = $price * $storedItems->qty;
         $this->items[$type . $product->id] = $storedItems;
         $this->totalQty = sizeof($this->items);
-        $this->totalPrice += $price;
+        $this->totalPrice += $storedItems->price;
+
+        return true;
     }
 
-    public function delete($product, $type)
+    public function delete($id)
     {
-        $itemIndex = $type . $product->id;
-        $item = $this->items[$itemIndex];
+        $item = $this->items[$id];
         $itemPrice = $item->price;
         $itemQty = $item->qty;
 
-        unset($this->items[$itemIndex]);
+        unset($this->items[$id]);
         $this->totalQty = sizeof($this->items);
         $this->totalPrice -= $itemPrice * $itemQty;
     }
 
-    public function changeQty($product, $type, $q)
+    public function changeQty($id, $qty)
     {
-        $itemIndex = $type . $product->id;
-        $item = $this->items[$itemIndex];
+        $item = $this->items[$id];
         $itemPrice = $item->price;
         $itemQty = $item->qty;
 
-        $this->items[$itemIndex]->qty = $q;
+        $this->items[$id]->qty = $qty;
         $this->totalPrice -= $itemPrice * $itemQty;
-        $this->totalPrice += $itemPrice * $q;
+        $this->totalPrice += $itemPrice * $qty;
         $this->totalQty = sizeof($this->items);
     }
 }

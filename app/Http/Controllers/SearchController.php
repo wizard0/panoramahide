@@ -41,7 +41,7 @@ class SearchController extends Controller
      * @param string $seek
      * @param string $found
      *
-     * @return string|null sentences from article where query word (q) was found
+     * @return string|null|array sentences from article where query word (q) was found
      */
     private function getFoundString($seek, $found)
     {

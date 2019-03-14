@@ -4,7 +4,7 @@ $releases->load('journal.translations');
 @endphp
 
 <div class="holder latest-issues">
-    <h2 class="text-uppercase text-center">{{ __('Новые журналы') }}</h2>
+    <h2 class="text-uppercase text-center m-b-20 m-t-20">{{ __('Новые журналы') }}</h2>
     <div class="container">
         <div class="row">
 

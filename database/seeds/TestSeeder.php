@@ -23,6 +23,7 @@ class TestSeeder extends Seeder
         $this->clear();
 
         $this->call(FullDBTestSeeder::class);
+        $this->call(\Tests\Seeds\UsersTableSeeder::class);
 
         $this->call(PaysystemSeeder::class);
         $this->call(PaysystemDataSeeder::class);
