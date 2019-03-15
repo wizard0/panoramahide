@@ -150,6 +150,9 @@ a:hover {
 
 .request {
   max-width: 200px;
+  @media (max-width: 991px) {
+    margin-bottom: 10px;
+  }
 }
 
 .request a {
@@ -307,6 +310,7 @@ h2 {
 }
 
 .cart-holder a.dropdown-toggle {
+  margin-left: 10px;
   font-size: 14px;
   padding-left: 30px;
   background: url(../img/cart-icon.svg) left center no-repeat;
