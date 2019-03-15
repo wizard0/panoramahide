@@ -36,6 +36,11 @@ class Release extends Model
         return $this->belongsTo(Journal::class);
     }
 
+    public function user()
+    {
+        return $this->belongsToMany(User::class);
+    }
+
     public function articles()
     {
         return $this->hasMany(Article::class);
@@ -62,7 +67,30 @@ class Release extends Model
             return ($User->releases()->find($this->id) != null ? true : false);
         } else {
             // Пользователь партала
-            return true;
+            // Если пользователь уже открывал этот журнал - возвращаем true
+            if ($User->releases->find($this->id)) {
+                return true;
+            }
+            $result = false;
+            // Если это промо юзер
+            if ($User->promoUser) {
+                // Проверяем, доступен ли этот выпуск по промокодам юзера
+                $releases = Release::whereId($this->id);
+                $User->promoUser->getReleasesQuery($releases);
+                if ($releases->count()) {
+                    //Если да, то помечаем выпуск как открытый
+                    $this->promoUser()->save($User->promoUser);
+                    $result = true;
+                }
+            }
+            // Ищем текущий выпуск среди купленных, в подписках и смотрим на результат поиска в промокодах
+            if (self::getReleasesByOrdersQuery($User->orders())->find($this->id) ||
+                $User->subscriptionsHasRelease($this) || $result) {
+                // Устанавливаем связь release - user, что бы упростить проверки при следующих открытиях
+                $this->user()->save($User);
+                return true;
+            }
+            return false;
         }
     }
     public function getLink()
@@ -91,5 +119,13 @@ class Release extends Model
     public function order()
     {
         return $this->belongsToMany(Order::class, 'order_product', 'release_id', 'order_id');
+    }
+
+    public static function getReleasesByOrdersQuery($orders)
+    {
+        return self::whereHas('order', function ($query) use ($orders) {
+               $query->where('status', 'completed')
+                     ->whereIn('order_id', $orders->get()->pluck('id'));
+        });
     }
 }

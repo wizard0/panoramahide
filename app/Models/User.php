@@ -70,11 +70,20 @@ class User extends Authenticatable
         return $this->hasMany(UserSearch::class);
     }
 
-    public function promo(): Relation
+    public function promoUser(): Relation
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
-
+    // Подписки пользователя
+    public function ordersSubscriptions()
+    {
+        return $this->hasManyThrough(OrderedSubscription::class, Order::class);
+    }
+    // Выпуски открытые пользователем
+    public function releases()
+    {
+        return $this->belongsToMany(Release::class);
+    }
     public function getPhoneFormatAttribute(): string
     {
         return phoneFormat($this->phone);
@@ -108,23 +117,30 @@ class User extends Authenticatable
 
         return $subscriptions->get();
     }
+    // Проверяем, доступен ли релиз по подпискам пользователя
+    public function subscriptionsHasRelease($release)
+    {
+        foreach ($this->getSubscriptions() as $subscription) {
+            if ($subscription->getReleases()->contains('id', $release->id)) {
+                return true;
+            }
+        }
+        return false;
+    }
     // Выпуски доступные пользователю по заказам/промокодам
     public function getReleases()
     {
         // Получаем выпуски пользователя доступные по заказам
-        $releases = Release::whereHas('order', function ($query) {
-            $query->where('status', 'completed')
-                  ->whereIn('order_id', $this->orders()->get()->pluck('id'));
-        })->orWhereHas('promoUser', function ($q) {
-        // Получаем выпуски пользователя доступные по промокодам
-            $q->whereHas('user', function ($q) {
-                $q->where('id', $this->id);
-            });
-        })->orderBy('active_date', 'desc');
+        $releases = Release::getReleasesByOrdersQuery($this->orders());
+
+        // Получаем выпуски пользователя доступные по промокодам, если они есть
+        if ($this->promoUser) {
+            $this->promoUser->getReleasesQuery($releases, true);
+        }
+        $releases->orderBy('active_date', 'desc');
 
         return $releases->get();
     }
-
     public static function createNew($data)
     {
         return self::create([
