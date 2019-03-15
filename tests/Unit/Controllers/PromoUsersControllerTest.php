@@ -87,7 +87,7 @@ class PromoUsersControllerTest extends TestCase
         ], true);
         $result = $this->controller()->store($request);
         $this->assertTrue($result['success']);
-        $this->assertNotNull($this->user()->promo);
+        $this->assertNotNull($this->user()->promoUser);
     }
 
     /**

@@ -44,7 +44,7 @@ class PromocodeService
      */
     public function promoUser(): PromoUser
     {
-        $this->promoUser = Auth::user()->promo;
+        $this->promoUser = Auth::user()->promoUser;
         return $this->promoUser;
     }
 

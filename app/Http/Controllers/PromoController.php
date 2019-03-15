@@ -59,7 +59,7 @@ class PromoController extends Controller
 
         $oGroups = $oGroups->get();
 
-        $oPromoUser = Auth::user()->promo;
+        $oPromoUser = Auth::user()->promoUser;
 
         $oJournals = (new PromocodeCustomService())->setPromoUser($oPromoUser)->getPromoUserJournals();
 
@@ -92,7 +92,7 @@ class PromoController extends Controller
     {
         $aJournals = $request->get('journal::promocode');
 
-        $oPromoUser = Auth::user()->promo;
+        $oPromoUser = Auth::user()->promoUser;
         $oService = new PromocodeCustomService(null, $oPromoUser);
 
         $a = [];
@@ -289,7 +289,7 @@ class PromoController extends Controller
 
         $oPromoUserService = new PromoUserService();
 
-        $oPromoUser = $oUser->promo;
+        $oPromoUser = $oUser->promoUser;
         if (is_null($oPromoUser)) {
             // создание промо-участника и использования кода
             $oPromoUser = $oPromoUserService->create([

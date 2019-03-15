@@ -271,7 +271,10 @@ class ReaderControllerTest extends TestCase
     {
         $this->actingAs($this->user);
 
+        // Устанавливаем отношение release - user, что бы 1 выпуск был доступен
+        $this->user->releases()->sync(1);
         $result = $this->controller()->release($this->request());
+
         $this->assertTrue(!empty($result['data']));
     }
 
