@@ -25,6 +25,45 @@ $(document).ready(function() {
         $('#legal_user_form').toggleClass('hidden');
     });
 
+    // мобильное меню
+    $('.--open-toggle-menu').click(function () {
+        let $element = $(this);
+        let $menu = $('#menu');
+        $menu.toggleClass('active');
+        let $fa = $element.find('.fa');
+        if ($menu.hasClass('active')) {
+            $element.addClass('__fixed');
+            $fa.addClass('fa-times');
+            $fa.removeClass('fa-bars');
+            $('.header .__menu').addClass('fill');
+        } else {
+            $element.removeClass('__fixed');
+            $fa.addClass('fa-bars');
+            $fa.removeClass('fa-times');
+            $('.header .__menu').removeClass('fill');
+        }
+    });
+
+    // меню в мобильном меню
+    $('.toggle-button').click(function () {
+        let $element = $(this);
+        console.log($element.data('toggle-next'));
+        if ($element.data('toggle-next')) {
+            let $target = $element.next($element.data('target'));
+            $target.toggleClass('active');
+            let $fa = $element.find('.fa');
+            if ($fa.length) {
+                if (!$target.hasClass('active')) {
+                    $fa.addClass('fa-chevron-down');
+                    $fa.removeClass('fa-chevron-up');
+                } else {
+                    $fa.addClass('fa-chevron-up');
+                    $fa.removeClass('fa-chevron-down');
+                }
+            }
+        }
+    });
+
     // валидация оформления заказов, закомментирован из-за ajax-form
     $('#order_confirm_button').click(function() {
         let $content = $('#order_form_content');

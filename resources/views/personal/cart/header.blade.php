@@ -1,8 +1,8 @@
-<div class="cart-holder" id="cart-in-header">
+<div class="cart-holder --cart-in-header" id="cart-in-header" >
     <ul>
         <li class="dropdown">
             <a class="dropdown-toggle"
-               @if($cart)
+               @if($cart && (!isset($toCart) || !$toCart))
                href="#" role="button" id="dropdownMenuLink3" data-toggle="dropdown" aria-haspopup="true"
                aria-expanded="false"
                @else

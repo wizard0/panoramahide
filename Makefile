@@ -41,6 +41,14 @@ build: clear ## Сборать проект
 	npm install
 	npm run dev
 
+build-php: ## Сборать php модули проекта
+	composer install
+	composer dumpautoload
+
+build-npm: ## Сборать npm модули проект
+	npm install
+	npm run dev
+
 seed: ## Заполнить БД тестовыми данными
 	./artisan migrate:fresh
 	./artisan db:seed --class=TestSeeder
@@ -62,7 +70,10 @@ psr: ## Анализ кода по PSR. По умолчанию SRC=./app TESTS=
 	@echo "\033[33m\n... Анализ кода тестов ...\033[0m\n"
 	./vendor/squizlabs/php_codesniffer/bin/phpcs ${TESTS} -n -s -p --report-full --colors --standard=PSR1 --standard=PSR2 --standard=PSR12 || true
 
-analyse: ## Статический анализ кода
+analyse: ## Статический анализ кода (Уровень 5)
 	./artisan code:analyse || true
+
+analyse-hard: ## Статический анализ кода (Уровень 7)
+	./artisan code:analyse --level=7 || true
 
 ---------------: ## ---------------

@@ -27,10 +27,10 @@
 }
 
 @media (min-width: 376px) and (max-width: 500px) {
-  .cover {
-    width: 70%;
-    margin-left: 15%;
-  }
+  //.cover {
+  //  width: 70%;
+  //  margin-left: 15%;
+  //}
 }
 
 @media (max-width: 375px) {
@@ -43,10 +43,10 @@
   .contents {
     margin: 0;
   }
-  .cover {
-    width: 80%;
-    margin-left: 10%;
-  }
+  //.cover {
+  //  width: 80%;
+  //  margin-left: 10%;
+  //}
   .search-holder {
     width: 100%;
     margin: 0;
@@ -55,9 +55,9 @@
     padding-left: 4px;
   }
 
-  .cover {
-    padding-top: 30px;
-  }
+  //.cover {
+  //  padding-top: 30px;
+  //}
 
   .contents .heading {
     padding: 10px 20px;
