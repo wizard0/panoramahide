@@ -41,6 +41,14 @@ build: clear ## Сборать проект
 	npm install
 	npm run dev
 
+build-php: ## Сборать php модули проекта
+	composer install
+	composer dumpautoload
+
+build-npm: ## Сборать npm модули проект
+	npm install
+	npm run dev
+
 seed: ## Заполнить БД тестовыми данными
 	./artisan migrate:fresh
 	./artisan db:seed --class=TestSeeder
