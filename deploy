@@ -13,6 +13,7 @@ if [ -d "$PROJECT" ]; then
     mv $PROJECT $PROJECT.prev
     mv $PROJECT.new $PROJECT
     cd $PROJECT
+    npm run dev
     php72 ./artisan config:cache
     php72 ./artisan cache:clear
 fi
