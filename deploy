@@ -9,7 +9,11 @@ if [ -d "$PROJECT.prev" ]; then
     rm -rf $PROJECT.prev
 fi
 
-if [ -d "$PROJECT" ]; then
+if [ -d "$PROJECT.new" ] && [ ! -d "$PROJECT" ]; then
+    mv $PROJECT.new $PROJECT
+fi
+
+if [ -d "$PROJECT" ] && [ -d "$PROJECT.new" ]; then
     mv $PROJECT $PROJECT.prev
     mv $PROJECT.new $PROJECT
     cd $PROJECT
