@@ -37,4 +37,6 @@ return [
     'users and roles' => 'Users and Roles',
     'users' => 'Users',
     'roles' => 'Roles',
+    'inactive' => 'Inactive',
+    'active' => 'Active',
 ];

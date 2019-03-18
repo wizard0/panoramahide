@@ -75,5 +75,18 @@ return [
 
     'categories' => 'Категории',
     'publishings' => 'Издательства',
-    'subscriptions' => 'Подписки'
+    'subscriptions' => 'Подписки',
+
+    'save' => 'Сохранить',
+
+    'name' => 'Имя',
+    'last_name' => 'Фамилия',
+    'email' => 'E-Mail адрес',
+    'phone' => 'Телефон',
+    'password' => 'Пароль',
+    'private' => 'Личный',
+    'remember_token' => 'Токен',
+    'inactive' => 'Неактивно',
+    'active' => 'Активно',
+    'edit' => 'Редактирование'
 ];
