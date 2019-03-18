@@ -74,11 +74,6 @@ class User extends Authenticatable
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
-    // Подписки пользователя
-    public function ordersSubscriptions()
-    {
-        return $this->hasManyThrough(OrderedSubscription::class, Order::class);
-    }
     // Выпуски открытые пользователем
     public function releases()
     {

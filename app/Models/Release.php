@@ -68,11 +68,12 @@ class Release extends Model
         } else {
             // Пользователь партала
             // Если пользователь уже открывал этот журнал - возвращаем true
-            if ($User->releases->find($this->id)) {
+            if ($User->releases()->find($this->id)) {
                 return true;
             }
             $result = false;
             // Если это промо юзер
+
             if ($User->promoUser) {
                 // Проверяем, доступен ли этот выпуск по промокодам юзера
                 $releases = Release::whereId($this->id);

@@ -267,6 +267,18 @@ class ReaderControllerTest extends TestCase
     /**
      * Выпуск
      */
+    public function testReleaseWrong()
+    {
+        $this->actingAs($this->user);
+
+        // Тест открытия ридера без доступных выпусков
+        $result = $this->controller()->release($this->request());
+        $this->assertTrue(empty($result['data']));
+    }
+
+    /**
+     * Выпуск
+     */
     public function testRelease()
     {
         $this->actingAs($this->user);
@@ -274,7 +286,9 @@ class ReaderControllerTest extends TestCase
         // Устанавливаем отношение release - user, что бы 1 выпуск был доступен
         $this->user->releases()->sync(1);
         $result = $this->controller()->release($this->request());
-
+        $this->assertTrue(!empty($result['data']));
+        // Повторное открытие
+        $result = $this->controller()->release($this->request());
         $this->assertTrue(!empty($result['data']));
     }
 
