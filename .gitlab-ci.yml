@@ -83,7 +83,6 @@ deploy:
         - ssh -i /home/gitlab-runner/.ssh/id_rsa gitlab-runner@jurdev.panor.ru 'cd /var/www/html/dev.panor.ru.new && chmod 774 ./deploy && ./deploy'
     dependencies:
         - build-php
-        - build-npm
         - dbseed
         - test
 

@@ -9,10 +9,18 @@ if [ -d "$PROJECT.prev" ]; then
     rm -rf $PROJECT.prev
 fi
 
+if [ -d "$PROJECT.new" ] && [ ! -d "$PROJECT" ]; then
+    mv $PROJECT.new $PROJECT
+fi
+
 if [ -d "$PROJECT" ]; then
     mv $PROJECT $PROJECT.prev
+    rm -rf $PROJECT
     mv $PROJECT.new $PROJECT
     cd $PROJECT
-    php72 ./artisan config:cache
+    npm install
+    npm run dev
+    php72 ./artisan config:clear
     php72 ./artisan cache:clear
+    chown -R gitlab-runner:nginx ./
 fi

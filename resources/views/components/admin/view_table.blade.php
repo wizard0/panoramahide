@@ -24,7 +24,7 @@
                     <form action="{{ url()->current() }}/{{ $id }}" method="post" style="display: inline">
                         @csrf
                         @method('DELETE')
-                        <button type="submit"><i class="far fa-trash-alt"></i></button>
+                        <button type="submit"><i class="far fa-trash-alt" style="color: red"></i></button>
                     </form>
                 </td>
             </tr>

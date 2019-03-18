@@ -4,17 +4,17 @@
 
 @section('content')
 
+    @include('includes.admin.breadcrumbs')
+
     <a class="btn btn-primary" href="{{ route($slug. ".index") }}">{{ __('Back to List') }}</a>
-    <br><br>
-    <a class="btn btn-primary" href="{{ route($slug. ".edit", compact('id')) }}">{{ __('Edit Record') }}</a>
+    <a class="btn btn-info" href="{{ route($slug. ".edit", compact('id')) }}">{{ __('Edit Record') }}</a>
     <br>
-    <div class="card">
-        <div class="card-header">
+    <div class="card" style="margin-top: 16px">
+        <div class="card-header" style="height: 52px">
             <strong>{{ ucfirst($slug) }}</strong> Elements
-            <select id="translate_locale">
+            <select id="translate_locale" style="width: 100px">
                 @foreach(config('translatable.locales') as $locale)
-                    <option value="{{ $locale }}" {{ ($locale == $translate_locale) ? 'selected' : '' }}>
-                        {{ $locale }}</option>
+                    <option value="{{ $locale }}" {{ ($locale == $translate_locale) ? 'selected' : '' }}>{{ $locale }}</option>
                 @endforeach
             </select>
         </div>
@@ -27,7 +27,7 @@
                         @case('string')
                             <div class="row form-group">
                                 <div class="col col-md-3">
-                                    <label class=" form-control-label">{{ $row->name }}</label>
+                                    <label class=" form-control-label">{{ __('admin.' . $row->name) }}</label>
                                 </div>
                                 <div class="col-12 col-md-9">
                                     <p class="form-control-static">{{ $row->value }}</p>
@@ -62,20 +62,22 @@
                         @case('bool')
                             <div class="row form-group">
                                 <div class="col col-md-3">
-                                    <label class=" form-control-label">{{ $row->name }}</label>
+                                    <label class=" form-control-label">{{ __('admin.' . $row->name) }}</label>
                                 </div>
                                 <div class="col col-md-9">
                                     <div class="form-check">
                                         <div class="radio">
                                             <label for="inline-radio1" class="form-check-label ">
                                                 <input type="radio" name="{{ $row->name }}" value="0" class="form-check-input"
-                                                        {{ ($row->value == 0) ? 'checked' : ''}}>Inactive
-                                            </label></div>
+                                                        {{ ($row->value == 0) ? 'checked' : ''}}>{{ __('admin.inactive') }}
+                                            </label>
+                                        </div>
                                         <div class="radio">
                                             <label for="inline-radio2" class="form-check-label ">
                                                 <input type="radio" name="{{ $row->name }}" value="1" class="form-check-input"
-                                                        {{ ($row->value == 1) ? 'checked' : '' }}>Active
-                                            </label></div>
+                                                        {{ ($row->value == 1) ? 'checked' : '' }}>{{ __('admin.active') }}
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
