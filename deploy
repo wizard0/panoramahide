@@ -19,6 +19,7 @@ if [ -d "$PROJECT" ] && [ -d "$PROJECT.new" ]; then
     cd $PROJECT
     npm install
     npm run dev
-    php72 ./artisan config:cache
+    php72 ./artisan config:clear
     php72 ./artisan cache:clear
+    chown -R gitlab-runner ./
 fi
