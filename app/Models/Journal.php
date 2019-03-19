@@ -102,9 +102,9 @@ class Journal extends Model
         return $last;
     }
 
-    public function scopeNewest($limit = null)
+    public function scopeNewest(Builder $query, $limit = null)
     {
-        return (is_numeric($limit))
+        return (is_int($limit))
             ? $query->orderBy('active_date', 'desc')->limit($limit)
             : $query->orderBy('active_date', 'desc');
     }
