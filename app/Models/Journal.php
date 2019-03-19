@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author
+ */
 namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
@@ -99,7 +102,7 @@ class Journal extends Model
         return $last;
     }
 
-    public function scopeNewest(Builder $query, $limit = null)
+    public function scopeNewest($limit = null)
     {
         return (is_numeric($limit))
             ? $query->orderBy('active_date', 'desc')->limit($limit)

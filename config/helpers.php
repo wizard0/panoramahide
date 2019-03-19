@@ -17,6 +17,13 @@ if (!function_exists('testData')) {
 }
 
 if (!function_exists('phoneFormat')) {
+    /**
+     * Форматировать номер телефона
+     *
+     * @param      string  $value  Номер телефона
+     *
+     * @return     string  Форматированный номер телефона
+     */
     function phoneFormat($value)
     {
         $num = preg_replace('/[^0-9]/', '', $value);

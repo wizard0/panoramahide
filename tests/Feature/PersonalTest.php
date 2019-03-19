@@ -18,7 +18,12 @@ use App\Models\Paysystem;
 use App\Models\User;
 use App\Models\Subscription;
 use App\Models\Article;
+use App\Models\PromoUser;
+use App\Models\PromoCode;
 use App\Cart;
+use App\Services\PromocodeService;
+use App\Http\Controllers\ReaderController;
+use App\Models\OrderedSubscription;
 
 class PersonalTest extends TestCase
 {
@@ -67,6 +72,11 @@ class PersonalTest extends TestCase
 //    {
 
 //    }
+    public function openRelease($id)
+    {
+        $result = (new ReaderController())->release($this->request(['id' => $id]));
+        return !empty($result['data']);
+    }
 
     public function testIndex()
     {
@@ -187,7 +197,7 @@ class PersonalTest extends TestCase
                 'version' => Cart::VERSION_ELECTRONIC
             ]);
         }
-        if ($q >= 2) {
+        if ($q >= 2 || $q == 0) {
             $subscription = factory(Subscription::class)->create([
                                 'journal_id' => $this->journal->id,
                                 'locale' => \App::getLocale(),
@@ -358,6 +368,36 @@ class PersonalTest extends TestCase
                  ->assertSee('Выберите выпуск для чтения');
     }
 
+    public function testReleaseOpen()
+    {
+        $this->addToCart();
+        $this->actingAs($this->user);
+        $this->l_data['l_email'] = $this->user->email;
+
+        $response = $this->postAjax(route('order.make'), $this->l_data);
+        $order = $this->user->orders()->first();
+        $response = $this->get(route('personal.order', $order->id));
+        $response = $this->get(route('personal.order.payment', $order->id));
+        $order->approve();
+
+        $this->assertTrue($this->openRelease($this->release->id));
+    }
+
+    public function testSubscriptionOpen()
+    {
+        $this->addToCart(0);
+        $this->actingAs($this->user);
+        $this->l_data['l_email'] = $this->user->email;
+
+        $response = $this->postAjax(route('order.make'), $this->l_data);
+        $order = $this->user->orders()->first();
+        $response = $this->get(route('personal.order', $order->id));
+        $response = $this->get(route('personal.order.payment', $order->id));
+        $order->approve();
+
+        $this->assertTrue($this->openRelease($this->release->id));
+    }
+
     public function testOrdersPage()
     {
         $this->testCompleteOrderLegal();
@@ -366,7 +406,7 @@ class PersonalTest extends TestCase
                  ->assertDontSee('_empty');
     }
 
-    public function testMagazinesPage()
+    public function testMagazinesPageForUser()
     {
         $this->addToCart(3);
         $this->actingAs($this->user);
@@ -381,6 +421,35 @@ class PersonalTest extends TestCase
         $response = $this->get(route('personal.magazines'));
         $response->assertStatus(200)
                  ->assertDontSee('_empty');
+    }
+
+    public function testMagazinesPageForPromoUser()
+    {
+        $this->user->promoUser()->save(factory(PromoUser::class)->create());
+        $this->actingAs($this->user);
+
+        $oActivePromocode = $this->factoryPromocode([
+            'type' => 'on_release',
+            'release_end' => now()->addDay(),
+            'limit' => 10,
+            'used' => 1,
+            'release_limit' => 1,
+        ]);
+        // Активируем выпуск, что бы он попал в выгрузку
+        $this->release->active_date = now();
+        $this->release->save();
+        // Добавляем релиз в промокод
+        $oActivePromocode->releases()->save($this->release);
+
+        $promocodeService = new PromocodeService($oActivePromocode);
+        $promocodeService->activatePromocode($oActivePromocode, $this->user->promoUser);
+
+        // Проверяем непустую страницу с журналами
+        $response = $this->get(route('personal.magazines'));
+        $response->assertStatus(200)
+                 ->assertDontSee('_empty');
+
+        $this->assertTrue($this->openRelease($this->release->id));
     }
 
     public function testForCodeCoverage()

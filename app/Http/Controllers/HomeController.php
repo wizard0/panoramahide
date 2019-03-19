@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function journals()
     {
         $result = view('home.journals');
-        $oPromoUser = Auth::user()->promo;
+        $oPromoUser = Auth::user()->promoUser;
         $oPromocodes = $oPromoUser->promocodes;
 
         if (count($oPromocodes) !== 0) {

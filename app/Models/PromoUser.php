@@ -11,6 +11,7 @@ use App\Models\Publishing;
 use App\Models\Release;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use App\Services\PromocodeService;
 
 /**
  * Class for promo user.
@@ -64,7 +65,8 @@ class PromoUser extends Model
     }
 
     /**
-     * Releases which promo-user has access to
+     * Связь устанавливается, когда юзер открывает выпуск доступный ему по промокоду любого типа
+     * Считать полем "открытые выпуски"
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
@@ -87,5 +89,20 @@ class PromoUser extends Model
     public function jByPromocodes()
     {
         return $this->belongsToMany(Promocode::class, 'jby_promo');
+    }
+
+    public function getReleasesQuery(&$query, $or = false)
+    {
+        $releasesByPromo = [];
+        foreach ($this->promocodes as $promocode) {
+            $releasesByPromo = array_merge($releasesByPromo, (new PromocodeService($promocode))->getReleases()->pluck('id')->toArray());
+        }
+        if (!empty($releasesByPromo)) {
+            if ($or) {
+                $query->orWhereIn('id', $releasesByPromo);
+            } else {
+                $query->whereIn('id', $releasesByPromo);
+            }
+        }
     }
 }

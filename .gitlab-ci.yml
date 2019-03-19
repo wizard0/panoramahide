@@ -16,7 +16,7 @@ build-php:
         - cp /home/gitlab-runner/.env.dev.panor.ru ./.env
         - php72 /usr/bin/composer install
         - php72 ./artisan cache:clear
-        - php72 ./artisan config:cache
+        - php72 ./artisan config:clear
     artifacts:
         name: "$CI_BUILD_REF_NAME-$CI_COMMIT_REF_NAME_php"
         untracked: true
