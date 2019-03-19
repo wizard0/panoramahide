@@ -60,9 +60,9 @@ class User extends Authenticatable
         $this->attributes['birthday'] = Carbon::parse($value);
     }
 
-    public function isAdmin(): bool
+    public function isAdmin($role = 'admin'): bool
     {
-        return $this->hasRole('admin');
+        return $this->hasRole($role);
     }
 
     public function searches(): Relation
@@ -74,11 +74,13 @@ class User extends Authenticatable
     {
         return $this->hasOne(PromoUser::class, 'user_id');
     }
+
     // Выпуски открытые пользователем
     public function releases()
     {
         return $this->belongsToMany(Release::class);
     }
+
     public function getPhoneFormatAttribute(): string
     {
         return phoneFormat($this->phone);
@@ -101,6 +103,7 @@ class User extends Authenticatable
 
         return $orders;
     }
+
     // Подписки пользователя
     public function getSubscriptions($sort = ['type' => 'asc'])
     {
@@ -112,6 +115,7 @@ class User extends Authenticatable
 
         return $subscriptions->get();
     }
+
     // Проверяем, доступен ли релиз по подпискам пользователя
     public function subscriptionsHasRelease($release)
     {
@@ -122,6 +126,7 @@ class User extends Authenticatable
         }
         return false;
     }
+
     // Выпуски доступные пользователю по заказам/промокодам
     public function getReleases()
     {
@@ -136,6 +141,7 @@ class User extends Authenticatable
 
         return $releases->get();
     }
+
     public static function createNew($data)
     {
         return self::create([

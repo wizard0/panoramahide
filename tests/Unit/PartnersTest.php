@@ -121,6 +121,21 @@ class PartnersTest extends TestCase
         for ($i = 0; $i < 5; $i++) {
             $this->user->releases()->save(factory(Release::class)->create(['journal_id' => $journal->id]));
         }
-        $this->assertEquals($this->user->releases()->count(), 5, $this->textRed('Ошибка при добавлении выпусков пользователю'));
+        $this->assertEquals(5, $this->user->releases()->count(), $this->textRed('Ошибка при добавлении выпусков пользователю'));
+    }
+
+    /**
+     * Тест прав пользователя партнера.
+     */
+    public function testUserHasPermission()
+    {
+        $oRelease = new Release();
+        $this->assertFalse($oRelease->userHasPermission($this->user));
+
+        $journal = factory(Journal::class)->create();
+        for ($i = 0; $i < 5; $i++) {
+            $this->user->releases()->save(factory(Release::class)->create(['journal_id' => $journal->id]));
+        }
+        $this->assertTrue($this->user->releases()->first()->userHasPermission($this->user));
     }
 }

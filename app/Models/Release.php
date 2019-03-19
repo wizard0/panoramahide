@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author
+ */
 namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
@@ -46,23 +49,23 @@ class Release extends Model
         return $this->hasMany(Article::class);
     }
 
-    public function scopeNewest(Builder $query, $limit = null)
+    public function scopeNewest($limit = null)
     {
-        return (is_numeric($limit))
+        return (is_int($limit))
             ? $this->orderBy('active_date', 'desc')->limit($limit)
             : $this->orderBy('active_date', 'desc');
     }
 
-    public function scopeNewestTranslated(Builder $query, $limit = null)
+    public function scopeNewestTranslated($limit = null)
     {
-        return (is_numeric($limit))
+        return (is_int($limit))
             ? $this->orderBy('active_date', 'desc')->limit($limit)->withTranslation()
             : $this->orderBy('active_date', 'desc')->withTranslation();
     }
 
     public function userHasPermission($User)
     {
-        if (preg_match('#.*\\\\(PartnerUser)$#', get_class($User))) {
+        if (preg_match('/.*\\\\(PartnerUser)$/', get_class($User))) {
             // Пользователь партнёра
             return ($User->releases()->find($this->id) != null ? true : false);
         } else {
@@ -94,20 +97,24 @@ class Release extends Model
             return false;
         }
     }
+
     public function getLink()
     {
         return route('release', ['journalCode' => $this->journal->code, 'releaseID' => $this->id]);
     }
+
     // По умолчанию ссылка ведёт прямо на выпуск в читалку
     public function getReaderLink()
     {
         return $this->readerLink ?? route('reader.index', ['release_id' => $this->id]);
     }
+
     // Можно задать другую ссылку. Например для перехода от партнёра
     public function setReaderLink($link)
     {
         $this->readerLink = $link;
     }
+
     public function promocode()
     {
         return $this->belongsToMany(Promocode::class);
@@ -117,6 +124,7 @@ class Release extends Model
     {
         return $this->belongsToMany(PromoUser::class);
     }
+
     public function order()
     {
         return $this->belongsToMany(Order::class, 'order_product', 'release_id', 'order_id');
