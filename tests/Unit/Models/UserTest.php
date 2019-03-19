@@ -48,7 +48,7 @@ class UserTest extends TestCase
         $user = User::where('email', 'admin')->first()
             ?? $user = factory(User::class)->create([
                 'email' => 'admin',
-                'password' => Hash::make('admin')
+                'password' => bcrypt('admin')
             ])->assignRole(User::ROLE_SUPERADMIN);
 
         $this->assertTrue($user->isAdmin('super-admin'));

@@ -134,7 +134,7 @@ class RegisterControllerTest extends TestCase
     private function registerData(array $data = [])
     {
         $oUser = $this->factoryMake(User::class, [
-            'password' => Hash::make('1234567890'),
+            'password' => bcrypt('1234567890'),
         ]);
 
         return array_merge([
