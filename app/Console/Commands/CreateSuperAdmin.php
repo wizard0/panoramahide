@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\User;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Hash;
 
 class CreateSuperAdmin extends Command
 {
@@ -48,7 +47,7 @@ class CreateSuperAdmin extends Command
         } else {
             $admin = factory(User::class)->create([
                 'email' => $login,
-                'password' => Hash::make($password)
+                'password' => bcrypt($password)
             ])->assignRole(User::ROLE_SUPERADMIN);
 
             $this->info('Created super-admin user#' . $admin->id . ' with login:' . $login .

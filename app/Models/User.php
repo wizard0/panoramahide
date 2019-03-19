@@ -15,7 +15,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * @property string $name
@@ -151,7 +150,7 @@ class User extends Authenticatable
             'last_name' => $data['last_name'],
             'email' => $data['email'],
             'phone' => preg_replace('/[^0-9]/', '', $data['phone']),
-            'password' => Hash::make($data['password']),
+            'password' => bcrypt($data['password']),
         ]);
     }
 }

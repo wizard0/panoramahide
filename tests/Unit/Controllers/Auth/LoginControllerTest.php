@@ -11,7 +11,6 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
@@ -57,7 +56,7 @@ class LoginControllerTest extends TestCase
     public function testLoginSuccess()
     {
         $user = $this->factoryUser([
-            'password' => Hash::make('1234567890'),
+            'password' => bcrypt('1234567890'),
         ]);
 
         $this->actingAs($user);
