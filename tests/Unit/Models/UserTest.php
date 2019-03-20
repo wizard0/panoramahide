@@ -1,7 +1,7 @@
 <?php
 /**
  * @copyright Copyright (c) 2018-2019 "ИД Панорама"
- * @author Денис Парыгин (dyp2000@mail.ru)
+ * @author    Денис Парыгин (dyp2000@mail.ru)
  */
 namespace Tests\Unit\Models;
 

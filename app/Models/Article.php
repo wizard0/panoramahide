@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author
+ */
 namespace App\Models;
 
 use Dimsav\Translatable\Translatable;
@@ -58,7 +61,16 @@ class Article extends Model
         return route('article', ['code' => $this->code]);
     }
 
-    public function scopeWhereTranslationCode($query, $value, $locale = null)
+    /**
+     * Эта область фильтрации результатов путем проверки полей перевода.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param string                                $value
+     * @param string                                $locale
+     *
+     * @return \Illuminate\Database\Eloquent\Builder|static
+     */
+    public function scopeWhereTranslationCode(Builder $query, $value, $locale = null)
     {
         return $this->scopeWhereTranslation($query, 'code', $value, $locale);
     }
