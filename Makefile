@@ -49,8 +49,10 @@ build-npm: ## Сборать npm модули проект
 	npm install
 	npm run dev
 
-seed: ## Заполнить БД тестовыми данными
+fresh: ## Обновить структуру БД
 	./artisan migrate:fresh
+
+seed: fresh ## Обновить структуру и заполнить БД тестовыми данными
 	./artisan db:seed --class=TestSeeder
 
 admin: ## Создать пользователя admin (user: admin; pass: admin)
