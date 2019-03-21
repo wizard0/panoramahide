@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
  * @author
  */
 namespace Tests\Unit\Controllers;
@@ -121,7 +121,7 @@ class ReaderControllerTest extends TestCase
         $result = $this->controller()->index($this->request([])); // Что здесь проверяется?
 
         $this->assertTrue(session()->has('modal'));
-        $this->assertTrue(session()->get('modal') === 'login-modal');
+        $this->assertEquals('login-modal', session()->get('modal'));
     }
 
     /**
@@ -195,7 +195,7 @@ class ReaderControllerTest extends TestCase
         $countAfter = $this->user->devices()->count();
         $this->assertTrue($countAfter > $countBefore);
         $this->assertTrue(session()->has('modal'));
-        $this->assertTrue(session()->get('modal') === 'reader-max-devices-modal');
+        $this->assertEquals('reader-max-devices-modal', session()->get('modal'));
     }
 
     /**
@@ -215,7 +215,7 @@ class ReaderControllerTest extends TestCase
         $countAfter = $this->user->devices()->count();
         $this->assertTrue($countAfter > $countBefore);
         $this->assertTrue(session()->has('modal'));
-        $this->assertTrue(session()->get('modal') === 'reader-code-modal');
+        $this->assertEquals('reader-code-modal', session()->get('modal'));
     }
 
     /**
@@ -237,7 +237,7 @@ class ReaderControllerTest extends TestCase
         $result = $this->controller()->index($this->request()); // Что здесь проверяется?
 
         $this->assertTrue(session()->has('modal'));
-        $this->assertTrue(session()->get('modal') === 'reader-confirm-online-modal');
+        $this->assertEquals('reader-confirm-online-modal', session()->get('modal'));
     }
 
     /**
@@ -460,7 +460,7 @@ class ReaderControllerTest extends TestCase
         $result = $this->controller()->online($this->request([
             'reset' => 1,
         ]));
-        $this->assertTrue($result['result'] === 5);
+        $this->assertEquals(5, $result['result']);
     }
 
     /**
@@ -509,7 +509,7 @@ class ReaderControllerTest extends TestCase
         $result = $this->controller()->reset($this->request(), 'code');
 
         $this->assertTrue(session()->has('modal'));
-        $this->assertTrue(session()->get('modal') === 'login-modal');
+        $this->assertEquals('login-modal', session()->get('modal'));
     }
 
     /**
@@ -526,7 +526,7 @@ class ReaderControllerTest extends TestCase
 
         $this->assertTrue(session()->has('reset-wrong'));
         $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-        $this->assertTrue($oDevice->active === 1);
+        $this->assertEquals(1, $oDevice->active);
     }
 
     /**
@@ -545,7 +545,7 @@ class ReaderControllerTest extends TestCase
 
         $this->assertTrue(session()->has('reset-success'));
         $oDevice = $this->user->devices()->where('id', $oDevice->id)->first();
-        $this->assertTrue($oDevice->active === 0);
+        $this->assertEquals(0, $oDevice->active);
     }
 
     /**
