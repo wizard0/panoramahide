@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @copyright Copyright (c) 2018-2019 "ИД Панорама"
+ * @author
+ */
 namespace App\Models;
 
 use App\Models\Journal;
@@ -20,12 +23,14 @@ class Group extends Model
 
     public static function store($group, $promocode_id)
     {
-        $Self = Group::create(['name' => $group['name'], 'promocode_id' => $promocode_id]);
-        $Self->journals()->saveMany(Journal::whereIn('id', $group['journals'])->get());
-        return $Self;
+        $self = Group::create(['name' => $group['name'], 'promocode_id' => $promocode_id]);
+        $self->journals()->saveMany(Journal::whereIn('id', $group['journals'])->get());
+        return $self;
     }
 
     /**
+     * Возвращает промокоды для группы
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function promocode()
@@ -34,6 +39,8 @@ class Group extends Model
     }
 
     /**
+     * Возвращает журналы для группы
+     *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
     public function journals()
