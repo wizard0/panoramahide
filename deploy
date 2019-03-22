@@ -23,4 +23,6 @@ if [ -d "$PROJECT" ]; then
     php72 ./artisan config:clear
     php72 ./artisan cache:clear
     chown -R gitlab-runner:nginx ./
+    ln -s /home/dev.panor.ru/files ./public/files
+    ln -s /home/dev.panor.ru/export ./storage/export
 fi
