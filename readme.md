@@ -3,4 +3,4 @@
 
 ----
 
-Подробное описание сущностей и алгоритмов читайте в [Wiki](https://gl.panor.ru/web/laravel-panor/wikis/Оглавление)
+Подробное описание сущностей и алгоритмов читайте в [Wiki](https://gl.panor.ru/web/laravel-panor/wikis/!Оглавление)
